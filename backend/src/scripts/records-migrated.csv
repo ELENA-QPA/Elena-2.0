@@ -1,0 +1,1096 @@
+internalCode;clientType;city;department;office;settled;user;processType;jurisdiction;personType
+1;Rappi;Bogot?;Bogot? D.C.;Juzgado 14 Laboral del Circuito de Bogot?;11001310501420210028300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+2;Rappi;Bogot?;Bogot? D.C.;NA;NA;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+3;Rappi;Bogot?;Bogot? D.C.;Juzgado 37 Laboral del Circuito de Bogot?;11001310503720210020800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+4;Rappi;Bogot?;Bogot? D.C.;NA;NA;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+5;Rappi;Bogot?;Bogot? D.C.;Juzgado 39 Laboral del Circuito de Bogot?;11001310503920210021000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+6;Rappi;Bogot?;Bogot? D.C.;Juzgado 39 Laboral del Circuito de Bogot?;11001310503920210049200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+7;Rappi;Bogot?;Bogot? D.C.;Juzgado 05 Laboral del Circuito de Bogot?;11001310500520210021400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+8;Rappi;Bogot?;Bogot? D.C.;Juzgado 22 Laboral del Circuito de Bogot?;11001310502220210052300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+9;Rappi;Bogot?;Bogot? D.C.;Juzgado 41 Laboral del Circuito de Bogot?;11001310504020210004900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+10;Rappi;Bogot?;Bogot? D.C.;NA;NA;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+11;Rappi;Bogot?;Bogot? D.C.;Juzgado 38 Laboral del Circuito de Bogot?;11001310503820240001700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+12;Rappi;Bogot?;Bogot? D.C.;Juzgado 08 Laboral del Circuito de Bogot?;11001310500820210020600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+13;Rappi;Bogot?;Bogot? D.C.;Juzgado 41 Laboral del Circuito de Bogot?;11001310504120210006800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+14;Rappi;Bogot?;Bogot? D.C.;Juzgado 16 Laboral del Circuito de Bogot?;11001310501620220042000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+15;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310503820220040200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+16;Rappi;Bogot?;Bogot? D.C.;Juzgado 37 Laboral del Circuito de Bogot?;11001310503720210032900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+17;Rappi;Bogot?;Bogot? D.C.;Juzgado 22 Laboral del Circuito de Bogot?;11001310502220210052400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+18;Rappi;Bogot?;Bogot? D.C.;Juzgado 04 Laboral del Circuito de Bogot?;11001310500420240002000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+19;Rappi;Bogot?;Bogot? D.C.;Juzgado 43 Laboral del Circuito de Bogot?;11001310503420220016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+20;Rappi;Bogot?;Bogot? D.C.;Juzgado 39 Laboral del Circuito de Bogot?;11001310503920220043800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+21;Rappi;Santa Marta;Magdalena;Juzgado 05 Laboral del Circuito de Santa Marta;47001310500520220030500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+22;Rappi;Santa Marta;Magdalena;Juzgado 01 Laboral del Circuito de Santa Marta;47001310500120220033800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+23;Rappi;Monter?a;C?rdoba;Juzgado 01 Laboral del Circuito de Monteria;23001310500120230003300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+24;Otro;Bogot?;Bogot? D.C.;Juzgado 45 Laboral del Circuito de Bogot?;11001310502420210006600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+25;Otro;Bogot?;Bogot? D.C.;Juzgado 01 Laboral del Circuito de Bogot?;11001310500120210006500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+26;Otro;Bogot?;Bogot? D.C.;Juzgado 09 Laboral del Circuito de Bogot?;11001310500920210002700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+27;Otro;Bogot?;Bogot? D.C.;Juzgado 11 Laboral del Circuito de Bogot?;11001310501120210004900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+28;Otro;Bogot?;Bogot? D.C.;Juzgado 17 de Familia de Bogot? - Juzgado 01 Civil Municipal de Chocont?;11001311001720210037900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+29;Otro;Bogot?;Bogot? D.C.;Juzgado 30 de Familia de Bogot?;11001311003020170019800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+30;Otro;Bogot?;Bogot? D.C.;Juzgado 048 Civil Municipal de Bogot?;11001400304820220024600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+31;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230060500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+32;Rappi;Bogot?;Bogot? D.C.;Juzgado 36 Laboral del Circuito de Bogot?;11001310503620230019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+33;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230059700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+34;Rappi;Bogot?;Bogot? D.C.;Juzgado 11 Laboral del Circuito de Bogot?;11001310501120240002100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+35;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230059800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+36;Rappi;Bogot?;Bogot? D.C.;Juzgado 45 Laboral del Circuito de Bogot?;11001310504520230027300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+37;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230058800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+38;Rappi;Bogot?;Bogot? D.C.;Juzgado 27 Laboral del Circuito de Bogot?;11001310502720240001800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+39;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230058900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+40;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920230016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+41;Rappi;Bogot?;Bogot? D.C.;Juzgado 13 Laboral del Circuito de Bogot?;11001310501320240001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+42;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310501820230020000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+43;Rappi;Bogot?;Bogot? D.C.;Juzgado 02 Laboral del Circuito de Bogot?;11001310500220240001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+44;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;05001310502620240008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+45;Rappi;Bogot?;Bogot? D.C.;Juzgado 07 Laboral del Circuito de Bogot?;11001310504720240007200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+46;Rappi;Bogot?;Bogot? D.C.;Juzgado 25 Laboral del Circuito de Bogot?;11001310502520240001700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+47;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120230015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+48;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620230028900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+49;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230047800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+50;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720230055500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+51;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502420230021700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+52;Rappi;Bogot?;Bogot? D.C.;Juzgado 46 Laboral del Circuito de Bogot?;11001310504620250004400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+53;Rappi;Bogot?;Bogot? D.C.;Juzgado 38 Laboral del Circuito de Bogot?;11001310503820230028100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+54;Rappi;Bogot?;Bogot? D.C.;Juzgado 28 Laboral del Circuito de Bogot?;11001310502820240001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+55;Rappi;Bogot?;Bogot? D.C.;Juzgado 09 Laboral del Circuito de Bogot?;11001310500920230029200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+56;Rappi;Bogot?;Bogot? D.C.;Juzgado 29 Laboral del Circuito de Bogot?;11001310502920230023200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+57;Rappi;Bogot?;Bogot? D.C.;Juzgado 17 Laboral del Circuito de Bogot?;11001310501720230028100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+58;Rappi;Bogot?;Bogot? D.C.;Juzgado 39 Laboral del Circuito de Bogot?;11001310503920230029400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+59;Rappi;Bogot?;Bogot? D.C.;Juzgado 07 Laboral del Circuito de Bogot?;11001310500720250004600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+60;Rappi;Bogot?;Bogot? D.C.;Juzgado 29 Laboral del Circuito de Bogot?;11001310504620230063900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+61;Rappi;Bogot?;Bogot? D.C.;Juzgado 35 Laboral del Circuito de Bogot?;11001310503520250005600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+62;Rappi;Bogot?;Bogot? D.C.;Juzgado 35 Laboral del Circuito de Bogot?;11001310503520250005600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+63;Rappi;Bogot?;Bogot? D.C.;Juzgado 35 Laboral del Circuito de Bogot?;11001310503520250005600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+64;Rappi;Bogot?;Bogot? D.C.;Juzgado 45 Laboral del Circuito de Bogot?;11001310503020230027100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+65;Rappi;Bogot?;Bogot? D.C.;Juzgado 35 Laboral del Circuito de Bogot?;11001310503520250005600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+66;Rappi;Bogot?;Bogot? D.C.;Juzgado 35 Laboral del Circuito de Bogot?;11001310503520250005600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+67;Rappi;Bogot?;Bogot? D.C.;Juzgado 34 Laboral del Circuito de Bogot?;11001310503420240008800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+68;Rappi;Bogot?;Bogot? D.C.;Juzgado 46 Laboral del Circuito de Bogot?;11001310502920240008900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+69;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500220230023800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+70;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500120230022600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+71;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420230015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+72;Rappi;Bogot?;Bogot? D.C.;Juzgado 01 Laboral del Circuito de Bogot?;11001310500120230030000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+73;Rappi;Bogot?;Bogot? D.C.;Juzgado 12 Laboral del Circuito de Bogot?;11001310501220240006700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+74;Rappi;Bogot?;Bogot? D.C.;Juzgado 11 Laboral del Circuito de Bogot?;11001310501120250005700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+75;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320240007500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+76;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240006400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+77;Rappi;Bogot?;Bogot? D.C.;Juzgado 40 Laboral del Circuito de Bogot?;11001310504020240006500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+78;Rappi;Bogot?;Bogot? D.C.;;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+79;Rappi;Bogot?;Bogot? D.C.;Juzgado 26 Laboral del Circuito de Bogot?;11001310502620240011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+80;Rappi;Bogot?;Bogot? D.C.;Juzgado 04 Laboral del Circuito de Bogot?;11001310500420240006700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+81;Otro;Bogot?;Bogot? D.C.;Juzgado 07 de Familia de Bogot?;11001311000720190048300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+82;Rappi;Bogot?;Bogot? D.C.;Juzgado 27 Laboral del Circuito de Bogot?;11001310502720230043701;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+83;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502120240004300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+84;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240004700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+85;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310501720240004300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+86;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240003900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+87;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220240003900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+88;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120240003900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+89;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420240007000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+90;Rappi;Bogot?;Bogot? D.C.;Juzgado 23 Laboral del Circuito de Bogot?;11001310502320240005400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+91;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240005200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+92;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240004000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+93;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120240004000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+94;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240004100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+95;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502620240004000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+96;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+97;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720240009500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+98;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120240008100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+99;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920240005200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+100;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240005900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+101;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120240007400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+102;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310500920240006100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+103;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120240007000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+104;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920240009100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+105;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240006600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+106;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240004900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+107;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240005400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+108;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320240007300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+109;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240005000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+110;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240005000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+111;Rappi;Barranquilla;Atl?ntico;Juzgado 06 Laboral de Circuito de Barranquilla;08001310500620240007800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+112;Rappi;Bogot?;Bogot? D.C.;Juzgado 16 Laboral del Circuito de Bogot?;11001310501620240010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+113;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620240006700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+114;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920240006200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+115;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240006400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+116;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de Itag??;05360310500220240011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+117;Rappi;Bello;Antioquia;Juzgado 02 Laboral del Circuito de Bello;05088310500220240018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+118;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020240006200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+119;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220240012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+120;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220240006000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+121;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240007600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+122;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320240006800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+123;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240006300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+124;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220240009400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+125;Otro;Bogot?;Bogot? D.C.;Juzgado 16 Administrativo Secci?n Segunda Oral Bogot?;11001333501620240032000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+126;Rappi;Envigado;Antioquia;Juzgado 01 Laboral del Circuito de Envigado;05266310500120240010000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+127;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220240013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+128;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240006500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+129;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240006700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+130;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120240008000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+131;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+132;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250004000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+133;Rappi;Bogot?;Bogot? D.C.;Juzgado 31 Laboral del Circuito de Bogot?;11001310503120240013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+134;Otro;Bogot?;Bogot? D.C.;Juzgado 11 Municipal de Peque?as Causas Laboral de Bogot?;11001410501120240025600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+135;Rappi;Cali;Valle del Cauca;Juzgado 22 Laboral del Circuito de Cali;76001310502120240020400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+136;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720240007000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+137;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120240007600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+138;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240007700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+139;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120240006900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+140;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240009000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+141;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240006600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+142;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+143;Otro;Bogot?;Bogot? D.C.;NA;NA;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+144;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240009400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+145;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220240015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+146;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620240014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+147;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720240022900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+148;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420240012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+149;Rappi;Cali;Valle del Cauca;Juzgado 21 Laboral del Circuito de Cali;76001310502120240023500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+150;Rappi;Cali;Valle del Cauca;Juzgado 20 Laboral del Circuito de Cali;76001310502020240022000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+151;Rappi;Barranquilla;Atl?ntico;Juzgado 07 Laboral de Circuito de Barranquilla;08001310500720240015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+152;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620240010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+153;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240010900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+154;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820240008500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+155;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220240018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+156;Rappi;Cali;Valle del Cauca;Juzgado 20 Laboral del Circuito de Cali;76001310502020240023100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+157;Rappi;Cali;Valle del Cauca;Juzgado 15 Laboral del Circuito de Cali;76001310501520240024300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+158;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot?;11001310504720240014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+159;Rappi;Bogot?;Bogot? D.C.;Juzgado 21 Laboral del Circuito de Bogot?;11001310502120240015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+160;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+161;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+162;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820240000200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+163;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020240011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+164;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920240009800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+165;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240009500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+166;Rappi;Bogot?;Bogot? D.C.;Juzgado 46 Laboral del Circuito de Bogot?;11001310504620240015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+167;Rappi;Bogot?;Bogot? D.C.;Juzgado 42 Laboral del Circuito de Bogot?;11001310504220240015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+168;Rappi;Bogot?;Bogot? D.C.;Juzgado 06 Laboral del Circuito de Bogot?;11001310500620240016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+169;Rappi;Bogot?;Bogot? D.C.;Juzgado 20 Laboral del Circuito de Bogot?;11001310502020240016300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+170;Rappi;Bogot?;Bogot? D.C.;Juzgado 20 Laboral del Circuito de Bogot?;11001310502020250006100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+171;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020240009500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+172;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+173;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320240010100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+174;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220240009300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+175;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820240009300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+176;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250004300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+177;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120240010800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+178;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502020240012300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+179;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240009800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+180;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720240010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+181;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220240021600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+182;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500220240021600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+183;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240022200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+184;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240023100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+185;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240023900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+186;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240024200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+187;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240023200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+188;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240022400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+189;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220240021500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+190;Rappi;Bogot?;Bogot? D.C.;Juzgado 32 Laboral del Circuito de Bogot?;11001310503220240018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+191;Rappi;Itag??;Antioquia;Juzgado 01 Laboral del Circuito de Itag??;05360310500120240021000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+192;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720240018900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+193;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+194;Rappi;Bello;Antioquia;Juzgado 02 Laboral del Circuito de Bello;05088310500220240033300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+195;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620240013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+196;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+197;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020240012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+198;Rappi;Bogot?;Bogot? D.C.;Juzgado 13 Laboral del Circuito de Bogot?;11001310501320240021600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+199;Rappi;Envigado;Antioquia;Juzgado 01 Laboral del Circuito de Envigado;05266310500120240033300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+200;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+201;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620240013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+202;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240027300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+203;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240027100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+204;Rappi;Medell?n;Antioquia;;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+205;Rappi;Medell?n;Antioquia;;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+206;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+207;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+208;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+209;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620240014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+210;Rappi;Sabaneta;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+211;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+212;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220240012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+213;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240030400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+214;Rappi;Bogot?;Bogot? D.C.;Juzgado 22 Laboral del Circuito de Bogot?;11001310502220240023000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+215;Rappi;Bogot?;Bogot? D.C.;Juzgado 06 Laboral del Circuito de Bogot?;11001310500620240021500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+216;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820240003900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+217;Rappi;Bello;Antioquia;Juzgado 02 Laboral del Circuito de Bello;05088310500220240036500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+218;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240030500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+219;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240028100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+220;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220240012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+221;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+222;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+223;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+224;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+225;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240028800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+226;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240029600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+227;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240031100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+228;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240031200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+229;Rappi;Barranquilla;Atl?ntico;Juzgado 15 Laboral del Cicuito de Barranquilla ;08001310501520240021200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+230;Rappi;Bogot?;Bogot? D.C.;Juzgado 32 Laboral del Circuito de Bogot?;11001310503220240022200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+231;Rappi;Bogot?;Bogot? D.C.;Juzgado 22 Laboral del Circuito de Bogot?;11001310502220240023500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+232;Rappi;Bogot?;Bogot? D.C.;Juzgado 29 Laboral del Circuito de Bogot?;11001310502920240022500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+233;Rappi;Bogot?;Bogot? D.C.;Juzgado 06 Laboral del Circuito de Bogot?;11001310500620240021900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+234;Rappi;Bogot?;Bogot? D.C.;Juzgado 01 Laboral del Circuito de Bogot?;11001310500120240023100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+235;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220240021900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+236;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240031000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+237;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420240031100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+238;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220240029700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+239;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240032300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+240;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240030500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+241;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120240014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+242;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220240029900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+243;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120240030400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+244;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320240032400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+245;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+246;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720240013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+247;Rappi;Bello;Antioquia;Juzgado 02 Laboral del Circuito de Bello;05088310500220240040400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+248;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+249;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120250024700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+250;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320250024800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+251;Rappi;Bogot?;Bogot? D.C.;Juzgado 15 Laboral del Circuito de Bogot?;11001310501520240023800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+252;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+253;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+254;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120240014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+255;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500120240016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+256;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+257;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+258;Rappi;Envigado;Antioquia;Juzgado 01 Laboral del Circuito de Envigado;05266310500120240024400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+259;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+260;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+261;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920240005100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+262;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de Itag??;05360310500220240027300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+263;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+264;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de C?cuta;54001310500220240032900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+265;Rappi;Itag??;Antioquia;Juzgado 04 Laboral del Circuito de C?cuta ;54001310500420240033600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+266;Rappi;Itag??;Antioquia;Juzgado 04 Laboral del Circuito de C?cuta ;54001310500420240033700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+267;Rappi;Itag??;Antioquia;Juzgado 03 Laboral del Circuito de C?cuta ;54001310500320240032700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+268;Rappi;Cali;Valle del Cauca;Juzgado 06 Laboral del Circuito de Cali;76001310500620240042200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+269;Rappi;Itag??;Antioquia;Juzgado 01 Laboral del Circuito de C?cuta ;54001310500120240032000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+270;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+271;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+272;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020240015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+273;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de C?cuta;54001310500220240033000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+274;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320240015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+275;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720240014800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+276;Rappi;Girardot;Cundinamarca;Juzgado 01 Laboral del Circuito de Girardot;25307310500120240029600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+277;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240014800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+278;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de Itag??;05360310500220240031900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+279;Rappi;Bello;Antioquia;Juzgado 01 Laboral del Circuito de Bello;05088310500120240031700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+280;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240020600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+281;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+282;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720240028600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+283;Otro;Bogot?;Bogot? D.C.;Juzgado 29 Administrativo Sec Segunda Oral Bogot?;11001333502920240034700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+284;Rappi;Itag??;Antioquia;Juzgado 03 Laboral del Circuito de C?cuta ;54001310500320240035200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+285;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240018000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+286;Rappi;Bello;Antioquia;Juzgado 01 Laboral del Circuito de Bello;05088310500120240035500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+287;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+288;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020240017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+289;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240029700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+290;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240018800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+291;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+292;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240023400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+293;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920240017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+294;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240018100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+295;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220240016700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+296;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+297;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620240017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+298;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240017300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+299;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+300;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+301;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+302;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+303;Rappi;Barranquilla;Atl?ntico;Juzgado 06 Laboral de Circuito de Barranquilla;08001310500620250000100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+304;Rappi;Bogot?;Bogot? D.C.;Juzgado 47 Laboral del Circuito de Bogot? ;11001310504720240025400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+305;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501320250000800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+306;Rappi;Envigado;Antioquia;Juzgado 01 Laboral del Circuito de Envigado;05266310500120240031600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+307;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250007200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+308;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+309;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250004400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+310;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020240020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+311;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820240009200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+312;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+313;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+314;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240018800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+315;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220240037400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+316;Rappi;Bogot?;Bogot? D.C.;Juzgado 12 Laboral del Circuito de Bogot?;11001310501220250003400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+317;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240021900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+318;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+319;Rappi;Bogot?;Bogot? D.C.;Juzgado 33 Laboral del Circuito de Bogot?;05001310501220240017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+320;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+321;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+322;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240019100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+323;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+324;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+325;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240025200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+326;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240020800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+327;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240022100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+328;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240021100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+329;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+330;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620240018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+331;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120240018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+332;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+333;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+334;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+335;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240021000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+336;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820240009500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+337;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720240019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+338;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240019200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+339;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120240018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+340;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240021700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+341;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240020800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+342;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120240019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+343;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+344;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+345;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+346;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820240009900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+347;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520240033300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+348;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500320240020600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+349;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga ;68001310500520250002000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+350;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240020000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+351;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+352;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+353;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240026200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+354;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920240010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+355;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+356;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920240022400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+357;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020240021900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+358;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520240018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+359;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+360;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+361;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620240019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+362;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+363;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250001200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+364;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220240018900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+365;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220240018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+366;Rappi;Barranquilla;Atl?ntico;Juzgado 10 Laboral del Circuito de Barranquilla;08001310501020240030500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+367;Rappi;Barranquilla;Atl?ntico;Juzgado 01 Laboral del Circuito de Barranquilla;08001310500120240029800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+368;Rappi;Barranquilla;Atl?ntico;Juzgado 05 Laboral del Circuito de Barranquilla;08001310500520240029600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+369;Rappi;Barranquilla;Atl?ntico;Juzgado 07 Laboral de Circuito de Barranquilla;08001310500720240031900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+370;Rappi;Barranquilla;Atl?ntico;Juzgado 03 Laboral del Circuito de Barranquilla;08001310500320250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+371;Rappi;Barranquilla;Atl?ntico;Juzgado 07 Laboral de Circuito de Barranquilla;08001310501020240031200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+372;Rappi;Barranquilla;Atl?ntico;Juzgado 10 Laboral del Circuito de Barranquilla;08001310501020240030900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+373;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+374;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220240034900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+375;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250002300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+376;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720240036700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+377;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250008400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+378;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240020200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+379;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240020400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+380;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240019200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+381;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240019400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+382;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240020300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+383;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420240022200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+384;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250003800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+385;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga ;68001310500520250000900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+386;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+387;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720240020400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+388;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250001500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+389;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820240019100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+390;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420240019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+391;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250009300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+392;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320240020100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+393;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120240021700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+394;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250004200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+395;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820240019800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+396;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220240020100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+397;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220240019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+398;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502920240011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+399;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Bogot?;11001310501620250003700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+400;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250004000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+401;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320240020800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+402;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920240021200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+403;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520240020300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+404;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620240021100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+405;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820240021500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+406;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250004400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+407;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620240024500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+408;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820240019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+409;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+410;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310502220240020100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+411;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250001700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+412;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520240029900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+413;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420240022100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+414;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320240022400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+415;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250021400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+416;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250002400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+417;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga ;68001310500520250005900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+418;Rappi;Cali;Valle del Cauca;Juzgado 17 Laboral del Circuito de Cali;76001310501720250000700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+419;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250000900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+420;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250001000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+421;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120250001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+422;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250000900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+423;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250001700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+424;Rappi;Armenia;Quind?o;Juzgado 01 Laboral del Circuito de Armenia;63001310500120250002300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+425;Rappi;Armenia;Quind?o;Juzgado 03 Laboral del Circuito de Armenia ;63001310500320250001200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+426;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250001900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+427;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+428;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+429;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+430;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250000800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+431;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de Itag??;05360310500220250005400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+432;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250001300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+433;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250001100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+434;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250004900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+435;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250001000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+436;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250001200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+437;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250001200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+438;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250001800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+439;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250001500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+440;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250002400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+441;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+442;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250022900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+443;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250001600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+444;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250001100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+445;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250002300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+446;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220250002700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+447;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120250002100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+448;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250001300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+449;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250001100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+450;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250001700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+451;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120250009500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+452;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250001500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+453;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250002400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+454;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+455;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250011600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+456;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250020600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+457;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310501720250019100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+458;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250020700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+459;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250021600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+460;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250025200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+461;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+462;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620250008700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+463;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250007800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+464;Rappi;Medell?n;Antioquia;;05001310500620250017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+465;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250007900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+466;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+467;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250008300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+468;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+469;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+470;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250008200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+471;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250010600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+472;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250008700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+473;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250010100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+474;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250008500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+475;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+476;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+477;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250018100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+478;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250021200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+479;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+480;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250009000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+481;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Bucaramanga;05001310501420250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+482;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250010000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+483;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250009000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+484;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250008900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+485;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250009300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+486;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250009300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+487;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250009100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+488;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250010300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+489;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250008800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+490;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250010100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+491;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250009200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+492;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250009200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+493;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250010600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+494;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250010400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+495;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620250010300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+496;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250009200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+497;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+498;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250010400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+499;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250009900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+500;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250009400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+501;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250009600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+502;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+503;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+504;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250010600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+505;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250010100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+506;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250010300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+507;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+508;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220250026500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+509;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250010300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+510;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+511;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+512;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+513;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+514;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+515;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320250013900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+516;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+517;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+518;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250010500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+519;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250010300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+520;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+521;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250010500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+522;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250010600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+523;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+524;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250011600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+525;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+526;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+527;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+528;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250010400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+529;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+530;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501720250010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+531;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820250010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+532;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+533;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+534;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+535;Rappi;Armenia;Quind?o;Juzgado 01 Laboral del Circuito de Armenia;63001310500120250006800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+536;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+537;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+538;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250018900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+539;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250010600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+540;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250022900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+541;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+542;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250010900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+543;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+544;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250010500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+545;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+546;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250010500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+547;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250010500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+548;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250010800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+549;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+550;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+551;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+552;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+553;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+554;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+555;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+556;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+557;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+558;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+559;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250013800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+560;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250014700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+561;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+562;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+563;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+564;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+565;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+566;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+567;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+568;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+569;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+570;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+571;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310502220250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+572;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250011000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+573;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+574;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250012200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+575;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+576;Rappi;Medell?n;Antioquia;Juzgado 08 laboral del Circuito de Medell?n;05001310500820250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+577;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+578;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+579;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+580;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+581;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+582;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250014400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+583;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+584;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250011500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+585;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+586;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+587;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+588;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+589;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250011500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+590;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+591;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250011600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+592;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250011200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+593;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310500120250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+594;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310502220250011300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+595;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250011400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+596;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+597;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250014700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+598;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+599;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+600;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+601;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250011500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+602;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+603;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+604;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+605;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250012900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+606;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+607;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+608;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+609;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+610;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+611;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250011800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+612;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250012300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+613;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+614;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+615;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+616;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+617;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250011800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+618;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+619;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502520250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+620;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250011800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+621;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+622;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310502620250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+623;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+624;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+625;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+626;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+627;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+628;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250012200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+629;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+630;Rappi;Monter?a;C?rdoba;Juzgado 01 Laboral del Circuito de Monteria;23001310500120250009400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+631;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+632;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+633;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+634;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+635;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250011900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+636;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+637;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+638;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310501920250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+639;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310502620250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+640;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+641;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+642;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+643;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+644;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500620250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+645;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+646;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+647;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+648;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250016300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+649;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+650;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+651;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+652;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250012100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+653;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+654;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+655;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+656;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+657;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+658;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+659;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250016300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+660;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+661;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+662;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+663;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250012300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+664;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250012200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+665;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+666;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250013800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+667;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250012300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+668;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+669;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+670;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+671;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500420250012900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+672;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+673;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+674;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+675;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+676;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n;05001310500820250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+677;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+678;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250012300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+679;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+680;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+681;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+682;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+683;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+684;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250012500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+685;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250014000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+686;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+687;Rappi;Bogot?;Bogot? D.C.;Juzgado 43 Laboral del Circuito de Bogot?;11001310504320250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+688;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+689;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+690;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250012400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+691;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250018800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+692;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+693;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+694;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+695;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+696;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+697;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+698;Rappi;Barranquilla;Atl?ntico;Juzgado 02 Laboral del Circuito de Barranquilla;08001310500220250010700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+699;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250023000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+700;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+701;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250021500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+702;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+703;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+704;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+705;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+706;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+707;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+708;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+709;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n ;05001310501120250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+710;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+711;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+712;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+713;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+714;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+715;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250012900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+716;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+717;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+718;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+719;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+720;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+721;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+722;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+723;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250012800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+724;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+725;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+726;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+727;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+728;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+729;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+730;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+731;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250013900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+732;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+733;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+734;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+735;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+736;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250012900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+737;Rappi;Barranquilla;Atl?ntico;Juzgado 08 Laboral del Circuito de Barranquilla;08001310500820250011700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+738;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+739;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+740;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+741;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+742;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+743;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+744;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250013000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+745;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+746;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+747;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250014800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+748;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+749;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+750;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+751;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+752;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250014100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+753;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250013200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+754;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+755;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+756;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+757;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+758;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+759;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250014400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+760;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250016800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+761;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+762;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+763;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+764;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+765;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+766;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+767;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250013400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+768;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+769;Rappi;Envigado;Antioquia;Juzgado 02 Laboral del Circuito de Envigado;05266310500220250035000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+770;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n;05001310501620250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+771;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+772;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+773;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+774;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250013800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+775;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+776;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310501920250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+777;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+778;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+779;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+780;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+781;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+782;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250014400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+783;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+784;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250013800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+785;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250013700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+786;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+787;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+788;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+789;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n ;05001310501120250014000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+790;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310501520250019400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+791;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+792;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+793;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250013900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+794;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+795;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250013900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+796;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n ;05001310502820250014000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+797;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250014000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+798;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+799;Rappi;Santa Marta;Magdalena;Juzgado 04 Laboral del Circuito de Santa Marta;47001310500420250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+800;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+801;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+802;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+803;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+804;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+805;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+806;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+807;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+808;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+809;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+810;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+811;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+812;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+813;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250014400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+814;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250014800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+815;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+816;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250014200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+817;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+818;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+819;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250016300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+820;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+821;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+822;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+823;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+824;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250014300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+825;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+826;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+827;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250019800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+828;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+829;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+830;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+831;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250014400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+832;Rappi;Bogot?;Bogot? D.C.;Juzgado 43 Laboral del Circuito de Bogota;11001310504320250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+833;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250020300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+834;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250020400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+835;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+836;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320250019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+837;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+838;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+839;Rappi;Bogot?;Bogot? D.C.;Juzgado 27 Laboral del Circuito de Bogota;11001310502720250017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+840;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+841;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+842;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+843;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250014500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+844;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+845;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+846;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+847;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+848;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+849;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+850;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+851;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+852;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+853;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250014800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+854;Rappi;Barranquilla;Atl?ntico;Juzgado 02 Laboral del Circuito de Barranquilla;08001310500220250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+855;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+856;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+857;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+858;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+859;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250019400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+860;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250014700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+861;Rappi;Santa Marta;Magdalena;Juzgado 02 Laboral del Circuito de Santa Marta;47001310500220250016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+862;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+863;Rappi;Bogot?;Bogot? D.C.;Juzgado 21 Laboral del Circuito de Bogota;11001310502120250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+864;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250016300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+865;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+866;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250020100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+867;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+868;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+869;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;05001310500620250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+870;Rappi;Bogot?;Bogot? D.C.;Juzgado 13 Laboral del Circuito de Bogota;11001310501320250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+871;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+872;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+873;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+874;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250014600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+875;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250015800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+876;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+877;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+878;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+879;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+880;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n ;05001310501120250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+881;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+882;Rappi;Santa Marta;Magdalena;Juzgado 04 Laboral del Circuito de Santa Marta;47001310500420250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+883;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+884;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+885;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+886;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+887;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+888;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+889;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+890;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+891;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+892;Rappi;Neiva;Huila;Juzgado 05 Laboral del Circuito de Neiva;41001310500320250020700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+893;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+894;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310501720250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+895;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+896;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+897;Rappi;Barranquilla;Atl?ntico;Juzgado 11 Laboral del Circuito de Barranquilla;08001310501120250013200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+898;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+899;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+900;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+901;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+902;Rappi;Villavicencio;Meta;Juzgado 03 Laboral del Circuito de Villavicencio;50001310500320250012000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+903;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+904;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+905;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+906;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+907;Rappi;Bogot?;Bogot? D.C.;Juzgado 16 Laboral del Circuito de Bogota;11001310501620250018000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+908;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+909;Rappi;Neiva;Huila;Juzgado 01 Laboral del Circuito de Neiva;41001310500120250021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+910;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+911;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+912;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+913;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+914;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+915;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+916;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+917;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n ;05001310501120250015400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+918;Rappi;Cali;Valle del Cauca;Juzgado 09 Laboral del Circuito de Cali;76001310500920250025900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+919;Rappi;Cali;Valle del Cauca;Juzgado 06 Laboral del Circuito de Cali;76001310500620250023100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+920;Rappi;Cali;Valle del Cauca;Juzgado 15 Laboral del Circuito de Cali;76001310501520250025000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+921;Rappi;Barranquilla;Atl?ntico;Juzgado 14 Laboral del Circuito de Barranquilla;08001310501420250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+922;Rappi;Santa Marta;Magdalena;Juzgado 02 Laboral del Circuito de Santa Marta;47001310500220250019100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+923;Rappi;Medell?n;Antioquia;Juzgado 08 Laboral del Circuito de Medell?n ;05001310500820250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+924;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n ;05001310501120250018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+925;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250018000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+926;Rappi;Barranquilla;Atl?ntico;Juzgado 05 Laboral del Circuito de Barranquilla;08001310500520250016100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+927;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+928;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+929;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+930;Rappi;Bogot?;Bogot? D.C.;Juzgado 15 Laboral del Circuito de Bogot?;11001310505120250020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+931;Rappi;Bogot?;Bogot? D.C.;Juzgado 10 Laboral del Circuito de Bogot?;11001310501020250027600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+932;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250015500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+933;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250021700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+934;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+935;Rappi;Medell?n;Antioquia;;;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+936;Rappi;Bogot?;Bogot? D.C.;Juzgado 25 Laboral del Circuito de Bogota;11001310502520250021200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+937;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+938;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+939;Rappi;Santa Marta;Magdalena;Juzgado 04 Laboral del Circuito de Santa Marta;47001310500420250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+940;Rappi;Barranquilla;Atl?ntico;Juzgado 04 Laboral del Circuito de Barranquilla;08001310500420250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+941;Rappi;Itag??;Antioquia;Juzgado 01 Laboral del Circuito de Cucuta;54001310500120250010400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+942;Rappi;Itag??;Antioquia;Juzgado 02 Laboral del Circuito de Itag??;05360310500220250005400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+943;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+944;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+945;Rappi;Bucaramanga;Santander;Juzgado 01 Laboral del Circuito de Bucaramanga;68001310500120250018500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+946;Rappi;Santa Marta;Magdalena;Juzgado 04 Laboral del Circuito de Santa Marta;47001310500420250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+947;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Bucaramanga;05001310500420250017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+948;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+949;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n ;05001310500320250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+950;Rappi;Medell?n;Antioquia;Juzgado 14 Laboral del Circuito de Medell?n;05001310501420250019500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+951;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250016200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+952;Rappi;Monter?a;C?rdoba;Juzgado 01 Laboral del Circuito de Monteria;23001310500120250009400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+953;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+954;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+955;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+956;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+957;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250015300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+958;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+959;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250016800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+960;Rappi;Bogot?;Bogot? D.C.;Juzgado 15 Laboral del Circuito de Bogot?;11001310501520250020200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+961;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250015600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+962;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250020600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+963;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+964;Rappi;Medell?n;Antioquia;Juzgado 16 Laboral del Circuito de Medell?n ;05001310501620250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+965;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250016800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+966;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+967;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+968;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+969;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250020700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+970;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250015700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+971;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+972;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250017600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+973;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+974;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+975;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+976;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250019100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+977;Rappi;Neiva;Huila;Juzgado 02 Laboral del Circuito de Neiva;41001310500220250023100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+978;Rappi;Armenia;Quind?o;Juzgado 01 Laboral del Circuito de Armenia;63001310500120250008000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+979;Rappi;Armenia;Quind?o;Juzgado 01 Laboral del Circuito de Armenia;63001310500120250008000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+980;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250015900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+981;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250020300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+982;Rappi;Manizales;Caldas;Juzgado 03 Laboral del Circuito de Manizales;17001310500320250011100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+983;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n ;05001310502120250016400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+984;Otro;Bogot?;Bogot? D.C.;Juzgado 35 Familia del Circuito de Bogota;11001311003520250072800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+985;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+986;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250019800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+987;Rappi;Bucaramanga;Santander;Juzgado 06 Laboral del Circuito de Bucaramanga;68001310500620250020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+988;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+989;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+990;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+991;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+992;Rappi;Villavicencio;Meta;Juzgado 02 Laboral del Circuito de Villavicencio;50001310500220250012700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+993;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250018100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+994;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250019700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+995;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500120250012600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+996;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250019600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+997;Rappi;Medell?n;Antioquia;Juzgado 09 Laboral del Circuito de Medell?n;05001310500920250016000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+998;Rappi;Girardot;Cundinamarca;Juzgado 01 Laboral del Circuito de Girardot;25307310500120250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+999;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250017300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1000;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1001;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1002;Rappi;Medell?n;Antioquia;Juzgado 23 Laboral del Circuito de Medell?n;05001310502320250016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1003;Rappi;Bucaramanga;Santander;Juzgado 07 Laboral del Circuito de Bucaramanga;68001310500720250019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1004;Rappi;Medell?n;Antioquia;Juzgado 06 Laboral del Circuito de Medell?n;50013105006202500167000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1005;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500120250012900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1006;Rappi;Villavicencio;Meta;Juzgado 03 Laboral del Circuito de Villavicencio;50001310500320250013100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1007;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250020200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1008;Rappi;Itag??;Antioquia;Juzgado 03 Laboral del Circuito de C?cuta;54001310500320250010200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1009;Rappi;Neiva;Huila;Juzgado 04 Laboral del Circuito de Neiva;41001310500420250023700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1010;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250016500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1011;Rappi;Cali;Valle del Cauca;Juzgado 18 Laboral del Circuito de Cali;76001310501820250032600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1012;Rappi;Cali;Valle del Cauca;Juzgado 20 Laboral del Circuito de Cali;76001310502020250026000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1013;Rappi;Cali;Valle del Cauca;Juzgado 15 Laboral del Circuito de Cali;76001310501520250026900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1014;Rappi;Cali;Valle del Cauca;Juzgado 11 Laboral del Circuito de Cali;76001310501120250025300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1015;Rappi;Cali;Valle del Cauca;Juzgado 18 Laboral del Circuito de Cali;76001310501820250032700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1016;Rappi;Cali;Valle del Cauca;Juzgado 07 Laboral del Circuito de Cali;76001310500720250030200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1017;Rappi;Cali;Valle del Cauca;Juzgado 19 Laboral del Circuito de Cali;76001310501920250022800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1018;Rappi;Cali;Valle del Cauca;Juzgado 16 Laboral del Circuito de Cali;76001310501620250027600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1019;Rappi;Cali;Valle del Cauca;Juzgado 07 Laboral del Circuito de Cali;76001310500720250029700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1020;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250016600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1021;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250017300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1022;Rappi;Cali;Valle del Cauca;Juzgado 17 Laboral del Circuito de Medellin;76001310501720250025200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1023;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1024;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250016800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1025;Rappi;Medell?n;Antioquia;Juzgado 15 Laboral del Circuito de Medell?n;05001310501520250022100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1026;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1027;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250017000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1028;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1029;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1030;Rappi;Medell?n;Antioquia;Juzgado 29 Laboral del Circuito de Medell?n;05001310502920250017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1031;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250018000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1032;Rappi;Medell?n;Antioquia;Juzgado 07 Laboral del Circuito de Medell?n;05001310500720250017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1033;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250016700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1034;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250020100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1035;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250020500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1036;Rappi;Bogot?;Bogot? D.C.;Juzgado 28 Laboral del Circuito de Bogota;11001310502820250020000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1037;Rappi;Bogot?;Bogot? D.C.;Juzgado 33 Laboral del Circuito de Bogota;11001310503320250019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1038;Rappi;Itag??;Antioquia;Juzgado 01 Laboral del Circuito de Cucuta;54001310500120250010100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1039;Rappi;Bogot?;Bogot? D.C.;Juzgado 07 Laboral del Circuito de Bogota;11001310500720250024900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1040;Rappi;Medell?n;Antioquia;Juzgado 03 Laboral del Circuito de Medell?n;05001310500320250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1041;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250017900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1042;Rappi;Medell?n;Antioquia;Juzgado 21 Laboral del Circuito de Medell?n;05001310502120250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1043;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250016900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1044;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250020300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1045;Rappi;Bogot?;Bogot? D.C.;Juzgado 10 Laboral del Circuito de Bogot?;11001310501020250026900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1046;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250021300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1047;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250018300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1048;Rappi;Medell?n;Antioquia;Juzgado 17 Laboral del Circuito de Medell?n;05001310501720250018200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1049;Rappi;Medell?n;Antioquia;Juzgado 20 Laboral del Circuito de Medell?n;05001310502020250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1050;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310502020250018400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1051;Rappi;Medell?n;Antioquia;Juzgado 19 Laboral del Circuito de Medell?n;05001310501920250018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1052;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500120250014900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1053;Rappi;Neiva;Huila;Juzgado 05 Laboral del Circuito de Neiva;41001310500320250024500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1054;Rappi;Villavicencio;Meta;Juzgado 03 Laboral del Circuito de Villavicencio;50001310500320250015200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1055;Rappi;Manizales;Caldas;Juzgado 05 Laboral del Circuito de Manizales;17001310500520250011500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1056;Rappi;Bucaramanga;Santander;Juzgado 03 Laboral del Circuito de Bucaramanga;68001310500320250021000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1057;Rappi;Medell?n;Antioquia;Juzgado 26 Laboral del Circuito de Medell?n;05001310502620250017200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1058;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1059;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250017400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1060;Rappi;Manizales;Caldas;Juzgado 04 Laboral del Circuito de Manizales;17001310500420250021100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1061;Rappi;Neiva;Huila;Juzgado 03 Laboral del Circuito de Neiva;41001310500320250024600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1062;Rappi;Itag??;Antioquia;Juzgado 01 Laboral del Circuito de Cucuta;54001310500120250010400;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1063;Rappi;Medell?n;Antioquia;Juzgado 12 Laboral del Circuito de Medell?n;05001310501220250019300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1064;Rappi;Medell?n;Antioquia;Juzgado 28 Laboral del Circuito de Medell?n;05001310502820250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1065;Rappi;Bucaramanga;Santander;Juzgado 04 Laboral del Circuito de Bucaramanga;68001310500420250022600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1066;Rappi;Barranquilla;Atl?ntico;Juzgado 04 Laboral del Circuito de Barranquilla;08001310500420250016800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1067;Rappi;Manizales;Caldas;Juzgado 01 Laboral del Circuito de Manizales;17001310500120250013300;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1068;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1069;Rappi;Bogot?;Bogot? D.C.;Juzgado 14 Laboral del Circuito de Bogota;11001310501420250024600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1070;Rappi;Villavicencio;Meta;Juzgado 01 Laboral del Circuito de Villavicencio;50001310500120250015100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1071;Rappi;Cali;Valle del Cauca;Juzgado 13 Laboral del Circuito de Cali;76001310501320250025600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1072;Rappi;Medell?n;Antioquia;Juzgado 10 Laboral del Circuito de Medell?n;05001310501020250020800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1073;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1074;Rappi;Cali;Valle del Cauca;Juzgado 14 Laboral del Circuito de Cali;76001310501420250025100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1075;Rappi;Medell?n;Antioquia;Juzgado 11 Laboral del Circuito de Medell?n;05001310501120250017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1076;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250018700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1077;Rappi;Medell?n;Antioquia;Juzgado 02 Laboral del Circuito de Medell?n;05001310500220250017500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1078;Rappi;Medell?n;Antioquia;Juzgado 22 Laboral del Circuito de Medell?n;05001310502220250017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1079;Rappi;Medell?n;Antioquia;Juzgado 25 Laboral del Circuito de Medell?n ;05001310502520250017800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1080;Rappi;Medell?n;Antioquia;Juzgado 01 Laboral del Circuito de Medell?n;05001310500120250017700;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1081;Rappi;Medell?n;Antioquia;Juzgado 18 Laboral del Circuito de Medell?n;05001310501820250020000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1082;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250019800;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1083;Rappi;Medell?n;Antioquia;Juzgado 04 Laboral del Circuito de Medell?n;05001310500420250019900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1084;Rappi;Manizales;Caldas;Juzgado 01 Laboral del Circuito de Manizales;70013105001202500134000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1085;Rappi;Manizales;Caldas;Juzgado 01 Laboral del Circuito de Manizales;17001310500120250013500;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1086;Rappi;Medell?n;Antioquia;Juzgado 13 Laboral del Circuito de Medell?n;05001310501320250018900;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1087;Rappi;Medell?n;Antioquia;Juzgado 05 Laboral del Circuito de Medell?n;05001310500520250019000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1088;Rappi;Barranquilla;Atl?ntico;Juzgado 04 Laboral del Circuito de Barranquilla;08001310500420250017100;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1089;Rappi;Bucaramanga;Santander;Juzgado 02 Laboral del Circuito de Bucaramanga;68001310500220250022000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1090;Rappi;Manizales;Caldas;Juzgado 01 Laboral del Circuito de Manizales;17001310500120250013600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1091;Rappi;Bucaramanga;Santander;Juzgado 05 Laboral del Circuito de Bucaramanga;68001310500520250021200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1092;Rappi;Medell?n;Antioquia;Juzgado 24 Laboral del Circuito de Medell?n;05001310502420250019200;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1093;Rappi;Barranquilla;Atl?ntico;Juzgado 11 Laboral del Circuito de Barranquilla;08001310501120250015000;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1094;Rappi;Medell?n;Antioquia;Juzgado 27 Laboral del Circuito de Medell?n;05001310502720250018600;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural
+1103;Otro;Bogot?;Bogot? D.C.;Superintencia de Industria y Comercio ;24-247141;68f02d20f248052e96ceea8b;Declarativo;Ordinario;Natural

@@ -1,0 +1,7 @@
+{
+    "conventionalCommits.scopes": [
+        "user",
+        "Prescriptions Logs",
+        "prescription"
+    ]
+}

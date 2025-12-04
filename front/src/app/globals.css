@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+     :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 330 81% 60%;
+        /* Pink 500 */
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 324 93% 44%;
+        /* Pink 600 */
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 330 81% 60%;
+        /* Pink 500 */
+        --radius: 0.5rem;
+        /* Sidebar with Elena theme - PURPLE BACKGROUND */
+        --sidebar-background: 262 83% 20%;
+        /* Purple background */
+        --sidebar-foreground: 0 0% 98%;
+        /* White text */
+        --sidebar-primary: 330 81% 60%;
+        --sidebar-primary-foreground: 0 0% 98%;
+        --sidebar-accent: 324 93% 44%;
+        --sidebar-accent-foreground: 0 0% 98%;
+        --sidebar-border: 262 83% 25%;
+        --sidebar-ring: 330 81% 60%;
+        /* Chart colors with Elena theme */
+        --chart-1: 330 81% 60%;
+        /* Pink */
+        --chart-2: 262 83% 58%;
+        /* Purple */
+        --chart-3: 24 95% 53%;
+        /* Orange */
+        --chart-4: 142 71% 45%;
+        /* Green */
+        --chart-5: 221 83% 53%;
+        /* Blue */
+    }
+    .dark {
+        --background: 0 0% 100%;
+        /* Force white background even in dark mode */
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 330 81% 60%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 324 93% 44%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 330 81% 60%;
+        /* Force purple sidebar background in dark mode too */
+        --sidebar-background: 262 83% 20%;
+        --sidebar-foreground: 0 0% 98%;
+        --sidebar-primary: 330 81% 60%;
+        --sidebar-primary-foreground: 0 0% 98%;
+        --sidebar-accent: 324 93% 44%;
+        --sidebar-accent-foreground: 0 0% 98%;
+        --sidebar-border: 262 83% 25%;
+        --sidebar-ring: 330 81% 60%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-white text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+    /* Force white backgrounds */
+    html,
+    body,
+    #__next,
+    [data-radix-portal] {
+        @apply bg-white !important;
+    }
+}
+
+
+/* Elena custom styles */
+
+@layer components {
+    .elena-button {
+        @apply rounded-lg px-4 py-2 font-medium transition-colors;
+    }
+    .elena-button-primary {
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-weight: 500;
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-duration: 150ms;
+        background-color: #db2777;
+        /* bg-pink-600 */
+        color: #fff;
+        /* text-white */
+    }
+    .elena-button-primary:hover {
+        background-color: #be185d;
+        /* bg-pink-700 */
+    }
+    .elena-button-secondary {
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-weight: 500;
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-duration: 150ms;
+        background-color: #f3f4f6;
+        /* bg-gray-100 */
+        color: #111827;
+        /* text-gray-900 */
+    }
+    .elena-button-secondary:hover {
+        background-color: #e5e7eb;
+        /* bg-gray-200 */
+    }
+    .elena-card {
+        background-color: #fff;
+        border-width: 1px;
+        border-color: #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    }
+}

@@ -1,0 +1,193 @@
+{
+  "Despacho judicial": [
+    {
+      "Armenia": [
+        "Juzgado 01 Laboral del Circuito de Armenia",
+        "Juzgado 02 Laboral del Circuito de Armenia",
+        "Juzgado 03 Laboral del Circuito de Armenia",
+        "Juzgado 04 Laboral del Circuito de Armenia"
+      ],
+      "Barranquilla": [
+        "Juzgado 01 Laboral del Circuito de Barranquilla",
+        "Juzgado 02 Laboral del Circuito de Barranquilla",
+        "Juzgado 03 Laboral del Circuito de Barranquilla",
+        "Juzgado 04 Laboral del Circuito de Barranquilla",
+        "Juzgado 05 Laboral del Circuito de Barranquilla",
+        "Juzgado 06 Laboral del Circuito de Barranquilla",
+        "Juzgado 07 Laboral del Circuito de Barranquilla",
+        "Juzgado 08 Laboral del Circuito de Barranquilla",
+        "Juzgado 09 Laboral del Circuito de Barranquilla",
+        "Juzgado 10 Laboral del Circuito de Barranquilla",
+        "Juzgado 11 Laboral del Circuito de Barranquilla",
+        "Juzgado 12 Laboral del Circuito de Barranquilla",
+        "Juzgado 13 Laboral del Circuito de Barranquilla",
+        "Juzgado 14 Laboral del Circuito de Barranquilla",
+        "Juzgado 15 Laboral del Circuito de Barranquilla",
+        "Juzgado 16 Laboral del Circuito de Barranquilla"
+      ],
+      "Bello": [
+        "Juzgado 01 Laboral del Circuito de Bello",
+        "Juzgado 02 Laboral del Circuito de Bello"
+      ],
+      "Bogotá": [
+        "Juzgado 01 Laboral del Circuito de Bogotá",
+        "Juzgado 02 Laboral del Circuito de Bogotá",
+        "Juzgado 03 Laboral del Circuito de Bogotá",
+        "Juzgado 04 Laboral del Circuito de Bogotá",
+        "Juzgado 05 Laboral del Circuito de Bogotá",
+        "Juzgado 06 Laboral del Circuito de Bogotá",
+        "Juzgado 07 Laboral del Circuito de Bogotá",
+        "Juzgado 08 Laboral del Circuito de Bogotá",
+        "Juzgado 09 Laboral del Circuito de Bogotá",
+        "Juzgado 10 Laboral del Circuito de Bogotá",
+        "Juzgado 11 Laboral del Circuito de Bogotá",
+        "Juzgado 12 Laboral del Circuito de Bogotá",
+        "Juzgado 13 Laboral del Circuito de Bogotá",
+        "Juzgado 14 Laboral del Circuito de Bogotá",
+        "Juzgado 15 Laboral del Circuito de Bogotá",
+        "Juzgado 16 Laboral del Circuito de Bogotá",
+        "Juzgado 17 Laboral del Circuito de Bogotá",
+        "Juzgado 18 Laboral del Circuito de Bogotá",
+        "Juzgado 19 Laboral del Circuito de Bogotá",
+        "Juzgado 20 Laboral del Circuito de Bogotá",
+        "Juzgado 21 Laboral del Circuito de Bogotá",
+        "Juzgado 22 Laboral del Circuito de Bogotá",
+        "Juzgado 23 Laboral del Circuito de Bogotá",
+        "Juzgado 24 Laboral del Circuito de Bogotá",
+        "Juzgado 25 Laboral del Circuito de Bogotá",
+        "Juzgado 26 Laboral del Circuito de Bogotá",
+        "Juzgado 27 Laboral del Circuito de Bogotá",
+        "Juzgado 28 Laboral del Circuito de Bogotá",
+        "Juzgado 29 Laboral del Circuito de Bogotá",
+        "Juzgado 30 Laboral del Circuito de Bogotá",
+        "Juzgado 31 Laboral del Circuito de Bogotá",
+        "Juzgado 32 Laboral del Circuito de Bogotá",
+        "Juzgado 33 Laboral del Circuito de Bogotá",
+        "Juzgado 34 Laboral del Circuito de Bogotá",
+        "Juzgado 35 Laboral del Circuito de Bogotá",
+        "Juzgado 36 Laboral del Circuito de Bogotá",
+        "Juzgado 37 Laboral del Circuito de Bogotá",
+        "Juzgado 38 Laboral del Circuito de Bogotá",
+        "Juzgado 39 Laboral del Circuito de Bogotá",
+        "Juzgado 40 Laboral del Circuito de Bogotá",
+        "Juzgado 41 Laboral del Circuito de Bogotá",
+        "Juzgado 42 Laboral del Circuito de Bogotá",
+        "Juzgado 43 Laboral del Circuito de Bogotá",
+        "Juzgado 44 Laboral del Circuito de Bogotá",
+        "Juzgado 45 Laboral del Circuito de Bogotá",
+        "Juzgado 46 Laboral del Circuito de Bogotá",
+        "Juzgado 47 Laboral del Circuito de Bogotá"
+      ],
+      "Bucaramanga": [
+        "Juzgado 01 Laboral del Circuito de Bucaramanga",
+        "Juzgado 02 Laboral del Circuito de Bucaramanga",
+        "Juzgado 03 Laboral del Circuito de Bucaramanga",
+        "Juzgado 04 Laboral del Circuito de Bucaramanga",
+        "Juzgado 05 Laboral del Circuito de Bucaramanga",
+        "Juzgado 06 Laboral del Circuito de Bucaramanga",
+        "Juzgado 07 Laboral del Circuito de Bucaramanga"
+      ],
+      "Cali": [
+        "Juzgado 01 Laboral del Circuito de Cali",
+        "Juzgado 02 Laboral del Circuito de Cali",
+        "Juzgado 03 Laboral del Circuito de Cali",
+        "Juzgado 04 Laboral del Circuito de Cali",
+        "Juzgado 05 Laboral del Circuito de Cali",
+        "Juzgado 06 Laboral del Circuito de Cali",
+        "Juzgado 07 Laboral del Circuito de Cali",
+        "Juzgado 08 Laboral del Circuito de Cali",
+        "Juzgado 09 Laboral del Circuito de Cali",
+        "Juzgado 10 Laboral del Circuito de Cali",
+        "Juzgado 11 Laboral del Circuito de Cali",
+        "Juzgado 12 Laboral del Circuito de Cali",
+        "Juzgado 13 Laboral del Circuito de Cali",
+        "Juzgado 14 Laboral del Circuito de Cali",
+        "Juzgado 15 Laboral del Circuito de Cali",
+        "Juzgado 16 Laboral del Circuito de Cali",
+        "Juzgado 17 Laboral del Circuito de Cali",
+        "Juzgado 18 Laboral del Circuito de Cali",
+        "Juzgado 19 Laboral del Circuito de Cali",
+        "Juzgado 20 Laboral del Circuito de Cali",
+        "Juzgado 21 Laboral del Circuito de Cali",
+        "Juzgado 22 Laboral del Circuito de Cali"
+      ],
+      "Cúcuta": [
+        "Juzgado 01 Laboral del Circuito de Cúcuta",
+        "Juzgado 02 Laboral del Circuito de Cúcuta",
+        "Juzgado 03 Laboral del Circuito de Cúcuta",
+        "Juzgado 04 Laboral del Circuito de Cúcuta",
+        "Juzgado 05 Laboral del Circuito de Cúcuta"
+      ],
+      "Envigado": [
+        "Juzgado 01 Laboral del Circuito de Envigado",
+        "Juzgado 02 Laboral del Circuito de Envigado"
+      ],
+      "Girardot": [
+        "Juzgado 01 Laboral del Circuito de Girardot"
+      ],
+      "Itagüí": [
+        "Juzgado 01 Laboral del Circuito de Itagüí",
+        "Juzgado 02 Laboral del Circuito de Itagüí"
+      ],
+      "Medellín": [
+        "Juzgado 01 Laboral del Circuito de Medellín",
+        "Juzgado 02 Laboral del Circuito de Medellín",
+        "Juzgado 03 Laboral del Circuito de Medellín",
+        "Juzgado 04 Laboral del Circuito de Medellín",
+        "Juzgado 05 Laboral del Circuito de Medellín",
+        "Juzgado 06 Laboral del Circuito de Medellín",
+        "Juzgado 07 Laboral del Circuito de Medellín",
+        "Juzgado 08 Laboral del Circuito de Medellín",
+        "Juzgado 09 Laboral del Circuito de Medellín",
+        "Juzgado 10 Laboral del Circuito de Medellín",
+        "Juzgado 11 Laboral del Circuito de Medellín",
+        "Juzgado 12 Laboral del Circuito de Medellín",
+        "Juzgado 13 Laboral del Circuito de Medellín",
+        "Juzgado 14 Laboral del Circuito de Medellín",
+        "Juzgado 15 Laboral del Circuito de Medellín",
+        "Juzgado 16 Laboral del Circuito de Medellín",
+        "Juzgado 17 Laboral del Circuito de Medellín",
+        "Juzgado 18 Laboral del Circuito de Medellín",
+        "Juzgado 19 Laboral del Circuito de Medellín",
+        "Juzgado 20 Laboral del Circuito de Medellín",
+        "Juzgado 21 Laboral del Circuito de Medellín",
+        "Juzgado 22 Laboral del Circuito de Medellín",
+        "Juzgado 23 Laboral del Circuito de Medellín",
+        "Juzgado 24 Laboral del Circuito de Medellín",
+        "Juzgado 25 Laboral del Circuito de Medellín",
+        "Juzgado 26 Laboral del Circuito de Medellín",
+        "Juzgado 27 Laboral del Circuito de Medellín",
+        "Juzgado 28 Laboral del Circuito de Medellín",
+        "Juzgado 29 Laboral del Circuito de Medellín"
+      ],
+      "Montería": [
+        "Juzgado 01 Laboral del Circuito de Montería",
+        "Juzgado 02 Laboral del Circuito de Montería",
+        "Juzgado 03 Laboral del Circuito de Montería",
+        "Juzgado 04 Laboral del Circuito de Montería",
+        "Juzgado 05 Laboral del Circuito de Montería"
+      ],
+      "Neiva": [
+        "Juzgado 01 Laboral del Circuito de Neiva",
+        "Juzgado 02 Laboral del Circuito de Neiva",
+        "Juzgado 03 Laboral del Circuito de Neiva",
+        "Juzgado 04 Laboral del Circuito de Neiva"
+      ],
+      "Santa Marta": [
+        "Juzgado 01 Laboral del Circuito de Santa Marta",
+        "Juzgado 02 Laboral del Circuito de Santa Marta",
+        "Juzgado 03 Laboral del Circuito de Santa Marta",
+        "Juzgado 04 Laboral del Circuito de Santa Marta",
+        "Juzgado 05 Laboral del Circuito de Santa Marta"
+      ],
+      "Villavicencio": [
+        "Juzgado 01 Laboral del Circuito de Villavicencio",
+        "Juzgado 02 Laboral del Circuito de Villavicencio",
+        "Juzgado 03 Laboral del Circuito de Villavicencio"
+      ],
+      "Otro": [
+        "Dejar especio para escribir a mano"
+      ]
+    }
+  ]
+}

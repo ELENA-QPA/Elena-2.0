@@ -1,0 +1,4764 @@
+﻿internalCode;responsible;performanceType;createdAt
+1;Demandante;Radicado;01/07/21
+1;Juzgado;Inadmitido;19/11/21
+1;Demandante;Subsanación;26/11/21
+1;Demandante;Radica impulso procesal;18/04/22
+1;Juzgado;Admite;20/05/22
+1;Demandante;Notificación personal de la demanda;06/06/22
+1;Demandado;Contestación de demanda;17/06/22
+1;Juzgado;Admite;08/08/22
+1;Juzgado;Fija audiencia;26/08/22
+1;Juzgado;Conciliado;29/11/22
+2;Demandante;Archivado;01/07/21
+3;Demandante;Radicado;03/05/21
+3;Juzgado;Inadmitido;21/06/21
+3;Demandante;Subsanación;28/06/21
+3;Juzgado;Admite;12/08/21
+3;Demandado;Contestación de demanda;06/09/21
+3;Demandante;Radica impulso procesal;16/12/21
+3;Demandante;Radica impulso procesal;18/04/22
+3;Demandante;Radica impulso procesal;06/06/22
+3;Juzgado;Fija audiencia;22/07/22
+3;Juzgado;Admite;22/07/22
+3;Juzgado;Conciliado;02/12/22
+4;Demandante;Archivado;01/07/21
+5;Demandante;Radicado;04/05/21
+5;Demandante;Subsanación;06/05/21
+5;Juzgado;Admite;08/06/21
+5;Juzgado;Fija audiencia;08/06/21
+5;Demandante;Notificación personal de la demanda;11/06/21
+5;Demandante;Radica impulso procesal;06/07/21
+5;Demandado;Contestación de demanda;28/06/21
+5;Demandante;Contestación de demanda;14/07/21
+5;Demandante;Radica impulso procesal;16/12/21
+5;Juzgado;Inadmite contestación de la demanda;24/03/22
+5;Juzgado;Fija audiencia;24/03/22
+5;Demandante;Subsanación;31/03/22
+5;Demandante;Radica impulso procesal;18/04/22
+5;Juzgado;Admite;31/05/22
+5;Juzgado;Fija audiencia;31/05/22
+5;Juzgado;Conciliado;06/09/22
+6;Demandante;Radicado;25/10/21
+6;Juzgado;Admite;08/02/22
+6;Juzgado;Fija audiencia;08/02/22
+6;Demandante;Notificación personal de la demanda;11/02/22
+6;Demandado;Contestación de demanda;28/02/22
+6;Demandante;Radica impulso procesal;18/04/22
+6;Juzgado;Inadmite contestación de la demanda;01/09/22
+6;Juzgado;Fija audiencia;01/09/22
+6;Demandante;Radica impulso procesal;01/09/22
+6;Demandante;Subsanación;08/09/22
+6;Juzgado;Fija audiencia;28/02/23
+6;Juzgado;Conciliado;22/03/23
+7;Demandante;Radicado;04/05/21
+7;Juzgado;Admite;11/08/21
+7;Demandado;Contestación de demanda;08/09/21
+7;Demandante;Radica impulso procesal;19/04/22
+7;Demandante;Radica impulso procesal;06/06/22
+7;Juzgado;Inadmite contestación de la demanda;05/07/22
+7;Demandante;Subsanación;12/07/22
+7;Juzgado;Admite;01/03/23
+7;Juzgado;Conciliado;14/04/23
+8;Demandante;Radicado;22/10/21
+8;Juzgado;Inadmitido;26/10/21
+8;Demandante;Subsanación;02/11/21
+8;Juzgado;Admite;02/11/21
+8;Demandado;Contestación de demanda;23/11/21
+8;Demandante;Radica impulso procesal;18/04/22
+8;Demandante;Radica impulso procesal;01/09/22
+8;Juzgado;Inadmite contestación de la demanda;18/08/23
+8;Demandante;Subsanación;25/08/23
+8;Juzgado;Admite;14/12/23
+8;Juzgado;Conciliado;23/02/24
+9;Demandante;Radicado;04/05/21
+9;Juzgado;Inadmitido;14/05/21
+9;Demandante;Subsanación;24/05/21
+9;Juzgado;Finalizado por Rechazo;15/10/21
+10;NA;NA;NA
+11;Demandante;Radicado;13/02/24
+11;Juzgado;Admite;08/05/24
+11;Demandante;Notificación personal de la demanda;08/05/24
+11;Juzgado;Inadmite contestación de la demanda;02/07/24
+11;Juzgado;Fija audiencia;15/07/24
+11;Juzgado;Conciliado;20/11/24
+12;Demandante;Radicado;27/05/21
+12;Juzgado;Admite;28/07/21
+12;Demandante;Notificación personal de la demanda;30/07/21
+12;Demandado;Contestación de demanda;18/08/21
+12;Juzgado;Fija audiencia;04/04/22
+12;Juzgado;Admite;04/04/22
+12;Juzgado;Conciliado;07/09/22
+13;Demandante;Radicado;11/05/21
+13;Juzgado;Inadmitido;20/05/21
+13;Demandante;Subsanación;25/05/21
+13;Juzgado;Admite;26/05/21
+13;Demandante;Notificación personal de la demanda;11/06/21
+13;Demandado;Contestación de demanda;19/08/21
+13;Demandante;Radica impulso procesal;23/08/21
+13;Juzgado;Fija audiencia;26/08/21
+13;Juzgado;Admite;23/09/21
+13;Demandante;Radica impulso procesal;02/02/22
+13;Juzgado;Fija audiencia;10/02/22
+13;Demandado;Contestación de demanda;10/02/22
+13;Juzgado;Admite;10/02/22
+13;Demandante;Radica impulso procesal;14/02/22
+13;Juzgado;Admite;21/02/22
+13;Juzgado;Admite;22/07/22
+13;Juzgado;Admite;22/08/22
+13;Demandante;Radica impulso procesal;01/09/22
+13;Juzgado;Fija audiencia;02/09/22
+13;Juzgado;Admite;02/09/22
+13;Juzgado;Admite;12/09/22
+13;Demandante;Radica impulso procesal;16/09/22
+13;Juzgado;Admite;25/10/22
+13;Juzgado;Admite;16/11/22
+13;Juzgado;Fija audiencia;24/11/22
+13;Juzgado;Admite;02/02/23
+13;Demandante;Radica impulso procesal;07/03/23
+13;Demandante;Retiro de demanda;15/08/23
+13;Juzgado;Archivado;15/08/23
+14;Demandante;Radicado;15/09/22
+14;Juzgado;Inadmitido;28/03/23
+14;Demandante;Subsanación;10/04/23
+14;Demandante;Radica impulso procesal;20/04/23
+14;Juzgado;Admite;03/05/23
+14;Juzgado;Fija audiencia;09/08/23
+14;Demandante;Radica impulso procesal;17/08/23
+14;Demandado;Contestación de demanda;05/09/23
+14;Juzgado;Admite;15/09/23
+14;Demandante;Radica impulso procesal;15/04/24
+14;Demandante;Radica impulso procesal;23/05/24
+14;Juzgado;Fija audiencia;13/06/24
+14;Demandante;Radica impulso procesal;14/06/24
+14;Demandante;Radica impulso procesal;27/08/24
+14;Juzgado;Conciliado;28/08/24
+15;Demandante;Radicado;15/09/22
+15;Juzgado;Admite;31/01/23
+15;Demandante;Notificación personal de la demanda;31/01/23
+15;Demandante;Radica impulso procesal;08/02/23
+15;Demandado;Contestación de demanda;24/02/23
+15;Juzgado;Fija audiencia;26/05/23
+15;Juzgado;Admite;26/05/23
+15;Juzgado;Admite;30/05/23
+15;Juzgado;Admite;20/06/23
+15;Juzgado;Admite;11/07/23
+15;Juzgado;Fija audiencia;11/07/23
+15;Juzgado;Conciliado;21/07/23
+16;Demandante;Radicado;19/07/21
+16;Juzgado;Inadmitido;24/08/21
+16;Demandante;Subsanación;15/09/21
+16;Juzgado;Admite;28/10/21
+16;Demandante;Notificación personal de la demanda;28/10/21
+16;Demandado;Contestación de demanda;01/12/21
+16;Demandante;Radica impulso procesal;16/11/21
+16;Demandante;Radica impulso procesal;18/04/22
+16;Demandante;Radica impulso procesal;06/06/22
+16;Demandante;Radica impulso procesal;13/09/22
+16;Juzgado;Fija audiencia;27/09/22
+16;Juzgado;Fija audiencia;29/03/23
+16;Juzgado;Fija audiencia;11/04/23
+16;Juzgado;Fija audiencia;18/08/23
+16;Juzgado;Fija audiencia;17/08/23
+16;Juzgado;Fija audiencia;11/09/23
+16;Juzgado;Conciliado;06/12/23
+17;Demandante;Radicado;22/10/21
+17;Juzgado;Inadmitido;26/10/21
+17;Demandante;Subsanación;02/11/21
+17;Juzgado;Admite;02/11/21
+17;Demandante;Notificación personal de la demanda;02/11/21
+17;Demandante;Radica impulso procesal;02/11/21
+17;Demandado;Contestación de demanda;23/11/21
+17;Demandante;Radica impulso procesal;18/04/22
+17;Demandante;Radica impulso procesal;06/06/22
+17;Demandante;Radica impulso procesal;01/09/22
+17;Demandante;Radica impulso procesal;07/10/22
+17;Juzgado;Fija audiencia;12/07/23
+17;Juzgado;Fija audiencia;23/08/23
+17;Juzgado;Conciliado;13/02/24
+18;Demandante;Radicado;19/02/24
+18;Juzgado;Admite;16/08/24
+18;Juzgado;Admite;16/10/24
+18;Demandante;Notificación personal de la demanda;19/08/25
+18;Juzgado;Inadmite contestación de la demanda;23/09/25
+19;Demandante;Radicado;29/04/22
+19;Juzgado;Inadmitido;13/10/22
+19;Demandante;Subsanación;25/10/22
+19;Juzgado;Admite;22/11/22
+19;Demandante;Radica impulso procesal;13/09/22
+19;Demandante;Radica impulso procesal;27/07/23
+19;Demandado;Contestación de demanda;18/07/23
+19;Juzgado;Admite;22/06/23
+19;Demandante;Notificación personal de la demanda;27/06/23
+19;Juzgado;Admite;02/02/24
+19;Juzgado;Fija audiencia;09/04/24
+19;Juzgado;Conciliado;25/04/25
+20;Demandante;Radicado;02/11/22
+20;Demandante;Subsanación;23/02/23
+20;Juzgado;Admite;15/03/23
+20;Demandante;Radica impulso procesal;16/03/23
+20;Juzgado;Admite;23/06/23
+20;Demandado;Contestación de demanda;10/07/23
+20;Juzgado;Fija audiencia;22/04/24
+20;Juzgado;Fija audiencia;25/04/24
+20;Demandante;Radica impulso procesal;17/04/24
+20;Demandante;Radica impulso procesal;14/06/24
+20;Demandante;Radica impulso procesal;06/09/24
+20;Juzgado;Fija audiencia;18/10/24
+20;Juzgado;Fija audiencia;12/12/24
+20;Demandante;Radica impulso procesal;07/05/25
+20;Juzgado;Conciliado;08/05/25
+21;Demandante;Radicado;04/11/22
+21;Juzgado;Inadmitido;01/12/22
+21;Juzgado;Admite;15/12/22
+21;Juzgado;Fija audiencia;23/01/24
+21;Juzgado;Conciliado;01/02/24
+22;Demandante;Radicado;28/11/22
+22;Juzgado;Inadmitido;01/02/23
+22;Juzgado;Admite;11/05/23
+22;Juzgado;Fija audiencia;11/03/24
+22;Juzgado;Conciliado;21/06/24
+23;Demandante;Radicado;21/02/23
+23;Juzgado;Admite;27/02/23
+23;Demandante;Notificación personal de la demanda;28/02/23
+23;Demandado;Contestación de demanda;17/03/23
+23;Juzgado;Admite;20/02/24
+23;Juzgado;Fija audiencia;23/02/24
+23;Juzgado;Conciliado;15/03/24
+24;Demandante;Radicado;16/02/21
+24;Juzgado;Inadmitido;07/07/21
+24;Demandante;Subsanación;12/07/21
+24;Juzgado;Admite;22/02/22
+24;Demandante;Notificación personal de la demanda;29/07/22
+24;Demandado;Contestación de demanda;23/03/22
+24;Demandado;Contestación de demanda;17/08/22
+24;Demandado;Contestación de demanda;14/09/22
+24;Demandante;Radica impulso procesal;25/01/22
+24;Demandante;Radica impulso procesal;18/04/22
+24;Demandante;Radica impulso procesal;06/06/22
+24;Demandante;Radica impulso procesal;01/07/22
+24;Demandante;Radica impulso procesal;13/09/22
+24;Juzgado;Inadmite contestación de la demanda;11/05/23
+24;Juzgado;Fija audiencia;28/07/23
+24;Juzgado;Fija audiencia;22/04/24
+24;Juzgado;Fija audiencia;22/07/24
+24;Juzgado;Fija audiencia;21/10/24
+24;Juzgado;Fija audiencia;14/08/25
+25;Demandante;Radicado;05/02/21
+25;Demandante;Radica impulso procesal;10/05/21
+25;Demandante;Radica impulso procesal;11/08/21
+25;Juzgado;Inadmitido;01/10/21
+25;Demandante;Subsanación;07/10/21
+25;Juzgado;Admite;21/10/21
+25;Demandante;Notificación personal de la demanda;05/11/21
+25;Demandante;Radica impulso procesal;16/12/21
+25;Juzgado;Admite;22/03/22
+25;Demandante;Radica impulso procesal;11/08/22
+25;Demandante;Radica impulso procesal;27/06/24
+25;Demandante;Radica impulso procesal;12/07/24
+25;Demandante;Retiro de demanda;05/11/24
+25;Demandante;Retiro de demanda;25/11/24
+26;Demandante;Radicado;19/01/21
+26;Juzgado;Inadmitido;28/06/21
+26;Juzgado;Admite;24/11/21
+26;Juzgado;Inadmite contestación de la demanda;05/08/22
+26;Juzgado;Fija audiencia;04/11/22
+26;Juzgado;Conciliado;08/03/23
+27;Demandante;Radicado;10/02/21
+27;Demandante;Radica impulso procesal;10/05/21
+27;Demandante;Radica impulso procesal;11/08/21
+27;Demandante;Radica impulso procesal;09/12/21
+27;Juzgado;Finalizado por Rechazo;27/07/22
+28;Demandante;Radicado;21/07/21
+28;Demandante;Radica impulso procesal;21/03/24
+28;Demandante;Radica impulso procesal;08/05/24
+28;Demandante;Radica impulso procesal;29/05/24
+28;Demandante;Radica impulso procesal;12/07/24
+28;Demandado;Contestación de demanda;09/06/25
+28;Juzgado;Admite;07/07/25
+28;Juzgado;Fija audiencia;07/07/25
+29;Juzgado;Archivado;09/03/23
+30;Demandante;Radicado;24/03/22
+30;Juzgado;Admite;24/02/23
+30;Juzgado;Admite;24/11/23
+30;Demandante;Radica impulso procesal;10/04/23
+30;Demandante;Radica impulso procesal;28/03/23
+30;Demandante;Radica impulso procesal;05/05/23
+30;Demandante;Radica impulso procesal;17/05/23
+30;Demandante;Radica impulso procesal;27/07/23
+30;Demandante;Radica impulso procesal;11/09/23
+30;Demandante;Radica impulso procesal;26/10/23
+30;Demandante;Radica impulso procesal;02/07/24
+30;Demandante;Radica impulso procesal;17/07/24
+30;Demandante;Radica impulso procesal;01/10/24
+30;Demandante;Radica impulso procesal;06/12/24
+30;Demandante;Radica impulso procesal;08/04/25
+31;Demandante;Radicado;25/07/23
+31;Juzgado;Inadmitido;26/10/23
+31;Demandante;Subsanación;03/11/23
+31;Juzgado;Admite;28/11/23
+31;Demandante;Notificación personal de la demanda;05/12/23
+31;Demandado;Contestación de demanda;11/01/24
+31;Juzgado;Inadmite contestación de la demanda;21/03/24
+31;Demandante;Subsanación;05/04/24
+31;Juzgado;Admite;30/05/24
+31;Juzgado;Fija audiencia;30/05/24
+31;Demandante;Radica impulso procesal;06/09/24
+31;Demandante;Radica impulso procesal;20/11/24
+31;Juzgado;Conciliado;21/11/24
+32;Demandante;Radicado;25/07/23
+32;Juzgado;Inadmitido;26/10/23
+32;Demandante;Subsanación;03/11/23
+32;Juzgado;Admite;28/11/23
+32;Demandante;Notificación personal de la demanda;05/12/23
+32;Demandado;Contestación de demanda;11/01/24
+32;Juzgado;Inadmite contestación de la demanda;21/03/24
+32;Demandante;Subsanación;05/04/24
+32;Juzgado;Admite;30/05/24
+32;Juzgado;Fija audiencia;30/05/24
+32;Demandante;Radica impulso procesal;06/09/24
+32;Demandante;Radica impulso procesal;20/11/24
+32;Juzgado;Conciliado;18/07/24
+33;Demandante;Radicado;24/07/23
+33;Juzgado;Inadmitido;08/11/23
+33;Demandante;Subsanación;15/11/23
+33;Juzgado;Admite;11/01/24
+33;Demandante;Notificación personal de la demanda;17/01/24
+33;Demandado;Contestación de demanda;31/01/24
+33;Juzgado;Inadmite contestación de la demanda;21/03/24
+33;Demandante;Subsanación;05/04/24
+33;Juzgado;Admite;28/05/24
+33;Juzgado;Fija audiencia;28/05/24
+33;Demandante;Radica impulso procesal;14/06/24
+33;Demandante;Radica impulso procesal;06/09/24
+33;Juzgado;Fija audiencia;05/11/24
+33;Juzgado;Conciliado;19/12/24
+34;Demandante;Radicado;19/02/24
+34;Juzgado;Inadmitido;26/11/24
+34;Demandante;Subsanación;27/11/24
+34;Juzgado;Admite;10/12/24
+34;Demandante;Notificación personal de la demanda;11/12/24
+34;Juzgado;Fija audiencia;12/02/25
+34;Juzgado;Fija audiencia;12/06/25
+34;Juzgado;Fija audiencia;18/07/25
+34;Juzgado;Conciliado;03/09/25
+35;Demandante;Radicado;19/02/24
+35;Juzgado;Inadmitido;26/11/24
+35;Demandante;Subsanación;27/11/24
+35;Juzgado;Admite;10/12/24
+35;Demandante;Notificación personal de la demanda;11/12/24
+35;Juzgado;Fija audiencia;12/02/25
+35;Juzgado;Fija audiencia;12/06/25
+35;Juzgado;Fija audiencia;18/07/25
+35;Juzgado;Conciliado;03/09/25
+36;Demandante;Radicado;19/02/24
+36;Juzgado;Inadmitido;26/11/24
+36;Demandante;Subsanación;27/11/24
+36;Juzgado;Admite;10/12/24
+36;Demandante;Notificación personal de la demanda;11/12/24
+36;Juzgado;Fija audiencia;12/02/25
+36;Juzgado;Fija audiencia;12/06/25
+36;Juzgado;Fija audiencia;18/07/25
+37;Demandante;Radicado;21/07/23
+37;Juzgado;Inadmitido;08/11/23
+37;Demandante;Subsanación;15/11/23
+37;Juzgado;Admite;11/01/24
+37;Demandante;Notificación personal de la demanda;17/01/24
+37;Demandado;Contestación de demanda;31/01/24
+37;Juzgado;Inadmite contestación de la demanda;21/03/24
+37;Demandante;Subsanación;05/04/24
+37;Juzgado;Admite;22/05/24
+37;Juzgado;Fija audiencia;22/05/24
+37;Demandante;Radica impulso procesal;14/06/24
+37;Demandante;Radica impulso procesal;06/09/24
+37;Juzgado;Conciliado;21/01/25
+38;Demandante;Radicado;14/02/24
+38;Juzgado;Admite;03/05/24
+38;Demandante;Notificación personal de la demanda;03/05/24
+38;Juzgado;Fija audiencia;14/02/25
+38;Juzgado;Fija audiencia;14/02/25
+38;Juzgado;Fija audiencia;12/09/25
+39;Demandante;Radicado;21/07/23
+39;Juzgado;Inadmitido;08/11/23
+39;Demandante;Subsanación;15/11/23
+39;Juzgado;Admite;11/01/24
+39;Demandante;Notificación personal de la demanda;17/01/24
+39;Demandado;Contestación de demanda;31/01/24
+39;Juzgado;Inadmite contestación de la demanda;21/03/24
+39;Demandante;Subsanación;05/04/24
+39;Juzgado;Admite;22/05/24
+39;Juzgado;Fija audiencia;22/05/24
+39;Juzgado;Conciliado;21/01/25
+40;Demandante;Radicado;04/05/23
+40;Juzgado;Inadmitido;20/06/23
+40;Demandante;Subsanación;20/06/23
+40;Juzgado;Admite;28/07/23
+40;Juzgado;Admite;05/10/23
+40;Juzgado;Fija audiencia;05/10/23
+40;Juzgado;Conciliado;22/02/24
+41;Demandante;Radicado;14/02/24
+41;Juzgado;Admite;19/07/24
+41;Demandante;Notificación personal de la demanda;25/07/24
+41;Juzgado;Conciliado;27/03/25
+42;Juzgado;Conciliado;26/02/25
+43;Demandante;Radicado;19/02/24
+43;Juzgado;Admite;05/03/24
+43;Juzgado;Fija audiencia;12/09/24
+43;Juzgado;Conciliado;21/01/25
+44;Demandante;Radicado;19/01/24
+44;Juzgado;Admite;23/02/24
+44;Juzgado;Fija audiencia;28/08/24
+44;Juzgado;Conciliado;30/10/24
+45;Demandante;Radicado;14/02/24
+45;Juzgado;Admite;27/02/24
+45;Juzgado;Fija audiencia;16/07/25
+45;Juzgado;Conciliado;14/08/25
+46;Demandante;Radicado;13/02/24
+46;Juzgado;Inadmitido;09/09/24
+46;Demandante;Subsanación;09/09/24
+46;Juzgado;Admite;03/04/25
+46;Demandante;Notificación personal de la demanda;04/04/25
+47;Demandante;Radicado;09/05/23
+47;Juzgado;Admite;23/05/23
+47;Juzgado;Admite;26/06/23
+47;Juzgado;Fija audiencia;26/06/23
+47;Juzgado;Conciliado;23/10/24
+48;Demandante;Radicado;16/05/23
+48;Juzgado;Admite;08/06/23
+48;Demandante;Notificación personal de la demanda;14/06/23
+48;Demandado;Contestación de demanda;30/06/23
+48;Juzgado;Fija audiencia;24/11/23
+48;Juzgado;Fija audiencia;29/10/24
+48;Juzgado;Conciliado;24/02/25
+49;Demandante;Radicado;14/07/23
+49;Juzgado;Inadmitido;08/11/23
+49;Demandante;Subsanación;15/11/23
+49;Juzgado;Admite;11/01/24
+49;Demandado;Contestación de demanda;31/01/24
+49;Juzgado;Inadmite contestación de la demanda;04/04/24
+49;Demandante;Subsanación;11/04/24
+49;Juzgado;Admite;22/05/24
+49;Juzgado;Fija audiencia;22/05/24
+49;Juzgado;Conciliado;21/01/25
+50;Demandante;Radicado;21/07/23
+50;Juzgado;Inadmitido;08/11/23
+50;Demandante;Subsanación;15/11/23
+50;Juzgado;Admite;12/01/24
+50;Demandado;Contestación de demanda;31/01/24
+50;Juzgado;Fija audiencia;23/04/24
+50;Juzgado;Conciliado;03/10/24
+51;Demandante;Radicado;28/06/23
+51;Juzgado;Admite;01/08/23
+51;Demandado;Contestación de demanda;22/08/23
+51;Juzgado;Fija audiencia;07/11/23
+51;Juzgado;Fija audiencia;25/10/24
+51;Juzgado;Conciliado;10/12/25
+52;Demandante;Radicado;10/03/25
+52;Juzgado;Inadmitido;26/03/25
+53;Demandante;Radicado;02/08/23
+53;Juzgado;Admite;21/09/23
+53;Demandado;Contestación de demanda;01/11/23
+53;Juzgado;Fija audiencia;26/01/24
+53;Juzgado;Fija audiencia;06/02/24
+53;Juzgado;Conciliado;12/07/24
+54;Demandante;Radicado;13/02/24
+54;Juzgado;Admite;09/07/24
+54;Juzgado;Fija audiencia;18/02/25
+54;Juzgado;Conciliado;20/08/25
+55;Demandante;Radicado;30/08/23
+55;Juzgado;Inadmitido;19/07/24
+55;Juzgado;Admite;06/08/24
+55;Juzgado;Inadmite contestación de la demanda;09/06/25
+55;Juzgado;Fija audiencia;30/07/25
+55;Juzgado;Conciliado;23/10/25
+56;Demandante;Radicado;27/07/23
+56;Juzgado;Admite;18/08/23
+56;Demandado;Contestación de demanda;10/11/23
+56;Juzgado;Fija audiencia;21/05/24
+56;Juzgado;Fija audiencia;23/05/24
+56;Juzgado;Fija audiencia;03/09/24
+56;Juzgado;Fija audiencia;03/12/24
+56;Juzgado;Conciliado;07/03/25
+57;Demandante;Radicado;27/07/23
+57;Juzgado;Admite;05/10/23
+57;Demandado;Contestación de demanda;02/11/23
+57;Juzgado;Fija audiencia;16/07/25
+57;Juzgado;Conciliado;14/08/25
+58;Demandante;Radicado;02/08/23
+58;Juzgado;Admite;17/08/23
+58;Demandado;Contestación de demanda;05/09/23
+58;Juzgado;Inadmite contestación de la demanda;16/04/24
+58;Demandante;Subsanación;22/04/24
+58;Juzgado;Fija audiencia;18/07/24
+58;Juzgado;Conciliado;25/09/24
+59;Demandante;Radicado;11/03/25
+59;Juzgado;Admite;04/04/25
+60;Demandante;Radicado;02/04/24
+60;Juzgado;Inadmitido;11/04/24
+60;Demandante;Subsanación;11/04/24
+60;Juzgado;Admite;19/06/24
+60;Juzgado;Inadmite contestación de la demanda;26/07/24
+60;Juzgado;Admite;02/08/24
+60;Juzgado;Conciliado;11/09/25
+61;Juzgado;Conciliado;08/09/25
+62;Juzgado;Conciliado;08/05/25
+63;Juzgado;Conciliado;23/05/24
+64;Demandante;Radicado;27/07/23
+64;Juzgado;Admite;17/10/23
+64;Demandado;Contestación de demanda;14/11/23
+64;Juzgado;Fija audiencia;12/12/24
+64;Juzgado;Conciliado;22/09/25
+65;Juzgado;Conciliado;07/11/24
+66;Juzgado;Conciliado;28/11/24
+67;Demandante;Radicado;02/04/24
+67;Juzgado;Admite;13/05/25
+68;Demandante;Radicado;12/07/23
+68;Juzgado;Inadmitido;01/09/23
+68;Demandante;Subsanación;08/09/23
+68;Juzgado;Admite;26/01/24
+68;Demandado;Contestación de demanda;16/02/24
+68;Juzgado;Inadmite contestación de la demanda;17/05/24
+68;Demandante;Subsanación;22/05/24
+68;Juzgado;Admite;10/07/24
+68;Juzgado;Fija audiencia;09/06/25
+68;Juzgado;Conciliado;04/12/24
+69;Demandante;Radicado;30/06/23
+69;Juzgado;Admite;06/07/23
+69;Demandado;Contestación de demanda;24/07/23
+69;Juzgado;Fija audiencia;08/08/23
+69;Juzgado;Conciliado;20/05/24
+70;Demandante;Radicado;10/07/23
+70;Juzgado;Admite;17/07/23
+70;Demandado;Contestación de demanda;11/08/23
+70;Juzgado;Fija audiencia;15/04/24
+70;Juzgado;Conciliado;16/11/24
+71;Demandante;Radicado;28/06/23
+71;Juzgado;Inadmitido;07/07/23
+71;Demandante;Subsanación;17/07/23
+71;Juzgado;Admite;22/08/23
+71;Demandado;Contestación de demanda;11/09/23
+71;Juzgado;Fija audiencia;19/01/24
+71;Juzgado;Conciliado;16/07/24
+72;Demandante;Radicado;08/08/23
+72;Juzgado;Admite;18/03/24
+72;Demandado;Contestación de demanda;12/04/24
+72;Juzgado;Fija audiencia;14/02/25
+72;Juzgado;Conciliado;28/03/25
+73;Demandante;Radicado;21/03/24
+73;Juzgado;Inadmitido;14/06/24
+73;Demandante;Subsanación;14/06/24
+73;Juzgado;Admite;23/09/24
+73;Demandado;Contestación de demanda;03/12/24
+73;Juzgado;Conciliado;10/07/25
+74;Juzgado;Fija audiencia;NA
+75;Demandante;Radicado;26/04/24
+75;Juzgado;Admite;07/06/24
+75;Demandado;Contestación de demanda;25/06/24
+75;Juzgado;Fija audiencia;20/03/25
+76;Demandante;Radicado;03/05/24
+76;Juzgado;Admite;14/05/24
+76;Demandado;Contestación de demanda;07/06/24
+76;Juzgado;Fija audiencia;11/03/25
+76;Juzgado;Conciliado;19/06/25
+77;Juzgado;Admite;20/02/25
+78;NA;NA;NA
+79;Demandante;Radicado;19/04/24
+79;Juzgado;Inadmitido;27/06/24
+79;Demandante;Subsanación;27/06/24
+79;Juzgado;Admite;31/10/24
+79;Juzgado;Fija audiencia;23/01/25
+79;Juzgado;Conciliado;10/03/25
+80;Demandante;Radicado;21/03/24
+80;Juzgado;Inadmitido;25/09/24
+80;Demandante;Subsanación;25/09/24
+80;Juzgado;Admite;13/11/24
+80;Juzgado;Contestación de demanda;28/01/25
+80;Juzgado;Conciliado;18/09/25
+81;NA ;NA;NA
+82;Demandante;Radicado;22/04/25
+82;Juzgado;Admite;22/05/25
+82;Demandante;Radica impulso procesal;26/05/25
+82;Juzgado;Conciliado;01/04/25
+83;Demandante;Radicado;13/03/24
+83;Juzgado;Inadmitido;18/03/24
+83;Demandante;Subsanación;02/04/24
+83;Juzgado;Admite;05/04/24
+83;Demandado;Contestación de demanda;26/04/24
+83;Juzgado;Fija audiencia;02/05/24
+84;Demandante;Radicado;13/03/24
+84;Juzgado;Inadmitido;15/03/24
+84;Demandante;Subsanación;02/04/24
+84;Juzgado;Admite;05/04/24
+84;Demandado;Contestación de demanda;26/04/24
+84;Juzgado;Fija audiencia;23/10/24
+84;Juzgado;Conciliado;24/04/25
+85;Demandante;Radicado;13/03/24
+85;Juzgado;Inadmitido;21/03/24
+85;Demandante;Subsanación;02/04/24
+85;Juzgado;Admite;26/04/24
+85;Demandante;Notificación personal de la demanda;03/05/24
+85;Demandado;Contestación de demanda;26/04/24
+86;Demandante;Radicado;13/03/24
+86;Juzgado;Admite;04/06/24
+86;Demandado;Contestación de demanda;19/06/24
+86;Juzgado;Admite;16/01/25
+86;Juzgado;Fija audiencia;16/01/25
+86;Juzgado;Conciliado;03/02/25
+87;Demandante;Radicado;13/03/24
+87;Juzgado;Inadmitido;24/10/24
+87;Demandante;Subsanación;06/05/25
+88;Demandante;Radicado;12/03/24
+88;Juzgado;Inadmitido;24/09/24
+88;Demandante;Subsanación;25/09/24
+88;Juzgado;Admite;31/10/24
+88;Juzgado;Fija audiencia;30/06/25
+88;Juzgado;Conciliado;13/08/25
+89;Demandante;Radicado;13/03/24
+89;Juzgado;Inadmitido;09/04/24
+89;Demandante;Subsanación;16/04/24
+89;Juzgado;Admite;14/05/24
+89;Demandado;Contestación de demanda;05/06/24
+89;Juzgado;Fija audiencia;18/06/24
+89;Juzgado;Conciliado;20/09/24
+90;Demandante;Radicado;19/03/24
+90;Juzgado;Inadmitido;30/04/24
+90;Demandante;Subsanación;02/05/24
+90;Juzgado;Conciliado;04/09/24
+91;Demandante;Radicado;13/03/24
+91;Juzgado;Inadmitido;22/04/24
+91;Demandante;Subsanación;30/04/24
+91;Juzgado;Admite;10/07/24
+91;Demandado;Contestación de demanda;29/07/24
+91;Demandante;Radica impulso procesal;29/08/24
+91;Juzgado;Fija audiencia;30/09/24
+91;Juzgado;Conciliado;22/01/25
+92;Demandante;Radicado;13/03/24
+92;Juzgado;Admite;28/06/24
+93;Demandante;Radicado;15/03/24
+93;Juzgado;Inadmitido;25/09/24
+93;Demandante;Subsanación;31/10/24
+93;Juzgado;Admite;31/10/24
+93;Demandado;Contestación de demanda;18/11/24
+93;Juzgado;Fija audiencia;07/07/25
+93;Juzgado;Conciliado;25/08/25
+94;Demandante;Radicado;13/03/24
+94;Juzgado;Inadmitido;02/04/24
+94;Demandante;Subsanación;05/04/24
+94;Juzgado;Admite;02/05/24
+94;Demandado;Contestación de demanda;20/05/24
+94;Juzgado;Fija audiencia;01/08/24
+94;Juzgado;Conciliado;30/05/25
+95;Demandante;Radicado;12/03/24
+95;Juzgado;Inadmitido;12/04/24
+95;Demandante;Subsanación;30/04/24
+95;Juzgado;Admite;30/04/24
+95;Juzgado;Fija audiencia;11/12/24
+95;Juzgado;Conciliado;12/05/25
+96;Demandante;Radicado;12/04/24
+96;Juzgado;Admite;19/04/24
+96;Demandado;Contestación de demanda;07/05/24
+96;Juzgado;Fija audiencia;31/05/24
+96;Juzgado;Conciliado;18/03/25
+97;Demandante;Radicado;01/04/24
+97;Juzgado;Inadmitido;15/04/24
+97;Demandante;Subsanación;22/04/24
+97;Juzgado;Admite;29/04/24
+97;Demandado;Contestación de demanda;20/05/24
+97;Juzgado;Fija audiencia;09/10/24
+98;Demandante;Radicado;01/04/24
+98;Juzgado;Admite;23/05/24
+98;Juzgado;Fija audiencia;07/02/25
+98;Juzgado;Conciliado;19/06/25
+99;Demandante;Radicado;25/01/24
+99;Juzgado;Admite;26/02/24
+99;Juzgado;Fija audiencia;26/08/24
+99;Juzgado;Conciliado;26/08/24
+100;Demandante;Radicado;28/01/24
+100;Juzgado;Admite;20/02/24
+100;Juzgado;Fija audiencia;24/04/25
+100;Juzgado;Conciliado;24/04/25
+101;Demandante;Radicado;29/01/24
+101;Juzgado;Admite;27/02/24
+101;Juzgado;Fija audiencia;06/05/25
+101;Juzgado;Conciliado;06/05/25
+102;Demandante;Radicado;30/01/24
+102;Juzgado;Admite;01/03/24
+102;Juzgado;Fija audiencia;29/11/24
+102;Juzgado;Conciliado;29/11/24
+103;Demandante;Radicado;31/01/24
+103;Juzgado;Admite;01/03/24
+103;Juzgado;Fija audiencia;20/02/25
+103;Juzgado;Conciliado;20/02/25
+104;Demandante;Radicado;01/02/24
+104;Juzgado;Admite;04/03/24
+105;Demandante;Radicado;02/02/24
+105;Juzgado;Admite;05/03/24
+105;Juzgado;Fija audiencia;28/03/25
+105;Juzgado;Conciliado;28/03/25
+106;Demandante;Radicado;05/02/24
+106;Juzgado;Admite;08/03/24
+106;Juzgado;Fija audiencia;14/02/25
+107;Demandante;Radicado;02/04/24
+107;Juzgado;Inadmitido;19/04/24
+107;Demandante;Subsanación;29/04/24
+107;Juzgado;Admite;12/11/24
+107;Demandado;Contestación de demanda;05/12/24
+107;Juzgado;Fija audiencia;03/03/25
+107;Juzgado;Conciliado;24/04/25
+108;Demandante;Radicado;24/04/24
+108;Juzgado;Inadmitido;25/06/24
+108;Demandante;Subsanación;28/06/24
+108;Juzgado;Admite;26/11/24
+108;Demandado;Contestación de demanda;16/12/24
+108;Demandante;Radica impulso procesal;25/04/25
+108;Juzgado;Fija audiencia;01/07/25
+109;Demandante;Radicado;02/04/24
+109;Juzgado;Inadmitido;26/06/24
+109;Demandante;Subsanación;26/06/24
+109;Juzgado;Admite;03/09/24
+109;Juzgado;Admite;05/02/25
+110;Demandante;Radicado;03/04/24
+110;Juzgado;Admite;23/04/24
+110;Demandado;Contestación de demanda;09/05/24
+110;Juzgado;Fija audiencia;17/01/25
+110;Juzgado;Conciliado;17/02/25
+111;Demandante;Radicado;04/04/24
+111;Juzgado;Admite;08/07/24
+111;Juzgado;Fija audiencia;02/09/24
+112;Demandante;Radicado;10/04/24
+112;Juzgado;Inadmitido;25/09/24
+112;Demandante;Subsanación;25/09/24
+112;Juzgado;Admite;27/05/25
+112;Demandante;Notificación personal de la demanda;27/05/25
+113;Demandante;Radicado;17/04/24
+113;Juzgado;Inadmitido;19/04/24
+113;Demandante;Subsanación;29/04/24
+113;Juzgado;Admite;02/05/24
+113;Demandante;Notificación personal de la demanda;03/05/24
+113;Demandado;Contestación de demanda;16/05/24
+113;Juzgado;Fija audiencia;21/06/24
+113;Juzgado;Conciliado;05/06/25
+114;Demandante;Radicado;16/04/24
+114;Juzgado;Admite;24/05/24
+114;Juzgado;Admite;16/07/24
+114;Juzgado;Conciliado;07/10/24
+115;Demandante;Radicado;17/04/24
+115;Juzgado;Inadmitido;30/05/24
+115;Demandante;Subsanación;11/06/24
+115;Juzgado;Admite;28/10/24
+115;Demandado;Contestación de demanda;15/11/24
+115;Demandante;Radica impulso procesal;03/12/24
+115;Juzgado;Fija audiencia;16/12/24
+115;Juzgado;Conciliado;24/01/25
+116;Demandante;Radicado;16/04/24
+116;Juzgado;Inadmitido;23/04/24
+116;Demandante;Subsanación;30/04/24
+116;Juzgado;Admite;15/05/24
+116;Demandado;Contestación de demanda;06/06/24
+116;Juzgado;Fija audiencia;11/06/24
+116;Juzgado;Conciliado;17/10/24
+117;Demandante;Radicado;17/04/24
+117;Juzgado;Admite;18/04/24
+117;Demandante;Notificación personal de la demanda;03/05/24
+117;Demandado;Contestación de demanda;16/05/24
+117;Juzgado;Fija audiencia;22/05/24
+117;Juzgado;Conciliado;09/10/24
+118;Demandante;Radicado;16/04/24
+118;Juzgado;Admite;18/04/24
+118;Juzgado;Fija audiencia;23/08/24
+118;Juzgado;Conciliado;20/09/24
+119;Demandante;Radicado;16/04/24
+119;Juzgado;Admite;10/05/24
+119;Demandante;Notificación personal de la demanda;17/05/24
+119;Demandado;Contestación de demanda;29/05/24
+119;Demandante;Radica impulso procesal;15/07/24
+119;Demandante;Radica impulso procesal;29/08/24
+119;Juzgado;Fija audiencia;06/09/24
+119;Juzgado;Fija audiencia;13/01/25
+119;Juzgado;Conciliado;11/02/25
+120;Demandante;Radicado;16/04/24
+120;Juzgado;Inadmitido;06/09/24
+120;Demandante;Subsanación;06/09/24
+120;Juzgado;Admite;04/10/24
+121;Demandante;Radicado;16/04/24
+121;Juzgado;Admite;03/05/24
+121;Demandante;Notificación personal de la demanda;05/05/24
+121;Juzgado;Fija audiencia;23/07/24
+121;Juzgado;Conciliado;22/08/24
+122;Demandante;Radicado;17/04/24
+122;Juzgado;Inadmitido;25/06/24
+122;Demandante;Subsanación;28/06/24
+122;Juzgado;Admite;26/11/24
+122;Demandado;Contestación de demanda;16/12/24
+122;Juzgado;Fija audiencia;01/07/25
+123;Demandante;Radicado;25/04/24
+123;Juzgado;Admite;14/05/24
+123;Demandante;Notificación personal de la demanda;15/05/24
+123;Juzgado;Fija audiencia;10/03/25
+124;Demandante;Radicado;07/06/24
+124;Juzgado;Admite;17/06/24
+124;Juzgado;Fija audiencia;28/11/24
+124;Juzgado;Conciliado;06/12/24
+125;Demandante;Radicado;11/09/24
+125;Juzgado;Admite;07/10/24
+125;Demandante;Notificación personal de la demanda;16/10/24
+125;Demandado;Contestación de demanda;20/11/24
+125;Juzgado;Fija audiencia;22/04/25
+126;Demandante;Radicado;19/04/24
+126;Juzgado;Inadmitido;16/07/24
+126;Demandante;Subsanación;23/07/24
+126;Juzgado;Admite;03/10/24
+126;Demandado;Contestación de demanda;24/10/24
+126;Demandante;Radica impulso procesal;29/08/24
+126;Demandante;Radica impulso procesal;25/04/25
+126;Juzgado;Fija audiencia;16/05/25
+127;Demandante;Radicado;19/04/24
+127;Juzgado;Admite;10/05/24
+127;Demandante;Notificación personal de la demanda;17/05/24
+127;Demandado;Contestación de demanda;30/05/24
+127;Juzgado;Admite;05/09/24
+127;Juzgado;Fija audiencia;13/01/25
+127;Juzgado;Conciliado;11/02/25
+128;Demandante;Radicado;30/04/24
+128;Juzgado;Admite;22/07/24
+129;Demandante;Radicado;25/04/24
+129;Juzgado;Admite;16/05/24
+129;Demandante;Notificación personal de la demanda;16/05/24
+129;Juzgado;Fija audiencia;09/05/25
+130;Demandante;Radicado;25/04/24
+130;Juzgado;Admite;06/05/24
+130;Demandante;Notificación personal de la demanda;08/05/24
+130;Demandado;Contestación de demanda;23/05/24
+130;Juzgado;Admite;04/06/24
+130;Juzgado;Fija audiencia;17/06/25
+130;Juzgado;Conciliado;17/06/25
+131;Demandante;Radicado;17/04/24
+131;Juzgado;Admite;06/05/24
+131;Demandante;Notificación personal de la demanda;09/05/24
+131;Juzgado;Fija audiencia;07/08/24
+131;Juzgado;Conciliado;19/09/24
+132;Demandante;Radicado;20/03/25
+132;Juzgado;Admite;25/07/25
+132;Juzgado;Fija audiencia;17/09/25
+133;Demandante;Radicado;19/04/24
+133;Juzgado;Inadmitido;07/05/24
+133;Demandante;Subsanación;07/05/24
+133;Juzgado;Admite;23/05/24
+133;Demandante;Notificación personal de la demanda;23/05/24
+133;Juzgado;Inadmite contestación de la demanda;21/08/24
+133;Juzgado;Conciliado;26/09/24
+134;Demandante;Radicado;06/05/24
+134;Juzgado;Inadmitido;18/06/24
+134;Demandante;Subsanación;18/06/24
+134;Juzgado;Admite;18/07/24
+134;Juzgado;Fija audiencia;31/01/25
+135;Demandante;Radicado;29/04/24
+135;Juzgado;Inadmitido;23/05/24
+135;Demandante;Subsanación;29/05/24
+135;Juzgado;Admite;26/06/24
+135;Demandante;Notificación personal de la demanda;02/07/24
+135;Demandado;Contestación de demanda;15/07/24
+135;Demandante;Radica impulso procesal;04/12/24
+135;Demandante;Radica impulso procesal;19/05/25
+136;Demandante;Radicado;29/04/24
+136;Juzgado;Inadmitido;06/05/24
+136;Juzgado;Finalizado por Rechazo;28/05/24
+136;Juzgado;Admite;13/06/24
+136;Demandado;Contestación de demanda;28/06/24
+136;Juzgado;Fija audiencia;27/08/24
+136;Juzgado;Conciliado;21/04/25
+137;Demandante;Radicado;29/04/24
+137;Juzgado;Inadmitido;30/04/24
+137;Juzgado;Admite;23/05/24
+137;Juzgado;Admite;20/02/25
+137;Juzgado;Conciliado;27/02/25
+138;Demandante;Radicado;29/04/24
+138;Juzgado;Admite;31/05/24
+138;Demandado;Contestación de demanda;02/07/24
+138;Juzgado;Fija audiencia;02/07/24
+138;Juzgado;Conciliado;27/08/24
+139;Demandante;Radicado;29/04/24
+139;Juzgado;Inadmitido;31/10/24
+139;Demandante;Subsanación;01/11/24
+139;Juzgado;Admite;10/12/24
+139;Juzgado;Fija audiencia;06/07/25
+139;Juzgado;Conciliado;04/09/25
+140;Demandante;Radicado;29/04/24
+140;Juzgado;Admite;22/05/24
+140;Demandante;Notificación personal de la demanda;22/05/24
+140;Juzgado;Conciliado;05/03/25
+141;Demandante;Radicado;29/04/24
+141;Juzgado;Admite;14/05/24
+141;Demandante;Notificación personal de la demanda;15/05/24
+141;Juzgado;Fija audiencia;18/11/24
+141;Juzgado;Conciliado;28/03/25
+142;Demandante;Radicado;26/04/24
+142;Juzgado;Admite;06/05/24
+142;Demandante;Notificación personal de la demanda;21/05/24
+142;Demandado;Contestación de demanda;23/05/24
+142;Juzgado;Fija audiencia;24/06/24
+142;Juzgado;Conciliado;03/04/25
+142;Juzgado;Conciliado;03/04/25
+143;NA;NA;NA
+144;Demandante;Radicado;10/05/24
+144;Juzgado;Admite;31/05/24
+144;Demandante;Notificación personal de la demanda;31/05/24
+144;Juzgado;Fija audiencia;23/07/24
+144;Juzgado;Conciliado;19/09/24
+145;Demandante;Radicado;10/05/24
+145;Juzgado;Inadmitido;15/07/24
+145;Demandante;Subsanación;22/07/24
+145;Juzgado;Admite;18/09/24
+145;Demandante;Notificación personal de la demanda;12/11/24
+145;Demandado;Contestación de demanda;08/11/24
+145;Juzgado;Fija audiencia;12/11/24
+145;Juzgado;Conciliado;29/01/25
+146;Demandante;Radicado;14/05/24
+146;Juzgado;Inadmitido;30/05/24
+146;Juzgado;Finalizado por Rechazo;24/07/24
+147;Demandante;Radicado;26/07/24
+147;Juzgado;Inadmitido;05/08/24
+147;Demandante;Subsanación;09/08/24
+147;Demandante;Subsanación;13/08/24
+147;Juzgado;Finalizado por Rechazo;16/09/24
+147;Juzgado;Archivado;11/10/24
+148;Demandante;Radicado;10/05/24
+148;Juzgado;Inadmitido;02/07/24
+148;Demandante;Subsanación;08/07/24
+148;Juzgado;Admite;29/07/24
+148;Demandado;Contestación de demanda;23/08/24
+148;Juzgado;Inadmite contestación de la demanda;17/03/25
+148;Demandante;Subsanación;25/03/25
+148;Juzgado;Admite;22/04/25
+148;Juzgado;Conciliado;24/04/25
+149;Demandante;Radicado;17/05/24
+149;Juzgado;Inadmitido;01/08/24
+149;Demandante;Subsanación;12/08/24
+149;Juzgado;Admite;12/09/24
+149;Juzgado;Fija audiencia;24/09/25
+150;Demandante;Radicado;17/05/24
+150;Demandante;Radica impulso procesal;14/06/24
+150;Juzgado;Admite;02/07/24
+150;Demandante;Notificación personal de la demanda;23/07/24
+150;Demandado;Contestación de demanda;19/07/24
+150;Demandante;Radica impulso procesal;29/08/24
+150;Demandante;Radica impulso procesal;04/12/24
+150;Demandante;Radica impulso procesal;11/02/25
+150;Demandante;Radica impulso procesal;24/04/25
+151;Demandante;Radicado;24/05/24
+151;Juzgado;Admite;02/07/24
+151;Juzgado;NA;03/07/24
+151;Demandado;Contestación de demanda;19/07/24
+151;Demandante;Radica impulso procesal;29/08/24
+151;Demandante;Radica impulso procesal;05/12/24
+151;Juzgado;Fija audiencia;20/08/25
+152;Demandante;Radicado;28/05/24
+152;Juzgado;Inadmitido;02/07/24
+152;Demandante;Subsanación;08/07/24
+152;Juzgado;Admite;22/07/24
+152;Juzgado;Fija audiencia;20/08/24
+152;Juzgado;Conciliado;09/09/25
+153;Demandante;Radicado;28/06/24
+153;Juzgado;Inadmitido;31/07/24
+153;Demandante;Subsanación;02/08/24
+153;Juzgado;Admite;29/08/24
+153;Juzgado;Fija audiencia;11/12/24
+154;Demandante;Radicado;27/05/24
+154;Juzgado;Admite;20/06/24
+154;Demandado;Contestación de demanda;10/07/24
+154;Juzgado;Conciliado;29/10/24
+155;Demandante;Radicado;24/05/24
+155;Juzgado;Admite;14/06/24
+155;Demandado;Contestación de demanda;04/07/24
+155;Juzgado;Conciliado;11/02/25
+155;Juzgado;Archivado;14/02/25
+156;Demandante;Radicado;24/05/24
+156;Demandante;Subsanación;08/07/24
+156;Demandante;Admite;18/07/24
+156;Demandado;Contestación de demanda;06/08/24
+157;Demandante;Radicado;24/05/24
+157;Juzgado;Admite;17/09/24
+157;Juzgado;Conciliado;03/03/25
+157;Juzgado;Archivado;06/03/25
+158;Demandante;Radicado;27/05/24
+158;Juzgado;Admite;10/09/24
+158;Juzgado;Conciliado;10/07/25
+158;Juzgado;Archivado;28/07/25
+159;Demandante;Radicado;27/05/24
+159;Juzgado;Inadmitido;23/09/24
+159;Juzgado;Admite;05/12/24
+159;Demandante;Notificación personal de la demanda;06/12/24
+159;Juzgado;Fija audiencia;21/07/25
+159;Juzgado;Conciliado;09/09/25
+160;Demandante;Radicado;24/05/24
+160;Juzgado;Admite;08/07/24
+160;Demandante;Notificación personal de la demanda;11/07/24
+160;Demandado;Contestación de demanda;25/07/24
+160;Demandante;Radica impulso procesal;29/08/24
+160;Demandante;Radica impulso procesal;06/09/24
+160;Juzgado;Admite;30/09/24
+160;Juzgado;Fija audiencia;30/09/24
+160;Juzgado;Conciliado;27/01/25
+161;Demandante;Radicado;30/05/24
+161;Juzgado;Inadmitido;11/06/24
+161;Demandante;Subsanación;19/06/24
+161;Demandante;Radica impulso procesal;19/06/24
+161;Juzgado;Admite;24/06/24
+161;Demandado;Contestación de demanda;16/07/24
+161;Juzgado;Fija audiencia;09/04/25
+161;Juzgado;Fija audiencia;09/04/25
+162;Demandante;Radicado;05/06/24
+162;Juzgado;Admite;05/06/24
+162;Demandante;Radica impulso procesal;14/06/24
+162;Demandante;Radica impulso procesal;18/06/24
+162;Demandante;Radica impulso procesal;18/06/24
+162;Juzgado;Fija audiencia;08/08/24
+162;Juzgado;Fija audiencia;08/08/24
+162;Demandante;Radica impulso procesal;12/08/24
+162;Juzgado;Conciliado;28/07/25
+162;Juzgado;Archivado;04/08/25
+163;Demandante;Radicado;07/06/24
+163;Juzgado;Admite;12/06/24
+163;Juzgado;Fija audiencia;01/08/24
+163;Juzgado;Fija audiencia;26/03/25
+163;Juzgado;Conciliado;06/06/25
+163;Juzgado;Archivado;09/06/25
+164;Demandante;Radicado;04/06/24
+164;Juzgado;Admite;09/07/24
+164;Juzgado;Admite;05/09/24
+164;Juzgado;Fija audiencia;05/09/24
+164;Juzgado;Conciliado;05/11/24
+165;Demandante;Radicado;11/06/24
+165;Juzgado;Admite;23/07/24
+165;Juzgado;Fija audiencia;27/09/24
+165;Juzgado;Fija audiencia;13/03/25
+165;Juzgado;Fija audiencia;31/03/25
+166;Demandante;Radicado;04/06/24
+166;Juzgado;Inadmitido;08/10/24
+166;Juzgado;Admite;20/11/24
+166;Demandante;Notificación personal de la demanda;21/11/24
+166;Juzgado;Fija audiencia;16/09/25
+166;Juzgado;Inadmite contestación de la demanda;19/06/25
+167;Demandante;Radicado;04/06/24
+167;Juzgado;Inadmitido;24/01/25
+167;Juzgado;Admite;18/06/25
+167;Demandante;Notificación personal de la demanda;18/06/25
+168;Demandante;Radicado;11/06/24
+168;Juzgado;Inadmitido;20/01/25
+169;Demandante;Radicado;11/06/24
+169;Juzgado;Admite;18/07/24
+169;Juzgado;Fija audiencia;13/01/25
+169;Juzgado;Conciliado;05/02/25
+169;Juzgado;Archivado;25/02/25
+170;Juzgado;Finalizado por Rechazo;08/05/25
+171;Demandante;Radicado;07/06/24
+171;Juzgado;Admite;12/06/24
+171;Demandado;Contestación de demanda;27/06/24
+171;Juzgado;Fija audiencia;23/08/24
+171;Juzgado;Conciliado;20/09/24
+171;Juzgado;Archivado;20/09/24
+172;Demandante;Radicado;07/06/24
+172;Juzgado;Admite;26/06/24
+172;Demandante;Notificación personal de la demanda;03/07/24
+172;Demandado;Contestación de demanda;17/07/24
+172;Juzgado;Fija audiencia;25/02/25
+172;Juzgado;Fija audiencia;04/07/25
+172;Juzgado;Fija audiencia;09/07/25
+172;Juzgado;Conciliado;20/09/24
+172;Juzgado;Archivado;24/07/25
+173;Demandante;Radicado;07/06/24
+173;Demandante;Radica impulso procesal;17/07/24
+173;Juzgado;Inadmitido;08/08/24
+173;Demandante;Subsanación;14/08/24
+173;Demandante;Radica impulso procesal;06/09/24
+173;Juzgado;Admite;02/05/25
+173;Demandado;Contestación de demanda;20/05/25
+173;Juzgado;Fija audiencia;14/07/25
+174;Demandante;Radicado;07/06/24
+174;Juzgado;Admite;17/06/24
+174;Juzgado;Admite;28/11/24
+174;Juzgado;Fija audiencia;28/11/24
+174;Juzgado;Conciliado;06/12/24
+175;Demandante;Radicado;07/06/24
+175;Demandante;Radica impulso procesal;17/06/24
+175;Juzgado;Admite;20/06/24
+175;Demandante;Notificación personal de la demanda;26/06/24
+175;Demandado;Contestación de demanda;10/07/24
+175;Juzgado;Fija audiencia;15/07/24
+175;Juzgado;Conciliado;20/11/24
+175;Juzgado;Archivado;21/07/25
+176;Juzgado;Conciliado;17/07/25
+177;Demandante;Radicado;07/06/24
+177;Juzgado;Admite;08/07/24
+177;Demandado;Contestación de demanda;25/07/24
+177;Juzgado;Fija audiencia;08/08/24
+177;Demandante;Radica impulso procesal;23/09/24
+177;Juzgado;Conciliado;12/08/25
+178;Demandante;Radicado;24/06/24
+178;Juzgado;Inadmitido;25/06/24
+178;Juzgado;Admite;08/07/24
+178;Juzgado;Fija audiencia;26/03/25
+178;Juzgado;Conciliado;06/06/25
+179;Demandante;Radicado;28/06/24
+179;Juzgado;Admite;15/07/24
+179;Demandante;Notificación personal de la demanda;01/08/24
+179;Demandado;Contestación de demanda;01/08/24
+179;Demandante;Radica impulso procesal;24/04/25
+179;Juzgado;Fija audiencia;02/05/25
+180;Demandante;Radicado;25/06/24
+180;Juzgado;Inadmitido;19/07/24
+180;Juzgado;Admite;29/08/24
+180;Juzgado;Fija audiencia;18/09/24
+180;Juzgado;Fija audiencia;23/01/25
+180;Juzgado;Conciliado;21/04/25
+181;Demandante;Radicado;24/06/24
+181;Juzgado;Inadmitido;05/07/24
+181;Demandante;Subsanación;15/07/24
+181;Juzgado;Admite;09/09/24
+181;Demandante;Radica impulso procesal;09/09/24
+181;Demandante;Notificación personal de la demanda;12/09/24
+181;Demandante;Radica impulso procesal;23/09/24
+181;Demandado;Contestación de demanda;25/09/24
+181;Juzgado;Fija audiencia;06/11/24
+181;Juzgado;Conciliado;29/01/25
+181;Juzgado;Archivado;27/02/25
+182;Juzgado;Conciliado;13/05/25
+183;Demandante;Radicado;24/06/24
+183;Juzgado;Admite;26/06/24
+183;Demandante;Notificación personal de la demanda;04/07/24
+183;Demandado;Contestación de demanda;16/07/24
+183;Demandante;Radica impulso procesal;03/09/24
+183;Demandante;Radica impulso procesal;09/09/24
+183;Juzgado;Inadmite contestación de la demanda;24/09/24
+183;Juzgado;Fija audiencia;13/01/25
+183;Juzgado;Conciliado;11/03/25
+183;Juzgado;Archivado;20/03/25
+184;Demandante;Radicado;26/06/24
+184;Juzgado;Inadmitido;16/08/24
+184;Demandante;Subsanación;21/08/24
+184;Demandante;Radica impulso procesal;25/08/24
+184;Demandante;Radica impulso procesal;09/09/24
+184;Juzgado;Admite;11/09/24
+184;Demandante;Radica impulso procesal;16/09/24
+184;Demandado;Contestación de demanda;27/09/24
+184;Juzgado;Admite;04/12/24
+184;Juzgado;Fija audiencia;05/12/24
+184;Juzgado;Conciliado;19/08/25
+185;Demandante;Radicado;30/06/24
+185;Juzgado;Inadmitido;16/08/24
+185;Demandante;Subsanación;21/08/24
+185;Demandante;Radica impulso procesal;06/09/24
+185;Juzgado;Admite;13/09/24
+185;Demandante;Radica impulso procesal;19/09/24
+185;Demandante;Notificación personal de la demanda;24/09/24
+185;Demandado;Contestación de demanda;30/09/24
+185;Juzgado;Admite;28/11/24
+185;Juzgado;Fija audiencia;11/12/24
+185;Demandante;Radica impulso procesal;19/05/25
+185;Juzgado;Conciliado;24/07/25
+186;Demandante;Radicado;24/06/24
+186;Juzgado;Admite;27/06/24
+186;Demandante;Notificación personal de la demanda;02/07/24
+186;Demandado;Contestación de demanda;15/07/24
+186;Juzgado;Fija audiencia;02/08/24
+186;Demandante;Radica impulso procesal;06/09/24
+186;Juzgado;Fija audiencia;30/04/25
+186;Juzgado;Conciliado;14/05/25
+186;Juzgado;Archivado;14/05/25
+187;Demandante;Radicado;26/06/24
+187;Juzgado;Inadmitido;01/07/24
+187;Demandante;Radica impulso procesal;23/07/24
+187;Demandante;Subsanación;16/08/24
+187;Demandante;Subsanación;21/08/24
+187;Juzgado;Admite;12/09/24
+187;Demandante;Radica impulso procesal;19/09/24
+187;Demandante;Notificación personal de la demanda;20/09/24
+187;Demandado;Contestación de demanda;24/09/24
+187;Juzgado;Admite;29/11/24
+187;Juzgado;Fija audiencia;14/01/25
+187;Juzgado;Conciliado;04/08/25
+188;Demandante;Radicado;24/06/24
+188;Juzgado;Admite;26/06/24
+188;Demandante;Notificación personal de la demanda;27/06/24
+188;Demandado;Contestación de demanda;01/07/24
+188;Demandante;Radica impulso procesal;10/07/24
+188;Juzgado;Fija audiencia;22/01/25
+188;Juzgado;Admite;20/02/25
+188;Juzgado;Conciliado;27/03/25
+188;Juzgado;Archivado;28/03/25
+189;Demandante;Radicado;24/06/24
+189;Juzgado;Inadmitido;05/07/24
+189;Demandante;Subsanación;15/07/24
+189;Demandante;Radica impulso procesal;18/07/24
+189;Demandante;Radica impulso procesal;29/08/24
+189;Juzgado;Admite;09/09/24
+189;Demandado;Contestación de demanda;25/09/24
+189;Demandante;Notificación personal de la demanda;28/10/24
+189;Demandante;Radica impulso procesal;20/05/25
+189;Juzgado;Fija audiencia;09/07/25
+189;Juzgado;Conciliado;30/07/25
+189;Juzgado;Archivado;30/07/25
+190;Demandante;Radicado;28/06/24
+190;Juzgado;Admite;25/07/24
+190;Demandante;Notificación personal de la demanda;25/07/24
+190;Juzgado;Inadmite contestación de la demanda;11/10/24
+190;Juzgado;Conciliado;22/05/25
+191;Demandante;Radicado;12/07/24
+191;Juzgado;Inadmitido;19/07/24
+191;Demandante;Subsanación;29/07/24
+191;Juzgado;Admite;09/08/24
+191;Demandante;Notificación personal de la demanda;14/08/24
+191;Demandado;Contestación de demanda;29/08/24
+191;Juzgado;Fija audiencia;12/09/24
+191;Juzgado;Admite;12/09/24
+191;Juzgado;Fija audiencia;31/10/24
+191;Juzgado;Admite;31/10/24
+191;Juzgado;Conciliado;20/11/24
+192;Demandante;Radicado;26/11/24
+192;Juzgado;Inadmitido;09/12/24
+192;Juzgado;Admite;07/02/25
+192;Demandante;Notificación personal de la demanda;19/02/25
+192;Juzgado;Admite;05/03/25
+192;Juzgado;Fija audiencia;06/03/25
+192;Juzgado;Conciliado;21/04/25
+193;Demandante;Radicado;12/07/24
+193;Juzgado;Admite;15/07/24
+193;Demandado;Contestación de demanda;31/07/24
+193;Demandado;Contestación de demanda;01/08/24
+193;Demandante;Radica impulso procesal;02/12/24
+193;Juzgado;Fija audiencia;07/03/25
+193;Juzgado;Conciliado;23/07/25
+194;Demandante;Radicado;12/07/24
+194;Juzgado;Admite;18/07/24
+194;Demandante;Notificación personal de la demanda;24/07/24
+194;Demandado;Contestación de demanda;08/08/24
+194;Juzgado;Fija audiencia;09/08/24
+194;Juzgado;Conciliado;21/11/24
+195;Demandante;Radicado;23/07/24
+195;Juzgado;Admite;20/08/24
+195;Demandante;Notificación personal de la demanda;27/08/24
+195;Demandante;Notificación personal de la demanda;28/08/24
+195;Demandado;Contestación de demanda;10/09/24
+195;Juzgado;Fija audiencia;23/09/24
+196;Demandante;Radicado;17/07/24
+196;Juzgado;Admite;06/09/24
+196;Juzgado;Admite;31/01/25
+196;Juzgado;Fija audiencia;31/01/25
+197;Demandante;Radicado;12/07/24
+197;Juzgado;Admite;23/07/24
+197;Demandado;Contestación de demanda;12/08/24
+197;Juzgado;Fija audiencia;23/08/24
+197;Juzgado;Conciliado;20/09/24
+197;Juzgado;Archivado;24/04/25
+198;Demandante;Radicado;29/07/24
+198;Juzgado;Admite;06/05/25
+199;Demandante;Radicado;28/10/24
+199;Juzgado;Admite;13/11/24
+199;Demandante;Notificación personal de la demanda;21/11/24
+199;Demandado;Contestación de demanda;06/12/24
+199;Juzgado;Admite;31/01/25
+199;Juzgado;Conciliado;18/09/25
+200;Demandante;Radicado;22/07/24
+200;Juzgado;Admite;18/02/25
+200;Demandante;Notificación personal de la demanda;18/02/25
+200;Demandante;Notificación personal de la demanda;19/02/25
+200;Juzgado;Fija audiencia;02/04/25
+201;Demandante;Radicado;20/08/24
+201;Demandante;Radica impulso procesal;02/12/24
+201;Juzgado;Inadmitido;14/03/25
+201;Demandante;Subsanación;21/03/25
+201;Juzgado;Admite;07/04/25
+201;Demandado;Contestación de demanda;07/05/25
+201;Juzgado;Admite;20/06/25
+201;Juzgado;Fija audiencia;20/06/25
+201;Juzgado;Fija audiencia;20/08/25
+202;Demandante;Radicado;29/07/24
+202;Juzgado;Inadmitido;12/09/24
+202;Demandante;Subsanación;24/09/24
+202;Demandante;Radica impulso procesal;06/10/24
+202;Juzgado;Admite;22/10/24
+202;Demandante;Notificación personal de la demanda;28/10/24
+202;Demandado;Contestación de demanda;12/11/24
+202;Juzgado;Fija audiencia;31/01/25
+202;Demandante;Radica impulso procesal;19/05/25
+202;Juzgado;Conciliado;10/09/25
+203;Demandante;Radicado;23/07/24
+203;Juzgado;Admite;29/07/24
+203;Demandante;Notificación personal de la demanda;02/08/24
+203;Demandado;Contestación de demanda;16/08/24
+203;Demandante;Radica impulso procesal;03/09/24
+203;Juzgado;Fija audiencia;09/09/24
+203;Juzgado;Fija audiencia;18/11/24
+203;Juzgado;Conciliado;18/11/24
+204;NA;NA;NA
+205;NA;NA;NA
+206;Demandante;Radicado;26/07/24
+206;Juzgado;Admite;06/08/24
+206;Demandado;Contestación de demanda;27/08/24
+206;Demandante;Radica impulso procesal;02/12/24
+206;Juzgado;Fija audiencia;07/03/25
+206;Juzgado;Conciliado;23/07/25
+207;Demandante;Radicado;26/07/24
+207;Juzgado;Admite;13/11/24
+207;Demandante;Notificación personal de la demanda;14/11/24
+207;Juzgado;Admite;19/09/25
+207;Juzgado;Fija audiencia;05/02/25
+208;Demandante;Radicado;29/07/24
+208;Juzgado;Admite;19/09/24
+208;Juzgado;NA;19/09/24
+208;Demandante;Notificación personal de la demanda;02/10/24
+208;Juzgado;Inadmite contestación de la demanda;14/01/25
+208;Demandante;Subsanación;14/01/25
+208;Juzgado;Fija audiencia;07/02/25
+209;Demandante;Radicado;13/08/24
+209;Juzgado;Admite;27/08/24
+209;Juzgado;Fija audiencia;27/08/24
+209;Demandante;Notificación personal de la demanda;30/08/24
+209;Demandante;Notificación personal de la demanda;30/08/24
+209;Demandado;Contestación de demanda;13/09/24
+209;Juzgado;Inadmitido;25/09/24
+209;Juzgado;Fija audiencia;25/09/24
+209;Juzgado;Admite;11/10/24
+209;Juzgado;Fija audiencia;11/10/24
+210;Demandante;Radicado;29/07/24
+210;Juzgado;Inadmitido;05/09/24
+210;Juzgado;Fija audiencia;05/09/24
+210;Demandante;Retiro de demanda;17/09/24
+210;Juzgado;Archivado;18/09/24
+211;Demandante;Radicado;29/07/24
+211;Juzgado;Admite;23/08/24
+211;Demandante;Notificación personal de la demanda;27/08/24
+211;Juzgado;Fija audiencia;23/08/24
+211;Juzgado;Fija audiencia;19/09/24
+211;Juzgado;Fija audiencia;19/09/24
+211;Juzgado;Conciliado;10/10/24
+212;Demandante;Radicado;26/07/24
+212;Juzgado;Inadmitido;06/09/24
+212;Demandante;Subsanación;06/09/24
+212;Juzgado;Admite;21/10/24
+212;Juzgado;Fija audiencia;10/04/25
+213;Demandante;Radicado;26/07/24
+213;Juzgado;Inadmitido;05/08/24
+213;Demandante;Subsanación;12/08/24
+213;Juzgado;Admite;26/08/24
+213;Demandado;Contestación de demanda;09/09/24
+213;Juzgado;Fija audiencia;27/09/24
+213;Juzgado;Conciliado;11/07/25
+213;Juzgado;Archivado;18/07/25
+214;Demandante;Radicado;29/07/24
+214;Juzgado;Inadmitido;20/02/25
+214;Juzgado;Admite;09/04/25
+215;Demandante;Radicado;29/07/24
+215;Demandante;Radica impulso procesal;29/08/24
+215;Demandante;Radica impulso procesal;02/12/24
+215;Juzgado;Inadmitido;27/01/25
+215;Demandante;Subsanación;31/01/25
+215;Demandante;Radica impulso procesal;06/05/25
+216;Demandante;Radicado;26/07/24
+216;Juzgado;Admite;18/08/24
+216;Demandante;Notificación personal de la demanda;21/08/24
+216;Demandado;Contestación de demanda;02/09/24
+216;Juzgado;Inadmite contestación de la demanda;26/09/24
+216;Demandante;Radica impulso procesal;02/12/24
+216;Juzgado;Fija audiencia;24/02/25
+216;Juzgado;Conciliado;21/03/25
+217;Demandante;Radicado;26/07/24
+217;Juzgado;Inadmitido;01/08/24
+217;Demandante;Subsanación;09/08/25
+217;Juzgado;Admite;15/08/24
+217;Demandante;Notificación personal de la demanda;20/08/24
+217;Demandado;Contestación de demanda;02/09/24
+217;Juzgado;Inadmite contestación de la demanda;12/09/24
+217;Demandado;Subsanación;18/09/24
+217;Juzgado;Fija audiencia;27/09/24
+217;Juzgado;Conciliado;07/02/25
+218;Demandante;Radicado;26/07/24
+218;Juzgado;Inadmitido;05/08/24
+218;Demandante;Subsanación;09/08/24
+218;Juzgado;Admite;26/08/24
+218;Demandante;Notificación personal de la demanda;28/08/24
+218;Demandado;Contestación de demanda;10/09/24
+218;Juzgado;Fija audiencia;27/09/24
+218;Juzgado;Conciliado;14/07/25
+219;Demandante;Radicado;26/07/24
+219;Juzgado;Admite;31/07/24
+219;Demandante;Notificación personal de la demanda;02/08/24
+219;Demandado;Contestación de demanda;16/08/24
+219;Demandante;Radica impulso procesal;03/09/24
+219;Juzgado;Fija audiencia;09/09/24
+219;Juzgado;Conciliado;15/11/24
+219;Juzgado;Archivado;03/12/24
+220;Demandante;Radicado;29/07/24
+220;Juzgado;Inadmitido;02/08/25
+220;Juzgado;Admite;27/08/24
+220;Juzgado;Fija audiencia;28/11/24
+220;Juzgado;Conciliado;09/12/24
+221;Demandante;Radicado;01/08/24
+221;Juzgado;Admite;12/08/24
+221;Demandante;Notificación personal de la demanda;14/08/24
+221;Demandado;Contestación de demanda;29/08/24
+221;Demandante;Radica impulso procesal;02/12/24
+221;Demandante;Radica impulso procesal;02/05/25
+221;Demandante;Radica impulso procesal;11/08/25
+222;Demandante;Radicado;01/08/24
+222;Juzgado;Admite;25/09/24
+222;Demandante;Notificación personal de la demanda;08/10/24
+222;Demandado;Contestación de demanda;19/12/24
+222;Juzgado;Inadmite contestación de la demanda;14/01/25
+222;Demandado;Subsanación;29/01/25
+222;Juzgado;Fija audiencia;06/02/25
+223;Demandante;Radicado;01/08/24
+223;Juzgado;Admite;14/08/24
+223;Demandante;Notificación personal de la demanda;22/08/24
+223;Demandante;Radica impulso procesal;02/12/24
+223;Juzgado;Fija audiencia;10/03/25
+223;Juzgado;Conciliado;19/06/25
+224;Demandante;Radicado;01/08/24
+224;Juzgado;Admite;14/08/24
+224;Demandante;Notificación personal de la demanda;22/08/24
+224;Demandante;Radica impulso procesal;02/12/24
+224;Demandante;Radica impulso procesal;02/05/25
+224;Juzgado;Fija audiencia;16/06/25
+225;Demandante;Radicado;01/08/24
+225;Juzgado;Admite;05/08/24
+225;Demandante;Notificación personal de la demanda;09/08/24
+225;Demandado;Contestación de demanda;09/09/24
+225;Demandante;Fija audiencia;09/09/24
+225;Juzgado;Conciliado;20/11/24
+225;Juzgado;Archivado;04/12/24
+226;Demandante;Radicado;31/07/24
+226;Demandante;Radica impulso procesal;06/09/24
+226;Juzgado;Inadmitido;12/09/24
+226;Demandante;Subsanación;20/09/24
+226;Demandante;Notificación personal de la demanda;28/10/24
+226;Demandado;Contestación de demanda;13/11/24
+226;Juzgado;Fija audiencia;21/02/25
+227;Demandante;Radicado;31/07/24
+227;Juzgado;Inadmitido;05/08/24
+227;Demandante;Subsanación;09/08/24
+227;Demandante;Admite;26/08/24
+227;Demandado;Contestación de demanda;10/09/24
+227;Juzgado;Fija audiencia;27/09/24
+227;Juzgado;Conciliado;14/07/25
+228;Demandante;Radicado;31/07/24
+228;Juzgado;Inadmitido;05/08/24
+228;Demandante;Subsanación;09/08/24
+228;Demandante;Admite;26/08/24
+228;Demandado;Contestación de demanda;10/09/24
+228;Juzgado;Fija audiencia;22/10/24
+228;Juzgado;Conciliado;30/07/25
+229;Demandante;Radicado;01/08/24
+229;Juzgado;Inadmitido;30/09/24
+229;Juzgado;Admite;21/10/24
+229;Demandado;Contestación de demanda;06/11/24
+229;Juzgado;Fija audiencia;17/01/25
+229;Juzgado;Conciliado;15/05/25
+230;Demandante;Radicado;01/08/24
+230;Juzgado;Inadmitido;09/09/24
+230;Juzgado;Admite;04/10/24
+230;Juzgado;Fija audiencia;22/11/24
+230;Juzgado;Conciliado;26/05/25
+231;Demandante;Radicado;01/08/24
+231;Juzgado;Inadmitido;12/12/24
+231;Demandante;Subsanación;13/01/25
+231;Juzgado;Admite;18/02/25
+231;Demandante;Notificación personal de la demanda;03/03/25
+231;Demandante;Radica impulso procesal;02/05/25
+231;Demandante;Radica impulso procesal;11/08/25
+231;Juzgado;Fija audiencia;18/08/25
+232;Demandante;Radicado;01/08/24
+232;Juzgado;Inadmitido;15/08/24
+232;Demandante;Subsanación;21/08/24
+232;Juzgado;Admite;19/11/24
+232;Demandante;Notificación personal de la demanda;21/11/24
+232;Demandado;Contestación de demanda;02/12/24
+232;Juzgado;Fija audiencia;18/06/25
+232;Juzgado;Conciliado;19/06/25
+233;Demandante;Radicado;01/08/24
+233;Demandante;Radica impulso procesal;29/08/24
+233;Demandante;Radica impulso procesal;02/09/24
+233;Juzgado;Inadmitido;27/01/25
+233;Demandante;Subsanación;31/01/25
+233;Demandante;Radica impulso procesal;08/05/25
+234;Demandante;Radicado;01/08/24
+234;Juzgado;Admite;26/11/24
+234;Demandante;Notificación personal de la demanda;06/12/24
+234;Demandado;Contestación de demanda;13/12/24
+234;Juzgado;Fija audiencia;04/07/25
+235;Demandante;Radicado;06/08/24
+235;Juzgado;Inadmitido;23/08/24
+235;Demandante;Subsanación;28/08/24
+235;Juzgado;Admite;27/09/24
+235;Demandado;Contestación de demanda;17/10/24
+235;Juzgado;Fija audiencia;29/11/24
+236;Demandante;Radicado;09/08/24
+236;Juzgado;Inadmitido;23/09/24
+236;Demandante;Subsanación;01/10/24
+236;Juzgado;Admite;15/10/24
+236;Demandado;Contestación de demanda;31/10/24
+236;Juzgado;Fija audiencia;28/01/25
+236;Juzgado;Conciliado;04/09/25
+237;Demandante;Radicado;09/08/24
+237;Juzgado;Inadmitido;24/09/24
+237;Juzgado;Admite;17/10/24
+237;Demandado;Contestación de demanda;06/11/24
+237;Juzgado;Inadmite contestación de la demanda;05/02/25
+237;Juzgado;Fija audiencia;24/02/25
+238;Demandante;Radicado;09/08/24
+238;Juzgado;Inadmitido;13/08/24
+238;Demandante;Subsanación;21/08/24
+238;Juzgado;Admite;26/09/24
+238;Demandado;Contestación de demanda;16/10/24
+238;Juzgado;Fija audiencia;20/11/24
+238;Juzgado;Conciliado;11/02/25
+239;Demandante;Radicado;12/08/24
+239;Juzgado;Admite;15/08/24
+239;Demandado;Contestación de demanda;05/09/24
+239;Juzgado;Inadmite contestación de la demanda;23/10/24
+239;Juzgado;Fija audiencia;15/11/24
+239;Juzgado;Conciliado;19/09/24
+240;Demandante;Radicado;09/08/24
+240;Juzgado;Admite;15/08/24
+240;Demandante;Notificación personal de la demanda;22/08/24
+240;Demandado;Contestación de demanda;03/09/24
+240;Juzgado;Fija audiencia;10/10/24
+240;Juzgado;Conciliado;22/01/25
+240;Juzgado;Archivado;28/01/25
+241;Demandante;Radicado;09/08/24
+241;Juzgado;Admite;03/09/24
+241;Demandante;Notificación personal de la demanda;03/09/24
+241;Juzgado;Fija audiencia;02/10/24
+241;Juzgado;Conciliado;09/12/24
+241;Juzgado;Archivado;17/09/25
+242;Demandante;Radicado;09/08/24
+242;Juzgado;Inadmitido;13/08/24
+242;Demandante;Subsanación;21/08/24
+242;Juzgado;Admite;24/09/24
+242;Demandado;Contestación de demanda;16/10/24
+242;Juzgado;Fija audiencia;15/11/24
+242;Juzgado;Conciliado;31/01/25
+243;Demandante;Radicado;09/08/24
+243;Juzgado;Admite;15/08/24
+243;Demandado;Contestación de demanda;03/09/24
+243;Juzgado;Fija audiencia;10/10/24
+243;Juzgado;Conciliado;11/12/24
+243;Juzgado;Archivado;19/12/24
+244;Demandante;Radicado;12/08/24
+244;Juzgado;Admite;15/08/24
+244;Demandado;Contestación de demanda;05/09/24
+244;Juzgado;Fija audiencia;27/09/24
+244;Juzgado;Conciliado;16/07/25
+245;Demandante;Radicado;21/08/24
+245;Juzgado;Admite;25/10/24
+245;Demandado;Contestación de demanda;15/11/24
+245;Demandante;Radica impulso procesal;11/08/25
+246;Demandante;Radicado;16/08/24
+246;Juzgado;Inadmitido;25/09/24
+246;Demandante;Subsanación;03/10/24
+246;Juzgado;Admite;28/01/25
+246;Juzgado;Notificación personal de la demanda;27/02/25
+246;Demandado;Contestación de demanda;27/02/25
+246;Juzgado;Fija audiencia;28/02/25
+246;Juzgado;Conciliado;21/04/25
+247;Demandante;Radicado;16/08/24
+247;Juzgado;Inadmitido;16/08/24
+247;Demandante;Subsanación;21/08/24
+247;Juzgado;Admite;21/08/24
+247;Demandante;Notificación personal de la demanda;27/08/24
+247;Demandado;Contestación de demanda;10/09/24
+247;Juzgado;Fija audiencia;11/09/24
+247;Juzgado;Conciliado;24/01/25
+248;Demandante;Radicado;16/08/24
+248;Juzgado;Admite;16/01/25
+248;Demandante;Notificación personal de la demanda;03/03/25
+248;Demandado;Contestación de demanda;18/03/25
+248;Juzgado;Fija audiencia;10/07/25
+248;Juzgado;Conciliado;28/07/25
+249;Demandante;Radicado;25/09/25
+250;Demandante;Radicado;25/09/25
+251;Demandante;Radicado;20/08/24
+251;Juzgado;Inadmitido;11/09/24
+251;Demandante;Subsanación;16/09/24
+251;Juzgado;Admite;13/11/24
+251;Demandante;Notificación personal de la demanda;21/11/24
+251;Juzgado;Fija audiencia;12/02/25
+251;Juzgado;Conciliado;12/05/25
+252;Demandante;Radicado;16/08/24
+252;Juzgado;Admite;10/09/24
+252;Demandante;Notificación personal de la demanda;16/09/24
+252;Demandado;Contestación de demanda;30/09/24
+252;Demandante;Radica impulso procesal;02/12/24
+252;Juzgado;Fija audiencia;21/02/25
+252;Juzgado;Conciliado;26/03/25
+253;Juzgado;Archivado;21/01/25
+254;Demandante;Radicado;16/08/24
+254;Juzgado;Admite;03/09/24
+254;Juzgado;Fija audiencia;03/10/24
+254;Juzgado;Contestación de demanda;11/12/24
+255;Demandante;Radicado;27/08/24
+255;Juzgado;Fija audiencia;18/09/24
+255;Juzgado;Conciliado;20/08/25
+256;Demandante;Radicado;23/08/24
+256;Juzgado;Admite;30/08/24
+256;Demandado;Contestación de demanda;18/09/24
+256;Juzgado;Fija audiencia;16/10/24
+256;Juzgado;Conciliado;28/11/24
+257;Demandante;Radicado;23/08/24
+257;Juzgado;Admite;18/02/25
+257;Demandante;Notificación personal de la demanda;05/03/25
+257;Juzgado;Contestación de demanda;19/03/25
+257;Juzgado;Fija audiencia;02/04/25
+258;Demandante;Radicado;23/08/24
+258;Juzgado;Inadmitido;16/09/24
+258;Demandante;Subsanación;25/09/24
+258;Juzgado;Admite;19/11/24
+258;Demandado;Contestación de demanda;09/12/24
+258;Juzgado;Fija audiencia;04/02/25
+259;Juzgado;Archivado;15/10/24
+260;Demandante;Radicado;23/08/24
+260;Juzgado;Admite;25/10/24
+260;Demandante;Notificación personal de la demanda;25/11/24
+260;Juzgado;Contestación de demanda;25/11/24
+260;Juzgado;Fija audiencia;18/07/25
+261;Demandante;Radicado;23/08/24
+261;Juzgado;Inadmitido;25/09/24
+261;Demandante;Subsanación;04/10/24
+261;Demandante;Radica impulso procesal;23/04/25
+262;Demandante;Radicado;30/08/24
+262;Juzgado;Inadmitido;03/09/24
+262;Juzgado;Admite;13/09/24
+262;Demandante;Notificación personal de la demanda;20/09/24
+262;Demandado;Contestación de demanda;10/10/24
+262;Juzgado;Fija audiencia;16/10/24
+262;Juzgado;Conciliado;30/01/25
+263;Demandante;Radicado;20/10/24
+263;Juzgado;Admite;31/10/24
+263;Juzgado;Notificación personal de la demanda;06/11/24
+263;Demandado;Contestación de demanda;19/11/24
+263;Juzgado;Fija audiencia;27/11/24
+263;Juzgado;Conciliado;31/01/25
+264;Demandante;Radicado;25/09/24
+264;Juzgado;Admite;09/10/24
+264;Juzgado;Inadmite contestación de la demanda;06/03/25
+264;Juzgado;Fija audiencia;15/07/25
+264;Juzgado;Fija audiencia;26/08/24
+264;Juzgado;Conciliado;10/10/24
+265;Demandante;Radicado;10/10/24
+265;Juzgado;Inadmitido;06/12/24
+265;Juzgado;Admite;15/01/25
+266;Demandante;Radicado;10/10/24
+266;Juzgado;Inadmitido;12/06/24
+266;Juzgado;Admite;16/01/25
+267;Demandante;Radicado;25/09/24
+267;Juzgado;Admite;30/10/24
+267;Juzgado;Fija audiencia;06/06/25
+267;Juzgado;Conciliado;25/08/25
+268;Demandante;Radicado;17/09/24
+268;Juzgado;Admite;20/09/24
+268;Juzgado;Fija audiencia;18/07/25
+268;Juzgado;Fija audiencia;16/09/25
+269;Demandante;Radicado;26/09/24
+269;Juzgado;Admite;18/11/24
+269;Juzgado;Fija audiencia;03/06/25
+269;Juzgado;Conciliado;28/08/25
+270;Demandante;Radicado;17/09/24
+270;Juzgado;Admite;01/11/24
+270;Demandado;Contestación de demanda;19/11/24
+270;Juzgado;Fija audiencia;06/02/25
+270;Juzgado;Conciliado;NA
+271;Demandante;Radicado;17/09/24
+271;Juzgado;Admite;23/09/24
+271;Demandado;Contestación de demanda;15/10/24
+271;Juzgado;Fija audiencia;18/10/24
+271;Juzgado;Conciliado;28/11/24
+272;Demandante;Radicado;16/09/24
+272;Juzgado;Admite;17/09/24
+272;Demandante;Notificación personal de la demanda;09/10/24
+272;Demandado;Contestación de demanda;16/10/24
+272;Demandante;Radica impulso procesal;02/12/24
+272;Juzgado;Fija audiencia;08/04/25
+272;Juzgado;Fija audiencia;29/05/25
+273;Demandante;Radicado;25/09/24
+273;Juzgado;Admite;15/10/24
+273;Juzgado;Fija audiencia;23/01/25
+273;Juzgado;Fija audiencia;22/07/25
+273;Juzgado;Conciliado;22/08/25
+274;Demandante;Radicado;16/09/24
+274;Juzgado;Inadmitido;17/10/24
+274;Demandante;Subsanación;23/10/24
+274;Juzgado;Admite;01/11/24
+274;Demandante;Notificación personal de la demanda;15/11/24
+274;Demandado;Contestación de demanda;20/11/24
+274;Juzgado;Fija audiencia;09/05/25
+274;Juzgado;Fija audiencia;21/07/25
+275;Demandante;Radicado;16/09/24
+275;Juzgado;Inadmitido;19/09/24
+275;Demandante;Subsanación;27/09/24
+275;Juzgado;Admite;07/10/24
+275;Juzgado;Notificación personal de la demanda;22/10/24
+275;Demandado;Contestación de demanda;24/10/24
+275;Juzgado;Fija audiencia;08/11/24
+275;Juzgado;Conciliado;28/03/25
+276;Demandante;Radicado;16/09/24
+276;Demandante;Radica impulso procesal;20/01/25
+276;Juzgado;Admite;11/03/25
+276;Juzgado;Notificación personal de la demanda;12/03/25
+276;Demandado;Contestación de demanda;26/03/25
+276;Demandante;Radica impulso procesal;24/04/25
+277;Demandante;Radicado;16/09/24
+277;Demandante;Radica impulso procesal;02/12/24
+277;Juzgado;Admite;16/01/25
+277;Demandante;Notificación personal de la demanda;03/03/25
+277;Demandado;Contestación de demanda;18/03/25
+277;Juzgado;Fija audiencia;09/07/25
+277;Juzgado;Conciliado;28/07/25
+278;Demandante;Radicado;15/10/24
+278;Juzgado;Inadmitido;21/10/24
+278;Demandante;Subsanación;25/10/24
+278;Juzgado;Admite;05/11/24
+278;Demandante;Notificación personal de la demanda;12/11/24
+278;Demandado;Contestación de demanda;25/11/24
+278;Juzgado;Fija audiencia;18/12/24
+278;Juzgado;Conciliado;30/01/25
+279;Demandante;Radicado;17/10/24
+279;Juzgado;Admite;04/12/24
+279;Demandante;Notificación personal de la demanda;10/12/24
+279;Demandado;Contestación de demanda;13/01/25
+279;Juzgado;Fija audiencia;07/02/25
+279;Juzgado;Conciliado;19/09/25
+280;Demandante;Radicado;17/09/24
+280;Juzgado;Admite;28/10/24
+280;Demandado;Contestación de demanda;15/11/24
+280;Juzgado;Fija audiencia;28/01/25
+280;Juzgado;Fija audiencia;14/02/25
+280;Juzgado;Conciliado;06/03/25
+281;Demandante;Radicado;17/09/24
+281;Juzgado;Admite;27/09/24
+281;Demandante;Notificación personal de la demanda;08/10/24
+281;Demandado;Contestación de demanda;17/10/24
+281;Demandante;Radica impulso procesal;02/12/24
+281;Juzgado;Fija audiencia;17/03/25
+281;Juzgado;Conciliado;17/09/25
+282;Demandante;Radicado;17/09/24
+282;Juzgado;Inadmitido;09/10/24
+282;Demandante;Subsanación;18/10/24
+282;Juzgado;Admite;13/12/24
+282;Demandante;Notificación personal de la demanda;05/05/25
+282;Demandado;Contestación de demanda;15/05/25
+282;Juzgado;Fija audiencia;01/09/25
+283;Demandante;Radicado;09/10/24
+283;Demandante;Radica impulso procesal;25/09/25
+284;Demandante;Radicado;21/10/24
+284;Juzgado;Admite;12/12/24
+284;Juzgado;Admite;24/06/25
+284;Juzgado;Fija audiencia;24/06/25
+284;Juzgado;Conciliado;05/09/25
+285;Demandante;Radicado;15/11/24
+285;Juzgado;Admite;15/11/24
+285;Demandante;Notificación personal de la demanda;21/11/24
+285;Demandado;Contestación de demanda;05/12/24
+285;Juzgado;Fija audiencia;07/02/25
+285;Juzgado;Conciliado;21/04/25
+286;Demandante;Radicado;25/11/24
+286;Juzgado;Admite;04/12/24
+286;Demandante;Notificación personal de la demanda;10/12/24
+286;Demandado;Contestación de demanda;18/12/24
+286;Juzgado;Fija audiencia;07/02/25
+286;Juzgado;Conciliado;19/09/25
+287;Demandante;Radicado;15/10/24
+287;Demandante;Radica impulso procesal;02/12/24
+287;Juzgado;Admite;03/12/24
+287;Demandado;Contestación de demanda;19/12/24
+287;Juzgado;Fija audiencia;03/03/25
+287;Juzgado;Conciliado;18/09/25
+288;Demandante;Radicado;15/10/24
+288;Juzgado;Admite;18/10/24
+288;Juzgado;Notificación personal de la demanda;23/10/24
+288;Demandante;Contestación de demanda;06/11/24
+288;Juzgado;Fija audiencia;02/05/25
+288;Juzgado;Conciliado;17/07/25
+289;Demandante;Radicado;18/12/24
+289;Juzgado;Admite;19/12/24
+289;Demandante;Notificación personal de la demanda;13/03/25
+289;Demandado;Contestación de demanda;19/03/25
+289;Juzgado;Fija audiencia;14/04/25
+289;Juzgado;Conciliado;16/05/25
+290;Demandante;Radicado;15/10/24
+290;Juzgado;Admite;22/10/24
+290;Demandante;Notificación personal de la demanda;28/10/24
+290;Demandado;Contestación de demanda;14/11/24
+290;Juzgado;Fija audiencia;29/11/24
+290;Juzgado;Fija audiencia;22/08/25
+290;Juzgado;Conciliado;17/09/25
+291;Demandante;Radicado;15/10/24
+291;Juzgado;Admite;25/10/24
+291;Demandado;Contestación de demanda;13/11/24
+291;Juzgado;Fija audiencia;17/02/25
+292;Demandante;Radicado;15/10/24
+292;Juzgado;Admite;06/11/24
+292;Demandante;Notificación personal de la demanda;12/11/24
+292;Demandado;Contestación de demanda;25/11/24
+292;Juzgado;Fija audiencia;21/02/25
+292;Juzgado;Conciliado;06/03/25
+293;Demandante;Radicado;15/10/24
+293;Juzgado;Admite;31/10/24
+293;Demandante;Notificación personal de la demanda;13/11/24
+293;Demandado;Contestación de demanda;19/11/24
+293;Juzgado;Fija audiencia;26/02/25
+293;Juzgado;Conciliado;28/03/25
+294;Demandante;Radicado;15/10/24
+294;Juzgado;Admite;25/10/24
+294;Demandante;Notificación personal de la demanda;31/10/24
+294;Demandado;Contestación de demanda;15/11/24
+294;Juzgado;Fija audiencia;29/11/24
+294;Juzgado;Conciliado;24/01/25
+295;Demandante;Radicado;15/10/24
+295;Juzgado;Inadmitido;22/10/24
+295;Demandante;Subsanación;31/10/24
+295;Juzgado;Admite;18/12/24
+295;Demandante;Notificación personal de la demanda;03/03/25
+295;Demandado;Contestación de demanda;17/03/25
+295;Juzgado;Fija audiencia;01/09/25
+295;Juzgado;Conciliado;29/09/25
+296;Demandante;Radicado;15/10/24
+296;Juzgado;Admite;29/10/24
+296;Demandante;Notificación personal de la demanda;11/11/24
+296;Demandado;Contestación de demanda;13/11/24
+296;Juzgado;Fija audiencia;17/01/25
+296;Juzgado;Conciliado;18/03/25
+297;Demandante;Radicado;10/10/24
+297;Juzgado;Admite;28/11/24
+297;Demandante;Notificación personal de la demanda;05/12/24
+297;Demandado;Contestación de demanda;17/12/24
+297;Juzgado;Fija audiencia;28/03/25
+297;Juzgado;Conciliado;26/05/25
+298;Demandante;Radicado;20/10/24
+298;Juzgado;Admite;24/10/24
+298;Demandante;Notificación personal de la demanda;19/12/24
+298;Demandado;Contestación de demanda;14/01/25
+298;Juzgado;Fija audiencia;28/03/25
+298;Juzgado;Conciliado;31/07/25
+299;Demandante;Radicado;10/10/24
+299;Juzgado;Admite;07/11/24
+299;Demandante;Notificación personal de la demanda;15/11/24
+299;Demandado;Contestación de demanda;09/12/24
+299;Demandante;Radica impulso procesal;23/04/25
+299;Juzgado;Admite;09/07/25
+300;Demandante;Radicado;13/11/24
+300;Juzgado;Admite;19/12/24
+300;Demandado;Contestación de demanda;28/01/25
+300;Demandante;Radica impulso procesal;23/04/25
+300;Juzgado;Fija audiencia;05/09/25
+301;Demandante;Radicado;15/10/24
+301;Juzgado;Admite;25/10/24
+301;Demandante;Notificación personal de la demanda;31/10/24
+301;Demandado;Contestación de demanda;12/11/24
+301;Juzgado;Fija audiencia;29/11/24
+301;Juzgado;Conciliado;24/01/25
+302;Demandante;Radicado;15/10/24
+302;Juzgado;Admite;25/10/24
+302;Demandado;Contestación de demanda;13/11/24
+302;Juzgado;Fija audiencia;17/02/25
+303;Demandante;Radicado;31/01/25
+303;Juzgado;Admite;10/02/25
+303;Demandante;Notificación personal de la demanda;03/03/25
+303;Demandado;Contestación de demanda;17/03/25
+303;Juzgado;Fija audiencia;07/04/25
+304;Demandante;Radicado;23/10/24
+304;Juzgado;Inadmitido;11/03/25
+304;Demandante;Subsanación;13/03/25
+304;Juzgado;Admite;16/07/25
+304;Demandante;Notificación personal de la demanda;21/07/25
+305;Demandante;Radicado;24/01/25
+305;Juzgado;Inadmitido;11/02/25
+305;Demandante;Subsanación;17/02/25
+305;Juzgado;Admite;18/03/25
+305;Demandante;Notificación personal de la demanda;21/03/25
+305;Demandado;Contestación de demanda;04/04/25
+305;Juzgado;Fija audiencia;22/05/25
+305;Demandante;Radicado;24/01/2025
+305;Juzgado;Fija audiencia;25/07/25
+305;Juzgado;Conciliado;29/09/25
+306;Demandante;Radicado;15/10/24
+306;Juzgado;Admite;13/11/24
+306;Demandante;Notificación personal de la demanda;22/11/24
+306;Demandado;Contestación de demanda;06/12/24
+306;Juzgado;Fija audiencia;03/02/25
+307;Demandante;Radicado;07/05/25
+307;Juzgado;Admite;05/05/25
+307;Demandante;Notificación personal de la demanda;08/05/25
+307;Demandado;Contestación de demanda;23/05/25
+307;Juzgado;Fija audiencia;20/06/25
+307;Juzgado;Conciliado;03/07/25
+308;Demandante;Radicado;29/10/24
+308;Juzgado;Admite;06/02/25
+308;Demandado;Contestación de demanda;25/02/25
+308;Juzgado;Fija audiencia;07/03/25
+309;Demandante;Radicado;23/03/25
+309;Juzgado;Admite;28/03/25
+309;Juzgado;Notificación personal de la demanda;01/04/25
+309;Juzgado;Fija audiencia;01/07/25
+309;Juzgado;Conciliado;04/07/25
+310;Demandante;Radicado;29/10/24
+310;Juzgado;Inadmitido;30/10/24
+310;Demandante;Subsanación;05/11/24
+310;Juzgado;Admite;22/11/24
+310;Demandante;Notificación personal de la demanda;25/11/24
+310;Demandado;Contestación de demanda;06/12/24
+310;Juzgado;Fija audiencia;14/01/25
+310;Juzgado;Conciliado;26/08/25
+311;Demandante;Radicado;29/10/24
+311;Demandante;Radica impulso procesal;23/04/25
+311;Juzgado;Admite;23/05/25
+311;Demandante;Notificación personal de la demanda;04/06/25
+311;Demandado;Contestación de demanda;17/06/25
+312;Demandante;Radicado;13/11/24
+312;Juzgado;Admite;17/01/25
+312;Demandado;Contestación de demanda;13/03/25
+312;Demandante;Radica impulso procesal;20/07/25
+313;Demandante;Radicado;29/10/24
+313;Juzgado;Admite;05/11/24
+313;Demandante;Notificación personal de la demanda;28/11/24
+313;Demandado;Contestación de demanda;08/12/24
+313;Juzgado;Fija audiencia;22/04/25
+314;Demandante;Radicado;29/10/24
+314;Juzgado;Admite;28/11/24
+314;Demandado;Contestación de demanda;18/12/24
+314;Juzgado;Fija audiencia;07/02/25
+314;Juzgado;Conciliado;21/04/25
+315;Demandante;Radicado;29/10/24
+315;Juzgado;Admite;05/11/24
+315;Demandante;Notificación personal de la demanda;12/11/24
+315;Demandado;Contestación de demanda;28/11/24
+315;Juzgado;Fija audiencia;13/01/25
+315;Juzgado;Conciliado;14/02/25
+316;Demandante;Radicado;04/03/25
+317;Demandante;Radicado;13/11/24
+317;Juzgado;Inadmitido;21/11/24
+317;Demandante;Subsanación;29/11/24
+317;Juzgado;Admite;05/12/24
+317;Demandante;Notificación personal de la demanda;13/01/25
+317;Demandado;Contestación de demanda;04/02/25
+318;Demandante;Radicado;30/10/24
+318;Juzgado;Admite;25/11/24
+318;Demandante;Notificación personal de la demanda;28/11/24
+318;Demandado;Contestación de demanda;06/12/24
+318;Juzgado;Admite;13/02/25
+318;Demandante;Radica impulso procesal;23/04/25
+319;Demandante;Radicado;30/10/24
+319;Demandante;Radica impulso procesal;26/03/25
+320;Demandante;Radicado;30/10/24
+320;Juzgado;Admite;14/11/24
+320;Juzgado;Fija audiencia;15/08/25
+320;Demandado;Contestación de demanda;09/09/25
+321;Demandante;Radicado;29/10/24
+321;Juzgado;Admite;31/01/25
+321;Demandante;Notificación personal de la demanda;13/03/25
+321;Demandado;Contestación de demanda;19/03/25
+321;Demandante;Radica impulso procesal;13/06/25
+321;Juzgado;Fija audiencia;18/07/25
+322;Demandante;Radicado;29/10/24
+322;Juzgado;Admite;31/10/24
+322;Demandante;Notificación personal de la demanda;15/11/24
+322;Demandado;Contestación de demanda;19/11/24
+322;Juzgado;Fija audiencia;27/11/24
+322;Juzgado;Conciliado;31/01/25
+323;Demandante;Radicado;29/10/24
+323;Juzgado;Admite;14/11/24
+323;Demandante;Notificación personal de la demanda;22/11/24
+323;Demandado;Contestación de demanda;06/12/24
+323;Juzgado;Fija audiencia;20/03/25
+323;Juzgado;Conciliado;18/09/25
+324;Demandante;Radicado;05/02/25
+324;Juzgado;Admite;28/03/25
+325;Demandante;Radicado;07/11/24
+325;Juzgado;Admite;29/11/24
+325;Demandante;Notificación personal de la demanda;03/12/24
+325;Demandado;Contestación de demanda;18/12/24
+325;Juzgado;Fija audiencia;21/02/25
+325;Juzgado;Conciliado;12/03/25
+326;Demandante;Radicado;05/11/24
+326;Juzgado;Admite;12/11/24
+326;Demandado;Contestación de demanda;16/01/25
+326;Juzgado;Fija audiencia;16/01/25
+327;Demandante;Radicado;13/11/24
+327;Juzgado;Admite;28/11/24
+327;Demandado;Contestación de demanda;13/01/25
+327;Juzgado;Fija audiencia;22/01/25
+328;Demandante;Radicado;22/11/24
+328;Juzgado;Admite;29/11/24
+328;Juzgado;Notificación personal de la demanda;02/12/24
+328;Demandado;Contestación de demanda;11/12/24
+328;Juzgado;Fija audiencia;24/01/25
+328;Juzgado;Conciliado;13/02/25
+329;Demandante;Radicado;13/08/25
+329;Juzgado;Admite;19/08/25
+329;Demandante;Notificación personal de la demanda;21/08/25
+329;Demandado;Contestación de demanda;04/09/25
+329;Juzgado;Fija audiencia;10/09/25
+330;Demandante;Radicado;13/11/24
+330;Juzgado;Inadmitido;20/01/25
+330;Demandante;Subsanación;28/01/25
+330;Juzgado;Admite;07/02/25
+330;Demandante;Notificación personal de la demanda;03/03/25
+330;Demandado;Contestación de demanda;17/03/25
+330;Demandante;Radica impulso procesal;05/06/25
+330;Juzgado;Fija audiencia;20/06/25
+331;Demandante;Radicado;05/11/24
+331;Juzgado;Inadmitido;12/11/24
+331;Demandante;Subsanación;20/11/24
+331;Juzgado;Admite;27/11/24
+331;Demandado;Contestación de demanda;17/12/24
+331;Juzgado;Fija audiencia;13/02/25
+331;Juzgado;Conciliado;04/03/25
+332;Demandante;Radicado;08/11/24
+332;Juzgado;Admite;03/12/24
+332;Demandado;Contestación de demanda;10/12/24
+332;Juzgado;Fija audiencia;29/01/25
+332;Juzgado;Conciliado;20/03/25
+333;Demandante;Radicado;07/11/24
+333;Juzgado;Admite;31/01/25
+333;Demandante;Notificación personal de la demanda;03/03/25
+333;Demandado;Contestación de demanda;17/03/25
+333;Juzgado;Fija audiencia;18/07/25
+334;Demandante;Radicado;24/07/25
+334;Juzgado;Admite;28/08/25
+334;Demandante;Notificación personal de la demanda;29/08/25
+334;Demandado;Contestación de demanda;23/09/25
+335;Demandante;Radicado;07/11/24
+335;Juzgado;Inadmitido;14/11/24
+335;Demandante;Subsanación;22/11/24
+335;Juzgado;Admite;22/11/24
+335;Demandante;Notificación personal de la demanda;27/11/24
+335;Demandado;Contestación de demanda;10/12/24
+335;Juzgado;Fija audiencia;29/01/25
+336;Demandante;Radicado;06/11/24
+336;Juzgado;Admite;21/11/24
+336;Juzgado;Notificación personal de la demanda;22/11/24
+336;Demandado;Contestación de demanda;04/12/24
+336;Juzgado;Fija audiencia;06/02/25
+336;Juzgado;Fija audiencia;31/07/25
+336;Juzgado;Conciliado;28/08/25
+337;Demandante;Radicado;07/11/24
+337;Juzgado;Admite;29/11/24
+337;Juzgado;Notificación personal de la demanda;02/12/24
+337;Demandado;Contestación de demanda;13/12/24
+337;Juzgado;Fija audiencia;24/01/25
+337;Juzgado;Conciliado;13/02/25
+338;Demandante;Radicado;07/11/24
+338;Juzgado;Admite;28/11/24
+338;Demandado;Contestación de demanda;16/12/24
+338;Juzgado;Fija audiencia;07/02/25
+338;Juzgado;Conciliado;22/04/25
+339;Demandante;Radicado;08/11/24
+339;Juzgado;Admite;02/05/25
+339;Demandante;Notificación personal de la demanda;06/05/25
+339;Demandado;Contestación de demanda;19/05/25
+340;Demandante;Radicado;12/11/24
+340;Juzgado;Admite;28/11/24
+340;Juzgado;Notificación personal de la demanda;28/11/24
+340;Demandado;Contestación de demanda;09/12/24
+340;Juzgado;Fija audiencia;17/01/25
+341;Demandante;Radicado;12/11/24
+341;Juzgado;Admite;14/11/24
+341;Demandante;Notificación personal de la demanda;22/11/24
+341;Demandado;Contestación de demanda;02/12/24
+341;Demandante;Radica impulso procesal;23/04/25
+341;Juzgado;Fija audiencia;23/04/25
+342;Demandante;Radicado;13/11/24
+342;Juzgado;Admite;05/12/24
+342;Demandado;Contestación de demanda;13/01/25
+342;Juzgado;Fija audiencia;15/01/25
+342;Juzgado;Conciliado;06/05/25
+343;Demandante;Radicado;12/11/24
+343;Juzgado;Admite;31/01/25
+343;Demandante;Notificación personal de la demanda;13/03/25
+343;Demandado;Contestación de demanda;17/03/25
+343;Juzgado;Fija audiencia;24/07/25
+344;Demandante;Radicado;12/11/24
+344;Juzgado;Admite;26/11/24
+344;Demandado;Contestación de demanda;18/12/25
+344;Demandante;Radica impulso procesal;23/04/25
+344;Demandante;Radica impulso procesal;11/08/25
+344;Juzgado;Admite;22/08/25
+345;Demandante;Radicado;12/11/24
+345;Juzgado;Admite;14/11/24
+345;Demandante;Notificación personal de la demanda;22/11/24
+345;Demandado;Contestación de demanda;02/12/24
+345;Juzgado;Fija audiencia;22/04/25
+346;Demandante;Radicado;13/11/24
+346;Juzgado;Inadmitido;06/12/24
+346;Demandante;Subsanación;13/12/24
+346;Juzgado;Admite;17/01/25
+346;Demandante;Notificación personal de la demanda;21/01/25
+346;Demandado;Contestación de demanda;04/02/25
+346;Demandante;Radica impulso procesal;23/04/25
+346;Juzgado;Fija audiencia;17/07/25
+305;Juzgado;Inadmitido;11/02/2025
+305;Demandante;Subsanación;17/02/2025
+305;Juzgado;Admite;18/03/2025
+305;Demandante;Notificación personal de la demanda;21/03/2025
+305;Demandado;Contestación de demanda;04/04/2025
+305;Juzgado;Fija audiencia;22/05/2025
+305;Juzgado;Fija audiencia;25/07/2025
+305;Juzgado;Conciliado;29/09/2025
+346;Demandante;Radicado;13/11/2024
+347;Juzgado;Inadmitido;13/11/24
+347;Juzgado;Admite;27/11/24
+347;Demandante;Notificación personal de la demanda;03/12/24
+347;Demandado;Contestación de demanda;18/12/24
+347;Juzgado;Fija audiencia;28/01/25
+347;Juzgado;Fija audiencia;18/03/25
+347;Juzgado;Conciliado;07/04/25
+348;Demandante;Radicado;15/11/24
+348;Juzgado;Inadmitido;09/07/25
+348;Juzgado;Finalizado por Rechazo;29/09/25
+349;Demandante;Radicado;31/01/25
+349;Juzgado;Admite;12/02/25
+349;Demandante;Notificación personal de la demanda;05/03/25
+349;Demandado;Contestación de demanda;19/03/25
+349;Juzgado;Fija audiencia;21/04/25
+349;Juzgado;Conciliado;22/05/25
+350;Demandante;Radicado;14/11/24
+350;Juzgado;Admite;17/01/25
+350;Demandante;Notificación personal de la demanda;07/03/25
+350;Demandante;Radica impulso procesal;23/04/25
+351;Demandante;Radicado;13/11/24
+351;Juzgado;Admite;26/11/24
+351;Demandado;Contestación de demanda;13/12/24
+351;Juzgado;Admite;25/04/25
+351;Demandante;Radica impulso procesal;25/04/25
+352;Demandante;Radicado;25/09/25
+353;Demandante;Radicado;18/11/24
+353;Juzgado;Admite;29/11/24
+353;Demandante;Notificación personal de la demanda;30/04/25
+353;Demandado;Contestación de demanda;12/05/25
+353;Juzgado;Fija audiencia;06/06/25
+353;Juzgado;Conciliado;03/07/25
+354;Demandante;Radicado;18/11/24
+354;Juzgado;Inadmitido;10/12/24
+354;Demandante;Subsanación;16/12/24
+354;Demandante;Radica impulso procesal;21/03/25
+354;Juzgado;Admite;28/03/25
+354;Demandante;Notificación personal de la demanda;10/04/25
+354;Demandante;Radica impulso procesal;24/06/25
+355;Demandante;Radicado;18/11/24
+355;Juzgado;Admite;05/12/25
+355;Demandado;Contestación de demanda;13/01/25
+355;Demandante;Radica impulso procesal;23/04/25
+355;Juzgado;Fija audiencia;23/04/25
+356;Demandante;Radicado;18/11/24
+356;Juzgado;Admite;07/02/25
+356;Demandante;Notificación personal de la demanda;03/03/25
+356;Demandado;Contestación de demanda;17/03/25
+356;Juzgado;Fija audiencia;30/04/25
+356;Juzgado;Conciliado;18/06/25
+357;Demandante;Radicado;18/11/24
+357;Juzgado;Admite;22/11/24
+357;Juzgado;Notificación personal de la demanda;28/11/24
+357;Demandado;Contestación de demanda;10/12/25
+357;Juzgado;Fija audiencia;14/01/25
+357;Juzgado;Conciliado;26/08/25
+358;Demandante;Radicado;18/11/24
+358;Juzgado;Inadmitido;16/12/24
+358;Demandante;Subsanación;13/01/25
+358;Juzgado;Admite;20/02/25
+358;Demandante;Notificación personal de la demanda;05/03/25
+358;Demandado;Contestación de demanda;18/03/25
+358;Demandante;Radica impulso procesal;10/06/25
+359;Demandante;Radicado;18/11/24
+359;Juzgado;Admite;06/03/25
+359;Demandante;Notificación personal de la demanda;07/03/25
+359;Demandado;Contestación de demanda;20/03/25
+359;Demandante;Radica impulso procesal;10/06/25
+359;Juzgado;Fija audiencia;09/06/25
+359;Juzgado;Conciliado;28/07/25
+360;Demandante;Radicado;21/11/24
+360;Juzgado;Admite;28/02/25
+360;Demandante;Notificación personal de la demanda;11/03/25
+360;Juzgado;Inadmite contestación de la demanda;16/06/25
+360;Juzgado;Fija audiencia;16/06/25
+361;Demandante;Radicado;18/11/24
+361;Juzgado;Admite;06/02/25
+361;Demandado;Contestación de demanda;25/02/25
+361;Demandante;Radica impulso procesal;23/04/25
+361;Demandante;Radica impulso procesal;11/08/25
+361;Juzgado;Fija audiencia;17/09/25
+362;Demandante;Radicado;18/11/24
+362;Juzgado;Admite;28/02/25
+362;Demandante;Notificación personal de la demanda;05/03/25
+362;Demandado;Contestación de demanda;19/03/25
+362;Juzgado;Fija audiencia;04/04/25
+363;Demandante;Radicado;03/02/25
+363;Juzgado;Admite;21/02/25
+363;Demandante;Notificación personal de la demanda;03/03/25
+363;Demandado;Contestación de demanda;19/03/25
+363;Demandante;Radica impulso procesal;23/04/25
+363;Juzgado;Fija audiencia;25/04/25
+363;Juzgado;Conciliado;11/08/25
+364;Demandante;Radicado;18/11/24
+364;Juzgado;Inadmitido;17/01/25
+364;Demandante;Subsanación;23/01/25
+364;Juzgado;Admite;28/02/25
+364;Demandante;Notificación personal de la demanda;05/03/25
+364;Demandado;Contestación de demanda;12/03/25
+364;Juzgado;Fija audiencia;31/03/25
+364;Juzgado;Conciliado;29/09/25
+365;Demandante;Radicado;18/11/24
+365;Juzgado;Admite;05/03/25
+365;Demandante;Notificación personal de la demanda;11/03/25
+365;Demandado;Contestación de demanda;27/03/25
+365;Juzgado;Fija audiencia;19/05/25
+366;Demandante;Radicado;18/11/24
+366;Demandante;Radica impulso procesal;17/01/25
+366;Juzgado;Inadmitido;18/02/25
+366;Demandante;Subsanación;26/02/25
+366;Juzgado;Admite;25/03/25
+366;Demandante;Notificación personal de la demanda;31/03/25
+366;Demandado;Contestación de demanda;09/04/25
+366;Juzgado;Fija audiencia;15/09/25
+346;Juzgado;Inadmitido;06/12/2024
+346;Demandante;Subsanación;19/12/2024
+346;Juzgado;Admite;17/01/2025
+346;Demandante;Notificación personal de la demanda;21/01/2025
+346;Demandado;Contestación de demanda;04/02/2025
+346;Juzgado;Fija audiencia;17/07/2025
+346;Juzgado;Conciliado;12/09/2025
+366;Demandante;Radicado;18/11/2024
+367;Demandante;Radicado;18/11/24
+367;Juzgado;Inadmitido;14/03/25
+367;Demandante;Subsanación;21/03/25
+368;Demandante;Radicado;18/11/24
+368;Juzgado;Inadmitido;21/01/25
+368;Demandante;Subsanación;29/01/25
+368;Juzgado;Admite;04/03/25
+368;Juzgado;Notificación personal de la demanda;14/03/25
+368;Demandado;Contestación de demanda;20/03/25
+368;Juzgado;Fija audiencia;30/04/25
+368;Juzgado;Conciliado;29/05/25
+369;Demandante;Radicado;29/11/24
+369;Juzgado;Admite;21/01/25
+369;Demandante;Notificación personal de la demanda;03/03/25
+369;Demandado;Contestación de demanda;10/03/25
+369;Demandante;Radica impulso procesal;02/05/25
+369;Demandante;Radica impulso procesal;11/08/25
+369;Juzgado;Fija audiencia;15/08/25
+370;Demandante;Radicado;25/09/25
+371;Demandante;Radicado;02/12/24
+371;Juzgado;Inadmitido;18/02/25
+371;Demandante;Subsanación;26/02/25
+371;Juzgado;Admite;25/03/25
+371;Demandante;Notificación personal de la demanda;10/04/25
+371;Demandado;Contestación de demanda;25/04/25
+371;Juzgado;Fija audiencia;05/06/25
+366;Juzgado;Inadmitido;18/02/2025
+366;Demandante;Subsanación;26/02/2025
+366;Juzgado;Admite;25/03/2025
+366;Demandante;Notificación personal de la demanda;31/03/2025
+366;Demandado;Contestación de demanda;09/04/2025
+366;Juzgado;Fija audiencia;15/09/2025
+366;Juzgado;Conciliado;02/10/2025
+371;Demandante;Radicado;02/12/2024
+372;Demandante;Radicado;26/11/24
+372;Juzgado;Inadmitido;18/02/25
+372;Demandante;Subsanación;26/02/25
+372;Juzgado;Admite;25/03/25
+372;Demandante;Notificación personal de la demanda;31/03/25
+372;Demandado;Contestación de demanda;09/04/25
+372;Juzgado;Admite;08/05/25
+373;Demandante;Radicado;24/07/25
+373;Juzgado;Inadmitido;27/08/25
+373;Demandante;Subsanación;01/09/25
+373;Juzgado;Admite;26/09/25
+374;Demandante;Radicado;27/11/24
+374;Juzgado;Admite;05/12/24
+374;Demandado;Contestación de demanda;13/01/25
+374;Juzgado;Fija audiencia;03/02/25
+375;Demandante;Radicado;06/02/25
+375;Juzgado;Admite;03/03/25
+375;Demandante;Notificación personal de la demanda;05/03/25
+375;Juzgado;Inadmite contestación de la demanda;11/04/25
+375;Juzgado;Fija audiencia;11/04/25
+371;Juzgado;Inadmitido;18/02/2025
+371;Demandante;Subsanación;26/02/2025
+371;Juzgado;Admite;25/03/2025
+371;Demandante;Notificación personal de la demanda;25/04/2025
+371;Demandado;Contestación de demanda;23/05/2025
+371;Juzgado;Fija audiencia;05/06/2025
+371;Juzgado;Conciliado;04/08/2025
+375;Demandante;Radicado;06/02/2025
+376;Demandante;Radicado;26/11/24
+376;Juzgado;Inadmitido;06/12/24
+376;Demandante;Subsanación;13/12/24
+376;Juzgado;Admite;17/03/25
+376;Demandante;Notificación personal de la demanda;21/03/25
+376;Demandado;Contestación de demanda;04/04/25
+376;Juzgado;Fija audiencia;14/07/25
+377;Demandante;Radicado;24/04/25
+377;Juzgado;Inadmitido;05/05/25
+377;Juzgado;Finalizado por Rechazo;19/05/25
+378;Demandante;Radicado;27/11/24
+378;Juzgado;Admite;12/12/24
+378;Juzgado;Notificación personal de la demanda;30/01/25
+378;Demandado;Contestación de demanda;11/02/25
+378;Juzgado;Fija audiencia;20/02/25
+375;Juzgado;Admite;03/03/2025
+375;Demandante;Notificación personal de la demanda;05/03/2025
+375;Demandado;Contestación de demanda;25/04/2025
+378;Demandante;Radicado;27/11/2025
+379;Demandante;Radicado;28/11/24
+379;Juzgado;Admite;09/12/24
+379;Juzgado;Notificación personal de la demanda;11/12/24
+379;Demandado;Contestación de demanda;20/01/25
+379;Demandante;Radica impulso procesal;23/04/25
+379;Demandante;Radica impulso procesal;11/08/25
+380;Demandante;Radicado;01/12/24
+380;Juzgado;Admite;04/12/24
+380;Juzgado;Admite;31/07/25
+381;Demandante;Radicado;29/11/24
+381;Juzgado;Admite;03/03/25
+381;Demandado;Contestación de demanda;25/03/25
+381;Juzgado;Fija audiencia;09/07/25
+381;Juzgado;Conciliado;28/07/25
+382;Demandante;Radicado;28/11/24
+382;Juzgado;Inadmitido;11/12/24
+382;Demandante;Subsanación;19/12/24
+382;Juzgado;Admite;06/02/25
+382;Juzgado;Notificación personal de la demanda;28/02/25
+382;Demandado;Contestación de demanda;12/03/25
+382;Juzgado;Fija audiencia;18/03/25
+382;Juzgado;Conciliado;28/04/25
+383;Demandante;Radicado;28/11/24
+383;Juzgado;Admite;13/12/25
+383;Demandante;Notificación personal de la demanda;06/03/25
+383;Demandado;Contestación de demanda;12/03/25
+383;Juzgado;Admite;02/05/25
+383;Juzgado;Fija audiencia;17/09/25
+384;Demandante;Radicado;17/03/25
+384;Juzgado;Admite;28/03/25
+384;Juzgado;Notificación personal de la demanda;27/05/25
+384;Demandado;Contestación de demanda;12/06/25
+384;Juzgado;Fija audiencia;01/07/25
+384;Juzgado;Conciliado;04/07/25
+385;Demandante;Radicado;16/01/25
+385;Juzgado;Admite;27/01/25
+385;Demandante;Retiro de demanda;22/04/25
+385;Juzgado;Archivado;06/05/25
+386;Demandante;Radicado;28/11/24
+386;Juzgado;Admite;13/12/25
+386;Juzgado;Notificación personal de la demanda;28/01/25
+386;Demandado;Contestación de demanda;11/02/25
+386;Juzgado;Fija audiencia;29/04/25
+386;Juzgado;Conciliado;25/06/25
+387;Demandante;Radicado;28/11/24
+387;Juzgado;Admite;12/12/24
+387;Juzgado;Notificación personal de la demanda;29/01/25
+387;Demandado;Contestación de demanda;07/02/25
+387;Juzgado;Fija audiencia;13/02/25
+387;Juzgado;Conciliado;25/02/25
+388;Demandante;Radicado;05/12/25
+388;Juzgado;Admite;27/06/25
+388;Juzgado;Notificación personal de la demanda;01/07/25
+388;Demandado;Contestación de demanda;15/07/25
+389;Demandante;Radicado;29/11/24
+389;Juzgado;Admite;04/12/24
+389;Juzgado;Notificación personal de la demanda;09/04/25
+390;Demandante;Radicado;02/12/24
+390;Juzgado;Admite;16/12/24
+390;Demandante;Notificación personal de la demanda;06/03/25
+390;Demandado;Contestación de demanda;17/03/25
+390;Demandante;Radica impulso procesal;20/07/25
+390;Juzgado;Admite;22/08/25
+391;Demandante;Radicado;06/05/25
+391;Juzgado;Admite;30/05/25
+391;Demandante;Notificación personal de la demanda;04/06/25
+391;Demandado;Contestación de demanda;17/06/25
+391;Juzgado;Fija audiencia;29/07/25
+391;Juzgado;Conciliado;11/08/25
+392;Demandante;Radicado;02/12/24
+392;Juzgado;Admite;28/02/25
+392;Demandante;Notificación personal de la demanda;05/03/25
+392;Demandado;Contestación de demanda;19/03/25
+392;Juzgado;Fija audiencia;02/04/25
+393;Demandante;Radicado;11/12/24
+393;Demandante;Radica impulso procesal;23/04/25
+393;Juzgado;Admite;12/06/25
+393;Juzgado;Notificación personal de la demanda;15/06/25
+393;Demandado;Contestación de demanda;03/07/25
+394;Demandante;Radicado;17/03/25
+394;Juzgado;Admite;08/04/25
+394;Juzgado;Notificación personal de la demanda;11/04/25
+394;Demandado;Contestación de demanda;30/04/25
+394;Juzgado;Fija audiencia;24/07/25
+394;Juzgado;Conciliado;31/07/25
+395;Demandante;Radicado;12/12/24
+395;Juzgado;Admite;13/01/25
+395;Demandante;Notificación personal de la demanda;06/03/25
+395;Demandado;Contestación de demanda;18/03/25
+395;Juzgado;Fija audiencia;25/03/25
+395;Juzgado;Conciliado;19/06/25
+396;Demandante;Radicado;12/12/24
+396;Juzgado;Inadmitido;24/02/25
+396;Demandante;Subsanación;02/04/25
+396;Juzgado;Admite;24/04/25
+396;Demandante;Notificación personal de la demanda;06/05/25
+396;Demandado;Contestación de demanda;21/05/25
+396;Juzgado;Inadmite contestación de la demanda;04/06/25
+396;Demandado;Subsanación;09/06/25
+396;Juzgado;Fija audiencia;08/07/25
+397;Demandante;Radicado;12/12/25
+397;Demandante;Radica impulso procesal;23/04/25
+398;Demandante;Radicado;12/12/24
+398;Juzgado;Inadmitido;17/02/25
+398;Demandante;Retiro de demanda;07/03/25
+398;Juzgado;Archivado;06/06/25
+399;Demandante;Radicado;04/03/25
+399;Juzgado;Inadmitido;28/08/25
+399;Demandante;Subsanación;08/09/25
+400;Demandante;Radicado;18/03/25
+400;Juzgado;Admite;31/03/25
+400;Demandante;Notificación personal de la demanda;10/04/25
+400;Demandado;Contestación de demanda;29/07/25
+401;Demandante;Radicado;12/12/24
+401;Juzgado;Admite;24/02/25
+401;Demandante;Notificación personal de la demanda;25/02/25
+401;Demandado;Contestación de demanda;12/03/25
+401;Juzgado;Fija audiencia;09/05/25
+402;Demandante;Radicado;12/12/24
+402;Juzgado;Admite;18/12/24
+402;Juzgado;Notificación personal de la demanda;19/12/25
+402;Demandado;Contestación de demanda;20/01/25
+402;Juzgado;Fija audiencia;27/02/25
+402;Demandante;Retiro de demanda;28/03/25
+403;Demandante;Radicado;12/12/24
+403;Juzgado;Admite;06/03/25
+403;Demandante;Notificación personal de la demanda;11/03/25
+403;Demandado;Contestación de demanda;26/03/25
+403;Demandante;Radica impulso procesal;19/06/25
+403;Juzgado;Fija audiencia;19/07/25
+403;Juzgado;Conciliado;28/07/25
+404;Demandante;Radicado;12/12/24
+404;Juzgado;Inadmitido;14/03/25
+404;Demandante;Subsanación;21/03/25
+404;Juzgado;Admite;04/04/25
+404;Demandante;Notificación personal de la demanda;22/04/25
+404;Demandado;Contestación de demanda;07/05/25
+404;Juzgado;Fija audiencia;20/06/25
+404;Juzgado;Conciliado;20/08/25
+405;Demandante;Radicado;12/12/24
+405;Juzgado;Admite;20/01/25
+405;Juzgado;Notificación personal de la demanda;07/02/25
+405;Demandado;Contestación de demanda;24/02/25
+405;Demandante;Radica impulso procesal;23/04/25
+405;Juzgado;Fija audiencia;09/06/25
+406;Demandante;Radicado;17/03/25
+406;Juzgado;Admite;25/04/25
+406;Demandante;Notificación personal de la demanda;29/04/25
+406;Demandado;Contestación de demanda;13/05/25
+406;Demandante;Radica impulso procesal;11/08/25
+406;Juzgado;Admite;14/08/25
+407;Demandante;Radicado;12/12/24
+407;Juzgado;Inadmitido;15/01/25
+407;Demandante;Subsanación;23/01/25
+407;Juzgado;Admite;27/02/25
+407;Demandante;Notificación personal de la demanda;03/03/25
+407;Demandado;Contestación de demanda;17/03/25
+407;Juzgado;Fija audiencia;18/03/25
+408;Demandante;Radicado;13/12/24
+408;Juzgado;Admite;13/01/25
+408;Demandante;Notificación personal de la demanda;06/03/25
+408;Demandado;Contestación de demanda;20/03/25
+408;Juzgado;Inadmite contestación de la demanda;03/06/25
+408;Demandado;Subsanación;03/06/25
+408;Juzgado;Fija audiencia;12/06/25
+408;Juzgado;Conciliado;24/06/25
+409;Demandante;Radicado;13/08/25
+409;Juzgado;Admite;19/08/25
+410;Demandante;Radicado;13/12/24
+410;Demandante;Radica impulso procesal;23/04/25
+410;Demandante;Radica impulso procesal;20/07/25
+411;Demandante;Radicado;05/02/25
+411;Demandante;Radica impulso procesal;23/04/25
+411;Juzgado;Admite;06/05/25
+411;Demandante;Notificación personal de la demanda;08/05/25
+411;Demandado;Contestación de demanda;15/07/25
+411;Juzgado;Inadmite contestación de la demanda;15/08/25
+412;Demandante;Radicado;19/12/24
+412;Juzgado;Admite;14/01/25
+412;Demandante;Notificación personal de la demanda;05/03/25
+412;Demandado;Contestación de demanda;20/03/25
+412;Juzgado;Fija audiencia;05/05/25
+412;Juzgado;Conciliado;13/06/25
+413;Demandante;Radicado;13/12/24
+413;Juzgado;Admite;19/12/24
+413;Demandado;Contestación de demanda;27/01/25
+413;Demandante;Radica impulso procesal;23/04/25
+413;Demandante;Radica impulso procesal;11/04/25
+413;Juzgado;Fija audiencia;05/09/25
+414;Demandante;Radicado;13/12/24
+414;Juzgado;Admite;21/01/25
+414;Juzgado;Notificación personal de la demanda;24/02/25
+414;Demandado;Contestación de demanda;11/03/25
+414;Juzgado;Fija audiencia;29/04/25
+414;Juzgado;Conciliado;25/06/25
+415;Demandante;Radicado;25/09/25
+416;Demandante;Radicado;20/02/25
+416;Demandante;Radica impulso procesal;23/04/25
+416;Juzgado;Inadmitido;19/05/25
+416;Demandante;Subsanación;27/05/25
+416;Juzgado;Inadmitido;06/06/25
+416;Demandante;Subsanación;18/06/25
+416;Juzgado;Admite;28/07/25
+416;Demandante;Notificación personal de la demanda;01/08/25
+416;Demandado;Contestación de demanda;20/08/25
+417;Demandante;Radicado;17/03/25
+417;Juzgado;Admite;28/03/25
+417;Demandante;Notificación personal de la demanda;10/04/25
+417;Demandado;Contestación de demanda;02/05/25
+417;Juzgado;Fija audiencia;26/05/25
+417;Juzgado;Conciliado;24/06/25
+418;Demandante;Radicado;14/01/25
+418;Juzgado;Admite;21/04/25
+418;Demandante;Notificación personal de la demanda;25/04/25
+418;Demandado;Contestación de demanda;09/05/25
+418;Juzgado;Fija audiencia;22/08/25
+419;Demandante;Radicado;29/01/25
+419;Juzgado;Inadmitido;13/02/25
+419;Demandante;Subsanación;24/02/25
+419;Juzgado;Admite;07/04/25
+419;Demandante;Notificación personal de la demanda;22/04/25
+419;Demandado;Contestación de demanda;07/05/25
+419;Juzgado;Fija audiencia;17/06/25
+419;Juzgado;Conciliado;26/06/25
+420;Demandante;Radicado;29/01/21
+420;Demandante;Radica impulso procesal;23/04/25
+420;Juzgado;Admite;17/07/25
+420;Juzgado;Notificación personal de la demanda;22/07/25
+420;Demandado;Contestación de demanda;01/08/25
+421;Demandante;Radicado;28/01/25
+421;Juzgado;Admite;07/02/25
+421;Demandante;Notificación personal de la demanda;03/03/25
+421;Demandado;Contestación de demanda;20/06/25
+421;Juzgado;Fija audiencia;15/08/25
+422;Demandante;Radicado;29/01/25
+422;Juzgado;Admite;21/02/25
+422;Demandante;Notificación personal de la demanda;03/03/25
+422;Demandado;Contestación de demanda;19/03/25
+422;Juzgado;Fija audiencia;29/04/25
+422;Juzgado;Conciliado;20/06/25
+423;Demandante;Radicado;28/01/25
+423;Juzgado;Inadmitido;29/01/25
+423;Demandante;Subsanación;31/01/25
+423;Juzgado;Admite;17/02/25
+423;Demandante;Notificación personal de la demanda;03/03/25
+423;Demandado;Contestación de demanda;19/03/25
+423;Juzgado;Fija audiencia;17/06/25
+424;Demandante;Radicado;18/03/25
+424;Juzgado;Admite;02/04/25
+424;Demandante;Notificación personal de la demanda;22/04/25
+424;Demandado;Contestación de demanda;23/05/25
+424;Juzgado;Fija audiencia;22/07/25
+424;Juzgado;Conciliado;16/09/25
+425;Demandante;Radicado;05/02/25
+425;Juzgado;Inadmitido;21/03/25
+425;Demandante;Subsanación;01/04/25
+425;Juzgado;Admite;04/06/25
+425;Demandante;Notificación personal de la demanda;05/06/25
+425;Demandado;Contestación de demanda;17/06/25
+425;Juzgado;Fija audiencia;22/08/25
+426;Demandante;Radicado;05/02/25
+426;Juzgado;Admite;10/02/25
+426;Juzgado;Notificación personal de la demanda;19/02/25
+426;Demandado;Contestación de demanda;05/03/25
+426;Juzgado;Fija audiencia;10/06/25
+427;Demandante;Radicado;05/02/25
+427;Demandante;Radica impulso procesal;23/04/25
+428;Demandante;Radicado;24/07/25
+428;Juzgado;Inadmitido;19/08/25
+428;Demandante;Subsanación;27/08/25
+428;Juzgado;Admite;29/09/25
+378;Juzgado;Admite;12/12/2024
+378;Demandante;Notificación personal de la demanda;30/01/2025
+378;Demandado;Contestación de demanda;11/02/2025
+378;Juzgado;Fija audiencia;20/02/2025
+378;Juzgado;Conciliado;19/03/2025
+429;Demandante;Radicado;22/08/2025
+430;Apoderado;Radicado;28/01/25
+430;Juzgado;Inadmitido;25/02/25
+430;Apoderado;Subsanación;28/02/25
+430;Juzgado;Admite;21/05/25
+430;Apoderado;Notificación personal de la demanda;22/05/25
+430;Demandado;Contestación de demanda;06/06/25
+431;Apoderado;Radicado;18/02/25
+431;Juzgado;Inadmitido;25/02/25
+431;Apoderado;Subsanación;04/03/25
+431;Juzgado;Admite;07/03/25
+431;Apoderado;Notificación personal de la demanda;12/03/25
+431;Demandado;Contestación de demanda;25/03/25
+431;Juzgado;Fija audiencia;09/04/25
+431;Juzgado;Conciliado;28/05/25
+432;Apoderado;Radicado;30/01/25
+432;Juzgado;Admite;25/02/25
+432;Apoderado;Notificación personal de la demanda;03/03/25
+432;Demandado;Contestación de demanda;12/05/25
+432;Juzgado;Fija audiencia;21/05/25
+432;Juzgado;Conciliado;16/06/25
+433;Apoderado;Radicado;30/01/25
+433;Apoderado;Radica impulso procesal;23/04/25
+433;Juzgado;Admite;18/07/25
+433;Apoderado;Notificación personal de la demanda;20/07/25
+433;Demandado;Contestación de demanda;29/07/25
+434;Apoderado;Radicado;17/03/25
+434;Juzgado;Admite;03/04/25
+434;Apoderado;Notificación personal de la demanda;22/04/25
+434;Demandado;Contestación de demanda;07/05/25
+434;Juzgado;Fija audiencia;30/05/25
+434;Juzgado;Conciliado;03/07/25
+435;Apoderado;Radicado;30/01/25
+435;Juzgado;Admite;03/02/25
+435;Juzgado;Notificación personal de la demanda;04/02/25
+435;Demandado;Contestación de demanda;19/02/25
+435;Juzgado;Fija audiencia;03/03/25
+435;Juzgado;Conciliado;11/04/25
+436;Apoderado;Radicado;31/01/25
+436;Juzgado;Admite;18/07/25
+436;Juzgado;Notificación personal de la demanda;22/07/25
+436;Demandado;Contestación de demanda;04/08/25
+437;Apoderado;Radicado;31/01/25
+437;Juzgado;Admite;10/02/25
+437;Apoderado;Notificación personal de la demanda;05/03/25
+437;Demandado;Contestación de demanda;05/03/25
+437;Juzgado;Admite;05/03/25
+437;Juzgado;Fija audiencia;06/03/25
+438;Apoderado;Radicado;31/01/25
+438;Juzgado;Admite;24/02/25
+438;Juzgado;Notificación personal de la demanda;26/02/25
+438;Demandado;Contestación de demanda;12/03/25
+438;Juzgado;Inadmite contestación de la demanda;03/04/25
+438;Demandado;Contestación de demanda;09/04/25
+438;Juzgado;Fija audiencia;25/04/25
+438;Juzgado;Fija audiencia;08/05/25
+439;Apoderado;Radicado;31/01/25
+439;Juzgado;Inadmitido;05/02/25
+439;Apoderado;Subsanación;11/02/25
+439;Juzgado;Admite;26/02/25
+439;Apoderado;Notificación personal de la demanda;03/03/25
+439;Demandado;Contestación de demanda;20/03/25
+439;Juzgado;Inadmite contestación de la demanda;09/04/25
+439;Demandado;Subsanación;24/04/25
+439;Juzgado;Fija audiencia;14/08/25
+439;Juzgado;Conciliado;01/09/25
+440;Apoderado;Radicado;31/01/25
+440;Juzgado;Admite;06/02/25
+440;Apoderado;Notificación personal de la demanda;05/03/25
+440;Juzgado;Fija audiencia;17/03/25
+440;Demandado;Contestación de demanda;20/03/25
+440;Juzgado;Fija audiencia;13/09/25
+441;Apoderado;Radicado;31/01/25
+441;Juzgado;Inadmitido;06/03/25
+441;Apoderado;Subsanación;10/03/25
+441;Apoderado;Radica impulso procesal;20/07/25
+441;Juzgado;Admite;23/07/25
+441;Apoderado;Notificación personal de la demanda;25/07/25
+441;Demandado;Contestación de demanda;13/08/25
+442;Apoderado;Radicado;26/09/25
+443;Apoderado;Radicado;31/01/25
+443;Juzgado;Inadmitido;20/02/25
+443;Apoderado;Subsanación;27/02/25
+443;Juzgado;Admite;11/04/25
+443;Apoderado;Notificación personal de la demanda;24/04/25
+443;Demandado;Contestación de demanda;12/05/25
+443;Juzgado;Fija audiencia;30/05/25
+443;Juzgado;Fija audiencia;25/08/25
+444;Apoderado;Radicado;31/01/25
+444;Juzgado;Inadmitido;13/02/25
+444;Apoderado;Subsanación;24/02/25
+444;Juzgado;Admite;06/04/25
+444;Apoderado;Notificación personal de la demanda;22/04/25
+444;Demandado;Contestación de demanda;06/05/25
+444;Juzgado;Inadmite contestación de la demanda;06/05/25
+444;Demandado;Contestación de demanda;29/05/25
+444;Juzgado;Fija audiencia;17/06/25
+444;Juzgado;Conciliado;15/07/25
+445;Apoderado;Radicado;20/02/25
+445;Juzgado;Admite;07/03/25
+445;Apoderado;Notificación personal de la demanda;11/03/25
+445;Demandado;Contestación de demanda;20/03/25
+445;Apoderado;Radica impulso procesal;20/07/25
+445;Juzgado;Fija audiencia;05/09/25
+446;Apoderado;Radicado;01/02/25
+446;Juzgado;Inadmitido;07/02/25
+446;Apoderado;Subsanación;13/02/25
+446;Juzgado;Admite;03/03/25
+446;Apoderado;Notificación personal de la demanda;05/03/25
+446;Demandado;Contestación de demanda;09/04/25
+446;Juzgado;Fija audiencia;25/06/25
+446;Juzgado;Conciliado;13/08/25
+447;Apoderado;Radicado;01/02/25
+447;Juzgado;Admite;07/02/25
+447;Apoderado;Notificación personal de la demanda;05/03/25
+447;Juzgado;Fija audiencia;15/08/25
+448;Apoderado;Radicado;01/02/25
+448;Juzgado;Inadmitido;17/02/25
+448;Apoderado;Subsanación;24/02/25
+448;Juzgado;Admite;18/03/25
+448;Juzgado;Notificación personal de la demanda;23/04/25
+448;Demandado;Contestación de demanda;06/05/25
+448;Juzgado;Fija audiencia;22/05/25
+448;Juzgado;Conciliado;25/06/25
+449;Apoderado;Radicado;01/02/25
+449;Juzgado;Admite;05/02/25
+449;Juzgado;Notificación personal de la demanda;06/02/25
+449;Demandado;Contestación de demanda;19/02/25
+449;Juzgado;Fija audiencia;24/02/25
+449;Juzgado;Conciliado;11/04/25
+450;Apoderado;Radicado;04/02/25
+450;Juzgado;Inadmitido;20/02/25
+450;Apoderado;Subsanación;27/02/25
+450;Juzgado;Admite;11/04/25
+450;Apoderado;Notificación personal de la demanda;24/04/25
+450;Demandado;Contestación de demanda;09/05/25
+450;Juzgado;Fija audiencia;30/05/25
+451;Apoderado;Radicado;06/05/25
+451;Juzgado;Admite;09/05/25
+451;Apoderado;Notificación personal de la demanda;13/05/25
+451;Demandado;Contestación de demanda;12/06/25
+451;Juzgado;Fija audiencia;06/08/25
+452;Apoderado;Radicado;04/02/25
+452;Juzgado;Admite;14/05/25
+452;Apoderado;Notificación personal de la demanda;15/05/25
+452;Demandado;Contestación de demanda;30/07/25
+452;Juzgado;Fija audiencia;06/08/25
+453;Apoderado;Radicado;04/02/25
+453;Juzgado;Inadmitido;17/02/25
+453;Apoderado;Subsanación;04/03/25
+453;Juzgado;Admite;12/03/25
+453;Apoderado;Notificación personal de la demanda;21/03/25
+453;Demandado;Contestación de demanda;03/04/25
+453;Juzgado;Fija audiencia;06/05/25
+454;Apoderado;Radicado;26/09/25
+455;Apoderado;Radicado;11/07/25
+455;Juzgado;Admite;08/09/25
+456;Apoderado;Radicado;03/10/25
+457;Apoderado;Radicado;03/10/25
+458;Apoderado;Radicado;03/10/25
+459;Apoderado;Radicado;03/10/25
+460;Apoderado;Radicado;26/09/25
+460;Juzgado;Admite;01/10/25
+461;Apoderado;Radicado;02/10/25
+462;Apoderado;Radicado;22/05/25
+462;Juzgado;Admite;30/05/25
+462;Apoderado;Notificación personal de la demanda;04/06/25
+462;Demandado;Contestación de demanda;17/06/25
+462;Juzgado;Fija audiencia;18/06/25
+463;Apoderado;Radicado;22/05/25
+463;Juzgado;Admite;05/06/25
+463;Apoderado;Notificación personal de la demanda;10/06/25
+463;Demandado;Contestación de demanda;19/06/25
+463;Juzgado;Admite;20/06/25
+464;Apoderado;Radicado;26/09/25
+465;Apoderado;Radicado;22/05/25
+465;Juzgado;Inadmitido;22/05/25
+465;Apoderado;Subsanación;30/05/25
+465;Juzgado;Admite;03/06/25
+465;Apoderado;Notificación personal de la demanda;04/06/25
+465;Demandado;Contestación de demanda;17/06/25
+465;Juzgado;Fija audiencia;25/06/25
+465;Juzgado;Conciliado;07/07/25
+466;Apoderado;Radicado;26/05/25
+466;Juzgado;Inadmitido;27/06/25
+466;Apoderado;Subsanación;08/07/25
+466;Juzgado;Admite;29/08/25
+466;Apoderado;Notificación personal de la demanda;03/09/25
+466;Demandado;Contestación de demanda;18/09/25
+467;Apoderado;Radicado;27/05/25
+467;Juzgado;Admite;27/06/25
+467;Apoderado;Notificación personal de la demanda;02/07/25
+467;Demandado;Contestación de demanda;17/07/25
+467;Juzgado;Fija audiencia;08/09/25
+468;Apoderado;Radicado;27/05/25
+468;Juzgado;Admite;09/06/25
+468;Apoderado;Notificación personal de la demanda;10/06/25
+468;Demandado;Contestación de demanda;25/06/25
+468;Juzgado;Fija audiencia;27/06/25
+469;Apoderado;Radicado;27/05/25
+469;Juzgado;Admite;14/08/25
+469;Apoderado;Notificación personal de la demanda;21/08/25
+469;Demandado;Contestación de demanda;05/09/25
+470;Apoderado;Radicado;27/05/25
+471;Apoderado;Radicado;29/05/25
+471;Juzgado;Admite;03/06/25
+471;Apoderado;Notificación personal de la demanda;04/06/25
+471;Demandado;Contestación de demanda;17/06/25
+471;Juzgado;Fija audiencia;22/07/25
+471;Juzgado;Conciliado;28/08/25
+472;Apoderado;Radicado;29/05/25
+472;Juzgado;Admite;10/06/25
+472;Demandado;Contestación de demanda;24/06/25
+472;Juzgado;Fija audiencia;29/07/25
+472;Juzgado;Conciliado;11/09/25
+473;Apoderado;Radicado;29/05/25
+473;Juzgado;Admite;04/06/25
+473;Apoderado;Notificación personal de la demanda;05/06/25
+473;Juzgado;Fija audiencia;04/07/25
+474;Apoderado;Radicado;29/05/25
+475;Apoderado;Radicado;24/07/25
+475;Juzgado;Admite;05/09/25
+475;Apoderado;Notificación personal de la demanda;17/09/25
+476;Apoderado;Radicado;29/05/25
+476;Juzgado;Admite;03/06/25
+476;Juzgado;Notificación personal de la demanda;04/06/25
+476;Demandado;Contestación de demanda;17/06/25
+476;Juzgado;Fija audiencia;17/07/25
+477;Apoderado;Radicado;26/09/25
+478;Apoderado;Radicado;26/09/25
+479;Apoderado;Radicado;24/07/25
+479;Juzgado;Admite;01/08/25
+479;Apoderado;Notificación personal de la demanda;21/08/25
+479;Demandado;Contestación de demanda;03/09/25
+479;Juzgado;Fija audiencia;17/09/25
+480;Apoderado;Radicado;03/06/25
+480;Juzgado;Admite;20/06/25
+480;Juzgado;Fija audiencia;13/08/25
+480;Juzgado;Conciliado;15/09/25
+481;Apoderado;Radicado;04/06/25
+481;Juzgado;Admite;12/06/25
+481;Juzgado;Notificación personal de la demanda;24/06/25
+481;Demandado;Contestación de demanda;09/07/25
+481;Juzgado;Fija audiencia;08/09/25
+482;Apoderado;Radicado;04/06/25
+482;Juzgado;Admite;12/06/25
+482;Juzgado;Notificación personal de la demanda;19/06/25
+482;Demandado;Contestación de demanda;03/07/25
+482;Juzgado;Fija audiencia;24/07/25
+482;Juzgado;Fija audiencia;04/09/25
+483;Apoderado;Radicado;04/06/25
+483;Juzgado;Admite;10/06/25
+483;Demandado;Contestación de demanda;02/07/25
+483;Juzgado;Fija audiencia;29/07/25
+483;Juzgado;Conciliado;11/09/25
+484;Apoderado;Radicado;05/06/25
+484;Juzgado;Admite;27/06/25
+484;Apoderado;Notificación personal de la demanda;02/07/25
+484;Juzgado;Fija audiencia;08/09/25
+484;Demandado;Contestación de demanda;15/09/25
+485;Apoderado;Radicado;06/06/25
+485;Juzgado;Admite;20/06/25
+485;Demandado;Contestación de demanda;01/07/25
+485;Juzgado;Fija audiencia;13/08/25
+485;Juzgado;Conciliado;12/09/25
+486;Apoderado;Radicado;06/06/25
+486;Juzgado;Admite;28/07/25
+486;Apoderado;Notificación personal de la demanda;01/08/25
+486;Demandado;Contestación de demanda;26/08/25
+486;Juzgado;Fija audiencia;01/09/25
+487;Apoderado;Radicado;09/06/25
+487;Juzgado;Inadmitido;09/06/25
+487;Apoderado;Subsanación;10/06/25
+487;Juzgado;Admite;18/06/25
+487;Apoderado;Notificación personal de la demanda;19/06/25
+487;Demandado;Contestación de demanda;07/07/25
+487;Juzgado;Fija audiencia;09/07/25
+487;Juzgado;Conciliado;17/07/25
+488;Apoderado;Radicado;09/06/25
+488;Juzgado;Admite;10/06/25
+488;Juzgado;Notificación personal de la demanda;10/06/25
+488;Demandado;Contestación de demanda;19/06/25
+488;Juzgado;Fija audiencia;19/06/25
+488;Juzgado;Conciliado;24/07/25
+489;Apoderado;Radicado;09/06/25
+489;Juzgado;Admite;22/07/25
+489;Juzgado;Notificación personal de la demanda;15/08/25
+489;Demandado;Contestación de demanda;23/09/25
+490;Apoderado;Radicado;09/06/25
+490;Juzgado;Admite;01/08/25
+490;Juzgado;Notificación personal de la demanda;01/08/25
+490;Demandado;Contestación de demanda;19/08/25
+490;Juzgado;Fija audiencia;01/09/25
+491;Apoderado;Radicado;09/06/25
+491;Juzgado;Admite;17/06/25
+491;Demandado;Contestación de demanda;04/07/25
+491;Juzgado;Fija audiencia;22/07/25
+491;Juzgado;Conciliado;16/09/25
+492;Apoderado;Radicado;09/06/25
+492;Juzgado;Admite;27/06/25
+492;Apoderado;Notificación personal de la demanda;02/07/25
+492;Demandado;Contestación de demanda;03/09/25
+492;Juzgado;Inadmite contestación de la demanda;17/09/25
+493;Apoderado;Radicado;09/06/25
+493;Juzgado;Admite;11/06/25
+493;Apoderado;Notificación personal de la demanda;13/06/25
+493;Demandado;Contestación de demanda;18/06/25
+493;Juzgado;Fija audiencia;09/07/25
+494;Apoderado;Radicado;09/06/25
+494;Juzgado;Admite;15/07/25
+494;Apoderado;Notificación personal de la demanda;21/07/25
+494;Demandado;Contestación de demanda;01/08/25
+495;Apoderado;Radicado;11/06/25
+495;Juzgado;Admite;18/06/25
+495;Apoderado;Notificación personal de la demanda;19/06/25
+495;Demandado;Contestación de demanda;08/07/25
+495;Juzgado;Fija audiencia;11/08/25
+496;Apoderado;Radicado;11/06/25
+496;Juzgado;Inadmitido;08/07/25
+496;Apoderado;Subsanación;15/07/25
+496;Juzgado;Admite;31/07/25
+497;Apoderado;Radicado;24/07/25
+497;Juzgado;Inadmitido;19/08/25
+497;Apoderado;Subsanación;27/08/25
+497;Juzgado;Admite;08/09/25
+497;Apoderado;Notificación personal de la demanda;17/09/25
+498;Apoderado;Radicado;18/06/25
+498;Juzgado;Admite;25/07/25
+498;Apoderado;Notificación personal de la demanda;01/08/25
+498;Demandado;Contestación de demanda;15/08/25
+499;Apoderado;Radicado;18/06/25
+499;Juzgado;Inadmitido;01/08/25
+499;Apoderado;Subsanación;12/08/25
+499;Juzgado;Admite;11/09/25
+499;Juzgado;Notificación personal de la demanda;23/09/25
+500;Apoderado;Radicado;18/06/25
+500;Juzgado;Inadmitido;11/09/25
+500;Apoderado;Subsanación;22/09/25
+501;Apoderado;Radicado;18/06/25
+501;Juzgado;Admite;19/09/25
+501;Juzgado;Notificación personal de la demanda;22/09/25
+502;Apoderado;Radicado;18/06/25
+502;Juzgado;Admite;02/07/25
+502;Apoderado;Notificación personal de la demanda;04/07/25
+502;Demandado;Contestación de demanda;18/07/25
+502;Juzgado;Fija audiencia;30/07/25
+502;Juzgado;Conciliado;20/08/25
+503;Apoderado;Radicado;20/06/25
+503;Juzgado;Inadmitido;02/07/25
+503;Apoderado;Subsanación;09/07/25
+503;Juzgado;Admite;18/07/25
+503;Demandado;Contestación de demanda;21/07/25
+503;Juzgado;Inadmite contestación de la demanda;13/08/25
+503;Demandado;Contestación de demanda;20/08/25
+503;Juzgado;Fija audiencia;29/08/25
+504;Apoderado;Radicado;24/06/25
+504;Juzgado;Admite;16/07/25
+504;Apoderado;Notificación personal de la demanda;21/07/25
+505;Apoderado;Radicado;24/06/25
+505;Juzgado;Inadmitido;15/07/25
+505;Apoderado;Subsanación;23/07/25
+505;Juzgado;Admite;13/08/25
+505;Apoderado;Notificación personal de la demanda;21/08/25
+505;Demandado;Contestación de demanda;17/09/25
+506;Apoderado;Radicado;20/06/25
+506;Juzgado;Admite;01/07/25
+506;Demandado;Contestación de demanda;17/07/25
+506;Juzgado;Fija audiencia;13/08/25
+506;Juzgado;Conciliado;12/09/25
+507;Apoderado;Radicado;20/06/25
+507;Juzgado;Admite;01/08/25
+507;Demandado;Contestación de demanda;19/08/25
+507;Juzgado;Fija audiencia;01/09/25
+508;Apoderado;Radicado;24/06/25
+508;Juzgado;Admite;08/07/25
+508;Apoderado;Notificación personal de la demanda;14/07/25
+508;Demandado;Contestación de demanda;28/07/25
+508;Juzgado;Fija audiencia;19/08/25
+509;Apoderado;Radicado;20/06/25
+509;Juzgado;Admite;16/07/25
+509;Apoderado;Notificación personal de la demanda;21/07/25
+509;Demandado;Contestación de demanda;04/08/25
+510;Apoderado;Radicado;20/06/25
+510;Juzgado;Admite;10/07/25
+510;Apoderado;Notificación personal de la demanda;11/07/25
+510;Demandado;Contestación de demanda;28/07/25
+510;Juzgado;Fija audiencia;21/08/25
+511;Apoderado;Radicado;20/06/25
+511;Juzgado;Admite;25/06/25
+511;Juzgado;Notificación personal de la demanda;15/07/25
+511;Demandado;Contestación de demanda;29/07/25
+511;Juzgado;Fija audiencia;20/08/25
+511;Juzgado;Conciliado;24/09/25
+512;Apoderado;Radicado;20/06/25
+512;Juzgado;Admite;24/06/25
+512;Juzgado;Notificación personal de la demanda;25/06/25
+512;Demandado;Contestación de demanda;11/07/25
+512;Juzgado;Fija audiencia;11/07/25
+512;Juzgado;Conciliado;23/09/25
+513;Apoderado;Radicado;20/06/25
+513;Juzgado;Admite;27/06/25
+513;Juzgado;Notificación personal de la demanda;04/07/25
+513;Demandado;Contestación de demanda;18/07/25
+513;Juzgado;Fija audiencia;31/07/25
+514;Apoderado;Radicado;20/06/25
+514;Juzgado;Inadmitido;01/08/25
+514;Apoderado;Subsanación;12/08/25
+514;Juzgado;Admite;01/09/25
+515;Apoderado;Radicado;24/06/25
+515;Juzgado;Admite;01/07/25
+515;Juzgado;Notificación personal de la demanda;09/07/25
+515;Demandado;Contestación de demanda;23/07/25
+515;Juzgado;Fija audiencia;05/08/25
+516;Apoderado;Radicado;25/06/25
+516;Juzgado;Admite;04/07/25
+516;Juzgado;Notificación personal de la demanda;08/07/25
+516;Demandado;Contestación de demanda;22/07/25
+516;Juzgado;Fija audiencia;04/08/25
+516;Juzgado;Conciliado;12/09/25
+517;Apoderado;Radicado;25/06/25
+517;Juzgado;Admite;16/09/25
+518;Apoderado;Radicado;25/06/25
+518;Juzgado;Inadmitido;01/08/25
+518;Apoderado;Subsanación;13/08/25
+518;Juzgado;Admite;12/09/25
+518;Apoderado;Notificación personal de la demanda;17/09/25
+519;Apoderado;Radicado;25/06/25
+520;Apoderado;Radicado;25/06/25
+520;Juzgado;Admite;21/07/25
+520;Apoderado;Notificación personal de la demanda;22/07/25
+520;Demandado;Contestación de demanda;15/08/25
+521;Apoderado;Radicado;25/06/25
+521;Juzgado;Admite;26/06/25
+521;Juzgado;Notificación personal de la demanda;15/07/25
+521;Demandado;Contestación de demanda;30/07/25
+521;Juzgado;Fija audiencia;20/08/25
+521;Juzgado;Conciliado;24/09/25
+522;Apoderado;Radicado;25/06/25
+522;Juzgado;Admite;01/07/25
+522;Juzgado;Notificación personal de la demanda;04/07/25
+522;Demandado;Contestación de demanda;22/07/25
+522;Juzgado;Fija audiencia;19/08/25
+522;Juzgado;Conciliado;19/09/25
+523;Apoderado;Radicado;25/06/25
+523;Juzgado;Admite;01/08/25
+523;Juzgado;Notificación personal de la demanda;15/08/25
+523;Demandado;Contestación de demanda;23/09/25
+524;Apoderado;Radicado;26/06/25
+524;Juzgado;Admite;27/06/25
+524;Juzgado;Notificación personal de la demanda;01/07/25
+524;Demandado;Contestación de demanda;11/07/25
+524;Juzgado;Fija audiencia;14/07/25
+524;Juzgado;Conciliado;15/09/25
+525;Apoderado;Radicado;26/06/25
+525;Juzgado;Admite;16/07/25
+525;Juzgado;Notificación personal de la demanda;21/07/25
+525;Demandado;Contestación de demanda;15/08/25
+526;Apoderado;Radicado;04/07/25
+526;Juzgado;Admite;04/07/25
+526;Juzgado;Notificación personal de la demanda;08/07/25
+526;Demandado;Contestación de demanda;22/07/25
+526;Juzgado;Fija audiencia;01/08/25
+526;Juzgado;Fija audiencia;25/08/25
+526;Juzgado;Conciliado;15/09/25
+527;Apoderado;Radicado;26/06/25
+527;Juzgado;Admite;10/07/25
+527;Juzgado;Notificación personal de la demanda;25/07/25
+527;Demandado;Contestación de demanda;11/08/25
+527;Juzgado;Fija audiencia;21/08/25
+528;Apoderado;Radicado;26/06/25
+529;Apoderado;Radicado;26/06/25
+529;Juzgado;Inadmitido;07/07/25
+529;Apoderado;Subsanación;15/07/25
+529;Juzgado;Admite;18/07/25
+529;Juzgado;Notificación personal de la demanda;NA
+529;Apoderado;Notificación personal de la demanda;21/07/25
+529;Demandado;Contestación de demanda;NA
+529;Juzgado;Fija audiencia;01/08/25
+529;Juzgado;Inadmite contestación de la demanda;13/08/25
+529;Juzgado;Conciliado;12/09/25
+530;Apoderado;Radicado;27/06/25
+530;Juzgado;Admite;01/07/25
+530;Juzgado;Notificación personal de la demanda;07/07/25
+530;Demandado;Contestación de demanda;22/07/25
+530;Juzgado;Fija audiencia;19/08/25
+530;Juzgado;Conciliado;19/09/25
+531;Apoderado;Radicado;27/06/25
+532;Apoderado;Radicado;03/07/25
+532;Juzgado;Admite;28/07/25
+532;Juzgado;Notificación personal de la demanda;01/08/25
+532;Demandado;Contestación de demanda;26/08/25
+532;Juzgado;Fija audiencia;01/09/25
+533;Apoderado;Radicado;27/06/25
+533;Juzgado;Admite;03/07/25
+533;Juzgado;Notificación personal de la demanda;23/07/25
+533;Demandado;Contestación de demanda;13/08/25
+533;Juzgado;Fija audiencia;04/09/25
+534;Apoderado;Radicado;27/06/25
+534;Juzgado;Admite;03/07/25
+534;Juzgado;Notificación personal de la demanda;11/08/25
+534;Demandado;Contestación de demanda;23/09/25
+535;Apoderado;Radicado;24/07/25
+535;Juzgado;Admite;05/08/25
+535;Juzgado;Notificación personal de la demanda;11/08/25
+535;Demandado;Contestación de demanda;27/08/25
+535;Demandado;Contestación de demanda;23/09/25
+536;Apoderado;Radicado;27/06/25
+537;Apoderado;Radicado;27/06/25
+537;Juzgado;Admite;03/07/25
+537;Apoderado;Notificación personal de la demanda;04/07/25
+537;Demandado;Contestación de demanda;22/07/25
+537;Juzgado;Fija audiencia;04/08/25
+538;Apoderado;Radicado;26/09/25
+539;Apoderado;Radicado;01/07/25
+540;Juzgado;Radicado;26/09/25
+541;Apoderado;Radicado;01/07/25
+541;Juzgado;Admite;30/07/25
+541;Juzgado;Notificación personal de la demanda;15/08/25
+541;Demandado;Contestación de demanda;02/09/25
+541;Juzgado;Fija audiencia;16/09/25
+541;Demandado;Contestación de demanda;24/09/25
+542;Apoderado;Radicado;01/07/25
+542;Juzgado;Admite;16/07/25
+542;Juzgado;Notificación personal de la demanda;21/07/25
+543;Apoderado;Radicado;01/07/25
+543;Juzgado;Admite;22/07/25
+543;Juzgado;Notificación personal de la demanda;25/07/25
+543;Demandado;Contestación de demanda;25/07/25
+543;Juzgado;Fija audiencia;15/09/25
+544;Apoderado;Radicado;01/07/25
+545;Apoderado;Radicado;01/07/25
+545;Juzgado;Admite;22/07/25
+545;Juzgado;Notificación personal de la demanda;25/07/25
+545;Demandado;Contestación de demanda;12/08/25
+545;Juzgado;Fija audiencia;13/08/25
+545;Juzgado;Conciliado;22/08/25
+546;Apoderado;Radicado;01/07/25
+547;Apoderado;Radicado;01/07/25
+547;Juzgado;Inadmitido;08/08/25
+547;Apoderado;Subsanación;19/08/25
+547;Juzgado;Admite;15/09/25
+548;Apoderado;Radicado;01/07/25
+548;Juzgado;Inadmitido;29/08/25
+548;Apoderado;Subsanación;03/09/25
+548;Juzgado;Admite;12/09/25
+548;Apoderado;Notificación personal de la demanda;17/09/25
+549;Apoderado;Radicado;03/07/25
+550;Apoderado;Radicado;03/07/25
+550;Juzgado;Admite;25/07/25
+550;Juzgado;Notificación personal de la demanda;29/07/25
+550;Demandado;Contestación de demanda;13/08/25
+550;Juzgado;Fija audiencia;04/09/25
+551;Apoderado;Radicado;04/07/25
+551;Juzgado;Admite;21/07/25
+551;Apoderado;Notificación personal de la demanda;22/07/25
+551;Demandado;Contestación de demanda;04/08/25
+551;Juzgado;Admite;12/08/25
+551;Juzgado;Fija audiencia;21/08/25
+552;Apoderado;Radicado;03/07/25
+552;Juzgado;Inadmitido;26/08/25
+552;Apoderado;Subsanación;01/09/25
+552;Juzgado;Admite;22/09/25
+553;Apoderado;Radicado;03/07/25
+553;Juzgado;Admite;09/07/25
+553;Apoderado;Notificación personal de la demanda;11/07/25
+553;Demandado;Contestación de demanda;28/07/25
+553;Juzgado;Fija audiencia;29/07/25
+553;Juzgado;Conciliado;19/09/25
+554;Apoderado;Radicado;03/07/25
+554;Juzgado;Inadmitido;31/07/25
+554;Apoderado;Subsanación;11/08/25
+554;Juzgado;Admite;23/09/25
+555;Apoderado;Radicado;03/07/25
+555;Juzgado;Admite;07/07/25
+555;Apoderado;Notificación personal de la demanda;08/07/25
+555;Demandado;Contestación de demanda;22/07/25
+555;Juzgado;Fija audiencia;05/08/25
+556;Apoderado;Radicado;03/07/25
+556;Juzgado;Inadmitido;12/09/25
+556;Apoderado;Subsanación;18/09/25
+557;Apoderado;Radicado;03/07/25
+557;Juzgado;Admite;01/08/25
+557;Apoderado;Notificación personal de la demanda;04/08/25
+557;Juzgado;Fija audiencia;01/09/25
+558;Apoderado;Radicado;03/07/25
+558;Juzgado;Admite;08/09/25
+558;Apoderado;Notificación personal de la demanda;17/09/25
+559;Apoderado;Radicado;04/07/25
+559;Juzgado;Admite;09/07/25
+559;Apoderado;Notificación personal de la demanda;11/07/25
+559;Demandado;Contestación de demanda;24/07/25
+559;Juzgado;Inadmite contestación de la demanda;31/07/25
+559;Demandado;Contestación de demanda;14/08/25
+559;Juzgado;Fija audiencia;19/08/25
+560;Apoderado;Radicado;04/07/25
+560;Juzgado;Admite;11/07/25
+560;Demandado;Contestación de demanda;12/08/25
+560;Juzgado;Fija audiencia;21/08/25
+561;Apoderado;Radicado;04/07/25
+561;Juzgado;Admite;11/07/25
+561;Apoderado;Notificación personal de la demanda;15/07/25
+561;Demandado;Contestación de demanda;28/07/25
+561;Juzgado;Fija audiencia;15/08/25
+561;Juzgado;Conciliado;02/09/25
+562;Apoderado;Radicado;26/09/25
+563;Apoderado;Radicado;04/07/25
+563;Juzgado;Admite;21/07/25
+563;Apoderado;Notificación personal de la demanda;22/07/25
+563;Demandado;Contestación de demanda;04/08/25
+563;Juzgado;Fija audiencia;08/09/25
+564;Apoderado;Radicado;04/07/25
+564;Juzgado;Admite;25/07/25
+564;Apoderado;Notificación personal de la demanda;29/07/25
+564;Demandado;Contestación de demanda;12/08/25
+564;Juzgado;Fija audiencia;04/09/25
+565;Apoderado;Radicado;07/07/25
+565;Juzgado;Inadmitido;22/07/25
+565;Apoderado;Subsanación;30/07/25
+565;Juzgado;Admite;NA
+565;Apoderado;Notificación personal de la demanda;06/08/25
+565;Demandado;Contestación de demanda;05/09/25
+565;Juzgado;Fija audiencia;10/09/25
+566;Apoderado;Radicado;24/07/25
+566;Juzgado;Inadmitido;04/08/25
+566;Apoderado;Subsanación;13/08/25
+566;Juzgado;Admite;13/08/25
+566;Apoderado;Notificación personal de la demanda;21/08/25
+566;Demandado;Contestación de demanda;11/09/25
+566;Juzgado;Inadmite contestación de la demanda;12/09/25
+567;Apoderado;Radicado;26/09/25
+568;Apoderado;Radicado;07/07/25
+569;Apoderado;Radicado;07/07/25
+569;Juzgado;Admite;10/07/25
+569;Apoderado;Notificación personal de la demanda;11/07/25
+569;Demandado;Contestación de demanda;24/07/25
+569;Juzgado;Admite;30/07/25
+569;Juzgado;Conciliado;28/08/25
+570;Demandante;Radicado;26/09/25
+571;Apoderado;Radicado;07/07/25
+572;Apoderado;Radicado;07/07/25
+572;Juzgado;Admite;05/08/25
+572;Apoderado;Notificación personal de la demanda;17/09/25
+573;Apoderado;Radicado;20/08/25
+574;Apoderado;Radicado;07/07/25
+574;Juzgado;Admite;01/08/25
+574;Juzgado;Inadmite contestación de la demanda;01/09/25
+575;Apoderado;Radicado;07/07/25
+575;Juzgado;Inadmitido;12/09/25
+575;Apoderado;Subsanación;18/09/25
+576;Apoderado;Radicado;07/07/25
+577;Apoderado;Radicado;08/07/25
+577;Juzgado;Admite;18/09/25
+577;Apoderado;Notificación personal de la demanda;23/09/25
+578;Apoderado;Radicado;07/07/25
+578;Juzgado;Inadmitido;31/07/25
+578;Apoderado;Subsanación;08/08/25
+579;Apoderado;Radicado;08/07/25
+579;Juzgado;Admite;15/08/25
+579;Apoderado;Notificación personal de la demanda;17/09/25
+580;Apoderado;Radicado;08/07/25
+580;Juzgado;Admite;10/07/25
+580;Apoderado;Notificación personal de la demanda;15/07/25
+580;Demandado;Contestación de demanda;28/07/25
+580;Juzgado;Fija audiencia;31/07/25
+581;Apoderado;Radicado;08/07/25
+581;Juzgado;Inadmitido;04/08/25
+581;Apoderado;Subsanación;13/08/25
+581;Juzgado;Admite;02/09/25
+581;Apoderado;Notificación personal de la demanda;17/09/25
+582;Apoderado;Radicado;08/07/25
+582;Juzgado;Admite;11/07/25
+582;Apoderado;Notificación personal de la demanda;15/07/25
+582;Demandado;Contestación de demanda;29/07/25
+582;Juzgado;Fija audiencia;04/08/25
+583;Apoderado;Radicado;08/07/25
+583;Juzgado;Admite;10/07/25
+583;Apoderado;Notificación personal de la demanda;15/07/25
+583;Demandado;Contestación de demanda;29/07/25
+583;Juzgado;Admite;01/08/25
+583;Juzgado;Conciliado;12/09/25
+584;Apoderado;Radicado;08/07/25
+584;Juzgado;Admite;28/07/25
+584;Apoderado;Notificación personal de la demanda;01/08/25
+584;Demandado;Contestación de demanda;26/08/25
+584;Juzgado;Conciliado;01/09/25
+585;Apoderado;Radicado;09/07/25
+585;Juzgado;Admite;16/07/25
+585;Apoderado;Notificación personal de la demanda;21/07/25
+585;Demandado;Contestación de demanda;30/07/25
+585;Juzgado;Fija audiencia;04/09/25
+585;Juzgado;Conciliado;26/09/25
+586;Apoderado;Radicado;09/07/25
+586;Juzgado;Inadmitido;13/08/25
+586;Apoderado;Subsanación;21/08/25
+586;Juzgado;Admite;11/09/25
+586;Apoderado;Notificación personal de la demanda;23/09/25
+587;Apoderado;Radicado;09/07/25
+587;Juzgado;Admite;04/09/25
+587;Apoderado;Notificación personal de la demanda;17/09/25
+588;Apoderado;Radicado;09/07/25
+588;Juzgado;Admite;08/09/25
+588;Apoderado;Notificación personal de la demanda;17/09/25
+589;Apoderado;Radicado;09/07/25
+589;Juzgado;Admite;16/07/25
+589;Apoderado;Notificación personal de la demanda;21/07/25
+589;Demandado;Contestación de demanda;15/08/25
+589;Juzgado;Fija audiencia;01/09/25
+590;Apoderado;Radicado;09/07/25
+591;Apoderado;Radicado;09/07/25
+591;Juzgado;Admite;18/07/25
+591;Apoderado;Notificación personal de la demanda;12/08/25
+591;Demandado;Contestación de demanda;25/08/25
+591;Juzgado;Fija audiencia;12/09/25
+592;Apoderado;Radicado;09/07/25
+592;Juzgado;Admite;01/08/25
+592;Apoderado;Notificación personal de la demanda;15/08/25
+592;Demandado;Contestación de demanda;23/09/25
+593;Apoderado;Radicado;10/07/25
+594;Apoderado;Radicado;10/07/25
+595;Apoderado;Radicado;10/07/25
+595;Juzgado;Inadmitido;25/09/25
+596;Apoderado;Radicado;24/07/25
+596;Juzgado;Admite;01/08/25
+596;Apoderado;Notificación personal de la demanda;11/08/25
+596;Demandado;Contestación de demanda;12/09/25
+597;Apoderado;Radicado;08/08/25
+597;Juzgado;Admite;20/08/25
+597;Apoderado;Notificación personal de la demanda;28/08/25
+597;Demandado;Contestación de demanda;10/09/25
+597;Juzgado;Inadmite contestación de la demanda;19/09/25
+597;Demandado;Contestación de demanda;26/09/25
+598;Apoderado;Radicado;11/07/25
+598;Juzgado;Admite;14/08/25
+599;Apoderado;Radicado;11/07/25
+599;Juzgado;Admite;17/09/25
+599;Apoderado;Notificación personal de la demanda;22/09/25
+600;Apoderado;Radicado;11/07/25
+600;Juzgado;Inadmitido;26/08/25
+600;Apoderado;Subsanación;01/09/25
+600;Juzgado;Admite;22/09/25
+601;Apoderado;Radicado;11/07/25
+601;Juzgado;Admite;04/09/25
+601;Juzgado;Notificación personal de la demanda;17/09/25
+602;Apoderado;Radicado;11/07/25
+602;Juzgado;Admite;28/07/25
+602;Apoderado;Notificación personal de la demanda;01/08/25
+602;Demandado;Contestación de demanda;14/08/25
+602;Juzgado;Fija audiencia;21/08/25
+603;Apoderado;Radicado;11/07/25
+603;Juzgado;Admite;17/07/25
+603;Apoderado;Notificación personal de la demanda;21/07/25
+603;Demandado;Contestación de demanda;30/07/25
+603;Juzgado;Fija audiencia;04/08/25
+604;Apoderado;Radicado;11/07/25
+604;Juzgado;Admite;18/07/25
+604;Juzgado;Notificación personal de la demanda;12/08/25
+604;Demandado;Contestación de demanda;25/08/25
+604;Juzgado;Fija audiencia;02/09/25
+604;Juzgado;Fija audiencia;12/09/25
+605;Apoderado;Radicado;11/07/25
+605;Juzgado;Admite;11/08/25
+605;Apoderado;Notificación personal de la demanda;15/08/25
+605;Demandado;Contestación de demanda;02/09/25
+606;Apoderado;Radicado;14/07/25
+606;Juzgado;Admite;15/07/25
+606;Juzgado;Notificación personal de la demanda;21/07/25
+606;Demandado;Contestación de demanda;14/08/25
+606;Juzgado;Fija audiencia;21/08/25
+607;Apoderado;Radicado;28/08/25
+607;Juzgado;Inadmitido;29/08/25
+607;Apoderado;Subsanación;08/09/25
+607;Juzgado;Admite;09/09/25
+607;Apoderado;Notificación personal de la demanda;17/09/25
+608;Apoderado;Radicado;15/07/25
+608;Juzgado;Admite;17/07/25
+608;Juzgado;Notificación personal de la demanda;21/07/25
+608;Demandado;Contestación de demanda;05/08/25
+608;Juzgado;Fija audiencia;22/08/25
+609;Apoderado;Radicado;14/07/25
+609;Juzgado;Admite;24/07/25
+609;Juzgado;Notificación personal de la demanda;01/08/25
+609;Demandado;Contestación de demanda;21/08/25
+609;Juzgado;Fija audiencia;15/09/25
+610;Apoderado;Radicado;14/07/25
+611;Apoderado;Radicado;14/07/25
+611;Juzgado;Admite;18/07/25
+611;Juzgado;Notificación personal de la demanda;22/07/25
+611;Demandado;Contestación de demanda;04/08/25
+611;Juzgado;Inadmite contestación de la demanda;22/08/25
+611;Demandado;Contestación de demanda;29/08/25
+612;Apoderado;Radicado;14/07/25
+612;Juzgado;Admite;04/09/25
+612;Juzgado;Notificación personal de la demanda;17/09/25
+613;Apoderado;Radicado;14/07/25
+613;Juzgado;Inadmitido;09/09/25
+613;Apoderado;Subsanación;12/09/25
+614;Apoderado;Radicado;14/07/25
+614;Juzgado;Inadmitido;12/09/25
+614;Apoderado;Subsanación;18/09/25
+615;Apoderado;Radicado;14/07/25
+615;Juzgado;Admite;28/07/25
+615;Apoderado;Notificación personal de la demanda;01/08/25
+615;Demandado;Contestación de demanda;26/08/25
+615;Juzgado;Fija audiencia;01/09/25
+616;Apoderado;Radicado;14/07/25
+616;Juzgado;Admite;02/09/25
+616;Apoderado;Notificación personal de la demanda;03/09/25
+616;Demandado;Contestación de demanda;16/09/25
+617;Apoderado;Radicado;14/07/25
+618;Apoderado;Radicado;15/07/25
+618;Juzgado;Admite;16/07/25
+618;Apoderado;Notificación personal de la demanda;21/07/25
+619;Apoderado;Radicado;15/07/25
+619;Juzgado;Inadmitido;25/08/25
+619;Apoderado;Subsanación;29/08/25
+619;Juzgado;Admite;11/09/25
+619;Apoderado;Notificación personal de la demanda;23/09/25
+620;Apoderado;Radicado;15/07/25
+620;Juzgado;Admite;30/07/25
+620;Apoderado;Notificación personal de la demanda;01/08/25
+620;Demandado;Contestación de demanda;21/08/25
+621;Apoderado;Radicado;26/09/25
+622;Apoderado;Radicado;15/07/25
+622;Juzgado;Admite;12/09/25
+622;Apoderado;Notificación personal de la demanda;17/09/25
+623;Apoderado;Radicado;24/07/25
+624;Apoderado;Radicado;15/07/25
+624;Juzgado;Admite;14/08/25
+624;Juzgado;Notificación personal de la demanda;15/08/25
+625;Apoderado;Radicado;15/07/25
+626;Apoderado;Radicado;15/07/25
+626;Juzgado;Admite;21/07/25
+626;Apoderado;Notificación personal de la demanda;22/07/25
+626;Demandado;Contestación de demanda;05/08/25
+626;Juzgado;Fija audiencia;11/08/25
+627;Apoderado;Radicado;16/07/25
+627;Juzgado;Admite;18/07/25
+627;Apoderado;Notificación personal de la demanda;21/07/25
+627;Demandado;Contestación de demanda;30/07/25
+627;Juzgado;Fija audiencia;01/08/25
+627;Juzgado;Conciliado;12/09/25
+628;Apoderado;Radicado;16/07/25
+628;Juzgado;Admite;28/07/25
+628;Apoderado;Notificación personal de la demanda;01/08/25
+628;Demandado;Contestación de demanda;21/08/25
+628;Juzgado;Fija audiencia;21/08/25
+629;Apoderado;Radicado;16/07/25
+629;Juzgado;Admite;18/09/25
+629;Apoderado;Notificación personal de la demanda;23/09/25
+630;Apoderado;Radicado;16/07/25
+630;Juzgado;Inadmitido;11/08/25
+630;Juzgado;Admite;19/08/25
+630;Apoderado;Subsanación;20/08/25
+630;Juzgado;Admite;08/09/25
+630;Apoderado;Notificación personal de la demanda;17/09/25
+631;Apoderado;Radicado;16/07/25
+631;Juzgado;Admite;21/07/25
+631;Apoderado;Notificación personal de la demanda;23/07/25
+631;Demandado;Contestación de demanda;01/08/25
+631;Juzgado;Fija audiencia;04/09/25
+632;Apoderado;Radicado;16/07/25
+632;Juzgado;Admite;24/09/25
+633;Apoderado;Radicado;16/07/25
+633;Juzgado;Inadmitido;09/09/25
+633;Apoderado;Subsanación;12/09/25
+634;Apoderado;Radicado;26/09/25
+635;Apoderado;Radicado;16/07/25
+635;Juzgado;Admite;21/07/25
+635;Apoderado;Notificación personal de la demanda;13/08/25
+635;Demandado;Contestación de demanda;28/08/25
+635;Juzgado;Inadmite contestación de la demanda;21/09/25
+636;Apoderado;Radicado;16/07/25
+636;Juzgado;Admite;21/07/25
+636;Apoderado;Notificación personal de la demanda;13/08/25
+636;Demandado;Contestación de demanda;23/09/25
+637;Apoderado;Radicado;16/07/25
+637;Juzgado;Admite;21/07/25
+637;Juzgado;Notificación personal de la demanda;18/09/25
+638;Apoderado;Radicado;16/07/25
+638;Juzgado;Admite;17/07/25
+638;juzgado;Notificación personal de la demanda;17/07/25
+638;Demandado;Contestación de demanda;29/07/25
+638;Juzgado;Fija audiencia;04/08/25
+639;Apoderado;Radicado;16/07/25
+639;Juzgado;Inadmitido;29/08/25
+639;Apoderado;Subsanación;03/09/25
+639;Juzgado;Admite;19/09/25
+640;Apoderado;Radicado;16/07/25
+640;Juzgado;Inadmitido;24/07/25
+640;Apoderado;Subsanación;25/07/25
+640;Juzgado;Admite;05/08/25
+640;Apoderado;Notificación personal de la demanda;11/08/25
+640;Juzgado;Fija audiencia;26/09/25
+641;Apoderado;Radicado;17/07/25
+642;Apoderado;Radicado;26/09/25
+643;Demandante;Radicado;17/07/25
+643;Juzgado;Admite;09/03/25
+643;Juzgado;Notificación personal de la demanda;09/04/25
+643;Demandado;Contestación de demanda;18/09/25
+644;Demandante;Radicado;17/07/25
+645;Demandante;Radicado;17/07/25
+645;Juzgado;Admite;09/05/25
+645;Demandante;Notificación personal de la demanda;17/09/25
+646;Demandante;Radicado;17/07/25
+646;Juzgado;Admite;29/07/25
+646;Demandante;Notificación personal de la demanda;08/01/25
+646;Demandado;Contestación de demanda;21/08/25
+647;Demandante;Radicado;17/07/25
+647;Juzgado;Admite;25/07/25
+647;Demandante;Notificación personal de la demanda;29/07/25
+647;Demandado;Contestación de demanda;13/08/25
+647;Juzgado;Fija audiencia;09/04/25
+648;Demandante;Radicado;17/07/25
+648;Juzgado;Inadmitido;09/09/25
+648;Demandante;Subsanación;09/12/25
+649;Demandante;Radicado;17/07/25
+649;Juzgado;Admite;23/07/25
+649;Demandante;Notificación personal de la demanda;08/01/25
+649;Demandado;Contestación de demanda;20/08/25
+649;Juzgado;Inadmite contestación de la demanda;09/09/25
+649;Demandado;Subsanación;16/09/25
+649;Juzgado;Fija audiencia;17/09/25
+650;Demandante;Radicado;17/07/25
+651;Demandante;Radicado;17/07/25
+651;Juzgado;Admite;21/07/25
+651;Juzgado;Notificación personal de la demanda;21/08/25
+651;Demandado;Contestación de demanda;09/03/25
+652;Demandante;Radicado;17/07/25
+653;Demandante;Radicado;17/07/25
+653;Juzgado;Admite;21/08/25
+653;Juzgado;Notificación personal de la demanda;09/03/25
+654;Demandante;Radicado;17/07/25
+654;Juzgado;Admite;29/07/25
+654;Juzgado;Notificación personal de la demanda;08/01/25
+654;Demandado;Contestación de demanda;20/08/25
+654;Juzgado;Fija audiencia;26/08/25
+654;Juzgado;Conciliado;09/08/25
+655;Demandante;Radicado;17/07/25
+655;Juzgado;Admite;29/07/25
+655;Demandado;Contestación de demanda;28/08/25
+655;Juzgado;Fija audiencia;23/09/25
+656;Demandante;Radicado;26/09/25
+657;Demandante;Radicado;17/07/25
+657;Juzgado;Admite;22/07/25
+657;Demandante;Notificación personal de la demanda;25/07/25
+657;Demandado;Contestación de demanda;09/09/25
+657;Juzgado;Inadmite contestación de la demanda;09/12/25
+657;Demandado;Contestación de demanda;19/09/25
+658;Demandante;Radicado;18/07/25
+659;Demandante;Radicado;18/07/25
+659;Juzgado;Admite;23/07/25
+659;Demandante;Notificación personal de la demanda;08/05/25
+659;Demandado;Contestación de demanda;19/08/25
+659;Juzgado;Fija audiencia;18/09/25
+660;Demandante;Radicado;18/07/25
+660;Juzgado;Inadmitido;26/09/25
+661;Demandante;Radicado;18/07/25
+661;Juzgado;Inadmitido;09/11/25
+661;Demandante;Subsanación;17/09/25
+662;Demandante;Radicado;18/07/25
+662;Juzgado;Admite;25/07/25
+662;Demandado;Contestación de demanda;08/12/25
+662;Juzgado;Fija audiencia;09/10/25
+663;Demandante;Radicado;18/07/25
+663;Juzgado;Admite;08/11/25
+663;Demandante;Notificación personal de la demanda;08/12/25
+663;Demandado;Contestación de demanda;27/08/25
+663;Juzgado;Fija audiencia;09/12/25
+664;Demandante;Radicado;18/07/25
+664;Juzgado;Inadmitido;26/08/25
+664;Demandante;Subsanación;09/03/25
+664;Juzgado;Admite;09/10/25
+664;Demandante;Notificación personal de la demanda;09/11/25
+664;Demandado;Contestación de demanda;26/09/25
+665;Demandante;Radicado;18/07/25
+665;Juzgado;Admite;28/07/25
+665;Demandante;Notificación personal de la demanda;08/01/25
+665;Demandado;Contestación de demanda;26/08/25
+665;Juzgado;Fija audiencia;09/01/25
+666;Demandante;Radicado;18/07/25
+666;Juzgado;Admite;08/01/25
+666;Demandante;Notificación personal de la demanda;08/11/25
+667;Demandante;Radicado;18/07/25
+668;Demandante;Radicado;21/07/25
+668;Juzgado;Inadmitido;09/11/25
+668;Demandante;Subsanación;17/09/25
+669;Demandante;Radicado;21/07/25
+669;Juzgado;Admite;09/01/25
+670;Demandante;Radicado;21/07/25
+670;Juzgado;Admite;24/07/25
+670;Juzgado;Notificación personal de la demanda;25/07/25
+670;Demandado;Contestación de demanda;08/12/25
+670;Juzgado;Fija audiencia;25/09/25
+671;Demandante;Radicado;21/07/25
+671;Juzgado;Inadmitido;14/08/25
+671;Demandante;Subsanación;25/08/25
+672;Demandante;Radicado;21/07/25
+672;Juzgado;Admite;29/07/25
+672;Juzgado;Notificación personal de la demanda;08/06/25
+672;Demandado;Contestación de demanda;22/08/25
+672;Juzgado;Fija audiencia;09/05/25
+673;Demandante;Radicado;21/07/25
+673;Juzgado;Admite;09/05/25
+673;Demandante;Notificación personal de la demanda;17/09/25
+673;Demandado;Contestación de demanda;30/09/25
+674;Demandante;Radicado;21/07/25
+674;Juzgado;Inadmitido;08/01/25
+674;Demandante;Subsanación;13/08/25
+674;Juzgado;Admite;09/12/25
+674;Demandante;Notificación personal de la demanda;17/09/25
+674;Demandado;Contestación de demanda;30/09/25
+675;Demandante;Radicado;21/07/25
+675;Juzgado;Inadmitido;24/07/25
+675;Demandante;Subsanación;08/01/25
+675;Juzgado;Admite;14/08/25
+675;Demandante;Notificación personal de la demanda;21/08/25
+675;Demandado;Contestación de demanda;09/08/25
+676;Demandante;Radicado;21/07/25
+676;Juzgado;Admite;23/07/25
+676;Demandante;Notificación personal de la demanda;25/07/25
+676;Demandado;Contestación de demanda;08/12/25
+676;Juzgado;Inadmite contestación de la demanda;09/09/25
+676;Demandado;Subsanación;16/09/25
+676;Juzgado;Fija audiencia;17/09/25
+677;Demandante;Radicado;21/07/25
+677;Juzgado;Admite;22/07/25
+677;Demandante;Notificación personal de la demanda;25/07/25
+677;Demandado;Contestación de demanda;13/08/25
+677;Juzgado;Admite;09/12/25
+677;Demandado;Subsanación;23/09/25
+678;Demandante;Radicado;21/07/25
+678;Juzgado;Inadmitido;26/08/25
+678;Demandante;Subsanación;09/03/25
+678;Juzgado;Admite;09/11/25
+679;Demandante;Radicado;21/07/25
+680;Demandante;Radicado;21/07/25
+680;Juzgado;Admite;21/08/25
+680;Demandante;Notificación personal de la demanda;09/03/25
+680;Demandado;Contestación de demanda;23/09/25
+681;Demandante;Radicado;26/09/25
+682;Demandante;Radicado;26/09/25
+683;Demandante;Radicado;22/07/25
+683;Juzgado;Admite;18/09/25
+683;Juzgado;Notificación personal de la demanda;18/09/25
+684;Demandante;Radicado;22/07/25
+685;Demandante;Radicado;22/07/25
+685;Juzgado;Admite;15/08/25
+685;Demandante;Notificación personal de la demanda;21/08/25
+685;Demandado;Contestación de demanda;09/04/25
+686;Demandante;Radicado;22/07/25
+686;Juzgado;Admite;29/07/25
+686;Demandante;Notificación personal de la demanda;08/06/25
+686;Demandado;Contestación de demanda;21/08/25
+686;Juzgado;Fija audiencia;29/08/25
+687;Demandante;Radicado;23/07/25
+688;Demandante;Radicado;23/07/25
+688;Juzgado;Admite;25/07/25
+688;Demandante;Notificación personal de la demanda;29/07/25
+688;Demandado;Contestación de demanda;08/12/25
+688;Juzgado;Fija audiencia;09/04/25
+689;Demandante;Radicado;23/07/25
+689;Juzgado;Inadmitido;15/09/25
+689;Demandante;Subsanación;22/09/25
+690;Demandante;Radicado;23/07/25
+691;Demandante;Radicado;26/09/25
+691;Juzgado;Inadmitido;26/09/25
+692;Demandante;Radicado;23/07/25
+692;Juzgado;Admite;13/08/25
+692;Demandante;Notificación personal de la demanda;15/08/25
+692;Demandado;Contestación de demanda;20/08/25
+692;Juzgado;Fija audiencia;09/11/25
+693;Demandante;Radicado;23/07/25
+694;Demandante;Radicado;23/07/25
+694;Juzgado;Admite;31/07/25
+695;Demandante;Radicado;23/07/25
+695;Juzgado;Admite;09/12/25
+695;Demandante;Notificación personal de la demanda;17/09/25
+695;Demandado;Contestación de demanda;30/09/25
+696;Demandante;Radicado;23/07/25
+696;Juzgado;Inadmitido;09/11/25
+696;Demandante;Subsanación;18/09/25
+697;Demandante;Radicado;23/07/25
+697;Juzgado;Admite;23/08/25
+697;Demandante;Notificación personal de la demanda;09/03/25
+697;Demandado;Contestación de demanda;19/09/25
+698;Demandante;Radicado;23/07/25
+699;Demandante;Radicado;26/09/25
+700;Demandante;Radicado;23/07/25
+700;Juzgado;Admite;08/05/25
+700;Demandante;Notificación personal de la demanda;08/11/25
+700;Demandado;Contestación de demanda;27/08/25
+700;Juzgado;Inadmite contestación de la demanda;09/01/25
+700;Demandado;Subsanación;09/08/25
+700;Juzgado;Fija audiencia;26/09/25
+701;Demandante;Radicado;26/09/25
+702;Demandante;Radicado;24/07/25
+703;Demandante;Radicado;24/07/25
+703;Juzgado;Inadmitido;15/09/25
+703;Juzgado;Finalizado por Rechazo;26/09/25
+704;Demandante;Radicado;24/07/25
+704;Juzgado;Admite;13/08/25
+704;Demandante;Notificación personal de la demanda;15/08/25
+704;Demandado;Contestación de demanda;28/08/25
+704;Juzgado;Fija audiencia;09/11/25
+705;Demandante;Radicado;24/07/25
+705;Juzgado;Inadmitido;29/08/25
+705;Demandante;Subsanación;09/03/25
+705;Juzgado;Admite;09/12/25
+705;Demandante;Notificación personal de la demanda;17/09/25
+705;Demandado;Contestación de demanda;30/09/25
+706;Demandante;Radicado;24/07/25
+706;Juzgado;Inadmitido;09/11/25
+706;Demandante;Subsanación;17/09/25
+707;Demandante;Radicado;24/07/25
+707;Juzgado;Inadmitido;09/11/25
+707;Demandante;Subsanación;17/09/25
+708;Demandante;Radicado;24/07/25
+708;Juzgado;Admite;24/07/25
+708;Demandante;Notificación personal de la demanda;25/07/25
+708;Demandado;Contestación de demanda;08/11/25
+708;Juzgado;Fija audiencia;13/08/25
+709;Demandante;Radicado;24/07/25
+709;Juzgado;Inadmitido;24/07/25
+709;Demandante;Subsanación;08/01/25
+709;Juzgado;Admite;08/05/25
+709;Demandante;Notificación personal de la demanda;17/09/25
+709;Demandado;Contestación de demanda;30/09/25
+709;Juzgado;Fija audiencia;30/09/25
+710;Demandante;Radicado;24/07/25
+710;Juzgado;Admite;28/07/25
+710;Demandante;Notificación personal de la demanda;08/01/25
+710;Demandado;Contestación de demanda;14/08/25
+711;Demandante;Radicado;24/07/25
+711;Juzgado;Admite;08/01/25
+711;Demandante;Notificación personal de la demanda;08/11/25
+711;Demandado;Contestación de demanda;26/08/25
+711;Juzgado;Fija audiencia;26/08/25
+712;Demandante;Radicado;24/07/25
+712;Juzgado;Admite;08/01/25
+712;Demandante;Notificación personal de la demanda;08/11/25
+712;Demandado;Contestación de demanda;21/08/25
+712;Juzgado;Fija audiencia;28/08/25
+712;Juzgado;Conciliado;17/09/25
+713;Demandante;Radicado;24/07/25
+713;Juzgado;Admite;13/08/25
+713;Demandado;Contestación de demanda;09/04/25
+713;Juzgado;Inadmite contestación de la demanda;15/09/25
+713;Demandado;Subsanación;24/09/25
+714;Demandante;Radicado;25/07/25
+714;Juzgado;Admite;30/07/25
+714;Demandado;Notificación personal de la demanda;09/03/25
+714;Demandado;Contestación de demanda;09/09/25
+715;Demandante;Radicado;25/07/25
+716;Demandante;Radicado;25/07/25
+717;Demandante;Radicado;25/07/25
+717;Juzgado;Admite;31/07/25
+717;Demandante;Notificación personal de la demanda;08/01/25
+717;Demandado;Contestación de demanda;20/08/25
+717;Juzgado;Fija audiencia;26/09/25
+718;Demandante;Radicado;25/07/25
+718;Juzgado;Admite;15/09/25
+719;Demandante;Radicado;25/07/25
+719;Juzgado;Admite;30/07/25
+719;Demandante;Notificación personal de la demanda;13/08/25
+719;Demandado;Contestación de demanda;27/08/25
+720;Demandante;Radicado;25/07/25
+720;Juzgado;Admite;08/01/25
+720;Demandante;Notificación personal de la demanda;17/09/25
+720;Demandado;Contestación de demanda;30/09/25
+721;Demandante;Radicado;25/07/25
+721;Juzgado;Admite;08/06/25
+721;Demandante;Notificación personal de la demanda;08/11/25
+721;Demandado;Contestación de demanda;25/08/25
+722;Demandante;Radicado;25/07/25
+722;Juzgado;Admite;22/08/25
+722;Juzgado;Notificación personal de la demanda;22/08/25
+722;Demandado;Contestación de demanda;23/09/25
+723;Demandante;Radicado;25/07/25
+724;Demandante;Radicado;25/07/25
+724;Juzgado;Admite;09/01/25
+724;Juzgado;Notificación personal de la demanda;09/01/25
+725;Demandante;Radicado;28/07/25
+725;Juzgado;Admite;08/01/25
+725;Demandante;Notificación personal de la demanda;08/11/25
+725;Demandado;Contestación de demanda;22/08/25
+725;Juzgado;Fija audiencia;29/08/25
+726;Demandante;Radicado;28/07/25
+726;Juzgado;Inadmitido;31/07/25
+726;Demandante;Subsanación;08/11/25
+726;Juzgado;Admite;14/08/25
+726;Demandante;Notificación personal de la demanda;21/08/25
+726;Demandado;Contestación de demanda;09/08/25
+727;Demandante;Radicado;28/07/25
+727;Juzgado;Admite;08/01/25
+727;Demandante;Notificación personal de la demanda;08/11/25
+727;Demandado;Contestación de demanda;25/08/25
+728;Demandante;Radicado;28/07/25
+728;Juzgado;Admite;08/11/25
+728;Demandante;Notificación personal de la demanda;15/08/25
+728;Demandado;Contestación de demanda;29/08/25
+728;Juzgado;Fija audiencia;22/09/25
+729;Demandante;Radicado;28/07/25
+730;Demandante;Radicado;28/07/25
+730;Juzgado;Admite;29/08/25
+730;Demandante;Notificación personal de la demanda;09/05/25
+730;Demandado;Contestación de demanda;19/09/25
+731;Demandante;Radicado;28/07/25
+731;Juzgado;Admite;08/01/25
+731;Demandante;Notificación personal de la demanda;08/11/25
+731;Demandado;Contestación de demanda;25/08/25
+731;Juzgado;Fija audiencia;29/08/25
+732;Demandante;Radicado;28/07/25
+732;Juzgado;Admite;30/07/25
+732;Demandante;Notificación personal de la demanda;31/07/25
+732;Demandado;Contestación de demanda;19/08/25
+733;Demandante;Radicado;28/07/25
+733;Juzgado;Admite;29/08/25
+733;Demandante;Notificación personal de la demanda;09/03/25
+733;Demandado;Contestación de demanda;16/09/25
+734;Demandante;Radicado;28/07/25
+734;Juzgado;Admite;15/08/25
+734;Demandante;Notificación personal de la demanda;21/08/25
+734;Demandado;Contestación de demanda;09/04/25
+735;Demandante;Radicado;28/07/25
+735;Juzgado;Inadmitido;29/08/25
+735;Demandante;Subsanación;09/03/25
+735;Juzgado;Admite;19/09/25
+736;Demandante;Radicado;28/07/25
+736;Juzgado;Inadmitido;28/08/25
+736;Demandante;Subsanación;29/08/25
+737;Demandante;Radicado;28/07/25
+737;Juzgado;Inadmitido;09/03/25
+737;Demandante;Subsanación;09/08/25
+738;Demandante;Radicado;29/07/25
+738;Juzgado;Admite;14/08/25
+738;Demandante;Notificación personal de la demanda;21/08/25
+738;Demandado;Contestación de demanda;09/04/25
+738;Juzgado;Admite;09/10/25
+739;Demandante;Radicado;29/07/25
+740;Demandante;Radicado;29/07/25
+740;Juzgado;Admite;09/04/25
+740;Demandante;Notificación personal de la demanda;17/09/25
+740;Demandado;Contestación de demanda;30/09/25
+741;Demandante;Radicado;29/07/25
+742;Demandante;Radicado;29/07/25
+742;Juzgado;Admite;13/08/25
+742;Demandante;Notificación personal de la demanda;15/08/25
+742;Demandado;Contestación de demanda;28/08/25
+742;Juzgado;Fija audiencia;09/10/25
+743;Demandante;Radicado;29/07/25
+744;Demandante;Radicado;29/07/25
+745;Demandante;Radicado;29/07/25
+745;Juzgado;Admite;29/08/25
+745;Demandante;Notificación personal de la demanda;09/05/25
+745;Demandado;Contestación de demanda;19/09/25
+746;Demandante;Radicado;29/07/25
+746;Juzgado;Admite;29/08/25
+746;Juzgado;Notificación personal de la demanda;29/08/25
+746;Demandado;Contestación de demanda;09/11/25
+747;Demandante;Radicado;31/07/25
+747;Juzgado;Admite;15/08/25
+747;Demandante;Notificación personal de la demanda;21/08/25
+748;Demandante;Radicado;31/07/25
+748;Juzgado;Admite;09/01/25
+748;Demandante;Notificación personal de la demanda;09/03/25
+748;Demandado;Contestación de demanda;16/09/25
+749;Demandante;Radicado;31/07/25
+750;Demandante;Radicado;31/07/25
+750;Juzgado;Admite;29/08/25
+750;Juzgado;Notificación personal de la demanda;09/08/25
+750;Demandado;Contestación de demanda;19/09/25
+751;Demandante;Radicado;26/09/25
+752;Demandante;Radicado;31/07/25
+752;Juzgado;Admite;08/08/25
+752;Juzgado;Notificación personal de la demanda;15/08/25
+752;Demandado;Contestación de demanda;28/08/25
+752;Juzgado;Inadmite contestación de la demanda;09/02/25
+752;Demandado;Subsanación;09/04/25
+752;Juzgado;Fija audiencia;26/09/25
+753;Demandante;Radicado;31/07/25
+753;Juzgado;Admite;08/05/25
+753;Demandante;Notificación personal de la demanda;09/08/25
+753;Demandado;Contestación de demanda;18/09/25
+754;Demandante;Radicado;31/07/25
+754;Juzgado;Admite;13/08/25
+754;Juzgado;Notificación personal de la demanda;22/08/25
+755;Demandante;Radicado;31/07/25
+755;Juzgado;Admite;18/09/25
+755;Demandante;Notificación personal de la demanda;18/09/25
+756;Demandante;Radicado;31/07/25
+756;Juzgado;Admite;25/08/25
+756;Demandante;Notificación personal de la demanda;28/08/25
+756;Demandado;Contestación de demanda;09/11/25
+757;Demandante;Radicado;31/07/25
+757;Juzgado;Inadmitido;08/04/25
+757;Demandante;Subsanación;13/08/25
+757;Juzgado;Admite;09/08/25
+757;Demandante;Notificación personal de la demanda;17/09/25
+757;Demandado;Contestación de demanda;30/09/25
+758;Demandante;Radicado;08/04/25
+758;Juzgado;Admite;08/12/25
+758;Juzgado;Notificación personal de la demanda;20/08/25
+758;Demandado;Contestación de demanda;09/01/25
+758;Juzgado;Fija audiencia;16/09/25
+759;Demandante;Radicado;08/04/25
+759;Juzgado;Admite;20/08/25
+759;Juzgado;Notificación personal de la demanda;28/08/25
+759;Demandado;Contestación de demanda;09/10/25
+759;Juzgado;Inadmite contestación de la demanda;19/09/25
+759;Demandado;Subsanación;26/09/25
+760;Demandante;Radicado;08/04/25
+760;Juzgado;Inadmitido;20/08/25
+760;Demandante;Subsanación;27/08/25
+760;Juzgado;Admite;09/01/25
+760;Demandante;Notificación personal de la demanda;09/03/25
+760;Demandado;Contestación de demanda;16/09/25
+760;Juzgado;Fija audiencia;26/09/25
+761;Demandante;Radicado;08/04/25
+762;Demandante;Radicado;08/04/25
+763;Demandante;Radicado;08/01/25
+764;Demandante;Radicado;08/01/25
+764;Juzgado;Admite;08/01/25
+765;Demandante;Radicado;08/01/25
+765;Juzgado;Inadmitido;08/06/25
+765;Demandante;Subsanación;21/08/25
+765;Juzgado;Admite;28/08/25
+765;Demandante;Notificación personal de la demanda;29/08/25
+765;Demandado;Contestación de demanda;09/12/25
+766;Demandante;Radicado;08/01/25
+766;Juzgado;Admite;13/08/25
+766;Demandante;Notificación personal de la demanda;22/08/25
+766;Demandado;Contestación de demanda;09/08/25
+766;Juzgado;Admite;17/08/25
+766;Juzgado;Fija audiencia;19/08/25
+767;Demandante;Radicado;08/01/25
+768;Demandante;Radicado;08/04/25
+768;Juzgado;Admite;08/05/25
+768;Demandante;Notificación personal de la demanda;22/08/25
+768;Demandado;Contestación de demanda;09/03/25
+769;Demandante;Radicado;08/04/25
+769;Demandante;Notificación personal de la demanda;15/08/25
+769;Demandado;Contestación de demanda;28/08/25
+770;Demandante;Radicado;08/04/25
+770;Juzgado;Admite;14/08/25
+770;Demandante;Notificación personal de la demanda;15/08/25
+770;Demandado;Contestación de demanda;28/08/25
+770;Juzgado;Fija audiencia;09/03/25
+771;Demandante;Radicado;08/04/25
+772;Demandante;Radicado;08/04/25
+772;Juzgado;Admite;19/08/25
+772;Demandante;Notificación personal de la demanda;21/08/25
+772;Demandado;Contestación de demanda;09/05/25
+773;Demandante;Radicado;08/04/25
+774;Demandante;Radicado;08/05/25
+774;Juzgado;Inadmitido;26/08/25
+774;Demandante;Subsanación;09/03/25
+774;Juzgado;Admite;09/11/25
+775;Demandante;Radicado;26/09/25
+775;Juzgado;Inadmitido;29/09/25
+776;Demandante;Radicado;08/05/25
+776;Juzgado;Admite;20/08/25
+776;Juzgado;Notificación personal de la demanda;09/03/25
+776;Demandado;Contestación de demanda;24/09/25
+777;Demandante;Radicado;08/05/25
+777;Juzgado;Admite;28/08/25
+777;Juzgado;Notificación personal de la demanda;18/09/25
+778;Demandante;Radicado;08/05/25
+778;Juzgado;Admite;08/08/25
+778;Demandante;Notificación personal de la demanda;15/08/25
+778;Demandado;Contestación de demanda;09/01/25
+778;Juzgado;Fija audiencia;15/09/25
+779;Demandante;Radicado;08/05/25
+779;Juzgado;Admite;10/01/25
+780;Demandante;Radicado;08/05/25
+780;Juzgado;Inadmitido;08/05/25
+780;Demandante;Subsanación;14/08/25
+780;Juzgado;Admite;15/08/25
+780;Demandante;Notificación personal de la demanda;21/08/25
+780;Demandado;Contestación de demanda;09/05/25
+780;Juzgado;Admite;09/09/25
+780;Demandado;Subsanación;15/09/25
+780;Juzgado;Fija audiencia;16/09/25
+780;Juzgado;Conciliado;23/09/25
+781;Demandante;Radicado;08/05/25
+781;Juzgado;Inadmitido;27/08/25
+781;Demandante;Subsanación;09/03/25
+781;Juzgado;Admite;09/11/25
+781;Demandado;Contestación de demanda;26/09/25
+782;Demandante;Radicado;08/05/25
+782;Juzgado;Admite;13/08/25
+782;Demandante;Notificación personal de la demanda;15/08/25
+782;Demandado;Contestación de demanda;28/08/25
+782;Juzgado;Fija audiencia;09/08/25
+783;Demandante;Radicado;08/05/25
+783;Juzgado;Inadmitido;08/08/25
+783;Demandante;Subsanación;19/08/25
+783;Juzgado;Admite;22/08/25
+783;Demandante;Notificación personal de la demanda;09/04/25
+783;Demandado;Contestación de demanda;17/09/25
+784;Demandante;Radicado;08/05/25
+784;Juzgado;Admite;09/01/25
+784;Demandante;Notificación personal de la demanda;09/03/25
+785;Demandante;Radicado;08/06/25
+786;Demandante;Radicado;08/06/25
+786;Juzgado;Admite;08/11/25
+786;Demandante;Notificación personal de la demanda;15/08/25
+786;Demandado;Contestación de demanda;09/01/25
+787;Demandante;Radicado;08/06/25
+787;Juzgado;Admite;13/08/25
+787;Juzgado;Notificación personal de la demanda;14/08/25
+787;Demandado;Contestación de demanda;09/02/25
+787;Juzgado;Inadmite contestación de la demanda;09/11/25
+787;Demandado;Subsanación;17/09/25
+787;Juzgado;Fija audiencia;23/09/25
+788;Demandante;Radicado;08/11/25
+788;Juzgado;Admite;19/08/25
+788;Demandante;Notificación personal de la demanda;21/08/25
+788;Demandado;Contestación de demanda;09/05/25
+788;Juzgado;Admite;09/12/25
+788;Demandado;Admite;17/09/25
+788;Juzgado;Fija audiencia;30/09/25
+789;Demandante;Radicado;08/11/25
+789;Juzgado;Inadmitido;08/11/25
+789;Demandante;Subsanación;20/08/25
+789;Juzgado;Admite;21/08/25
+789;Demandante;Notificación personal de la demanda;28/08/25
+789;Demandado;Contestación de demanda;09/09/25
+789;Juzgado;Inadmite contestación de la demanda;19/09/25
+789;Demandado;Subsanación;24/09/25
+789;Juzgado;Fija audiencia;25/09/25
+790;Demandante;Radicado;08/11/25
+790;Juzgado;Admite;19/08/25
+790;Demandante;Notificación personal de la demanda;21/08/25
+790;Demandado;Contestación de demanda;09/05/25
+790;Juzgado;Fija audiencia;09/10/25
+791;Demandante;Radicado;27/08/25
+791;Juzgado;Admite;09/01/25
+791;Demandante;Notificación personal de la demanda;17/09/25
+791;Demandado;Contestación de demanda;30/09/25
+792;Demandante;Radicado;08/11/25
+792;Juzgado;Admite;14/08/25
+792;Demandante;Notificación personal de la demanda;15/08/25
+792;Demandado;Contestación de demanda;29/08/25
+792;Juzgado;Fija audiencia;15/09/25
+793;Demandante;Radicado;08/11/25
+793;Juzgado;Admite;29/08/25
+793;Demandante;Notificación personal de la demanda;29/08/25
+793;Demandado;Contestación de demanda;22/09/25
+793;Juzgado;Admite;30/09/25
+794;Demandante;Radicado;08/12/25
+794;Juzgado;Admite;26/08/25
+794;Demandante;Notificación personal de la demanda;09/02/25
+794;Demandado;Contestación de demanda;09/11/25
+794;Juzgado;Inadmite contestación de la demanda;19/09/25
+794;Demandado;Subsanación;26/09/25
+795;Demandante;Radicado;08/12/25
+795;Juzgado;Admite;13/08/25
+795;Demandante;Notificación personal de la demanda;21/08/25
+795;Demandado;Contestación de demanda;09/05/25
+795;Juzgado;Inadmite contestación de la demanda;09/09/25
+795;Demandado;Subsanación;17/09/25
+796;Demandante;Radicado;08/12/25
+797;Demandante;Radicado;13/08/25
+798;Demandante;Radicado;26/09/25
+799;Demandante;Radicado;13/08/25
+800;Demandante;Radicado;13/08/25
+800;Juzgado;Inadmitido;22/08/25
+800;Demandante;Subsanación;09/01/25
+800;Juzgado;Admite;15/09/25
+800;Juzgado;Notificación personal de la demanda;23/09/25
+801;Demandante;Radicado;13/08/25
+801;Juzgado;Admite;21/08/25
+801;Demandante;Notificación personal de la demanda;28/08/25
+801;Demandado;Contestación de demanda;09/12/25
+801;Juzgado;Fija audiencia;10/01/25
+802;Demandante;Radicado;26/09/25
+803;Demandante;Radicado;13/08/25
+803;Juzgado;Admite;21/08/25
+803;Demandante;Notificación personal de la demanda;27/08/25
+803;Demandado;Contestación de demanda;09/05/25
+803;Juzgado;Inadmite contestación de la demanda;09/09/25
+803;Demandado;Subsanación;15/09/25
+803;Juzgado;Fija audiencia;16/09/25
+804;Demandante;Radicado;13/08/25
+804;Juzgado;Admite;15/08/25
+805;Demandante;Radicado;13/08/25
+806;Demandante;Radicado;13/08/25
+806;Juzgado;Admite;14/08/25
+807;Demandante;Radicado;13/08/25
+807;Juzgado;Admite;09/01/25
+807;Demandante;Notificación personal de la demanda;09/03/25
+807;Demandado;Contestación de demanda;18/09/25
+808;Demandante;Radicado;13/08/25
+809;Demandante;Radicado;13/08/25
+809;Juzgado;Admite;29/08/25
+809;Demandante;Notificación personal de la demanda;10/01/25
+810;Demandante;Radicado;13/08/25
+811;Demandante;Radicado;13/08/25
+811;Juzgado;Inadmitido;15/08/25
+811;Demandante;Subsanación;27/08/25
+811;Juzgado;Admite;09/11/25
+811;Demandante;Notificación personal de la demanda;17/09/25
+811;Demandado;Contestación de demanda;30/09/25
+812;Demandante;Radicado;20/08/25
+812;Juzgado;Admite;09/01/25
+812;Demandante;Notificación personal de la demanda;01/09/25
+812;Demandado;Contestación de demanda;25/09/25
+812;Juzgado;Admite;30/09/25
+813;Demandante;Radicado;13/08/25
+813;Juzgado;Admite;15/09/25
+813;Juzgado;Notificación personal de la demanda;18/09/25
+814;Demandante;Radicado;13/08/25
+814;Juzgado;Admite;19/09/25
+815;Demandante;Radicado;13/08/25
+815;Juzgado;Admite;29/08/25
+815;Demandante;Notificación personal de la demanda;24/09/25
+816;Demandante;Radicado;13/08/25
+817;Demandante;Radicado;13/08/25
+817;Juzgado;Admite;14/08/25
+817;Demandante;Notificación personal de la demanda;15/08/25
+817;Demandado;Contestación de demanda;26/08/25
+817;Juzgado;Fija audiencia;09/11/25
+818;Demandante;Radicado;13/08/25
+818;Juzgado;Admite;20/08/25
+818;Demandante;Notificación personal de la demanda;17/09/25
+818;Demandado;Contestación de demanda;30/09/25
+819;Demandante;Radicado;24/08/25
+819;Juzgado;Admite;15/08/25
+819;Demandante;Notificación personal de la demanda;28/08/25
+819;Demandado;Contestación de demanda;09/09/25
+819;Juzgado;Fija audiencia;15/09/25
+820;Demandante;Radicado;14/08/25
+820;Juzgado;Inadmitido;29/08/25
+820;Demandante;Subsanación;09/03/25
+820;Juzgado;Admite;09/12/25
+820;Demandante;Notificación personal de la demanda;17/09/25
+820;Demandado;Contestación de demanda;30/09/25
+821;Demandante;Radicado;14/08/25
+822;Demandante;Radicado;14/08/25
+822;Juzgado;Admite;29/08/25
+822;Demandado;Contestación de demanda;25/09/25
+822;Juzgado;Admite;29/09/25
+823;Demandante;Radicado;14/08/25
+824;Demandante;Radicado;14/08/25
+824;Juzgado;Inadmitido;27/08/25
+824;Demandante;Subsanación;09/03/25
+825;Demandante;Radicado;15/08/25
+825;Juzgado;Admite;22/08/25
+825;Juzgado;Notificación personal de la demanda;27/08/25
+825;Demandado;Contestación de demanda;09/11/25
+825;Juzgado;Inadmite contestación de la demanda;15/09/25
+825;Demandado;Subsanación;17/09/25
+825;Juzgado;Fija audiencia;17/09/25
+826;Demandante;Radicado;15/08/25
+826;Juzgado;Admite;20/08/25
+826;Juzgado;Notificación personal de la demanda;09/03/25
+826;Demandado;Contestación de demanda;15/09/25
+827;Demandante;Radicado;15/08/25
+827;Juzgado;Admite;19/08/25
+827;Demandante;Notificación personal de la demanda;28/08/25
+827;Demandado;Contestación de demanda;09/11/25
+827;Juzgado;Inadmite contestación de la demanda;16/09/25
+827;Demandado;Subsanación;17/09/25
+827;Juzgado;Fija audiencia;18/09/25
+828;Demandante;Radicado;15/08/25
+828;Juzgado;Admite;10/01/25
+829;Demandante;Radicado;15/08/25
+829;Juzgado;Admite;27/08/25
+829;Demandante;Notificación personal de la demanda;29/08/25
+830;Demandante;Radicado;15/08/25
+830;Juzgado;Admite;26/08/25
+830;Juzgado;Notificación personal de la demanda;09/02/25
+830;Demandado;Contestación de demanda;09/11/25
+830;Juzgado;Inadmite contestación de la demanda;16/09/25
+830;Demandado;Subsanación;18/09/25
+830;Juzgado;Fija audiencia;23/09/25
+831;Demandante;Radicado;15/08/25
+831;Juzgado;Admite;29/08/25
+832;Demandante;Radicado;19/08/25
+833;Demandante;Radicado;19/08/25
+833;Juzgado;Admite;25/08/25
+833;Demandante;Notificación personal de la demanda;28/08/25
+833;Demandado;Contestación de demanda;15/09/25
+833;Juzgado;Inadmite contestación de la demanda;23/09/25
+833;Demandado;Subsanación;29/09/25
+834;Demandante;Radicado;19/08/25
+834;Juzgado;Admite;25/08/25
+834;Demandante;Notificación personal de la demanda;28/08/25
+834;Demandado;Contestación de demanda;15/09/25
+834;Juzgado;Fija audiencia;19/09/25
+835;Demandante;Radicado;19/08/25
+835;Juzgado;Admite;25/08/25
+835;Demandante;Notificación personal de la demanda;28/08/25
+835;Demandado;Contestación de demanda;15/09/25
+835;Juzgado;Fija audiencia;19/09/25
+836;Demandante;Radicado;19/08/25
+836;Juzgado;Admite;25/08/25
+836;Demandante;Notificación personal de la demanda;29/08/25
+836;Demandado;Contestación de demanda;15/09/25
+837;Demandante;Radicado;19/08/25
+837;Juzgado;Admite;25/08/25
+837;Demandante;Notificación personal de la demanda;28/08/25
+837;Demandado;Contestación de demanda;09/12/25
+837;Juzgado;Fija audiencia;18/09/25
+838;Demandante;Radicado;19/08/25
+838;Juzgado;Inadmitido;19/09/25
+838;Demandante;Subsanación;24/09/25
+838;Juzgado;Admite;30/09/25
+839;Demandante;Radicado;19/08/25
+839;Juzgado;Admite;09/05/25
+839;Demandante;Notificación personal de la demanda;17/09/25
+839;Demandado;Contestación de demanda;30/09/25
+840;Demandante;Radicado;20/08/25
+840;Juzgado;Admite;25/08/25
+840;Demandante;Notificación personal de la demanda;28/08/25
+840;Demandado;Contestación de demanda;15/09/25
+840;Juzgado;Fija audiencia;19/09/25
+841;Demandante;Radicado;20/08/25
+841;Juzgado;Admite;09/04/25
+841;Demandante;Notificación personal de la demanda;09/05/25
+842;Demandante;Radicado;20/08/25
+842;Juzgado;Inadmitido;14/09/25
+842;Demandante;Subsanación;29/09/25
+843;Demandante;Radicado;20/08/25
+843;Juzgado;Inadmitido;29/08/25
+843;Demandante;Subsanación;09/05/25
+843;Juzgado;Admite;19/09/25
+844;Demandante;Radicado;20/08/25
+844;Juzgado;Admite;25/08/25
+845;Demandante;Radicado;21/08/25
+845;Juzgado;Admite;25/08/25
+845;Demandante;Notificación personal de la demanda;27/08/25
+845;Juzgado;Fija audiencia;17/09/25
+845;Demandado;Fija audiencia;22/09/24
+845;Juzgado;Fija audiencia;30/09/25
+846;Demandante;Radicado;20/08/25
+846;Juzgado;Admite;09/01/25
+846;Demandante;Notificación personal de la demanda;09/09/25
+846;Demandado;Contestación de demanda;24/09/25
+847;Demandante;Radicado;21/08/25
+848;Demandante;Radicado;21/08/25
+848;Juzgado;Admite;09/02/25
+848;Demandante;Notificación personal de la demanda;09/09/25
+848;Demandado;Contestación de demanda;24/09/25
+848;Juzgado;Inadmite contestación de la demanda;30/09/25
+849;Demandante;Radicado;21/08/25
+849;Juzgado;Admite;26/08/25
+849;Demandante;Notificación personal de la demanda;28/08/25
+850;Demandante;Radicado;21/08/25
+850;Juzgado;Admite;26/08/25
+850;Demandante;Notificación personal de la demanda;29/08/25
+850;Demandado;Contestación de demanda;09/12/25
+850;Juzgado;Fija audiencia;24/09/25
+851;Demandante;Radicado;20/08/25
+852;Demandante;Radicado;20/08/25
+852;Juzgado;Admite;22/08/25
+852;Demandante;Notificación personal de la demanda;28/08/25
+853;Demandante;Radicado;20/08/25
+853;Juzgado;Admite;15/09/25
+853;Juzgado;Notificación personal de la demanda;18/09/25
+854;Demandante;Radicado;20/08/25
+855;Demandante;Radicado;20/08/25
+855;Juzgado;Inadmitido;21/08/25
+855;Demandante;Subsanación;28/08/25
+855;Juzgado;Admite;29/08/25
+855;Demandante;Notificación personal de la demanda;09/03/25
+855;Demandado;Contestación de demanda;19/09/25
+855;Juzgado;Inadmite contestación de la demanda;16/09/25
+855;Demandado;Subsanación;25/09/25
+855;Juzgado;Fija audiencia;25/09/25
+856;Demandante;Radicado;20/08/25
+856;Juzgado;Admite;29/08/25
+857;Demandante;Radicado;21/08/25
+858;Demandante;Radicado;22/08/25
+859;Demandante;Radicado;22/08/25
+859;Juzgado;Inadmitido;02/09/25
+859;Demandante;Subsanación;10/09/25
+859;Juzgado;Admite;11/09/25
+859;Demandante;Notificación personal de la demanda;17/09/25
+859;Demandado;Contestación de demanda;30/09/25
+860;Demandante;Radicado;22/08/25
+860;Juzgado;Inadmitido;22/08/25
+860;Demandante;Subsanación;01/09/25
+860;Juzgado;Admite;02/09/25
+860;Demandante;Notificación personal de la demanda;05/09/25
+860;Demandado;Contestación de demanda;24/09/25
+861;Demandante;Radicado;22/08/25
+861;Juzgado;Inadmitido;16/09/25
+861;Demandante;Subsanación;24/09/25
+861;Juzgado;Admite;26/09/25
+862;Demandante;Radicado;22/08/25
+862;Juzgado;Admite;31/08/25
+862;Demandante;Notificación personal de la demanda;03/09/25
+862;Demandado;Contestación de demanda;23/09/25
+862;Juzgado;Fija audiencia;01/10/25
+863;Demandante;Radicado;22/08/25
+864;Demandante;Radicado;22/08/25
+864;Juzgado;Admite;01/09/25
+864;Demandante;Notificación personal de la demanda;03/09/25
+864;Demandado;Contestación de demanda;16/09/25
+865;Demandante;Radicado;22/08/25
+865;Juzgado;Inadmitido;25/08/25
+865;Demandante;Subsanación;29/08/25
+865;Juzgado;Admite;01/09/25
+866;Demandante;Radicado;22/08/25
+866;Juzgado;Admite;29/08/25
+866;Demandante;Notificación personal de la demanda;03/09/25
+866;Demandado;Contestación de demanda;16/09/25
+866;Juzgado;Fija audiencia;17/09/25
+867;Demandante;Radicado;22/08/25
+867;Juzgado;Admite;01/09/25
+867;Demandante;Notificación personal de la demanda;03/09/25
+867;Demandado;Contestación de demanda;16/09/25
+868;Demandante;Radicado;22/08/25
+868;Juzgado;Admite;15/09/25
+868;Juzgado;Notificación personal de la demanda;23/09/25
+869;Demandante;Radicado;22/08/25
+870;Demandante;Radicado;22/08/25
+870;Juzgado;Inadmitido;27/08/25
+870;Demandante;Subsanación;04/09/25
+871;Demandante;Radicado;22/08/25
+871;Juzgado;Admite;26/08/25
+871;Juzgado;Notificación personal de la demanda;08/09/25
+871;Demandado;Contestación de demanda;22/09/25
+872;Demandante;Radicado;22/08/25
+872;Juzgado;Admite;22/09/25
+873;Demandante;Radicado;22/08/25
+874;Demandante;Radicado;22/08/25
+874;Juzgado;Inadmitido;27/08/25
+874;Demandante;Subsanación;03/09/25
+874;Juzgado;Admite;04/09/25
+874;Demandante;Notificación personal de la demanda;05/09/25
+874;Demandado;Contestación de demanda;24/09/25
+875;Demandante;Radicado;25/08/25
+875;Juzgado;Admite;22/09/25
+876;Demandante;Radicado;25/08/25
+876;Juzgado;Admite;29/08/25
+876;Demandante;Notificación personal de la demanda;03/09/25
+876;Demandado;Contestación de demanda;12/09/25
+876;Juzgado;Fija audiencia;26/09/25
+877;Demandante;Radicado;25/08/25
+878;Demandante;Radicado;25/08/25
+878;Juzgado;Inadmitido;23/09/25
+878;Demandante;Subsanación;26/09/25
+879;Demandante;Radicado;25/08/25
+879;Juzgado;Inadmitido;01/09/25
+879;Demandante;Subsanación;05/09/25
+879;Juzgado;Admite;26/09/25
+880;Demandante;Radicado;25/08/25
+880;Juzgado;Inadmitido;28/08/25
+880;Demandante;Subsanación;04/09/25
+880;Juzgado;Admite;05/09/25
+880;Demandante;Notificación personal de la demanda;17/09/25
+880;Demandado;Contestación de demanda;01/10/25
+881;Demandante;Radicado;25/08/25
+881;Juzgado;Admite;29/08/25
+881;Juzgado;Notificación personal de la demanda;01/10/25
+882;Demandante;Radicado;25/08/25
+883;Demandante;Radicado;25/08/25
+883;Juzgado;Inadmitido;01/10/25
+884;Demandante;Radicado;25/08/25
+884;Juzgado;Admite;05/09/25
+884;Juzgado;Notificación personal de la demanda;15/09/25
+884;Demandado;Contestación de demanda;29/09/25
+885;Demandante;Radicado;26/08/25
+885;Juzgado;Admite;22/09/25
+886;Demandante;Radicado;26/08/25
+886;Juzgado;Admite;28/08/25
+886;Demandante;Notificación personal de la demanda;05/09/25
+886;Demandado;Contestación de demanda;22/09/25
+886;Juzgado;Fija audiencia;01/10/25
+887;Demandante;Radicado;26/08/25
+887;Juzgado;Admite;01/09/25
+887;Demandante;Notificación personal de la demanda;05/09/25
+887;Demandado;Contestación de demanda;19/09/25
+888;Demandante;Radicado;26/08/25
+888;Juzgado;Admite;31/08/25
+888;Demandante;Notificación personal de la demanda;05/09/25
+888;Demandado;Contestación de demanda;19/09/25
+889;Demandante;Radicado;26/08/25
+890;Demandante;Radicado;26/08/25
+890;Juzgado;Admite;02/09/25
+890;Demandado;Contestación de demanda;25/09/25
+890;Juzgado;Admite;02/10/25
+891;Demandante;Radicado;26/08/25
+891;Juzgado;Admite;04/09/25
+891;Demandante;Notificación personal de la demanda;05/09/25
+891;Demandado;Contestación de demanda;15/09/25
+892;Demandante;Radicado;26/08/25
+892;Juzgado;Admite;26/08/25
+892;Juzgado;Notificación personal de la demanda;26/08/25
+892;Demandado;Contestación de demanda;15/09/25
+892;Juzgado;Fija audiencia;02/10/25
+893;Demandante;Radicado;26/08/25
+893;Juzgado;Admite;09/09/25
+893;Juzgado;Notificación personal de la demanda;17/09/25
+893;Demandado;Contestación de demanda;30/09/25
+893;Juzgado;Inadmite contestación de la demanda;30/09/25
+894;Demandante;Radicado;26/08/25
+894;Juzgado;Admite;29/08/25
+894;Juzgado;Notificación personal de la demanda;09/09/25
+894;Demandado;Contestación de demanda;23/09/25
+895;Demandante;Radicado;26/08/25
+895;Juzgado;Admite;02/09/25
+895;Juzgado;Notificación personal de la demanda;09/09/25
+895;Demandado;Contestación de demanda;24/09/25
+895;Juzgado;Inadmite contestación de la demanda;30/09/25
+896;Demandante;Radicado;27/08/25
+897;Demandante;Radicado;27/08/25
+897;Juzgado;Inadmitido;30/09/25
+898;Demandante;Radicado;27/08/25
+898;Juzgado;Inadmitido;04/09/25
+898;Demandante;Subsanación;08/09/25
+898;Juzgado;Admite;11/09/25
+898;Demandado;Contestación de demanda;26/09/25
+899;Demandante;Radicado;27/08/25
+899;Juzgado;Admite;28/08/25
+899;Juzgado;Notificación personal de la demanda;08/09/25
+899;Demandado;Contestación de demanda;18/09/25
+900;Demandante;Radicado;27/08/25
+900;Juzgado;Admite;29/08/25
+900;Juzgado;Notificación personal de la demanda;09/09/25
+900;Demandado;Contestación de demanda;19/09/25
+901;Demandante;Radicado;27/08/25
+901;Juzgado;Admite;09/09/25
+901;Juzgado;Notificación personal de la demanda;17/08/25
+901;Demandado;Contestación de demanda;30/09/25
+901;Juzgado;Fija audiencia;30/09/25
+902;Demandante;Radicado;27/08/25
+902;Juzgado;Admite;29/09/25
+903;Demandante;Radicado;27/08/25
+903;Juzgado;Admite;02/09/25
+903;Demandante;Notificación personal de la demanda;05/09/25
+903;Demandado;Contestación de demanda;16/09/25
+903;Juzgado;Fija audiencia;18/09/25
+904;Demandante;Radicado;28/08/25
+904;Juzgado;Inadmitido;08/09/25
+904;Demandante;Subsanación;10/09/25
+904;Juzgado;Admite;19/09/25
+905;Demandante;Radicado;28/08/25
+905;Juzgado;Admite;08/09/25
+905;Demandante;Notificación personal de la demanda;17/09/25
+905;Demandado;Contestación de demanda;01/10/25
+906;Demandante;Radicado;28/08/25
+906;Juzgado;Inadmitido;08/09/25
+906;Demandante;Subsanación;10/09/25
+906;Juzgado;Admite;29/09/25
+907;Demandante;Radicado;28/08/25
+908;Demandante;Radicado;28/08/25
+908;Juzgado;Admite;01/09/25
+908;Demandante;Notificación personal de la demanda;05/09/25
+908;Demandado;Contestación de demanda;16/09/25
+909;Demandante;Radicado;28/08/25
+909;Juzgado;Admite;05/09/25
+909;Demandante;Notificación personal de la demanda;17/09/25
+909;Demandado;Contestación de demanda;01/10/25
+910;Demandado;Radicado;28/08/25
+910;Juzgado;Admite;11/09/25
+910;Demandante;Notificación personal de la demanda;17/09/25
+910;Demandado;Contestación de demanda;30/09/25
+911;Demandante;Radicado;29/08/25
+912;Demandante;Radicado;29/08/25
+912;Juzgado;Inadmitido;22/09/25
+912;Demandante;Subsanación;24/09/25
+913;Demandante;Radicado;29/08/25
+914;Demandante;Radicado;29/08/25
+914;Juzgado;Admite;08/09/25
+914;Demandante;Notificación personal de la demanda;17/09/25
+914;Demandado;Contestación de demanda;01/10/25
+915;Demandante;Radicado;30/08/25
+916;Demandante;Radicado;30/08/25
+916;Juzgado;Admite;24/09/25
+917;Demandante;Radicado;30/08/25
+917;Juzgado;Inadmitido;03/09/25
+917;Demandante;Subsanación;08/09/25
+917;Juzgado;Admite;09/09/25
+917;Demandante;Notificación personal de la demanda;17/09/25
+917;Demandado;Contestación de demanda;30/09/25
+918;Demandante;Radicado;30/08/25
+918;Juzgado;Inadmitido;04/09/25
+918;Demandante;Subsanación;08/09/25
+918;Juzgado;Admite;11/09/25
+918;Demandante;Notificación personal de la demanda;17/09/25
+918;Demandado;Contestación de demanda;30/09/25
+919;Demandante;Radicado;30/08/25
+920;Demandante;Radicado;30/08/25
+920;Juzgado;Admite;03/10/25
+921;Demandante;Radicado;03/10/25
+922;Demandante;Radicado;04/10/25
+923;Demandante;Radicado;05/10/25
+924;Demandante;Radicado;06/10/25
+925;Demandante;Radicado;07/10/25
+926;Demandante;Radicado;08/10/25
+927;Demandante;Radicado;09/10/25
+928;Demandante;Radicado;29/08/25
+928;Juzgado;Inadmitido;24/09/25
+928;Demandante;Subsanación;29/09/25
+929;Demandante;Radicado;03/10/25
+930;Demandante;Radicado;03/10/25
+931;Demandante;Radicado;03/10/25
+932;Demandante;Radicado;02/09/25
+933;Demandante;Radicado;03/10/25
+934;Demandante;Radicado;29/08/25
+934;Juzgado;Admite;01/09/25
+934;Demandante;Notificación personal de la demanda;05/09/25
+934;Demandado;Contestación de demanda;18/09/25
+429;Juzgado;Admite;31/08/2025
+429;Demandante;Notificación personal de la demanda;03/09/2025
+429;Demandado;Contestación de demanda;23/09/2025
+429;Juzgado;Fija audiencia;01/10/2025
+935;Demandante;Radicado;03/10/2025
+936;Demandante;Radicado;03/10/25
+937;Demandante;Radicado;29/08/25
+937;Juzgado;Admite;24/09/25
+938;Juzgado;Radicado;22/08/25
+939;Demandante;Radicado;03/10/25
+940;Demandante;Radicado;03/10/25
+941;Demandante;Radicado;03/10/25
+942;Demandante;Radicado;03/10/25
+943;Demandante;Radicado;03/10/25
+944;Demandante;Radicado;29/08/25
+944;Juzgado;Admite;24/09/25
+945;Demandante;Radicado;29/08/25
+945;Juzgado;Admite;19/09/25
+946;Demandante;Radicado;29/08/25
+947;Demandante;Radicado;29/08/25
+948;Demandante;Radicado;03/10/25
+949;Demandante;Radicado;03/10/25
+950;Demandante;Radicado;03/10/25
+951;Demandante;Radicado;03/10/25
+952;Demandante;Radicado;03/10/25
+953;Demandante;Radicado;03/10/25
+954;Demandante;Radicado;03/10/25
+955;Demandante;Radicado;29/08/25
+955;Juzgado;Admite;01/09/25
+955;Demandante;Notificación personal de la demanda;05/09/25
+955;Demandado;Contestación de demanda;23/09/25
+955;Juzgado;Inadmite contestación de la demanda;23/09/25
+955;Demandado;Subsanación;02/10/25
+956;Demandante;Radicado;29/08/25
+957;Demandante;Radicado;01/09/25
+957;Juzgado;Inadmitido;12/09/25
+957;Demandante;Subsanación;22/09/25
+958;Demandante;Radicado;02/09/25
+958;Juzgado;Inadmitido;12/09/25
+958;Demandante;Subsanación;22/09/25
+958;Juzgado;Admite;23/09/25
+959;Demandante;Radicado;02/09/25
+959;Juzgado;Inadmitido;05/09/25
+959;Demandante;Subsanación;10/09/25
+959;Juzgado;Admite;11/09/25
+959;Juzgado;Notificación personal de la demanda;23/09/25
+960;Demandante;Radicado;02/09/25
+961;Demandante;Radicado;02/09/25
+961;Juzgado;Admite;26/09/25
+962;Demandante;Radicado;02/09/25
+962;Juzgado;Inadmitido;11/09/25
+962;Demandante;Subsanación;17/09/25
+962;Juzgado;Admite;23/09/25
+963;Demandante;Radicado;02/09/25
+963;Juzgado;Admite;08/09/25
+963;Juzgado;Notificación personal de la demanda;17/09/25
+963;Demandado;Contestación de demanda;30/09/25
+964;Demandante;Radicado;02/09/25
+964;Juzgado;Admite;09/09/25
+964;Demandante;Notificación personal de la demanda;17/09/25
+964;Demandado;Contestación de demanda;30/09/25
+965;Demandante;Radicado;02/09/25
+965;Juzgado;Admite;26/09/25
+965;Juzgado;Notificación personal de la demanda;02/10/25
+966;Demandante;Radicado;03/09/25
+966;Juzgado;Inadmitido;11/09/25
+966;Demandante;Subsanación;17/09/25
+967;Demandante;Radicado;03/09/25
+967;Juzgado;Inadmitido;22/09/25
+967;Demandante;Subsanación;30/09/25
+968;Demandante;Radicado;03/09/25
+968;Juzgado;Admite;15/09/25
+968;Demandante;Notificación personal de la demanda;17/09/25
+968;Demandado;Contestación de demanda;30/09/25
+969;Demandante;Radicado;03/09/25
+969;Juzgado;Inadmitido;30/09/25
+970;Demandante;Radicado;03/09/25
+971;Demandante;Radicado;03/09/25
+971;Juzgado;Radicado;26/09/25
+972;Demandante;Radicado;03/09/25
+973;Demandante;Radicado;04/09/25
+973;Juzgado;Admite;10/09/25
+973;Demandante;Notificación personal de la demanda;17/09/25
+973;Demandado;Contestación de demanda;30/09/25
+974;Demandante;Radicado;04/09/25
+975;Demandante;Radicado;04/09/25
+976;Demandante;Radicado;04/09/25
+976;Juzgado;Admite;12/09/25
+976;Demandante;Notificación personal de la demanda;17/09/25
+976;Demandado;Contestación de demanda;30/09/25
+977;Demandante;Radicado;04/09/25
+977;Juzgado;Admite;19/09/25
+978;Demandante;Radicado;04/09/25
+978;Juzgado;Inadmitido;15/09/25
+978;Demandante;Subsanación;22/09/25
+979;Juzgado;Admite;30/09/25
+979;Demandante;Radicado;05/09/25
+980;Demandante;Radicado;05/09/25
+981;Demandante;Radicado;05/09/25
+981;Juzgado;Inadmitido;24/09/25
+981;Demandante;Subsanación;01/10/25
+982;Demandante;Radicado;05/09/25
+982;Juzgado;Inadmitido;18/09/25
+982;Demandante;Subsanación;24/09/25
+983;Demandante;Radicado;08/09/25
+983;Juzgado;Admite;02/10/25
+984;Demandante;Radicado;22/09/25
+985;Demandante;Radicado;08/09/25
+986;Demandante;Radicado;08/09/25
+986;Juzgado;Admite;26/09/25
+987;Demandante;Radicado;08/09/25
+987;Juzgado;Admite;24/09/25
+988;Demandante;Radicado;08/09/25
+989;Demandante;Radicado;09/09/25
+990;Demandante;Radicado;09/09/25
+991;Demandante;Radicado;10/09/25
+991;Juzgado;Admite;19/09/25
+992;Demandante;Radicado;10/09/25
+993;Demandante;Radicado;10/09/25
+994;Demandante;Radicado;10/09/25
+995;Demandante;Radicado;10/09/25
+995;Juzgado;Admite;30/09/25
+996;Demandante;Radicado;11/09/25
+996;Juzgado;Admite;16/09/25
+996;Demandante;Notificación personal de la demanda;17/09/25
+996;Demandado;Contestación de demanda;02/10/25
+997;Demandante;Radicado;11/09/25
+997;Juzgado;Admite;15/09/25
+997;Demandante;Notificación personal de la demanda;17/10/25
+997;Demandado;Contestación de demanda;30/09/25
+998;Demandante;Radicado;11/09/25
+999;Demandante;Radicado;11/09/25
+1000;Demandante;Radicado;11/09/25
+1000;Juzgado;Admite;23/09/25
+1000;Juzgado;Notificación personal de la demanda;03/10/25
+1001;Demandante;Radicado;10/09/25
+1001;Juzgado;Admite;16/09/25
+1001;Juzgado;Notificación personal de la demanda;02/10/25
+1002;Demandante;Radicado;12/09/25
+1002;Juzgado;Admite;02/10/25
+1003;Demandante;Radicado;12/09/25
+1004;Demandante;Radicado;12/09/25
+1005;Demandante;Radicado;12/09/25
+1006;Demandante;Radicado;12/09/25
+1006;Juzgado;Admite;19/09/25
+1007;Demandante;Radicado;12/09/25
+1007;Juzgado;Admite;26/09/25
+1008;Demandante;Radicado;12/09/25
+1009;Demandante;Radicado;16/09/25
+1009;Juzgado;Admite;19/09/25
+1010;Demandante;Radicado;16/09/25
+1011;Demandante;Radicado;16/09/25
+1011;Juzgado;Admite;17/09/25
+1011;Juzgado;Notificación personal de la demanda;19/09/25
+1012;Demandante;Radicado;16/09/25
+1012;Juzgado;Inadmitido;02/10/25
+1013;Demandante;Radicado;16/09/25
+1014;Demandante;Radicado;16/09/25
+1014;Juzgado;Admite;19/09/25
+1014;Demandante;Notificación personal de la demanda;22/09/25
+1015;Demandante;Radicado;16/09/25
+1015;Juzgado;Admite;18/09/25
+1015;Juzgado;Notificación personal de la demanda;19/09/25
+1016;Demandante;Radicado;17/09/25
+1017;Demandante;Radicado;17/09/25
+1017;Juzgado;Inadmitido;25/09/25
+1017;Demandante;Subsanación;01/10/25
+1018;Demandante;Radicado;17/09/25
+1019;Demandante;Radicado;16/09/25
+1020;Demandante;Radicado;16/09/25
+1021;Demandante;Radicado;16/09/25
+1022;Demandante;Radicado;17/09/25
+1023;Demandante;Radicado;17/09/25
+1023;Juzgado;Admite;26/09/25
+1024;Demandante;Radicado;17/09/25
+1024;Juzgado;Admite;23/09/25
+1025;Demandante;Radicado;17/09/25
+1025;Juzgado;Admite;24/09/25
+1026;Demandante;Radicado;17/09/25
+1027;Demandante;Radicado;19/09/25
+1028;Demandante;Radicado;19/09/25
+1029;Demandante;Radicado;19/09/25
+1030;Demandante;Radicado;19/09/25
+1031;Demandante;Radicado;19/09/25
+1031;Juzgado;Admite;30/09/25
+1032;Demandante;Radicado;25/09/25
+1033;Demandante;Radicado;19/09/25
+1034;Demandante;Radicado;19/09/25
+1034;Juzgado;Admite;23/09/25
+1035;Demandante;Radicado;19/09/25
+1036;Demandante;Radicado;22/09/25
+1037;Demandante;Radicado;22/09/25
+1038;Demandante;Radicado;22/09/25
+1039;Demandante;Radicado;22/09/25
+1040;Demandante;Radicado;22/09/25
+1041;Demandante;Radicado;22/09/25
+1042;Demandante;Radicado;23/09/25
+1043;Demandante;Radicado;23/09/25
+1044;Demandante;Radicado;23/09/25
+1044;Juzgado;Admite;24/09/25
+1045;Demandante;Radicado;23/09/25
+1046;Demandante;Radicado;23/09/25
+1046;Juzgado;Admite;26/09/25
+1047;Demandante;Radicado;23/09/25
+1047;Juzgado;Admite;30/09/25
+1048;Demandante;Radicado;23/09/25
+1048;Juzgado;Admite;26/09/25
+1048;Juzgado;Notificación personal de la demanda;02/10/25
+1049;Demandante;Radicado;23/09/25
+1049;Juzgado;Inadmitido;25/09/25
+1049;Demandante;Subsanación;01/10/25
+1049;Juzgado;Admite;01/10/25
+1050;Juzgado;Notificación personal de la demanda;03/10/25
+1050;Demandante;Radicado;23/09/25
+1051;Demandante;Radicado;23/09/25
+1052;Demandante;Radicado;23/09/25
+1053;Demandante;Radicado;23/09/25
+1053;Juzgado;Admite;29/09/25
+1053;Juzgado;Notificación personal de la demanda;03/10/25
+1054;Demandante;Radicado;23/09/25
+1054;Juzgado;Admite;29/09/25
+1055;Demandante;Radicado;23/09/25
+1055;Juzgado;Admite;02/10/25
+1056;Demandante;Radicado;23/09/25
+1057;Demandante;Radicado;23/09/25
+1058;Demandante;Radicado;23/09/25
+1058;Juzgado;Admite;03/10/25
+1059;Demandante;Radicado;24/09/25
+1060;Demandante;Radicado;24/09/25
+1061;Demandante;Radicado;24/09/25
+1061;Juzgado;Admite;29/09/25
+1061;Juzgado;Notificación personal de la demanda;03/10/25
+1062;Demandante;Radicado;24/09/25
+1063;Demandante;Radicado;24/09/25
+1063;Juzgado;Admite;29/09/25
+1064;Demandante;Radicado;24/09/25
+1065;Demandante;Radicado;24/09/25
+1066;Demandante;Radicado;24/09/25
+1067;Demandante;Radicado;25/09/25
+1068;Demandante;Radicado;25/09/25
+1069;Demandante;Radicado;25/09/25
+1070;Demandante;Radicado;25/09/25
+1071;Demandante;Radicado;26/09/25
+1072;Demandante;Radicado;26/09/25
+1073;Demandante;Radicado;26/09/25
+1074;Demandante;Radicado;26/09/25
+1075;Demandante;Radicado;26/09/25
+1075;Juzgado;Inadmitido;03/10/25
+1076;Demandante;Radicado;26/09/25
+1077;Demandante;Radicado;29/09/25
+1078;Demandante;Radicado;29/09/25
+1079;Demandante;Radicado;29/09/25
+1080;Demandante;Radicado;29/09/25
+1081;Demandante;Radicado;29/09/25
+1082;Demandante;Radicado;29/09/25
+1083;Demandante;Radicado;29/09/25
+1084;Demandante;Radicado;29/09/25
+1085;Demandante;Radicado;29/09/25
+1086;Demandante;Radicado;29/09/25
+1087;Demandante;Radicado;30/09/25
+1088;Demandante;Radicado;30/09/25
+1089;Demandante;Radicado;30/09/25
+1090;Demandante;Radicado;30/09/25
+1091;Demandante;Radicado;30/09/25
+1092;Demandante;Radicado;30/09/25
+1093;Demandante;Radicado;30/09/2025
+1094;Demandante;Radicado;30/09/25
+1103;Demandante;Radicado;12/06/2024
+1103;Juzgado;Admite;25/06/2024
+1103;Demandante;Notificación personal de la demanda;25/06/2024
+1103;Demandado;Contestación de demanda;09/07/2024
+1103;Demandante;Radica impulso procesal;12/08/2024
+1103;Demandante;Radica impulso procesal;15/07/2025
+; ;;
+;; ;
