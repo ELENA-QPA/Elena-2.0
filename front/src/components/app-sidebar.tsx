@@ -60,6 +60,12 @@ const mainItems = [
     href: "/dashboard/equipo",
     icon: Users,
   },
+  
+  {
+    title: "Audiencias",
+    href: "/dashboard/audiencias",
+    icon: Users,
+  },
 ]
 
 // Items de configuración (al fondo)

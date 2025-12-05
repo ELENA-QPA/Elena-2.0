@@ -28,4 +28,6 @@ export const routes = {
   perfil: "/dashboard/perfil", 
   equipo: "/dashboard/equipo",
   estadisticas: "/dashboard/estadisticas",
+  audiencias : "/dashboard/audiencias",
+
 };
