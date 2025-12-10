@@ -7,13 +7,8 @@ import { Loader2, RefreshCw, Plus} from "lucide-react"
 import { checkAuth } from "@/utilities/helpers/checkAuth"
 import { AudienceCalendar} from "./components/AudienceCalendar"
 import Link from "next/link";
+import { EstadosLeyenda } from "./components/EstadosLeyend"
 
-
-interface ExpedientesViewProps {
-  initialCasos?: Caso[];
-  initialTotal?: number;
-  initialError?: string | null;
-}
 
 export default function AudienciasView() {
 
@@ -85,12 +80,15 @@ const runCheck = () => {
                    Ver las audiencias programadas en el sistema.
             {userRole && (
               <span className="ml-1 sm:ml-2 text-xs sm:text-sm">
-                • Rol: <span className={`font-medium ${userRole === 'admin' ? 'text-green-600' : 'text-blue-600'}`}>
+                • Rol: 
+                <span className={`font-medium ${userRole === 'admin' ? 'text-green-600' : 'text-blue-600'}`}>
                   {userRole === 'admin' ? 'Admin' : 'Usuario'}
                 </span>
               </span>
             )}
           </p>
+
+          <EstadosLeyenda />
         </div>
         <Link href="/dashboard/informacion-caso?mode=create" className="flex-shrink-0">
           <Button className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg w-full sm:w-auto text-xs sm:text-sm">
