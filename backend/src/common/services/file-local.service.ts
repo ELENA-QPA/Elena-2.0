@@ -54,7 +54,6 @@ export class FileLocalService {
     if (!fs.existsSync(this.uploadPath)) {
       fs.mkdirSync(this.uploadPath, { recursive: true });
     }
-    console.log('📁 Archivos se guardarán en:', this.uploadPath);
   }
 
   validateFiles(files: UploadedFile[]): boolean {
@@ -97,8 +96,6 @@ export class FileLocalService {
   }
 
   async processUploadedFiles(files: UploadedFile[]): Promise<any[]> {
-    console.log('🔥🔥🔥 ENTRANDO A FileLocalService.processUploadedFiles');
-    console.log('🔥 Archivos recibidos:', files?.length);
     if (!files || files.length === 0) {
       return [];
     }
@@ -123,7 +120,6 @@ export class FileLocalService {
       });
 
       const processedFiles = await Promise.all(uploadPromises);
-      console.log('✅ Archivos guardados localmente:', processedFiles.length);
       return processedFiles;
     } catch (error) {
       console.error('Error processing uploaded files:', error);
@@ -157,7 +153,7 @@ export class FileLocalService {
 
   async deleteFile(key: string): Promise<void> {
     try {
-      // key puede ser una URL como "/uploads/filename.pdf" o solo "filename.pdf"
+      // key
       const filename = key.split('/').pop();
       const filepath = join(this.uploadPath, filename);
 

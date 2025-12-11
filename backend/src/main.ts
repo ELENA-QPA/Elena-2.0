@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  console.log('🔑 API_KEY cargada:', process.env.API_KEY);
   app.enableCors();
   app.setGlobalPrefix('api');
 
