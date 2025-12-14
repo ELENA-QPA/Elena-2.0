@@ -12,7 +12,13 @@ import { Toolbar } from "./toolbar";
 
 dayjs.locale("es");
 
-export function AudienceCalendar() {
+interface AudienceCalendarProps {
+  onSelectSlot?: (slot: { start: Date; end: Date }) => void;
+  onSelectEvent?: (eventData: Evento) => void;
+}
+
+
+export function AudienceCalendar({ onSelectSlot, onSelectEvent }: AudienceCalendarProps) {
   const localizer = dayjsLocalizer(dayjs);
 
   const [date, setDate] = useState<Date>(new Date());
@@ -109,6 +115,7 @@ export function AudienceCalendar() {
   return (
     <div style={{ height: 700, width: "100%" }}>
       <Calendar
+        selectable
         localizer={localizer}
         events={sampleEvents}
         components={components}
@@ -130,6 +137,9 @@ export function AudienceCalendar() {
           allDay: "Todo el día",
           noEventsInRange: "No hay eventos en este rango.",
         }}
+
+        onSelectSlot={(slot) => onSelectSlot?.(slot)}
+        onSelectEvent={(event) => onSelectEvent?.(event)}
       />
     </div>
   );
