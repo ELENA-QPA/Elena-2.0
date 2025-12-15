@@ -1,10 +1,9 @@
-import { Estado, EstadoColors } from "@/data/interfaces/audiencias.interface";
-import { getColorByEstado } from "../utilities/utilities";
+import { Estado, LegendColors } from "@/data/interfaces/audiencias.interface";
 
 export function EstadosLeyenda() {
   return (
     <div className="flex gap-2">
-      {Object.entries(EstadoColors).map(([estado, color]) => (
+      {Object.entries(LegendColors).map(([estado, color]) => (
         <LeyendaItem 
           key={estado}
           estado={estado as Estado}

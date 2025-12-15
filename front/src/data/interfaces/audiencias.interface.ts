@@ -5,11 +5,11 @@ export type Estado =
     | "No_celebrada"
     | "Conciliada";
 
-export const EstadoColors: Record<Estado, string> = {
-    Programada: "bg-pink-600",
-    Celebrada: "bg-blue-600",
-    No_celebrada: "bg-gray-900",
-    Conciliada: "bg-green-600",
+export const LegendColors: Record<string, string> = {
+    Rappi: "bg-orange-600",
+    Didi: "bg-blue-600",
+    Uber: "bg-gray-900",
+    Otro: "bg-green-600",
 };
 
 export interface Evento {

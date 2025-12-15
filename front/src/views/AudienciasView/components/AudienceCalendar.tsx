@@ -71,7 +71,7 @@ export function AudienceCalendar({ onSelectSlot, onSelectEvent }: AudienceCalend
   {
     title: "11001-31-05-007-2024-00012-00",
     demandante: "Laura Ríos",
-    demandado: "Bancolombia",
+    demandado: "Uber",
     juzgado: "Juzgado 7 Civil Municipal de Bogotá",
     start: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2, 11, 0),
     end: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2, 12, 0),
@@ -85,7 +85,7 @@ export function AudienceCalendar({ onSelectSlot, onSelectEvent }: AudienceCalend
   {
     title: "11001-31-05-009-2024-00087-00",
     demandante: "Pedro Torres",
-    demandado: "Movistar",
+    demandado: "Didi",
     juzgado: "Juzgado 9 Civil Municipal de Bogotá",
     start: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 3, 16, 0),
     end: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 3, 17, 0),

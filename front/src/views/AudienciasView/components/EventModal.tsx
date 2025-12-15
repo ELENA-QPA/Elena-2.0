@@ -45,8 +45,8 @@ export const eventoSchema = z.object({
   juzgado: z.string().min(1),
   abogado: z.string().min(1),
 
-  start: z.coerce.date(),
-  end: z.coerce.date(),
+  start: z.string(),
+  end: z.string(),
 
   link_teams: z.string().url().optional().or(z.literal("")),
   codigo_interno: z.string().optional(),
@@ -78,13 +78,10 @@ export function EventModal({ open, onClose, onCreate, initialData }: EventModalP
       resumen_hechos: "",
       link_teams: "",
       estado: "Programada",
-      start: new Date(),
-      end: new Date(),
+      start: "",
+      end: "",
     },
   });
-
-  const formatForInput = (date?: Date) =>
-  date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
 
  useEffect(() => {
   if (open) {
@@ -110,7 +107,9 @@ export function EventModal({ open, onClose, onCreate, initialData }: EventModalP
 
   return (
     <Dialog open={open} onOpenChange={closeModal}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent 
+        className="sm:max-w-2xl"
+        onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Crear Evento</DialogTitle>
           <DialogDescription>Completa los campos para crear un nuevo evento.</DialogDescription>

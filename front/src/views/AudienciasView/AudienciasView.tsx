@@ -13,6 +13,7 @@ import { set } from "lodash"
 import { Evento } from "@/data/interfaces/audiencias.interface"
 import { on } from "events"
 import { se } from "date-fns/locale"
+import dayjs from "dayjs"
 
 
 export default function AudienciasView() {
@@ -32,20 +33,30 @@ const runCheck = () => {
     runCheck();
   }, [])
 
+const formatForInput = (date?: Date) =>
+  date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
+
 const handleRetry = () => {
     setAuthStatus('checking');
     runCheck();
   }
 
 const handleSelectEvent = (event: Evento) => {
-  setInitialEventData(event);
+  const string_start = formatForInput(event.start);
+  const string_end = formatForInput(event.end);
+  setInitialEventData({
+    ...event,
+    start: string_start,
+    end: string_end
+  });
   setShowEventModal(true);
 };
 
 const handleSelectSlot = (slot: { start: Date; end: Date }) => {
+
   setInitialEventData({
-    start: slot.start,
-    end: slot.end,
+    start: formatForInput(slot.start),
+    end: formatForInput(slot.end),
   });
   setShowEventModal(true);
 };
