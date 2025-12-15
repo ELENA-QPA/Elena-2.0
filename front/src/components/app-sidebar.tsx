@@ -24,6 +24,7 @@ import {
   Home,
   FileText,
   Users,
+  CalendarDays,
   Settings,
   User,
   BookOpen,
@@ -59,6 +60,12 @@ const mainItems = [
     title: "Equipo de Trabajo",
     href: "/dashboard/equipo",
     icon: Users,
+  },
+  
+  {
+    title: "Audiencias",
+    href: "/dashboard/audiencias",
+    icon: CalendarDays,
   },
 ]
 
