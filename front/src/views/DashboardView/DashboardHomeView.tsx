@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppBar } from "@/components/appbar";
 import { Footer } from "@/components/footer";
-import { FileText, BarChart3, Settings, Users, Scale, Upload } from "lucide-react";
+import { FileText, BarChart3, Settings, Users, CalendarDays } from "lucide-react";
 import { getUserCookiesClient } from "@/utilities/helpers/handleUserCookies/getUserCookieClient";
 import { UserRole } from "@/utilities/enums/user-roles.enum";
 import { useEffect, useState } from "react";
@@ -134,6 +134,27 @@ export default function DashboardHomeView() {
             <Link 
               href="/dashboard/estadisticas" 
               className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+            >
+              Ingresar
+            </Link>
+          </div>
+
+          {/* Tarjeta Audiencias*/}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
+            <div className="flex items-center justify-between w-full mb-6">
+              <div className="flex flex-col">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Audiencias</h2>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Consulta y gestiona las audiencias programadas.
+                </p>
+              </div>
+              <div className="w-16 h-16 rounded-full border-2 border-pink-200 bg-pink-50 flex items-center justify-center flex-shrink-0 ml-4">
+                <CalendarDays className="w-8 h-8 text-pink-600" />
+              </div>
+            </div>
+            <Link 
+              href="/dashboard/audiencias" 
+              className="bg-gray-900  text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
             >
               Ingresar
             </Link>
