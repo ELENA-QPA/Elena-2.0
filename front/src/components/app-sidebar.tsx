@@ -21,6 +21,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
   Home,
   FileText,
   Users,
@@ -31,6 +36,9 @@ import {
   Menu,
   ChevronLeft,
   ChevronRight,
+  Scale,
+  Upload,
+  ChevronDown,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -47,15 +55,21 @@ const mainItems = [
     icon: Home,
   },
   {
-    title: "Expedientes",
-    href: "/dashboard/expedientes", 
-    icon: FileText,
+    title: "Unidad de Litigios",
+    icon: Scale,
+    subItems: [
+      {
+        title: "Gestión de Expedientes",
+        href: "/dashboard/expedientes",
+        icon: FileText,
+      },
+      {
+        title: "Monolegal / Importar",
+        href: "/dashboard/monolegal/importar",
+        icon: Upload,
+      },
+    ],
   },
-  // {
-  //   title: "Información del Caso",
-  //   href: "/dashboard/informacion-caso",
-  //   icon: BookOpen,
-  // },
   {
     title: "Equipo de Trabajo",
     href: "/dashboard/equipo",
@@ -82,6 +96,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { state, toggleSidebar } = useSidebar();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [openMenus, setOpenMenus] = useState<string[]>(["Unidad de Litigios"]);
 
   // Verificar rol del usuario
   useEffect(() => {
@@ -116,6 +131,14 @@ export function AppSidebar() {
     checkUserRole();
   }, []);
 
+  const toggleMenu = (title: string) => {
+    setOpenMenus(prev => 
+      prev.includes(title) 
+        ? prev.filter(t => t !== title)
+        : [...prev, title]
+    );
+  };
+
   return (
     <Sidebar 
       variant="sidebar" 
@@ -146,46 +169,103 @@ export function AppSidebar() {
               if (item.title === "Equipo de Trabajo") {
                 return isAdmin;
               }
-              return true; // Mostrar todos los demás elementos
+              return true;
             })
             .map((item) => {
-            const isActive = pathname === item.href;
-            const menuButton = (
-              <SidebarMenuButton asChild isActive={isActive}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
-                    ${isActive 
-                      ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-500' 
-                      : 'hover:bg-slate-800 text-slate-300 hover:text-white'
-                    }`}
-                >
-                  <item.icon className={`h-5 w-5 transition-colors ${isActive ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`} />
-                  {state !== "collapsed" && (
-                    <span className={`font-medium transition-colors ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
-                      {item.title}
-                    </span>
-                  )}
-                </Link>
-              </SidebarMenuButton>
-            );
+              // Si el item tiene subItems, renderizar como Collapsible
+              if ('subItems' in item && item.subItems) {
+                const isOpen = openMenus.includes(item.title);
+                const hasActiveSubItem = item.subItems.some(sub => pathname === sub.href);
+                
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <Collapsible open={state !== "collapsed" && isOpen} onOpenChange={() => toggleMenu(item.title)}>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group w-full
+                            ${hasActiveSubItem
+                              //</CollapsibleTrigger>? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-500' 
+                              //: 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                            }`}
+                        >
+                          <item.icon className={`h-5 w-5 transition-colors ${hasActiveSubItem ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`} />
+                          {state !== "collapsed" && (
+                            <>
+                              <span className={`font-medium transition-colors flex-1 text-left ${hasActiveSubItem ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                                {item.title}
+                              </span>
+                              <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                            </>
+                          )}
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      {state !== "collapsed" && (
+                        <CollapsibleContent className="ml-4 mt-1 space-y-1">
+                          {item.subItems.map((subItem) => {
+                            const isActive = pathname === subItem.href;
+                            return (
+                              <SidebarMenuButton key={subItem.href} asChild isActive={isActive}>
+                                <Link
+                                  href={subItem.href}
+                                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
+                                    ${isActive 
+                                      ? 'bg-blue-500 text-white shadow-sm' 
+                                      : 'hover:bg-slate-800 text-slate-400 hover:text-white'
+                                    }`}
+                                >
+                                  <subItem.icon className={`h-4 w-4 transition-colors ${isActive ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`} />
+                                  <span className={`text-sm font-medium transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
+                                    {subItem.title}
+                                  </span>
+                                </Link>
+                              </SidebarMenuButton>
+                            );
+                          })}
+                        </CollapsibleContent>
+                      )}
+                    </Collapsible>
+                  </SidebarMenuItem>
+                );
+              }
 
-            return (
-              <SidebarMenuItem key={item.href}>
-                {state === "collapsed" ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {menuButton}
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="ml-2">
-                      {item.title}
-                    </TooltipContent>
-                  </Tooltip>
-                ) : (
-                  menuButton
-                )}
-              </SidebarMenuItem>
-            );
+              // Renderizar items normales sin subItems
+              const isActive = pathname === item.href;
+              const menuButton = (
+                <SidebarMenuButton asChild isActive={isActive}>
+                  <Link
+                    href={item.href!}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
+                      ${isActive 
+                        ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-500' 
+                        : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                      }`}
+                  >
+                    <item.icon className={`h-5 w-5 transition-colors ${isActive ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`} />
+                    {state !== "collapsed" && (
+                      <span className={`font-medium transition-colors ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                        {item.title}
+                      </span>
+                    )}
+                  </Link>
+                </SidebarMenuButton>
+              );
+
+              return (
+                <SidebarMenuItem key={item.href}>
+                  {state === "collapsed" ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        {menuButton}
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="ml-2">
+                        {item.title}
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    menuButton
+                  )}
+                </SidebarMenuItem>
+              );
           })}
         </SidebarMenu>
         

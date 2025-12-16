@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppBar } from "@/components/appbar";
 import { Footer } from "@/components/footer";
-import { FileText, BarChart3, Settings, Users, CalendarDays } from "lucide-react";
+import { FileText, BarChart3, Settings, Users, CalendarDays, Scale, Upload } from "lucide-react";
 import { getUserCookiesClient } from "@/utilities/helpers/handleUserCookies/getUserCookieClient";
 import { UserRole } from "@/utilities/enums/user-roles.enum";
 import { useEffect, useState } from "react";
@@ -14,8 +14,7 @@ export default function DashboardHomeView() {
 
   useEffect(() => {
     // Obtener el rol del usuario desde las cookies
-    const user = getUserCookiesClient();
-    console.log('[DASHBOARD] Full user object:', user);
+    const user = getUserCookiesClient(); 
     
     // El user en localStorage tiene "rol" (array) no "role" (string)
     let userRoleFromStorage = null;
@@ -33,9 +32,8 @@ export default function DashboardHomeView() {
         hasRole: !!user.role,
         roleType: typeof user.role,
         roleValue: user.role
-      });
+      });      
       
-      // ✅ CORREGIDO: Verificar "roles" (plural) del backend primero
       if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
         userRoleFromStorage = user.roles[0]; // Tomar el primer rol del array
         console.log('[DASHBOARD] User roles from array:', userRoleFromStorage);
@@ -85,25 +83,39 @@ export default function DashboardHomeView() {
 
       <main className="flex-1 flex flex-col items-center justify-center py-12 px-4 mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
-          {/* Tarjeta Gestión de Expedientes */}
+          
+          {/* NUEVA TARJETA: Unidad de Litigios */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
             <div className="flex items-center justify-between w-full mb-6">
               <div className="flex flex-col">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestión de Expedientes</h2>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Este módulo te permite registrar, consultar y editar los expedientes judiciales de tus clientes.
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Unidad de Litigios</h2>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Accede a las herramientas de gestión de expedientes e importación de datos.
                 </p>
               </div>
               <div className="w-16 h-16 rounded-full border-2 border-pink-200 bg-pink-50 flex items-center justify-center flex-shrink-0 ml-4">
-                <FileText className="w-8 h-8 text-pink-600" />
+                <Scale className="w-8 h-8 text-pink-600" />
               </div>
             </div>
-            <Link 
-              href="/dashboard/expedientes" 
-              className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-            >
-              Ingresar
-            </Link>
+            
+            {/* Opciones dentro de la card */}
+            <div className="flex flex-col gap-3 w-full">
+              <Link 
+                href="/dashboard/expedientes" 
+                className="flex items-center gap-3 bg-gray-900 text-white px-5 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              >
+                <FileText className="w-5 h-5" />
+                <span>Gestión de Expedientes</span>
+              </Link>
+              
+              <Link 
+                href="/dashboard/monolegal/importar" 
+                className="flex items-center gap-3 bg-pink-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
+              >
+                <Upload className="w-5 h-5" />
+                <span>Monolegal / Importar</span>
+              </Link>
+            </div>
           </div>
 
           {/* Tarjeta Estadísticas y métricas */}

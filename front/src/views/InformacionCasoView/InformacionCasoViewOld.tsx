@@ -295,121 +295,143 @@ export const caseFormSchema = z.object({
 export type CaseFormData = z.infer<typeof caseFormSchema>;
 
 // Datos actualizados para coincidir con el diseño
-const processTypes = [
-  // ADMINISTRATIVO
-  "Acciones de cumplimiento",
-  "Acciones de grupo",
-  "Acciones populares",
-  "Aprobación conciliaciones extrajudiciales",
-  "Comisiones (Despachos comisorios)",
-  "Negación copias, consultas y certificaciones (artículos 21 y 24 de)",
-  "Residuales (diferentes a temas laborales, contractuales o tributari)",
-  "Sección 1a electorales",
-  "Sección 1a nulidad simple (otros asuntos)",
-  "Sección 1a nulidad y restablecimiento del derecho (otros asuntos)",
-  "Sección 2a ejecutivos (laboral)",
-  "Sección 2a lesividad",
-  "Sección 2a nulidad y restablecimiento del derecho (asuntos laborale)",
-  "Sección 3a acción de repetición",
-  "Sección 3a contractuales",
-  "Sección 3a ejecutivos (contractual)",
-  "Sección 3a reparación directa",
-  "Sección 3a restitución de inmueble",
-  "Sección 4a jurisdicción coactiva",
-  "Sección 4a nulidad simple (asuntos tributarios)",
-  "Sección 4a nulidad y restablecimiento del derecho (asuntos tributar)",
+const PROCESS_TYPES_BY_JURISDICTION: Record<string, string[]> = {
+  "Administrativo": [
+    "Acción de nulidad y restablecimiento del derecho",
+    "Acciones de cumplimiento",
+    "Acciones de grupo",
+    "Acciones populares",
+    "Aprobación conciliaciones extrajudiciales",
+    "Comisiones (Despachos comisorios)",
+    "Negación copias, consultas y certificaciones (artículos 21 y 24 de la Ley 57 de 1985)",
+    "Residuales (diferentes a temas laborales, contractuales o tributarios)",
+    "Sección 1a electorales",
+    "Sección 1a nulidad simple (otros asuntos)",
+    "Sección 1a nulidad y restablecimiento del derecho (otros asuntos)",
+    "Sección 2a ejecutivos (laboral)",
+    "Sección 2a lesividad",
+    "Sección 2a nulidad y restablecimiento del derecho (asuntos laborales)",
+    "Sección 3a acción de repetición",
+    "Sección 3a contractuales",
+    "Sección 3a ejecutivos (contractual)",
+    "Sección 3a reparación directa",
+    "Sección 3a restitución de inmueble",
+    "Sección 4a jurisdicción coactiva",
+    "Sección 4a nulidad simple (asuntos tributarios)",
+    "Sección 4a nulidad y restablecimiento del derecho (asuntos tributarios)"
+  ],
 
-  // CIVIL CIRCUITO - MAYOR CUANTÍA
-  "Procesos verbales (mayor cuantía)",
-  "Proceso nulidad, disolución y liquidación sociedad civil y comercia",
-  "Proceso pertenencia, divisorios, deslinde, amojonamiento",
-  "Procesos de insolvencia",
-  "Acciones populares y de grupo",
-  "Procesos ejecutivos",
-  "Pruebas extraprocesales designación árbitros",
-  "Otros procesos (exhortos, recusaciones, etc.)",
+  "Civil circuito - mayor cuantía": [
+    "Procesos verbales (mayor cuantía)",
+    "Proceso nulidad, disolución y liquidación sociedad civil y comercial",
+    "Proceso pertenencia, divisorios, deslinde, amojonamiento",
+    "Procesos de insolvencia",
+    "Acciones populares y de grupo",
+    "Procesos ejecutivos",
+    "Pruebas extraprocesales designación árbitros",
+    "Otros procesos (exhortos, recusaciones, etc.)"
+  ],
 
-  // CIVIL MUNICIPAL - MENOR CUANTÍA
-  "Verbal de menor cuantía",
-  "Verbal sumario menor cuantía",
-  "Monitorio menor cuantía",
-  "Pertenencia divisorios deslinde amojonamiento menor cuantía",
-  "Ejecutivo de menor cuantía",
-  "Sucesión",
-  "Pruebas extraprocesales menor cuantía",
-  "Matrimonio civil",
-  "Proceso de insolvencia menor cuantía",
-  "Medidas cautelares anticipadas menor cuantía",
-  "Despacho comisorio menor cuantía",
+  "Civil municipal - menor cuantía": [
+    "Verbal de menor cuantía",
+    "Verbal sumario",
+    "Monitorio",
+    "Pertenencia - divisorios - deslinde y amojonamiento",
+    "Ejecutivo de menor cuantía",
+    "Sucesión",
+    "Pruebas extraprocesales - otros requerimientos - diligencias varias",
+    "Matrimonio civil",
+    "Proceso de insolvencia",
+    "Medidas cautelares anticipadas",
+    "Despacho comisorio"
+  ],
 
-  // CIVIL MUNICIPAL DE PEQUEÑAS CAUSAS Y COMPETENCIA MÚLTIPLE - MÍNIM
-  "Verbal de mínima cuantía",
-  "Monitorio mínima cuantía",
-  "Sucesión de mínima cuantía",
-  "Celebración matrimonio civil mínima cuantía",
-  "Despacho comisorio mínima cuantía",
-  "Otros procesos de mínima cuantía",
-  "Ejecutivo de mínima cuantía",
-  "Verbal sumario mínima cuantía",
-  "Pertenencia divisorios deslinde amojonamiento mínima cuantía",
-  "Pruebas extraprocesales mínima cuantía",
-  "Proceso de insolvencia mínima cuantía",
-  "Medidas cautelares anticipadas mínima cuantía",
+  "Civil municipal de pequeñas causas y competencia múltiple - mínima cuantía": [
+    "Verbal de mínima cuantía",
+    "Monitorio",
+    "Sucesión de mínima cuantía",
+    "Celebración matrimonio civil - mínima cuantía",
+    "Despacho comisorio",
+    "Otros procesos de mínima cuantía",
+    "Ejecutivo de mínima cuantía",
+    "Verbal sumario",
+    "Pertenencia - divisorios - deslinde y amojonamiento",
+    "Pruebas extraprocesales - otros requerimientos - diligencias varias",
+    "Proceso de insolvencia",
+    "Medidas cautelares anticipadas"
+  ],
 
-  // CONSEJO DE ESTADO
-  "Otros",
+  "Consejo de Estado": [
+    "Otros"
+  ],
 
-  // FAMILIA
-  "Verbales familia",
-  "Verbales sumarios familia",
-  "Sucesión y cualquier otro de naturaleza liquidatoria",
-  "Jurisdicción voluntaria",
-  "Adopciones",
-  "Derechos menores permisos especiales salidas del país",
-  "Ejecutivo de alimentos ejecutivo",
-  "Homologaciones familia",
-  "Restablecimiento de derechos",
-  "Otros procesos y actuaciones familia",
+  "Familia": [
+    "Verbales",
+    "Verbales sumarios",
+    "Sucesión y cualquier otro de naturaleza liquidatoria",
+    "Jurisdicción voluntaria",
+    "Adopciones",
+    "Derechos menores - permisos especiales salidas del país",
+    "Ejecutivo de alimentos - ejecutivo",
+    "Homologaciones",
+    "Restablecimiento de derechos",
+    "Otros procesos y actuaciones (comisarias, ICBF, cancillería, etc.)"
+  ],
 
-  // LABORAL CIRCUITO
-  "Ordinario laboral",
-  "Fuero sindical acción de reintegro",
-  "Cancelación personería jurídica",
-  "Ejecutivos laboral",
-  "Pago por consignación",
-  "Residual otros procesos laboral",
-  "Homologaciones laboral",
-  "Despachos comisorios de laborales",
+  "Laboral circuito": [
+    "Ordinario",
+    "Fuero sindical - acción de reintegro",
+    "Cancelación personería jurídica",
+    "Ejecutivos",
+    "Pago por consignación",
+    "Residual - otros procesos",
+    "Homologaciones",
+    "Despachos comisorios de laborales"
+  ],
 
-  // PEQUEÑAS CAUSAS LABORALES
-  "Ordinario de única instancia",
-  "Ejecutivos pequeñas causas",
-  "Pago por consignación oficina de depósitos judiciales",
-  "Residual otros procesos pequeñas causas",
+  "Pequeñas causas laborales": [
+    "Ordinario de única instancia",
+    "Ejecutivos",
+    "Pago por consignación - oficina de depósitos judiciales",
+    "Residual - otros procesos"
+  ],
 
-  // TRIBUNAL ADMINISTRATIVO - SECCIÓN PRIMERA
-  "Electorales",
-  "Nulidad simple (otros asuntos)",
-  "Nulidad y restablecimiento del derecho (otros asuntos)",
+  "Tribunal administrativo - sección primera": [
+    "Electorales",
+    "Nulidad simple (otros asuntos)",
+    "Nulidad y restablecimiento del derecho (otros asuntos)"
+  ],
 
-  // TRIBUNAL ADMINISTRATIVO - SECCIÓN SEGUNDA
-  "Ejecutivos (laboral)",
-  "Lesividad",
-  "Nulidad y restablecimiento del derecho (asuntos laborales)",
+  "Tribunal administrativo - sección segunda": [
+    "Ejecutivos (laboral)",
+    "Lesividad",
+    "Nulidad y restablecimiento del derecho (asuntos laborales)"
+  ],
 
-  // TRIBUNAL ADMINISTRATIVO - SECCIÓN TERCERA
-  "Acción de repetición",
-  "Ejecutivos (contractual)",
-  "Reparación directa",
-  "Restitución de inmueble",
+  "Tribunal administrativo - sección tercera": [
+    "Acción de repetición",
+    "Ejecutivos (contractual)",
+    "Reparación directa",
+    "Restitución de inmueble"
+  ],
 
-  // TRIBUNAL ADMINISTRATIVO - SECCIÓN CUARTA
-  "Jurisdicción coactiva",
-  "Nulidad simple (asuntos tributarios)",
-  "Nulidad y restablecimiento del derecho (asuntos tributarios)"
+  "Tribunal administrativo - sección cuarta": [
+    "Jurisdicción coactiva",
+    "Nulidad simple (asuntos tributarios)",
+    "Nulidad y restablecimiento del derecho (asuntos tributarios)"
+  ],
 
-  // OTROS
-];
+  "Otros": [
+    "Superintendencia de Industria y Comercio",
+    "Superintendencia Financiera",
+    "Otro"
+  ]
+};
+
+// Obtener tipos de proceso según jurisdicción seleccionada
+const getProcessTypesByJurisdiction = (jurisdiction: string): string[] => {
+  return PROCESS_TYPES_BY_JURISDICTION[jurisdiction] || [];
+};
 
 const personTypes = [
   "NATURAL",
@@ -573,7 +595,7 @@ export default function InformacionCasoFormViewOld() {
   const searchParams = useSearchParams();
   const caseId = searchParams.get("id"); // Para editar caso existente
   const mode = searchParams.get("mode") || "create"; // create, edit, view
-
+  
   // Helper para generar fecha actual en formato ISO (YYYY-MM-DD) en horario local
   const getCurrentDate = () => {
     const d = new Date();
@@ -1037,7 +1059,7 @@ export default function InformacionCasoFormViewOld() {
       total = paymentsTotal + premiumToAdd;
     }
 
-    console.log('🧮 [CALCULATE_TOTAL]:', {
+    console.log('[CALCULATE_TOTAL]:', {
       mode: isViewMode ? 'view' : isEditMode ? 'edit' : 'create',
       paymentsFromForm: isCreateMode ? payments.reduce((sum, payment) => sum + (payment.value || 0), 0) : 'N/A',
       savedPaymentsTotal,
@@ -1167,27 +1189,27 @@ export default function InformacionCasoFormViewOld() {
     const subscription = form.watch((values, { name }) => {
       if (name === 'department') {
         const selectedDepartment = values.department;
-        console.log('🏛️ [DEPARTMENT_CHANGE] Departamento seleccionado:', selectedDepartment);
-        console.log('📊 [DEPARTMENT_CHANGE] Departamentos disponibles:', departments.length);
+        console.log('[DEPARTMENT_CHANGE] Departamento seleccionado:', selectedDepartment);
+        console.log('[DEPARTMENT_CHANGE] Departamentos disponibles:', departments.length);
 
         if (selectedDepartment && departments.length > 0) {
           // Buscar el departamento seleccionado en los datos de divipola
           const selectedDept = departments.find(dept => dept.nombre === selectedDepartment);
-          console.log('🔍 [DEPARTMENT_CHANGE] Departamento encontrado:', selectedDept);
+          console.log('[DEPARTMENT_CHANGE] Departamento encontrado:', selectedDept);
 
           if (selectedDept) {
             // Actualizar ciudades disponibles según el departamento
-            console.log('🏙️ [DEPARTMENT_CHANGE] Ciudades del departamento:', selectedDept.municipios.length);
+            console.log('[DEPARTMENT_CHANGE] Ciudades del departamento:', selectedDept.municipios.length);
             setAvailableCities(selectedDept.municipios);
 
             // Si la ciudad actual no está en las ciudades del nuevo departamento, limpiarla
             const currentCity = form.getValues('city');
             const cityNames = selectedDept.municipios.map((municipio: any) => municipio.nombre);
-            console.log('🏙️ [DEPARTMENT_CHANGE] Ciudad actual:', currentCity);
-            console.log('🏙️ [DEPARTMENT_CHANGE] Ciudad actual normalizada:', normalizeCityName(currentCity));
-            console.log('🏙️ [DEPARTMENT_CHANGE] Ciudades disponibles:', cityNames);
-            console.log('🏙️ [DEPARTMENT_CHANGE] Ciudades normalizadas:', cityNames.map((name: string) => normalizeCityName(name)));
-            console.log('🔍 [DEPARTMENT_CHANGE] ¿Ciudad actual está en lista?', cityNames.some((cityName: string) => normalizeCityName(cityName) === normalizeCityName(currentCity)));
+            console.log('[DEPARTMENT_CHANGE] Ciudad actual:', currentCity);
+            console.log('[DEPARTMENT_CHANGE] Ciudad actual normalizada:', normalizeCityName(currentCity));
+            console.log('[DEPARTMENT_CHANGE] Ciudades disponibles:', cityNames);
+            console.log('[DEPARTMENT_CHANGE] Ciudades normalizadas:', cityNames.map((name: string) => normalizeCityName(name)));
+            console.log('[DEPARTMENT_CHANGE] ¿Ciudad actual está en lista?', cityNames.some((cityName: string) => normalizeCityName(cityName) === normalizeCityName(currentCity)));
 
             // Limpiar ciudad y despacho judicial cuando cambie el departamento
             if (currentCity) {
@@ -1196,21 +1218,21 @@ export default function InformacionCasoFormViewOld() {
               const isCityInList = normalizedCityNames.includes(normalizedCurrentCity);
 
               if (!isCityInList) {
-                console.log('🧹 [DEPARTMENT_CHANGE] Ciudad no pertenece al departamento, limpiando ciudad y despacho');
+                console.log('[DEPARTMENT_CHANGE] Ciudad no pertenece al departamento, limpiando ciudad y despacho');
                 form.setValue('city', '');
                 form.setValue('despachoJudicial', '');
                 setManualDespacho('');
                 toast.info(`Ciudad "${currentCity}" no está disponible en ${selectedDepartment}. Por favor seleccione una ciudad válida.`);
               } else {
-                console.log('✅ [DEPARTMENT_CHANGE] Ciudad pertenece al departamento, manteniendo...');
+                console.log('[DEPARTMENT_CHANGE] Ciudad pertenece al departamento, manteniendo...');
               }
             }
           } else {
-            console.log('❌ [DEPARTMENT_CHANGE] Departamento no encontrado en divipola');
+            console.log('[DEPARTMENT_CHANGE] Departamento no encontrado en divipola');
           }
         } else {
           // Si no hay departamento seleccionado, no mostrar ciudades
-          console.log('⏳ [DEPARTMENT_CHANGE] No hay departamento seleccionado');
+          console.log('[DEPARTMENT_CHANGE] No hay departamento seleccionado');
           setAvailableCities([]);
         }
       }
@@ -1228,17 +1250,17 @@ export default function InformacionCasoFormViewOld() {
         const cachedCities = sessionStorage.getItem('divipola_cities');
         
         if (cachedDepartments && cachedCities) {
-          console.log('📊 [DIVIPOLA] Usando datos en caché');
+          console.log('[DIVIPOLA] Usando datos en caché');
           setDepartments(JSON.parse(cachedDepartments));
           setAllCities(JSON.parse(cachedCities));
           return;
         }
 
-        console.log('📊 [DIVIPOLA] Iniciando carga de datos de divipola...');
+        console.log('[DIVIPOLA] Iniciando carga de datos de divipola...');
         const response = await fetch('/divipola.json');
         const data = await response.json();
-        console.log('📊 [DIVIPOLA] Datos cargados:', data);
-        console.log('📊 [DIVIPOLA] Número de departamentos:', data.departamentos?.length);
+        console.log('[DIVIPOLA] Datos cargados:', data);
+        console.log('[DIVIPOLA] Número de departamentos:', data.departamentos?.length);
 
         setDepartments(data.departamentos);
 
@@ -1249,7 +1271,7 @@ export default function InformacionCasoFormViewOld() {
             departamento: dept.nombre
           }))
         );
-        console.log('📊 [DIVIPOLA] Total de ciudades cargadas:', allCitiesData.length);
+        console.log('[DIVIPOLA] Total de ciudades cargadas:', allCitiesData.length);
         setAllCities(allCitiesData);
         
         // Guardar en caché
@@ -1259,7 +1281,7 @@ export default function InformacionCasoFormViewOld() {
         // Inicialmente no cargar ciudades hasta que se necesiten
         setAvailableCities([]);
       } catch (error) {
-        console.error('❌ [DIVIPOLA] Error loading divipola data:', error);
+        console.error('[DIVIPOLA] Error loading divipola data:', error);
       }
     };
 
@@ -1269,14 +1291,14 @@ export default function InformacionCasoFormViewOld() {
         const cachedDespachos = sessionStorage.getItem('despacho_judicial_data');
         
         if (cachedDespachos) {
-          console.log('📋 [DESPACHO_JSON] Usando datos en caché');
+          console.log('[DESPACHO_JSON] Usando datos en caché');
           setDespachoJudicialData(JSON.parse(cachedDespachos));
           return;
         }
 
         const response = await fetch('/despacho_judicial.json');
         const data = await response.json();
-        console.log('📋 [DESPACHO_JSON] Datos cargados:', data);
+        console.log('[DESPACHO_JSON] Datos cargados:', data);
         setDespachoJudicialData(data);
         
         // Guardar en caché
@@ -1293,8 +1315,8 @@ export default function InformacionCasoFormViewOld() {
   // Efecto para procesar caso cargado cuando los datos de divipola estén disponibles
   useEffect(() => {
     if (caso && departments.length > 0 && (mode === "view" || mode === "edit")) {
-      console.log('🔄 [DIVIPOLA_LOAD] Procesando caso con datos de divipola disponibles');
-      console.log('🔍 [DIVIPOLA_LOAD] Datos del caso:', {
+      console.log('[DIVIPOLA_LOAD] Procesando caso con datos de divipola disponibles');
+      console.log('[DIVIPOLA_LOAD] Datos del caso:', {
         department: caso.department,
         city: caso.city,
         mode: mode
@@ -1306,7 +1328,7 @@ export default function InformacionCasoFormViewOld() {
         // Buscar el departamento del caso en los datos de divipola
         const selectedDept = departments.find(dept => dept.nombre === caseDepartment);
         if (selectedDept) {
-          console.log('✅ [DIVIPOLA_LOAD] Departamento encontrado, cargando ciudades');
+          console.log('[DIVIPOLA_LOAD] Departamento encontrado, cargando ciudades');
           setAvailableCities(selectedDept.municipios);
           
           // Verificar si la ciudad del caso está en las ciudades del departamento
@@ -1316,15 +1338,15 @@ export default function InformacionCasoFormViewOld() {
             const cityExists = cityNames.some((cityName: string) => normalizeCityName(cityName) === normalizedCaseCity);
             
             if (cityExists) {
-              console.log('✅ [DIVIPOLA_LOAD] Ciudad del caso encontrada en departamento');
+              console.log('[DIVIPOLA_LOAD] Ciudad del caso encontrada en departamento');
               // La ciudad ya está establecida en el formulario por el form.reset()
             } else {
-              console.log('⚠️ [DIVIPOLA_LOAD] Ciudad del caso no encontrada en departamento, limpiando');
+              console.log('[DIVIPOLA_LOAD] Ciudad del caso no encontrada en departamento, limpiando');
               form.setValue('city', '');
             }
           }
         } else {
-          console.log('❌ [DIVIPOLA_LOAD] Departamento del caso no encontrado en divipola');
+          console.log('[DIVIPOLA_LOAD] Departamento del caso no encontrado en divipola');
         }
       }
     }
@@ -1334,45 +1356,45 @@ export default function InformacionCasoFormViewOld() {
   useEffect(() => {
     const selectedCity = form.watch("city");
     const normalizedCity = normalizeCityName(selectedCity);
-    console.log('🏙️ [CITY_CHANGE] Ciudad seleccionada:', selectedCity, '→ Normalizada:', normalizedCity);
-    console.log('📋 [CITY_CHANGE] Datos JSON disponibles:', !!despachoJudicialData);
+    console.log('[CITY_CHANGE] Ciudad seleccionada:', selectedCity, '→ Normalizada:', normalizedCity);
+    console.log('[CITY_CHANGE] Datos JSON disponibles:', !!despachoJudicialData);
 
     if (selectedCity && despachoJudicialData) {
       const despachosForCity = despachoJudicialData["Despacho judicial"]?.[0]?.[normalizedCity];
-      console.log('🏛️ [DESPACHOS] Despachos para ciudad:', despachosForCity);
+      console.log('[DESPACHOS] Despachos para ciudad:', despachosForCity);
       
       if (despachosForCity) {
         // Ciudad encontrada en el JSON - mostrar select con opciones
-        console.log('✅ [DESPACHOS] Ciudad encontrada, mostrando select');
+        console.log('[DESPACHOS] Ciudad encontrada, mostrando select');
         setAvailableDespachos(despachosForCity);
         setShowManualDespacho(false);
         
         // Si hay un despacho ya establecido en el formulario, verificar si está en la lista
         const currentDespacho = form.getValues('despachoJudicial');
         if (currentDespacho && despachosForCity.includes(currentDespacho)) {
-          console.log('✅ [DESPACHOS] Despacho existente encontrado en lista:', currentDespacho);
+          console.log('[DESPACHOS] Despacho existente encontrado en lista:', currentDespacho);
           // El despacho ya está correctamente establecido, no hacer nada
         } else {
-          console.log('⚠️ [DESPACHOS] Limpiando despacho judicial');
+          console.log('[DESPACHOS] Limpiando despacho judicial');
           form.setValue('despachoJudicial', '');
           setManualDespacho('');
         }
       } else {
         // Ciudad no encontrada en el JSON - mostrar input manual
-        console.log('❌ [DESPACHOS] Ciudad no encontrada, mostrando input manual');
+        console.log('[DESPACHOS] Ciudad no encontrada, mostrando input manual');
         setAvailableDespachos([]);
         setShowManualDespacho(true);
         
         // Si hay un despacho ya establecido en el formulario, mantenerlo
         const currentDespacho = form.getValues('despachoJudicial');
         if (currentDespacho) {
-          console.log('✅ [DESPACHOS] Manteniendo despacho existente:', currentDespacho);
+          console.log('[DESPACHOS] Manteniendo despacho existente:', currentDespacho);
           setManualDespacho(currentDespacho);
         }
       }
     } else {
       // No hay ciudad seleccionada o datos no cargados
-      console.log('⏳ [DESPACHOS] Esperando ciudad o datos JSON');
+      console.log('[DESPACHOS] Esperando ciudad o datos JSON');
       setAvailableDespachos([]);
       setShowManualDespacho(false);
     }
@@ -1384,36 +1406,39 @@ export default function InformacionCasoFormViewOld() {
     const currentDespacho = form.getValues("despachoJudicial");
     const normalizedCity = normalizeCityName(currentCity);
 
-    console.log('🔄 [CASE_LOAD] Verificando caso cargado - Ciudad:', currentCity, '→ Normalizada:', normalizedCity, 'Despacho:', currentDespacho);
-    console.log('📋 [CASE_LOAD] Datos JSON disponibles:', !!despachoJudicialData);
-    console.log('📋 [CASE_LOAD] Caso disponible:', !!caso);
+    console.log('[CASE_LOAD] Verificando caso cargado - Ciudad:', currentCity, '→ Normalizada:', normalizedCity, 'Despacho:', currentDespacho);
+    console.log('[CASE_LOAD] Datos JSON disponibles:', !!despachoJudicialData);
+    console.log('[CASE_LOAD] Caso disponible:', !!caso);
+
+    if (!despachoJudicialData) return;  
+
     if (caso) {
-      console.log('📋 [CASE_LOAD] Datos del caso:', { city: caso.city, office: caso.office });
+      console.log('[CASE_LOAD] Datos del caso:', { city: caso.city, office: caso.office });
     }
 
     // Solo procesar durante la carga inicial del caso en modo EDIT, no en modo CREATE
     if (!caso || caseInitialLoadCompleted) {
-      console.log('🚫 [CASE_LOAD] Ignorando carga de caso (modo crear o carga inicial completada)');
+      console.log('[CASE_LOAD] Ignorando carga de caso (modo crear o carga inicial completada)');
       return;
     }
 
     if (currentCity && despachoJudicialData) {
       const despachosForCity = despachoJudicialData["Despacho judicial"]?.[0]?.[normalizedCity];
-      console.log('🏛️ [CASE_LOAD] Despachos para ciudad:', despachosForCity);
+      console.log('[CASE_LOAD] Despachos para ciudad:', despachosForCity);
 
       if (despachosForCity) {
         // Ciudad encontrada en JSON
         if (currentDespacho && despachosForCity.includes(currentDespacho)) {
           // Despacho existe en la lista, usar select
-          console.log('✅ [CASE_LOAD] Despacho encontrado en lista, usando select');
+          console.log('[CASE_LOAD] Despacho encontrado en lista, usando select');
           setAvailableDespachos(despachosForCity);
           setShowManualDespacho(false);
           // Asegurar que el valor esté establecido en el formulario
           form.setValue('despachoJudicial', currentDespacho);
-          console.log('✅ [CASE_LOAD] Despacho establecido en formulario:', currentDespacho);
+          console.log('[CASE_LOAD] Despacho establecido en formulario:', currentDespacho);
         } else {
           // Despacho no está en la lista o no hay despacho, usar input manual
-          console.log('⚠️ [CASE_LOAD] Despacho no está en lista o vacío, usando input manual');
+          console.log('[CASE_LOAD] Despacho no está en lista o vacío, usando input manual');
           setAvailableDespachos([]);
           setShowManualDespacho(true);
           if (currentDespacho) {
@@ -1422,21 +1447,21 @@ export default function InformacionCasoFormViewOld() {
         }
       } else {
         // Ciudad no encontrada en JSON, usar input manual
-        console.log('❌ [CASE_LOAD] Ciudad no encontrada en JSON, usando input manual');
+        console.log('[CASE_LOAD] Ciudad no encontrada en JSON, usando input manual');
         setAvailableDespachos([]);
         setShowManualDespacho(true);
         if (currentDespacho) {
           setManualDespacho(currentDespacho);
           // También establecer el valor en el formulario
           form.setValue('despachoJudicial', currentDespacho);
-          console.log('✅ [CASE_LOAD] Despacho manual establecido en formulario:', currentDespacho);
+          console.log('[CASE_LOAD] Despacho manual establecido en formulario:', currentDespacho);
         }
       }
     } else if (currentCity && !despachoJudicialData) {
-      console.log('⏳ [CASE_LOAD] Esperando datos JSON para procesar ciudad');
+      console.log('[CASE_LOAD] Esperando datos JSON para procesar ciudad');
     } else if (!currentCity && caso && despachoJudicialData) {
       // Si no hay ciudad en el formulario pero sí en el caso, procesar directamente
-      console.log('🔄 [CASE_LOAD] Procesando ciudad directamente del caso');
+      console.log('[CASE_LOAD] Procesando ciudad directamente del caso');
       const caseCity = caso.city;
       const caseDespacho = caso.office;
       const normalizedCaseCity = caseCity ? normalizeCityName(caseCity) : '';
@@ -1447,14 +1472,14 @@ export default function InformacionCasoFormViewOld() {
 
         if (despachosForCity) {
           if (caseDespacho && despachosForCity.includes(caseDespacho)) {
-            console.log('✅ [CASE_LOAD] Despacho del caso encontrado en lista');
+            console.log('[CASE_LOAD] Despacho del caso encontrado en lista');
             setAvailableDespachos(despachosForCity);
             setShowManualDespacho(false);
             // Establecer el valor del despacho en el formulario
             form.setValue('despachoJudicial', caseDespacho);
-            console.log('✅ [CASE_LOAD] Despacho establecido en formulario:', caseDespacho);
-          } else {
-            console.log('⚠️ [CASE_LOAD] Despacho del caso no está en lista, usando input manual');
+            console.log('[CASE_LOAD] Despacho establecido en formulario:', caseDespacho);
+          } else{ 
+            console.log('[CASE_LOAD] Despacho del caso no está en lista, usando input manual');
             setAvailableDespachos([]);
             setShowManualDespacho(true);
             if (caseDespacho) {
@@ -1462,25 +1487,25 @@ export default function InformacionCasoFormViewOld() {
             }
           }
         } else {
-          console.log('❌ [CASE_LOAD] Ciudad del caso no encontrada en JSON, usando input manual');
+          console.log('[CASE_LOAD] Ciudad del caso no encontrada en JSON, usando input manual');
           setAvailableDespachos([]);
           setShowManualDespacho(true);
           if (caseDespacho) {
             setManualDespacho(caseDespacho);
             // También establecer el valor en el formulario
             form.setValue('despachoJudicial', caseDespacho);
-            console.log('✅ [CASE_LOAD] Despacho manual establecido en formulario:', caseDespacho);
+            console.log('[CASE_LOAD] Despacho manual establecido en formulario:', caseDespacho);
           }
         }
       }
     }
 
     // Marcar como completada la carga inicial si tenemos caso y datos
-    if (caso && despachoJudicialData) {
-      setCaseInitialLoadCompleted(true);
-      console.log('✅ [CASE_LOAD] Carga inicial completada');
-    }
-  }, [caso, despachoJudicialData, form.watch("city"), form.watch("despachoJudicial"), caseInitialLoadCompleted]);
+      if (caso && despachoJudicialData) {
+        setCaseInitialLoadCompleted(true);
+        console.log('[CASE_LOAD] Carga inicial completada');
+      }
+    }, [caso, despachoJudicialData, form.watch("city"), form.watch("despachoJudicial"), caseInitialLoadCompleted]);
 
   // Efecto para actualizar el formulario cuando caso cambie
   useEffect(() => {
@@ -1494,17 +1519,22 @@ export default function InformacionCasoFormViewOld() {
           incomingCaseId,
           caso
         );
-        console.log("🔍 [FORM_RESET] Datos del caso para reset:", {
+        console.log("[FORM_RESET] Datos del caso para reset:", {
           department: caso.department,
           city: caso.city,
           office: caso.office,
           location: caso.location
         });
-        console.log("🔍 [FORM_RESET] Tipo de location:", typeof caso.location);
-        console.log("🔍 [FORM_RESET] Location value:", caso.location);
+        console.log("[FORM_RESET] Tipo de location:", typeof caso.location);
+        console.log("[FORM_RESET] Location value:", caso.location);
         setLoadedCaseId(incomingCaseId);
         setCaseInitialLoadCompleted(false); // Reiniciar bandera para nuevo caso
-        // Llenar campos principales del formulario
+        
+        console.log('[BEFORE_RESET] caso.processType:', caso.processType);
+        console.log('[BEFORE_RESET] typeof:', typeof caso.processType);
+        console.log('[BEFORE_RESET] caso.jurisdiction:', caso.jurisdiction);
+        console.log('[BEFORE_RESET] caso completo:', caso);
+                // Llenar campos principales del formulario
         form.reset({
           clientType: caso.clientType || "",
           internalCode: caso.internalCode || "",
@@ -1625,28 +1655,31 @@ export default function InformacionCasoFormViewOld() {
             paymentDate: getCurrentDate(),
           },
         });
+        console.log('[AFTER_RESET] form.processType:', form.getValues('processType'));
+        console.log('[AFTER_RESET] form.jurisdiction:', form.getValues('jurisdiction'));
         console.log("Form reset with case data successfully");
-        console.log("🔍 [FORM_RESET] Valores del formulario después del reset:", {
+        console.log("Form reset with case data successfully");
+        console.log("[FORM_RESET] Valores del formulario después del reset:", {
           city: form.getValues("city"),
           department: form.getValues("department"),
           despachoJudicial: form.getValues("despachoJudicial"),
           location: form.getValues("location")
         });
-        console.log("🔍 [FORM_RESET] Location field type:", typeof form.getValues("location"));
-        console.log("🔍 [FORM_RESET] Location field value:", form.getValues("location"));
+        console.log("[FORM_RESET] Location field type:", typeof form.getValues("location"));
+        console.log("[FORM_RESET] Location field value:", form.getValues("location"));
 
         // Agregar un setTimeout para verificar si algo está limpiando la ciudad después del reset
         setTimeout(() => {
           const cityAfterReset = form.getValues("city");
-          console.log("🔍 [FORM_RESET_CHECK] Ciudad después de 100ms:", cityAfterReset);
+          console.log("[FORM_RESET_CHECK] Ciudad después de 100ms:", cityAfterReset);
           if (cityAfterReset !== (caso.city ? normalizeCityName(caso.city) : "")) {
-            console.log("⚠️ [FORM_RESET_CHECK] ¡La ciudad fue modificada después del reset!");
-            console.log("🔍 [FORM_RESET_CHECK] Ciudad esperada:", caso.city ? normalizeCityName(caso.city) : "");
-            console.log("🔍 [FORM_RESET_CHECK] Ciudad actual:", cityAfterReset);
+            console.log("[FORM_RESET_CHECK] ¡La ciudad fue modificada después del reset!");
+            console.log("[FORM_RESET_CHECK] Ciudad esperada:", caso.city ? normalizeCityName(caso.city) : "");
+            console.log("[FORM_RESET_CHECK] Ciudad actual:", cityAfterReset);
 
             // Restaurar la ciudad si fue limpiada incorrectamente
             if (!cityAfterReset && caso.city) {
-              console.log("🔄 [FORM_RESET_CHECK] Restaurando ciudad:", caso.city);
+              console.log("[FORM_RESET_CHECK] Restaurando ciudad:", caso.city);
               form.setValue("city", normalizeCityName(caso.city));
             }
           }
@@ -1689,7 +1722,7 @@ export default function InformacionCasoFormViewOld() {
       setShowDemandanteForm(false);
       setShowDemandadoForm(false);
       setShowIntervinienteForm(false);
-      // ✅ CORREGIDO: También ocultar formulario de documentos en modo edición
+      // CORREGIDO: También ocultar formulario de documentos en modo edición
       setShowDocumentForm(false);
     }
   }, [isCreateMode, form]);
@@ -1697,7 +1730,7 @@ export default function InformacionCasoFormViewOld() {
   // Recalcular automáticamente el total cuando cambie el caso o sus pagos
   useEffect(() => {
     if (caso && caso.payments) {
-      console.log('🔄 [AUTO_RECALC] Caso o pagos cambiaron, recalculando total...');
+      console.log('[AUTO_RECALC] Caso o pagos cambiaron, recalculando total...');
       setTimeout(() => calculateTotalAmount(), 100);
     }
   }, [caso, caso?.payments, calculateTotalAmount]);
@@ -1708,12 +1741,47 @@ export default function InformacionCasoFormViewOld() {
   const watchedSuccessPremiumPrice = form.watch("successPremiumPrice");
 
   useEffect(() => {
-    console.log('📊 [FORM_WATCH] Valores del formulario cambiaron, recalculando...');
+    console.log('[FORM_WATCH] Valores del formulario cambiaron, recalculando...');
     calculateTotalAmount();
   }, [watchedPayments, watchedSuccessPremium, watchedSuccessPremiumPrice, calculateTotalAmount]);
 
+  // Efecto para limpiar tipo de proceso cuando cambia la jurisdicción
+  useEffect(() => {
+    const subscription = form.watch((values, { name }) => {
+      if (name === 'jurisdiction') {
+        console.log('[JURISDICTION_CHANGE] Jurisdicción cambió, limpiando tipo de proceso');
+        // Limpiar el tipo de proceso cuando cambie la jurisdicción
+        form.setValue('processType', '');
+      }
+    });
+
+  return () => subscription.unsubscribe();
+}, [form]);
+
+  // Efecto específico para forzar processType cuando se carga el caso
+  useEffect(() => {
+    if (caso && caso.processType && (mode === "view" || mode === "edit")) {
+      const currentValue = form.getValues("processType");
+      
+      console.log('[FORCE_PROCESS_TYPE] Verificando:', {
+        casoValue: caso.processType,
+        formValue: currentValue,
+        needsUpdate: currentValue !== caso.processType
+      });
+      
+      // Si el valor del form no coincide con el del caso, forzarlo
+      if (currentValue !== caso.processType) {
+        console.log('[FORCE_PROCESS_TYPE] Forzando valor:', caso.processType);
+        form.setValue("processType", caso.processType, { 
+          shouldValidate: false,
+          shouldDirty: false 
+        });
+      }
+    }
+  }, [caso, caso?.processType, mode, form]);
+
   const onSubmit = async (data: CaseFormData) => {
-    console.log("🔥 [INFORMACION_CASO_VIEW] onSubmit iniciado!");
+    console.log("[INFORMACION_CASO_VIEW] onSubmit iniciado!");
 
     // Limpiar campos temporales antes de enviar - estos no deben ser parte del caso final
     const cleanData = {
@@ -1724,10 +1792,10 @@ export default function InformacionCasoFormViewOld() {
       tempPago: undefined
     };
 
-    console.log("📊 Form data received:", data);
-    console.log("🧹 Clean data (without temp fields):", cleanData);
-    console.log("📋 Form errors:", form.formState.errors);
-    console.log("✅ Form valid:", form.formState.isValid);
+    console.log("Form data received:", data);
+    console.log("Clean data (without temp fields):", cleanData);
+    console.log("Form errors:", form.formState.errors);
+    console.log("Form valid:", form.formState.isValid);
     console.log("uploadedFiles length:", uploadedFiles.length);
     console.log("uploadedFiles:", uploadedFiles);
     console.log("isCreatingCase actual:", isCreatingCase);
@@ -1769,18 +1837,18 @@ export default function InformacionCasoFormViewOld() {
 
     if (isCreatingCase) {
       console.log(
-        "❌ [INFORMACION_CASO_VIEW] Submit bloqueado por isCreatingCase=true"
+        "[INFORMACION_CASO_VIEW] Submit bloqueado por isCreatingCase=true"
       );
       return;
     }
 
     // Si estamos en modo edición, usar updateCaso en lugar de createCaso
     if (isEditMode && caseId) {
-      console.log("📝 [INFORMACION_CASO_VIEW] Modo edición - actualizando caso existente");
+      console.log("[INFORMACION_CASO_VIEW] Modo edición - actualizando caso existente");
 
       // Prevenir doble actualización
       if (isCreatingCase) {
-        console.log("❌ [INFORMACION_CASO_VIEW] Actualización bloqueada por isCreatingCase=true");
+        console.log("[INFORMACION_CASO_VIEW] Actualización bloqueada por isCreatingCase=true");
         return;
       }
 
@@ -1803,7 +1871,7 @@ export default function InformacionCasoFormViewOld() {
 
     // Permitir continuar sin archivos físicos - esto es opcional
     if (uploadedFiles.length === 0) {
-      console.log("ℹ️ Continuando sin archivos físicos (esto es opcional)");
+      console.log("ℹContinuando sin archivos físicos (esto es opcional)");
     }
 
     setIsCreatingCase(true);
@@ -1811,7 +1879,7 @@ export default function InformacionCasoFormViewOld() {
     setCreationSteps([{ step: "Creando caso principal", status: "loading" }]);
 
     try {
-      console.log("🚀 Iniciando construcción del payload...");
+      console.log("Iniciando construcción del payload...");
 
       // Definir responsible para uso en documentos de fallback
       let responsible = "Sistema";
@@ -1978,7 +2046,7 @@ export default function InformacionCasoFormViewOld() {
 
       // Informar al usuario sobre el estado de los documentos
       if (documents.length > 0 && (!uploadedFiles || uploadedFiles.length === 0)) {
-        console.log("ℹ️ Creando caso con metadata de documentos pero sin archivos físicos (esto es válido)");
+        console.log("Creando caso con metadata de documentos pero sin archivos físicos (esto es válido)");
         // No mostrar error, solo información
       }
 
@@ -2026,7 +2094,7 @@ export default function InformacionCasoFormViewOld() {
         );
       }
 
-      console.log("📋 Datos construidos:", {
+      console.log("Datos construidos:", {
         proceduralParts,
         interveners,
         documents,
@@ -2063,19 +2131,19 @@ export default function InformacionCasoFormViewOld() {
       } as const;
 
       console.log(
-        "📁 Archivos físicos a enviar:",
+        "Archivos físicos a enviar:",
         uploadedFiles.map((f) => ({
           name: f.file.name,
           size: f.file.size,
           type: f.file.type,
         }))
       );
-      console.log("📄 Documentos enviados:", documents.map(d => ({ documentType: d.documentType, document: d.document, category: d.category })));
-      console.log("[CASO_CREATION] 📦 Payload createCaso:", body);
+      console.log("Documentos enviados:", documents.map(d => ({ documentType: d.documentType, document: d.document, category: d.category })));
+      console.log("[CASO_CREATION] Payload createCaso:", body);
 
-      console.log("🔥 Llamando a createCaso...");
+      console.log("Llamando a createCaso...");
       const result = await createCaso(body);
-      console.log("[CASO_CREATION] ✅ Resultado createCaso:", result);
+      console.log("[CASO_CREATION] Resultado createCaso:", result);
 
       if ("record" in result) {
         setCreationSteps([
@@ -2257,7 +2325,7 @@ export default function InformacionCasoFormViewOld() {
     try {
       if (caseId) {
         if (editingDocument && editingDocument._id) {
-          // ✅ CORREGIDO: Actualizar documento existente según API PATCH /api/document/{id}
+          // CORREGIDO: Actualizar documento existente según API PATCH /api/document/{id}
           const updatePayload = {
             category: documentForm.categoria,
             documentType: documentForm.documentType || 'Escrito',
@@ -3302,15 +3370,15 @@ export default function InformacionCasoFormViewOld() {
                         const values = form.getValues();
                         const errors = form.formState.errors;
                         const isValid = form.formState.isValid;
-                        console.log("📊 Current values:", values);
-                        console.log("❌ Errors:", errors);
-                        console.log("✅ IsValid:", isValid);
-                        console.log("📋 Dirty fields:", form.formState.dirtyFields);
-                        console.log("🔍 Touched fields:", form.formState.touchedFields);
+                        console.log("Current values:", values);
+                        console.log("Errors:", errors);
+                        console.log("IsValid:", isValid);
+                        console.log("Dirty fields:", form.formState.dirtyFields);
+                        console.log("Touched fields:", form.formState.touchedFields);
                         
                         // Trigger validation manually
                         form.trigger().then((result) => {
-                          console.log("🎯 Manual validation result:", result);
+                          console.log("Manual validation result:", result);
                         });
                       }}
                       title="Debug form state"
@@ -3425,12 +3493,12 @@ export default function InformacionCasoFormViewOld() {
             <Form {...form}>
               <form
                 onSubmit={(e) => {
-                  console.log("🚀 Form submit event triggered!");
+                  console.log("Form submit event triggered!");
                   const formData = form.getValues();
                   const formErrors = form.formState.errors;
-                  console.log("📊 Form data:", formData);
-                  console.log("❌ Form errors:", formErrors);
-                  console.log("✅ Form valid:", form.formState.isValid);
+                  console.log("Form data:", formData);
+                  console.log("Form errors:", formErrors);
+                  console.log("Form valid:", form.formState.isValid);
 
                   // Llamar al handler de envío de react-hook-form
                   return form.handleSubmit(onSubmit)(e);
@@ -3519,7 +3587,7 @@ export default function InformacionCasoFormViewOld() {
                               </FormControl>
                               <SelectContent>
                                 {(() => {
-                                  console.log('🏛️ [RENDER] Departamentos disponibles:', departments.length);
+                                  console.log('[RENDER] Departamentos disponibles:', departments.length);
                                   return departments.map((dept, index) => (
                                     <SelectItem key={`dept-${dept.codigo}-${index}`} value={dept.nombre}>
                                       {dept.nombre}
@@ -3554,14 +3622,14 @@ export default function InformacionCasoFormViewOld() {
                               <SelectContent>
                                 {(() => {
                                   const currentCityValue = field.value;
-                                  console.log('🏙️ [RENDER] Ciudades disponibles:', availableCities.length);
-                                  console.log('🏙️ [RENDER] Valor actual del campo ciudad:', currentCityValue);
+                                  console.log('[RENDER] Ciudades disponibles:', availableCities.length);
+                                  console.log('[RENDER] Valor actual del campo ciudad:', currentCityValue);
                                   // Filtrar ciudades duplicadas y crear keys únicas
                                   const uniqueCities = availableCities.filter((city, index, self) =>
                                     index === self.findIndex(c => c.nombre === city.nombre)
                                   );
-                                  console.log('🏙️ [RENDER] Ciudades únicas:', uniqueCities.length);
-                                  console.log('🏙️ [RENDER] ¿Ciudad actual está en la lista?', uniqueCities.some(c => normalizeCityName(c.nombre) === normalizeCityName(currentCityValue)));
+                                  console.log('[RENDER] Ciudades únicas:', uniqueCities.length);
+                                  console.log('[RENDER] ¿Ciudad actual está en la lista?', uniqueCities.some(c => normalizeCityName(c.nombre) === normalizeCityName(currentCityValue)));
                                   return uniqueCities.map((city, index) => (
                                     <SelectItem key={`city-${city.codigo}-${city.nombre}-${index}`} value={normalizeCityName(city.nombre)}>
                                       {city.nombre}
@@ -3636,8 +3704,8 @@ export default function InformacionCasoFormViewOld() {
                         control={form.control}
                         name="location"
                         render={({ field }) => {
-                          console.log('🔍 [LOCATION_FIELD] Field value:', field.value);
-                          console.log('🔍 [LOCATION_FIELD] Field type:', typeof field.value);
+                          console.log('[LOCATION_FIELD] Field value:', field.value);
+                          console.log('[LOCATION_FIELD] Field type:', typeof field.value);
                           return (
                           <FormItem>
                             <FormLabel className="text-gray-700 font-medium">
@@ -3745,35 +3813,75 @@ export default function InformacionCasoFormViewOld() {
 
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
-                        control={form.control}
-                        name="processType"
-                        render={({ field }) => (
+                      control={form.control}
+                      name="processType"
+                      render={({ field }) => {
+                        const currentJurisdiction = form.watch("jurisdiction");
+                        const currentProcessType = field.value;
+                        
+                        console.log('[PROCESS_TYPE_DEBUG] Estado actual:', {
+                          fieldValue: currentProcessType,
+                          jurisdiction: currentJurisdiction,
+                          casoProcessType: caso?.processType,
+                          isEmpty: !currentProcessType,
+                          isString: typeof currentProcessType === 'string'
+                        });
+                        
+                        let availableProcessTypes = currentJurisdiction 
+                          ? getProcessTypesByJurisdiction(currentJurisdiction)
+                          : [];
+                        
+                        // SIEMPRE incluir el valor actual si existe
+                        if (currentProcessType && !availableProcessTypes.includes(currentProcessType)) {
+                          console.log('[AGREGAR_VALOR] Agregando:', currentProcessType);
+                          availableProcessTypes = [currentProcessType, ...availableProcessTypes];
+                        }
+                        
+                        console.log('[OPCIONES_FINALES]:', availableProcessTypes);
+                        
+                        return (
                           <FormItem>
                             <FormLabel className="text-gray-700 font-medium">
                               Tipo de proceso
                             </FormLabel>
                             <Select
+                              value={field.value || ""} // IMPORTANTE: fallback a string vacío
                               onValueChange={field.onChange}
-                              value={field.value}
-                              disabled={isViewMode}
+                              disabled={isViewMode || !currentJurisdiction}
                             >
                               <FormControl>
                                 <SelectTrigger className="border-gray-300 w-full">
-                                  <SelectValue placeholder="Seleccione un tipo de proceso" />
+                                  <SelectValue 
+                                    placeholder={
+                                      !currentJurisdiction 
+                                        ? "Selecciona primero una jurisdicción" 
+                                        : "Seleccione un tipo de proceso"
+                                    } 
+                                  />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {processTypes.map((type, index) => (
-                                  <SelectItem key={`${type}-${index}`} value={type}>
-                                    {type}
+                                {availableProcessTypes.length === 0 ? (
+                                  <SelectItem value="none" disabled>
+                                    {!currentJurisdiction 
+                                      ? "Selecciona primero una jurisdicción"
+                                      : "No hay tipos de proceso para esta jurisdicción"
+                                    }
                                   </SelectItem>
-                                ))}
+                                ) : (
+                                  availableProcessTypes.map((type, index) => (
+                                    <SelectItem key={`${type}-${index}`} value={type}>
+                                      {type}
+                                    </SelectItem>
+                                  ))
+                                )}
                               </SelectContent>
                             </Select>
                             <FormMessage />
                           </FormItem>
-                        )}
-                      />
+                        );
+                      }}
+                    />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -3817,7 +3925,7 @@ export default function InformacionCasoFormViewOld() {
                                 </FormControl>
                                 <SelectContent>
                                   {(() => {
-                                    console.log('🏛️ [RENDER] Despachos disponibles:', availableDespachos.length);
+                                    console.log('[RENDER] Despachos disponibles:', availableDespachos.length);
                                     return availableDespachos.map((despacho) => (
                                       <SelectItem key={despacho} value={despacho}>
                                         {despacho}
@@ -4649,7 +4757,7 @@ export default function InformacionCasoFormViewOld() {
                                     return;
                                   }
 
-                                  console.log('🔍 Datos del demandado antes de guardar:', demandado);
+                                  console.log('Datos del demandado antes de guardar:', demandado);
 
                                   // En modo creación, manejar creación y edición local
                                   if (isCreationMode) {
@@ -5150,7 +5258,7 @@ export default function InformacionCasoFormViewOld() {
                                     return;
                                   }
 
-                                  console.log('🔍 Datos del interviniente antes de guardar:', interviniente);
+                                  console.log('Datos del interviniente antes de guardar:', interviniente);
 
                                   // En modo creación, manejar creación y edición local
                                   if (isCreationMode) {
@@ -6400,7 +6508,7 @@ export default function InformacionCasoFormViewOld() {
                       className="elena-button-primary"
                       disabled={isCaseLoading || isCreatingCase}
                       onClick={async (e) => {
-                        console.log("🔥 [INFORMACION_CASO_VIEW] Botón submit clickeado!");
+                        console.log("[INFORMACION_CASO_VIEW] Botón submit clickeado!");
                         console.log("Mode:", mode, "CaseId:", caseId);
                         console.log("isCreatingCase:", isCreatingCase);
                         console.log("isCaseLoading:", isCaseLoading);
@@ -6410,12 +6518,12 @@ export default function InformacionCasoFormViewOld() {
                         const errors = form.formState.errors;
                         const values = form.getValues();
 
-                        console.log("📋 Form validation result:", isValid);
-                        console.log("❌ Form errors:", errors);
-                        console.log("📊 Form values:", values);
+                        console.log("Form validation result:", isValid);
+                        console.log("Form errors:", errors);
+                        console.log("Form values:", values);
 
                         if (!isValid) {
-                          console.log("❌ Formulario inválido, no se procederá");
+                          console.log("Formulario inválido, no se procederá");
                           // Mostrar errores específicos
                           Object.keys(errors).forEach(key => {
                             const error = errors[key as keyof typeof errors];
@@ -6427,7 +6535,7 @@ export default function InformacionCasoFormViewOld() {
                           return false;
                         }
 
-                        console.log("✅ Formulario válido, permitiendo submit");
+                        console.log("Formulario válido, permitiendo submit");
                       }}
                     >
                       {isCaseLoading || isCreatingCase ? (
@@ -6470,7 +6578,7 @@ export default function InformacionCasoFormViewOld() {
 
         {/* Sidebar - Historial de Actuaciones - Solo visible en desktop */}
         {/* Sidebar reducido 20% (antes w-80 ~320px, ahora w-64 ~256px) para dar más espacio al formulario */}
-        <div className="hidden lg:block w-64 bg-gray-50 p-6 border-l border-gray-200">
+        <div className="hidden lg:block w-[26rem] bg-gray-50 p-6 border-l border-gray-200">
           <div className="space-y-6">
             <div className="flex flex-col space-y-2 items-center justify-between mb-4">
               <h2 className="text-md font-semibold text-pink-600">
@@ -6585,21 +6693,26 @@ export default function InformacionCasoFormViewOld() {
                         {(() => {
                           const currentState = caso?.estado;
                           const allStates = [
-                            { value: "RADICADO", label: "Radicado" },
-                            { value: "INADMITIDO", label: "Inadmitido" },
-                            { value: "SUBSANACION", label: "Subsanación" },
-                            { value: "ADMITE", label: "Admite" },
-                            { value: "NOTIFICACION_PERSONAL", label: "Notificación personal de la demanda" },
-                            { value: "CONTESTACION_DEMANDA", label: "Contestación de demanda" },
-                            { value: "INADMITE_CONTESTACION", label: "Inadmite contestación de la demanda" },
-                            { value: "ADMISION_CONTESTACION", label: "Admisión de la contestación de la demanda" },
-                            { value: "FIJA_AUDIENCIA", label: "Fija audiencia" },
-                            { value: "CELEBRA_AUDIENCIA", label: "Celebra audiencia" },
-                            { value: "CONCILIADO", label: "Conciliado" },
-                            { value: "ARCHIVADO", label: "Archivado" },
-                            { value: "RETIRO_DEMANDA", label: "Retiro de demanda" },
-                            { value: "FINALIZADO_SENTENCIA", label: "Finalizado por Sentencia" },
-                            { value: "FINALIZADO_RECHAZO", label: "Finalizado por Rechazo" }
+                            { value: "Demanda radicada", label: "Demanda radicada" },
+                            { value: "Inadmite demanda", label: "Inadmite demanda" },
+                            { value: "Subsana demanda", label: "Subsana demanda" },
+                            { value: "Admite demanda", label: "Admite demanda" },
+                            { value: "Notificación personal de la demanda", label: "Notificación personal de la demanda" },
+                            { value: "Contestación de la demanda", label: "Contestación de la demanda" },
+                            { value: "Inadmite contestación de la demanda", label: "Inadmite contestación de la demanda" },
+                            { value: "Admisión de la contestación de la demanda", label: "Admisión de la contestación de la demanda" },
+                            { value: "Subsana contestación de la demanda", label: "Subsana contestación de la demanda" },
+                            { value: "Fija audiencia", label: "Fija audiencia" },
+                            { value: "Celebra audiencia # 1", label: "Celebra audiencia # 1" },
+                            { value: "Celebra audiencia # 2", label: "Celebra audiencia # 2" },
+                            { value: "Celebra audiencia + 2", label: "Celebra audiencia + 2" },
+                            { value: "Conciliación y proceso conciliado", label: "Conciliación y proceso conciliado" },
+                            { value: "Archivado", label: "Archivado" },
+                            { value: "Radica impulso procesal", label: "Radica impulso procesal" },
+                            { value: "Retiro de la demanda", label: "Retiro de la demanda" },
+                            { value: "Finalizado por Sentencia", label: "Finalizado por Sentencia" },
+                            { value: "Finalizado por Rechazo", label: "Finalizado por Rechazo" },
+                            { value: "Otro", label: "Otro" }
                           ];
 
                           // Filtrar estados válidos según el estado actual
@@ -6907,21 +7020,26 @@ export default function InformacionCasoFormViewOld() {
                           {(() => {
                             const currentState = caso?.estado;
                             const allStates = [
-                              { value: "RADICADO", label: "Radicado" },
-                              { value: "INADMITIDO", label: "Inadmitido" },
-                              { value: "SUBSANACION", label: "Subsanación" },
-                              { value: "ADMITE", label: "Admite" },
-                              { value: "NOTIFICACION_PERSONAL", label: "Notificación personal de la demanda" },
-                              { value: "CONTESTACION_DEMANDA", label: "Contestación de demanda" },
-                              { value: "INADMITE_CONTESTACION", label: "Inadmite contestación de la demanda" },
-                              { value: "ADMISION_CONTESTACION", label: "Admisión de la contestación de la demanda" },
-                              { value: "FIJA_AUDIENCIA", label: "Fija audiencia" },
-                              { value: "CELEBRA_AUDIENCIA", label: "Celebra audiencia" },
-                              { value: "CONCILIADO", label: "Conciliado" },
-                              { value: "ARCHIVADO", label: "Archivado" },
-                              { value: "RETIRO_DEMANDA", label: "Retiro de demanda" },
-                              { value: "FINALIZADO_SENTENCIA", label: "Finalizado por Sentencia" },
-                              { value: "FINALIZADO_RECHAZO", label: "Finalizado por Rechazo" }
+                              { value: "Demanda radicada", label: "Demanda radicada" },
+                              { value: "Inadmite demanda", label: "Inadmite demanda" },
+                              { value: "Subsana demanda", label: "Subsana demanda" },
+                              { value: "Admite demanda", label: "Admite demanda" },
+                              { value: "Notificación personal de la demanda", label: "Notificación personal de la demanda" },
+                              { value: "Contestación de la demanda", label: "Contestación de la demanda" },
+                              { value: "Inadmite contestación de la demanda", label: "Inadmite contestación de la demanda" },
+                              { value: "Admisión de la contestación de la demanda", label: "Admisión de la contestación de la demanda" },
+                              { value: "Subsana contestación de la demanda", label: "Subsana contestación de la demanda" },
+                              { value: "Fija audiencia", label: "Fija audiencia" },
+                              { value: "Celebra audiencia # 1", label: "Celebra audiencia # 1" },
+                              { value: "Celebra audiencia # 2", label: "Celebra audiencia # 2" },
+                              { value: "Celebra audiencia + 2", label: "Celebra audiencia + 2" },
+                              { value: "Conciliación y proceso conciliado", label: "Conciliación y proceso conciliado" },
+                              { value: "Archivado", label: "Archivado" },
+                              { value: "Radica impulso procesal", label: "Radica impulso procesal" },
+                              { value: "Retiro de la demanda", label: "Retiro de la demanda" },
+                              { value: "Finalizado por Sentencia", label: "Finalizado por Sentencia" },
+                              { value: "Finalizado por Rechazo", label: "Finalizado por Rechazo" },
+                              { value: "Otro", label: "Otro" }
                             ];
 
                             // Filtrar estados válidos según el estado actual

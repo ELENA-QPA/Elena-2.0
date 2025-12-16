@@ -17,11 +17,162 @@ import { getCookie } from 'cookies-next';
 import { CookiesKeysEnum } from '@/utilities/enums';
 import Link from 'next/link';
 
+const JURISDICTIONS = [
+  "Administrativo",
+  "Civil circuito - mayor cuantía",
+  "Civil municipal - menor cuantía",
+  "Civil municipal de pequeñas causas y competencia múltiple - mínima cuantía",
+  "Consejo de Estado",
+  "Familia",
+  "Laboral circuito",
+  "Pequeñas causas laborales",
+  "Tribunal administrativo - sección primera",
+  "Tribunal administrativo - sección segunda",
+  "Tribunal administrativo - sección tercera",
+  "Tribunal administrativo - sección cuarta",
+  "Otros"
+];
+
+const PROCESS_TYPES_BY_JURISDICTION: Record<string, string[]> = {
+  "Administrativo": [
+    "Acción de nulidad y restablecimiento del derecho",
+    "Acciones de cumplimiento",
+    "Acciones de grupo",
+    "Acciones populares",
+    "Aprobación conciliaciones extrajudiciales",
+    "Comisiones (Despachos comisorios)",
+    "Negación copias, consultas y certificaciones (artículos 21 y 24 de la Ley 57 de 1985)",
+    "Residuales (diferentes a temas laborales, contractuales o tributarios)",
+    "Sección 1a electorales",
+    "Sección 1a nulidad simple (otros asuntos)",
+    "Sección 1a nulidad y restablecimiento del derecho (otros asuntos)",
+    "Sección 2a ejecutivos (laboral)",
+    "Sección 2a lesividad",
+    "Sección 2a nulidad y restablecimiento del derecho (asuntos laborales)",
+    "Sección 3a acción de repetición",
+    "Sección 3a contractuales",
+    "Sección 3a ejecutivos (contractual)",
+    "Sección 3a reparación directa",
+    "Sección 3a restitución de inmueble",
+    "Sección 4a jurisdicción coactiva",
+    "Sección 4a nulidad simple (asuntos tributarios)",
+    "Sección 4a nulidad y restablecimiento del derecho (asuntos tributarios)"
+  ],
+
+  "Civil circuito - mayor cuantía": [
+    "Procesos verbales (mayor cuantía)",
+    "Proceso nulidad, disolución y liquidación sociedad civil y comercial",
+    "Proceso pertenencia, divisorios, deslinde, amojonamiento",
+    "Procesos de insolvencia",
+    "Acciones populares y de grupo",
+    "Procesos ejecutivos",
+    "Pruebas extraprocesales designación árbitros",
+    "Otros procesos (exhortos, recusaciones, etc.)"
+  ],
+
+  "Civil municipal - menor cuantía": [
+    "Verbal de menor cuantía",
+    "Verbal sumario",
+    "Monitorio",
+    "Pertenencia - divisorios - deslinde y amojonamiento",
+    "Ejecutivo de menor cuantía",
+    "Sucesión",
+    "Pruebas extraprocesales - otros requerimientos - diligencias varias",
+    "Matrimonio civil",
+    "Proceso de insolvencia",
+    "Medidas cautelares anticipadas",
+    "Despacho comisorio"
+  ],
+
+  "Civil municipal de pequeñas causas y competencia múltiple - mínima cuantía": [
+    "Verbal de mínima cuantía",
+    "Monitorio",
+    "Sucesión de mínima cuantía",
+    "Celebración matrimonio civil - mínima cuantía",
+    "Despacho comisorio",
+    "Otros procesos de mínima cuantía",
+    "Ejecutivo de mínima cuantía",
+    "Verbal sumario",
+    "Pertenencia - divisorios - deslinde y amojonamiento",
+    "Pruebas extraprocesales - otros requerimientos - diligencias varias",
+    "Proceso de insolvencia",
+    "Medidas cautelares anticipadas"
+  ],
+
+  "Consejo de Estado": ["Otros"],
+
+  "Familia": [
+    "Verbales",
+    "Verbales sumarios",
+    "Sucesión y cualquier otro de naturaleza liquidatoria",
+    "Jurisdicción voluntaria",
+    "Adopciones",
+    "Derechos menores - permisos especiales salidas del país",
+    "Ejecutivo de alimentos - ejecutivo",
+    "Homologaciones",
+    "Restablecimiento de derechos",
+    "Otros procesos y actuaciones (comisarias, ICBF, cancillería, etc.)"
+  ],
+
+  "Laboral circuito": [
+    "Ordinario",
+    "Fuero sindical - acción de reintegro",
+    "Cancelación personería jurídica",
+    "Ejecutivos",
+    "Pago por consignación",
+    "Residual - otros procesos",
+    "Homologaciones",
+    "Despachos comisorios de laborales"
+  ],
+
+  "Pequeñas causas laborales": [
+    "Ordinario de única instancia",
+    "Ejecutivos",
+    "Pago por consignación - oficina de depósitos judiciales",
+    "Residual - otros procesos"
+  ],
+
+  "Tribunal administrativo - sección primera": [
+    "Electorales",
+    "Nulidad simple (otros asuntos)",
+    "Nulidad y restablecimiento del derecho (otros asuntos)"
+  ],
+
+  "Tribunal administrativo - sección segunda": [
+    "Ejecutivos (laboral)",
+    "Lesividad",
+    "Nulidad y restablecimiento del derecho (asuntos laborales)"
+  ],
+
+  "Tribunal administrativo - sección tercera": [
+    "Acción de repetición",
+    "Ejecutivos (contractual)",
+    "Reparación directa",
+    "Restitución de inmueble"
+  ],
+
+  "Tribunal administrativo - sección cuarta": [
+    "Jurisdicción coactiva",
+    "Nulidad simple (asuntos tributarios)",
+    "Nulidad y restablecimiento del derecho (asuntos tributarios)"
+  ],
+   
+  "Otros": [
+    "Superintendencia de Industria y Comercio",
+    "Superintendencia Financiera",
+    "Otro"
+  ]
+};
+
+const NORMALIZED_PROCESS_TYPES = new Map<string, string[]>(
+  Object.entries(PROCESS_TYPES_BY_JURISDICTION).map(([k, v]) => [k.toLowerCase().trim(), v])
+);
+
 export function CreateCasoForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
-  const casoId = searchParams.get('id');
+  const casoId = searchParams.get('id');  
   
   const { 
     caso, 
@@ -30,6 +181,8 @@ export function CreateCasoForm() {
     createCaso,
     getCasoById 
   } = useCaso();
+
+  const [processTypes, setProcessTypes] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     internalCode: '',
@@ -45,9 +198,42 @@ export function CreateCasoForm() {
     processType: '',
     office: '',
     location: '',
-  });
+  }); 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+useEffect(() => {
+  const raw = formData.jurisdiction;
+  if (!raw) {
+    setProcessTypes([]);
+    return;
+  }
+
+  
+  const key = raw.toLowerCase().trim();
+  let tipos = NORMALIZED_PROCESS_TYPES.get(key);
+
+  if (!tipos) {
+    for (const [mapKey, mapTipos] of NORMALIZED_PROCESS_TYPES.entries()) {
+      if (mapKey.includes(key) || key.includes(mapKey)) {
+        tipos = mapTipos;
+        break;
+      }
+    }
+  }
+
+  tipos = tipos || [];
+
+  console.log('[DEBUG] Tipos cargados para jurisdicción:', tipos);
+  setProcessTypes(tipos);
+
+  // limpiar el seleccionado previo
+  setFormData(prev => ({ ...prev, processType: '' }));
+}, [formData.jurisdiction]);
+
+
+
+
 
   // Si estamos en modo edición, cargar el caso
   useEffect(() => {
@@ -63,12 +249,12 @@ export function CreateCasoForm() {
         internalCode: caso.internalCode || '',
         clientType: caso.clientType || '',
         department: caso.department || '',
-  city: caso.city || '',
-  personType: caso.personType || '',
-  documentType: (caso.documents && caso.documents[0] && (caso.documents[0].category || caso.documents[0].documentType)) || '',
-  documentName: (caso.documents && caso.documents[0] && (caso.documents[0].document || '')) || '',
-  numeroRadicado: caso.numeroRadicado || caso.internalCode || '',
-  country: caso.country || 'COLOMBIA',
+        city: caso.city || '',
+        personType: caso.personType || '',
+        documentType: (caso.documents && caso.documents[0] && (caso.documents[0].category || caso.documents[0].documentType)) || '',
+        documentName: (caso.documents && caso.documents[0] && (caso.documents[0].document || '')) || '',
+        numeroRadicado: caso.numeroRadicado || caso.internalCode || '',
+        country: caso.country || 'COLOMBIA',
         jurisdiction: caso.jurisdiction || '',
         processType: caso.processType || '',
         office: caso.office || '',
@@ -86,15 +272,15 @@ export function CreateCasoForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 [CREATE_CASO_FORM] Iniciando submit...');
-    console.log('🚀 [CREATE_CASO_FORM] FormData:', formData);
+    console.log('[CREATE_CASO_FORM] Iniciando submit...');
+    console.log('[CREATE_CASO_FORM] FormData:', formData);
     setIsSubmitting(true);
 
     try {
       // Validar campos obligatorios
     if (!formData.internalCode || !formData.clientType || !formData.department || !formData.city ||
       !formData.personType || !formData.documentType || !formData.documentName || !formData.numeroRadicado || !formData.country || !formData.jurisdiction || !formData.processType || !formData.office || !formData.location) {
-        console.error('❌ [CREATE_CASO_FORM] Faltan campos obligatorios:', {
+        console.error('[CREATE_CASO_FORM] Faltan campos obligatorios:', {
           internalCode: !!formData.internalCode,
           clientType: !!formData.clientType,
           department: !!formData.department,
@@ -119,13 +305,13 @@ export function CreateCasoForm() {
       
       // Verificar token en cookies (usado por el HttpClient)
       const cookieToken = getCookie(CookiesKeysEnum.token);
-      console.log('🍪 [CREATE_CASO_FORM] Token de cookie:', {
+      console.log('[CREATE_CASO_FORM] Token de cookie:', {
         hasToken: !!cookieToken,
         tokenPreview: cookieToken ? `${cookieToken.substring(0, 20)}...` : 'null'
       });
       
       if (!cookieToken) {
-        console.error('❌ [CREATE_CASO_FORM] Token no encontrado en cookies');
+        console.error('[CREATE_CASO_FORM] Token no encontrado en cookies');
         toast.error('Sesión expirada. Por favor, inicia sesión nuevamente.');
         setIsSubmitting(false);
         router.push('/login');
@@ -137,16 +323,16 @@ export function CreateCasoForm() {
         if (userDataString) {
           const userData = JSON.parse(userDataString);
           responsible = userData?.name || userData?.email || 'Sistema';
-          console.log('� [CREATE_CASO_FORM] Usuario autenticado:', {
+          console.log('[CREATE_CASO_FORM] Usuario autenticado:', {
             name: userData?.name,
             email: userData?.email,
             responsible
           });
         } else {
-          console.warn('⚠️ [CREATE_CASO_FORM] No se encontró información de usuario en localStorage, usando datos por defecto');
+          console.warn('[CREATE_CASO_FORM] No se encontró información de usuario en localStorage, usando datos por defecto');
         }
       } catch (err) {
-        console.warn('⚠️ [CREATE_CASO_FORM] Error al obtener el usuario del localStorage:', err);
+        console.warn('[CREATE_CASO_FORM] Error al obtener el usuario del localStorage:', err);
       }
 
   const casoData: CreateCasoBody = {
@@ -194,25 +380,25 @@ export function CreateCasoForm() {
         }),
       };
 
-      console.log('🚀 [CREATE_CASO_FORM] Payload enviado:', casoData);
+      console.log('[CREATE_CASO_FORM] Payload enviado:', casoData);
       // No pasar token personalizado, dejar que HttpClient use las cookies automáticamente
       const response = await createCaso(casoData);
-      console.log('🚀 [CREATE_CASO_FORM] Respuesta recibida:', response);
+      console.log('[CREATE_CASO_FORM] Respuesta recibida:', response);
       
       if ('record' in response) {
         toast.success('Caso creado exitosamente', { position: "top-right" });
-        console.log('✅ [CREATE_CASO_FORM] Caso creado exitosamente, redirigiendo...');
+        console.log('[CREATE_CASO_FORM] Caso creado exitosamente, redirigiendo...');
         router.push(`/dashboard/informacion-caso?mode=view&id=${response.record._id}`);
       } else {
         const errorMsg = Array.isArray(response.message) ? response.message.join(", ") : response.message;
-        console.error('❌ [CREATE_CASO_FORM] Error en respuesta:', errorMsg);
+        console.error('[CREATE_CASO_FORM] Error en respuesta:', errorMsg);
         toast.error(errorMsg, { position: "top-right" });
       }
     } catch (error) {
-      console.error('❌ [CREATE_CASO_FORM] Error inesperado:', error);
+      console.error('[CREATE_CASO_FORM] Error inesperado:', error);
       toast.error('Error inesperado al crear el caso', { position: "top-right" });
     } finally {
-      console.log('🏁 [CREATE_CASO_FORM] Submit finalizado, reseteando estado...');
+      console.log('[CREATE_CASO_FORM] Submit finalizado, reseteando estado...');
       setIsSubmitting(false);
     }
   };
@@ -406,10 +592,15 @@ export function CreateCasoForm() {
                     <SelectValue placeholder="Selecciona la jurisdicción" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="SIUGJ">SIUGJ</SelectItem>
+                    {JURISDICTIONS.map((j) => (
+                      <SelectItem key={j} value={j}>
+                        {j}
+                      </SelectItem>
+                    ))}
+                    {/* <SelectItem value="SIUGJ">SIUGJ</SelectItem>
                     <SelectItem value="BUSQUEDA DE CONSULTA NACIONAL">BUSQUEDA DE CONSULTA NACIONAL</SelectItem>
                     <SelectItem value="SAMAI">SAMAI</SelectItem>
-                    <SelectItem value="SIC">SIC</SelectItem>                      
+                    <SelectItem value="SIC">SIC</SelectItem>                       */}
                     {/* <SelectItem value="LABORAL CIRCUITO">LABORAL CIRCUITO</SelectItem>
                     <SelectItem value="CIVIL CIRCUITO">CIVIL CIRCUITO</SelectItem>
                     <SelectItem value="PENAL CIRCUITO">PENAL CIRCUITO</SelectItem>
@@ -421,130 +612,37 @@ export function CreateCasoForm() {
               </div>
 
               {/* Tipo de Proceso */}
-              <div className="space-y-2 col-span-2">
-                <Label className='w-full' htmlFor="processType">Tipo de Proceso *</Label>
-                <Select value={formData.processType} onValueChange={(value) => handleInputChange('processType', value)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona el tipo de proceso" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {/* ADMINISTRATIVO */}
-                    <SelectItem value="Acción de nulidad y restablecimiento del derecho">Acción de nulidad y restablecimiento del derecho</SelectItem>
-                    <SelectItem value="Acciones de cumplimiento">Acciones de cumplimiento</SelectItem>
-                    <SelectItem value="Acciones de grupo">Acciones de grupo</SelectItem>
-                    <SelectItem value="Acciones populares">Acciones populares</SelectItem>
-                    <SelectItem value="Aprobación conciliaciones extrajudiciales">Aprobación conciliaciones extrajudiciales</SelectItem>
-                    <SelectItem value="Comisiones (Despachos comisorios)">Comisiones (Despachos comisorios)</SelectItem>
-                    <SelectItem value="Negación copias, consultas y certificaciones (artículos 21 y 24 de la Ley 57 de 1985)">Negación copias, consultas y certificaciones (artículos 21 y 24 de la Ley 57 de 1985)</SelectItem>
-                    <SelectItem value="Residuales (diferentes a temas laborales, contractuales o tributarios)">Residuales (diferentes a temas laborales, contractuales o tributarios)</SelectItem>
-                    <SelectItem value="Sección 1a electorales">Sección 1a electorales</SelectItem>
-                    <SelectItem value="Sección 1a nulidad simple (otros asuntos)">Sección 1a nulidad simple (otros asuntos)</SelectItem>
-                    <SelectItem value="Sección 1a nulidad y restablecimiento del derecho (otros asuntos)">Sección 1a nulidad y restablecimiento del derecho (otros asuntos)</SelectItem>
-                    <SelectItem value="Sección 2a ejecutivos (laboral)">Sección 2a ejecutivos (laboral)</SelectItem>
-                    <SelectItem value="Sección 2a lesividad">Sección 2a lesividad</SelectItem>
-                    <SelectItem value="Sección 2a nulidad y restablecimiento del derecho (asuntos laborales)">Sección 2a nulidad y restablecimiento del derecho (asuntos laborales)</SelectItem>
-                    <SelectItem value="Sección 3a acción de repetición">Sección 3a acción de repetición</SelectItem>
-                    <SelectItem value="Sección 3a contractuales">Sección 3a contractuales</SelectItem>
-                    <SelectItem value="Sección 3a ejecutivos (contractual)">Sección 3a ejecutivos (contractual)</SelectItem>
-                    <SelectItem value="Sección 3a reparación directa">Sección 3a reparación directa</SelectItem>
-                    <SelectItem value="Sección 3a restitución de inmueble">Sección 3a restitución de inmueble</SelectItem>
-                    <SelectItem value="Sección 4a jurisdicción coactiva">Sección 4a jurisdicción coactiva</SelectItem>
-                    <SelectItem value="Sección 4a nulidad simple (asuntos tributarios)">Sección 4a nulidad simple (asuntos tributarios)</SelectItem>
-                    <SelectItem value="Sección 4a nulidad y restablecimiento del derecho (asuntos tributarios)">Sección 4a nulidad y restablecimiento del derecho (asuntos tributarios)</SelectItem>
-                    
-                    {/* CIVIL CIRCUITO - MAYOR CUANTÍA */}
-                    <SelectItem value="Procesos verbales (mayor cuantía)">Procesos verbales (mayor cuantía)</SelectItem>
-                    <SelectItem value="Proceso nulidad, disolución y liquidación sociedad civil y comercia">Proceso nulidad, disolución y liquidación sociedad civil y comercia</SelectItem>
-                    <SelectItem value="Proceso pertenencia, divisorios, deslinde, amojonamiento">Proceso pertenencia, divisorios, deslinde, amojonamiento</SelectItem>
-                    <SelectItem value="Procesos de insolvencia">Procesos de insolvencia</SelectItem>
-                    <SelectItem value="Acciones populares y de grupo">Acciones populares y de grupo</SelectItem>
-                    <SelectItem value="Procesos ejecutivos">Procesos ejecutivos</SelectItem>
-                    <SelectItem value="Pruebas extraprocesales designación árbitros">Pruebas extraprocesales designación árbitros</SelectItem>
-                    <SelectItem value="Otros procesos (exhortos, recusaciones, etc.)">Otros procesos (exhortos, recusaciones, etc.)</SelectItem>
-                    
-                    {/* CIVIL MUNICIPAL - MENOR CUANTÍA */}
-                    <SelectItem value="Verbal de menor cuantía">Verbal de menor cuantía</SelectItem>
-                    <SelectItem value="Verbal sumario menor cuantía">Verbal sumario</SelectItem>
-                    <SelectItem value="Monitorio menor cuantía">Monitorio</SelectItem>
-                    <SelectItem value="Pertenencia divisorios deslinde amojonamiento menor cuantía">Pertenencia – divisorios – deslinde y amojonamiento</SelectItem>
-                    <SelectItem value="Ejecutivo de menor cuantía">Ejecutivo de menor cuantía</SelectItem>
-                    <SelectItem value="Sucesión">Sucesión</SelectItem>
-                    <SelectItem value="Pruebas extraprocesales menor cuantía">Pruebas extraprocesales – otros requerimientos – diligencias varias</SelectItem>
-                    <SelectItem value="Matrimonio civil">Matrimonio civil</SelectItem>
-                    <SelectItem value="Proceso de insolvencia menor cuantía">Proceso de insolvencia</SelectItem>
-                    <SelectItem value="Medidas cautelares anticipadas menor cuantía">Medidas cautelares anticipadas</SelectItem>
-                    <SelectItem value="Despacho comisorio menor cuantía">Despacho comisorio</SelectItem>
-                    
-                    {/* CIVIL MUNICIPAL DE PEQUEÑAS CAUSAS Y COMPETENCIA MÚLTIPLE - MÍNIM */}
-                    <SelectItem value="Verbal de mínima cuantía">Verbal de mínima cuantía</SelectItem>
-                    <SelectItem value="Monitorio mínima cuantía">Monitorio</SelectItem>
-                    <SelectItem value="Sucesión de mínima cuantía">Sucesión de mínima cuantía</SelectItem>
-                    <SelectItem value="Celebración matrimonio civil mínima cuantía">Celebración matrimonio civil – mínima cuantía</SelectItem>
-                    <SelectItem value="Despacho comisorio mínima cuantía">Despacho comisorio</SelectItem>
-                    <SelectItem value="Otros procesos de mínima cuantía">Otros procesos de mínima cuantía</SelectItem>
-                    <SelectItem value="Ejecutivo de mínima cuantía">Ejecutivo de mínima cuantía</SelectItem>
-                    <SelectItem value="Verbal sumario mínima cuantía">Verbal sumario</SelectItem>
-                    <SelectItem value="Pertenencia divisorios deslinde amojonamiento mínima cuantía">Pertenencia – divisorios – deslinde y amojonamiento</SelectItem>
-                    <SelectItem value="Pruebas extraprocesales mínima cuantía">Pruebas extraprocesales – otros requerimientos – diligencias varias</SelectItem>
-                    <SelectItem value="Proceso de insolvencia mínima cuantía">Proceso de insolvencia</SelectItem>
-                    <SelectItem value="Medidas cautelares anticipadas mínima cuantía">Medidas cautelares anticipadas</SelectItem>
-                    
-                    {/* CONSEJO DE ESTADO */}
-                    <SelectItem value="Otros">Otros</SelectItem>
-                    
-                    {/* FAMILIA */}
-                    <SelectItem value="Verbales familia">Verbales</SelectItem>
-                    <SelectItem value="Verbales sumarios familia">Verbales sumarios</SelectItem>
-                    <SelectItem value="Sucesión y cualquier otro de naturaleza liquidatoria">Sucesión y cualquier otro de naturaleza liquidatoria</SelectItem>
-                    <SelectItem value="Jurisdicción voluntaria">Jurisdicción voluntaria</SelectItem>
-                    <SelectItem value="Adopciones">Adopciones</SelectItem>
-                    <SelectItem value="Derechos menores permisos especiales salidas del país">Derechos menores / permisos especiales salidas del país</SelectItem>
-                    <SelectItem value="Ejecutivo de alimentos ejecutivo">Ejecutivo de alimentos – ejecutivo</SelectItem>
-                    <SelectItem value="Homologaciones familia">Homologaciones</SelectItem>
-                    <SelectItem value="Restablecimiento de derechos">Restablecimiento de derechos</SelectItem>
-                    <SelectItem value="Otros procesos y actuaciones familia">Otros procesos y actuaciones (comisarías, ICBF, Cancillería, etc.)</SelectItem>
-                    
-                    {/* LABORAL CIRCUITO */}
-                    <SelectItem value="Ordinario laboral">Ordinario</SelectItem>
-                    <SelectItem value="Fuero sindical acción de reintegro">Fuero sindical – acción de reintegro</SelectItem>
-                    <SelectItem value="Cancelación personería jurídica">Cancelación personería jurídica</SelectItem>
-                    <SelectItem value="Ejecutivos laboral">Ejecutivos</SelectItem>
-                    <SelectItem value="Pago por consignación">Pago por consignación</SelectItem>
-                    <SelectItem value="Residual otros procesos laboral">Residual – otros procesos</SelectItem>
-                    <SelectItem value="Homologaciones laboral">Homologaciones</SelectItem>
-                    <SelectItem value="Despachos comisorios de laborales">Despachos comisorios de laborales</SelectItem>
-                    
-                    {/* PEQUEÑAS CAUSAS LABORALES */}
-                    <SelectItem value="Ordinario de única instancia">Ordinario de única instancia</SelectItem>
-                    <SelectItem value="Ejecutivos pequeñas causas">Ejecutivos</SelectItem>
-                    <SelectItem value="Pago por consignación oficina de depósitos judiciales">Pago por consignación – oficina de depósitos judiciales</SelectItem>
-                    <SelectItem value="Residual otros procesos pequeñas causas">Residual – otros procesos</SelectItem>
-                    
-                    {/* TRIBUNAL ADMINISTRATIVO - SECCIÓN PRIMERA */}
-                    <SelectItem value="Electorales">Electorales</SelectItem>
-                    <SelectItem value="Nulidad simple (otros asuntos)">Nulidad simple (otros asuntos)</SelectItem>
-                    <SelectItem value="Nulidad y restablecimiento del derecho (otros asuntos)">Nulidad y restablecimiento del derecho (otros asuntos)</SelectItem>
-                    
-                    {/* TRIBUNAL ADMINISTRATIVO - SECCIÓN SEGUNDA */}
-                    <SelectItem value="Ejecutivos (laboral)">Ejecutivos (laboral)</SelectItem>
-                    <SelectItem value="Lesividad">Lesividad</SelectItem>
-                    <SelectItem value="Nulidad y restablecimiento del derecho (asuntos laborales)">Nulidad y restablecimiento del derecho (asuntos laborales)</SelectItem>
-                    
-                    {/* TRIBUNAL ADMINISTRATIVO - SECCIÓN TERCERA */}
-                    <SelectItem value="Acción de repetición">Acción de repetición</SelectItem>
-                    <SelectItem value="Ejecutivos (contractual)">Ejecutivos (contractual)</SelectItem>
-                    <SelectItem value="Reparación directa">Reparación directa</SelectItem>
-                    <SelectItem value="Restitución de inmueble">Restitución de inmueble</SelectItem>
-                    
-                    {/* TRIBUNAL ADMINISTRATIVO - SECCIÓN CUARTA */}
-                    <SelectItem value="Jurisdicción coactiva">Jurisdicción coactiva</SelectItem>
-                    <SelectItem value="Nulidad simple (asuntos tributarios)">Nulidad simple (asuntos tributarios)</SelectItem>
-                    <SelectItem value="Nulidad y restablecimiento del derecho (asuntos tributarios)">Nulidad y restablecimiento del derecho (asuntos tributarios)</SelectItem>
-                  
-                    {/* OTROS */}
-                  </SelectContent>
-                </Select>
-              </div>
+<div className="space-y-2 col-span-2">
+  <Label className='w-full' htmlFor="processType">Tipo de Proceso *</Label>
+
+  {/* 
+    key = formData.jurisdiction -> fuerza remount del Select cuando cambie jurisdicción
+    value -> si no hay opciones, pasamos "" para forzar que el Select no muestre un valor antiguo
+  */}
+  <Select
+    key={formData.jurisdiction || 'none'}
+    value={processTypes.length ? formData.processType : ''}
+    onValueChange={(value) => handleInputChange('processType', value)}
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="Selecciona el tipo de proceso" />
+    </SelectTrigger>
+    <SelectContent>
+      {processTypes.length === 0 ? (
+        <SelectItem value="" key="empty" disabled>
+          Selecciona primero una jurisdicción
+        </SelectItem>
+      ) : (
+        processTypes.map((tipo) => (
+          <SelectItem key={tipo} value={tipo}>
+            {tipo}
+          </SelectItem>
+        ))
+      )}
+    </SelectContent>
+  </Select>
+</div>
+
 
               {/* Oficina */}
               <div className="space-y-2">
@@ -585,7 +683,7 @@ export function CreateCasoForm() {
                 type="submit" 
                 className="bg-pink-600 hover:bg-pink-700 text-white"
                 disabled={isSubmitting}
-                onClick={() => console.log('🔥 [CREATE_CASO_FORM] Botón submit clickeado!')}
+                onClick={() => console.log('[CREATE_CASO_FORM] Botón submit clickeado!')}
               >
                 {isSubmitting ? (
                   <>

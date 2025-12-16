@@ -1,75 +1,92 @@
-import { Schema } from "@nestjs/mongoose";
-import { Prop, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { Document, ObjectId } from "mongoose";
-import { IsOptional } from "class-validator";
+import { Schema } from '@nestjs/mongoose';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Document, ObjectId } from 'mongoose';
+import { IsOptional } from 'class-validator';
 import { Estado, TipoEstado } from '../dto/create-record.dto';
-
-
-
-
 
 @Schema()
 export class Record extends Document {
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  })
+  user: ObjectId;
 
-    @Prop({
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    })
-    user: ObjectId;
+  @Prop()
+  clientType: string;
 
-    @Prop()
-    clientType: string;
+  @Prop()
+  internalCode: string;
 
-    @Prop()
-    internalCode: string;
+  @Prop()
+  department: string;
 
-    @Prop()
-    department: string;
+  @Prop()
+  personType: string;
 
-    @Prop()
-    personType: string;
+  @Prop()
+  jurisdiction: string;
 
-    @Prop()
-    jurisdiction: string;
+  @Prop()
+  location?: string;
 
-    @Prop()
-    location?: string;
+  @Prop()
+  processType: string;
 
-    @Prop()
-    processType: string;
+  @Prop()
+  office: string;
 
-    @Prop()
-    office: string;
+  @Prop()
+  settled: string;
 
-    @Prop()
-    settled: string;
+  @Prop()
+  city?: string;
 
-    @Prop()
-    city?: string;
+  @Prop({ default: 'Colombia' })
+  country: string;
 
-    @Prop({ default: "Colombia" })
-    country: string;
+  @Prop({ default: Date.now })
+  createdAt: Date;
 
+  @Prop()
+  updatedAt: Date;
 
-    @Prop({ default: Date.now })
-    createdAt: Date;
+  @Prop()
+  deletedAt: Date;
 
-    @Prop()
-    updatedAt: Date;
+  @Prop({ type: String, enum: Estado, required: false })
+  estado: Estado;
 
-    @Prop()
-    deletedAt: Date;
+  @Prop({ type: String, enum: TipoEstado, required: false })
+  type: TipoEstado;
 
-    @Prop({ type: String, enum: Estado, required: false })
-    estado: Estado;
+  @Prop({ unique: true, sparse: true })
+  radicado: string;
 
-    @Prop({ type: String, enum: TipoEstado, required: false })
-    type: TipoEstado;
+  @Prop()
+  despachoJudicial: string;
 
+  @Prop()
+  etiqueta: string;
+
+  @Prop()
+  etapaProcesal: string;
+
+  @Prop()
+  ultimaActuacion: string;
+
+  @Prop()
+  fechaUltimaActuacion: Date;
+
+  @Prop({ default: false })
+  sincronizadoMonolegal: boolean;
+
+  @Prop()
+  fechaSincronizacion: Date;
 }
 
 export const RecordSchema = SchemaFactory.createForClass(Record);
 RecordSchema.methods.toJSON = function () {
-    const { __v, ...record } = this.toObject();
-    return record;
-}
+  const { __v, ...record } = this.toObject();
+  return record;
+};
