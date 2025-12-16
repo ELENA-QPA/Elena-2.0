@@ -16,6 +16,8 @@ import { se } from "date-fns/locale"
 import dayjs from "dayjs"
 
 
+
+
 export default function AudienciasView() {
 
   const [authStatus, setAuthStatus] = useState<'checking' | 'authenticated' | 'unauthenticated'>('checking')

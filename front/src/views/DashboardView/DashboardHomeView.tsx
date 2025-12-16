@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppBar } from "@/components/appbar";
 import { Footer } from "@/components/footer";
-import { FileText, BarChart3, Settings, Users, CalendarDays } from "lucide-react";
+import { FileText, BarChart3, Settings, Users, CalendarDays, Scale, Upload } from "lucide-react";
 import { getUserCookiesClient } from "@/utilities/helpers/handleUserCookies/getUserCookieClient";
 import { UserRole } from "@/utilities/enums/user-roles.enum";
 import { useEffect, useState } from "react";
