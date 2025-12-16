@@ -71,24 +71,39 @@ export interface User {
   phone: string;
 }
 
-// Caso principal
+// Caso principal 
 export interface Caso {
   _id?: string;
-  internalCode: string;
+  internalCode: string;  
   clientType: string;
   department: string;
   city?: string;
   responsible?: string;
-  numeroRadicado?: string;
+  
+  // Campos de radicado 
+  numeroRadicado?: string;  
+  radicado?: string;         
+  
+  // Campos de despacho
+  despachoJudicial?: string; 
+  office?: string;          
+  
   personType: string;
   jurisdiction: string;
   processType: string;
-  office: string;
   settled: string;
   country: string;
   location?: string;
   estado: string;
-  type: string;
+  type: string;  
+
+  etiqueta?: string;         
+  etapaProcesal?: string;
+  ultimaActuacion?: string;
+  fechaUltimaActuacion?: string;
+  sincronizadoMonolegal?: boolean;
+  fechaSincronizacion?: string;
+  
   user?: User;
   createdAt?: string;
   updatedAt?: string;
@@ -290,7 +305,6 @@ export interface ParametersPaginatedResponse {
   limit: number;
 }
 
-// Respuesta de archivo subido
 export interface FileUploadResponse {
   success: boolean;
   message: string;
@@ -304,11 +318,10 @@ export interface FileUploadResponse {
   };
 }
 
-// Respuesta de múltiples archivos
 export interface MultipleFileUploadResponse {
   success: boolean;
   message: string;
-  data: FileUploadResponse['data'][];
+  data: FileUploadResponse["data"][];
   count: number;
 }
 
@@ -406,4 +419,4 @@ export type CasoSuccessResponse =
   | FileInfoResponse;
 
 // Union de todas las respuestas
-export type CasoResponse = CasoSuccessResponse | ErrorResponse; 
+export type CasoResponse = CasoSuccessResponse | ErrorResponse;

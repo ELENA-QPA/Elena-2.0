@@ -1,9 +1,9 @@
-import { 
-  Caso, 
-  Document, 
-  Intervener, 
-  ProceduralPart, 
-  Payment, 
+import {
+  Caso,
+  Document,
+  Intervener,
+  ProceduralPart,
+  Payment,
   PaymentValue,
   Parameter,
   CreateCasoSuccessResponse,
@@ -17,15 +17,19 @@ import {
   ParametersPaginatedResponse,
   FileUploadResponse,
   MultipleFileUploadResponse,
-  FileInfoResponse
-} from '../interfaces/caso.interface';
-import { CreatePerformanceSuccessResponse, DeletePerformanceSuccessResponse, PerformanceData } from '../interfaces/caso.interface';
+  FileInfoResponse,
+} from "../interfaces/caso.interface";
+import {
+  CreatePerformanceSuccessResponse,
+  DeletePerformanceSuccessResponse,
+  PerformanceData,
+} from "../interfaces/caso.interface";
 
 // Mapear documento de API a modelo
 export function mapDocumentApiToModel(api: any): Document {
   return {
     _id: api._id,
-  record: api.record || api.recordId || undefined,
+    record: api.record || api.recordId || undefined,
     category: api.category,
     documentType: api.documentType,
     document: api.document,
@@ -42,24 +46,23 @@ export function mapDocumentApiToModel(api: any): Document {
 // Mapear interviniente de API a modelo
 export function mapIntervenerApiToModel(api: any): Intervener {
   if (!api) {
-    throw new Error('No se proporcionaron datos del interviniente para mapear');
+    throw new Error("No se proporcionaron datos del interviniente para mapear");
   }
-  
+
   return {
-    _id: api._id || '',
-    record: api.record || '',
-    intervenerType: api.intervenerType || '',
-    name: api.name || '',
-    documentType: api.documentType || '',
-    document: api.document || '',
-    email: api.email || '',
-    contact: api.contact || '',
+    _id: api._id || "",
+    record: api.record || "",
+    intervenerType: api.intervenerType || "",
+    name: api.name || "",
+    documentType: api.documentType || "",
+    document: api.document || "",
+    email: api.email || "",
+    contact: api.contact || "",
   };
 }
 
 // Mapear parte procesal de API a modelo
 export function mapProceduralPartApiToModel(api: any): ProceduralPart {
-
   return {
     _id: api._id,
     record: api.record,
@@ -108,7 +111,7 @@ export function mapParameterApiToModel(api: any): Parameter {
   };
 }
 
-// Mapear caso de API a modelo
+// Mapear caso de API a modelo 
 export function mapCasoApiToModel(api: any): Caso {
   if (!api || typeof api !== 'object' || !api._id) {
     // Si la respuesta no es válida, retorna un objeto vacío con la estructura de Caso
@@ -136,8 +139,11 @@ export function mapCasoApiToModel(api: any): Caso {
       payments: [],
     };
   }
+  
   console.log('[ADAPTER][mapCasoApiToModel] API data:', { 
     location: api.location,
+    despachoJudicial: api.despachoJudicial,
+    radicado: api.radicado,
     _id: api._id 
   });
   
@@ -145,9 +151,9 @@ export function mapCasoApiToModel(api: any): Caso {
     _id: api._id,
     clientType: api.clientType,
     department: api.department,
-  personType: api.personType,
-  city: api.city || api.city || undefined,
-  responsible: api.responsible || api.user || undefined,
+    personType: api.personType,
+    city: api.city || undefined,
+    responsible: api.responsible || api.user || undefined,
     jurisdiction: api.jurisdiction,
     processType: api.processType,
     office: api.office,
@@ -155,7 +161,17 @@ export function mapCasoApiToModel(api: any): Caso {
     country: api.country,
     location: api.location || undefined,
     estado: api.estado,
-    type: api.type,
+    type: api.type,   
+    internalCode: api.internalCode || '',
+    numeroRadicado: api.numeroRadicado || api.radicado || api.internalCode || '',
+    despachoJudicial: api.despachoJudicial || api.office || '',   
+    etiqueta: api.etiqueta || api.label || undefined,
+    etapaProcesal: api.etapaProcesal,
+    ultimaActuacion: api.ultimaActuacion,
+    fechaUltimaActuacion: api.fechaUltimaActuacion,
+    sincronizadoMonolegal: api.sincronizadoMonolegal,
+    fechaSincronizacion: api.fechaSincronizacion,
+    
     user: api.user && typeof api.user === 'object' ? {
       _id: api.user._id,
       name: api.user.name,
@@ -163,16 +179,19 @@ export function mapCasoApiToModel(api: any): Caso {
       email: api.user.email,
       phone: api.user.phone,
     } : undefined,
+    
     createdAt: api.createdAt,
     updatedAt: api.updatedAt,
-  internalCode: api.internalCode || '',
-  numeroRadicado: api.numeroRadicado || api.internalCode || '',
+    
     documents: api.documents?.map(mapDocumentApiToModel) || [],
     interveners: api.interveners?.map(mapIntervenerApiToModel) || [],
-    proceduralParts: api.proceduralParts?.map(mapProceduralPartApiToModel) || [],
+    proceduralParts: Array.isArray(api.proceduralParts)
+      ? api.proceduralParts.map(mapProceduralPartApiToModel)
+      : Object.values(api.proceduralParts || {}).flat().map(mapProceduralPartApiToModel),
     payments: api.payments?.map(mapPaymentApiToModel) || [],
-  // Mapear actuaciones si vienen en la respuesta
-  performances: api.performances?.map(mapPerformanceApiToModel) || api.actuaciones?.map(mapPerformanceApiToModel) || [],
+    
+    // Mapear actuaciones si vienen en la respuesta
+    performances: api.performances?.map(mapPerformanceApiToModel) || api.actuaciones?.map(mapPerformanceApiToModel) || [],
   };
 }
 
@@ -185,7 +204,9 @@ export function mapCreateCasoResponse(api: any): CreateCasoSuccessResponse {
 }
 
 // Mapear respuesta de creación de documento
-export function mapCreateDocumentResponse(api: any): CreateDocumentSuccessResponse {
+export function mapCreateDocumentResponse(
+  api: any
+): CreateDocumentSuccessResponse {
   return {
     message: api.message,
     document: mapDocumentApiToModel(api.document),
@@ -210,69 +231,82 @@ export function mapCasosPaginatedResponse(api: any): CasosPaginatedResponse {
 }
 
 // Mapear respuesta de creación de interviniente
-export function mapCreateIntervenerResponse(api: any): CreateIntervenerSuccessResponse {
-  console.log('[ADAPTER][mapCreateIntervenerResponse][Input]:', api);
-  
-  // Validación defensiva: buscar el interviniente en diferentes estructuras posibles
+export function mapCreateIntervenerResponse(
+  api: any
+): CreateIntervenerSuccessResponse {
+
+ 
   let intervenerData = api?.intervener || api?.data || api?.body || api;
-  
-  // Si no encontramos el interviniente, intentar extraerlo de la estructura
+
+ 
   if (!intervenerData || !intervenerData._id) {
-    console.warn('[ADAPTER][mapCreateIntervenerResponse] No se encontró intervener válido, intentando extraer de api:', api);
-    // Buscar cualquier propiedad que tenga _id como posible interviniente
-    if (api && typeof api === 'object') {
+    console.warn(
+      "[ADAPTER][mapCreateIntervenerResponse] No se encontró intervener válido, intentando extraer de api:",
+      api
+    );
+    
+    if (api && typeof api === "object") {
       for (const [key, value] of Object.entries(api)) {
-        if (value && typeof value === 'object' && (value as any)._id) {
-          console.log(`[ADAPTER][mapCreateIntervenerResponse] Encontrado interviniente en api.${key}:`, value);
+        if (value && typeof value === "object" && (value as any)._id) {
+          console.log(
+            `[ADAPTER][mapCreateIntervenerResponse] Encontrado interviniente en api.${key}:`,
+            value
+          );
           intervenerData = value;
           break;
         }
       }
     }
   }
-  
+
   if (!intervenerData || !intervenerData._id) {
-    console.error('[ADAPTER][mapCreateIntervenerResponse] No se pudo mapear interviniente, datos insuficientes:', api);
-    throw new Error('Respuesta del servidor inválida: no se encontró información del interviniente creado');
+    console.error(
+      "[ADAPTER][mapCreateIntervenerResponse] No se pudo mapear interviniente, datos insuficientes:",
+      api
+    );
+    throw new Error(
+      "Respuesta del servidor inválida: no se encontró información del interviniente creado"
+    );
   }
-  
+
   return {
-    message: api.message || 'Interviniente creado exitosamente',
+    message: api.message || "Interviniente creado exitosamente",
     intervener: mapIntervenerApiToModel(intervenerData),
   };
 }
 
 // Mapear respuesta de creación de parte procesal
-export function mapCreateProceduralPartResponse(api: any): CreateProceduralPartSuccessResponse {
-  // Log temporal para depuración
-  console.log('[ADAPTER][mapCreateProceduralPartResponse][api]:', api);
-  // Tolerancia a diferentes estructuras
+export function mapCreateProceduralPartResponse(
+  api: any
+): CreateProceduralPartSuccessResponse {
   let part = api?.proceduralPart || api?.data || api?.body || api;
-  // Si part es un objeto y tiene _id, se asume que es la parte procesal
-  if (part && typeof part === 'object' && part._id) {
+ 
+  if (part && typeof part === "object" && part._id) {
     return {
-      message: api.message || 'Parte procesal creada exitosamente',
+      message: api.message || "Parte procesal creada exitosamente",
       proceduralPart: mapProceduralPartApiToModel(part),
     };
   }
   // Si la estructura no es válida, retorna proceduralPart vacío
   return {
-    message: api.message || 'Parte procesal creada exitosamente',
+    message: api.message || "Parte procesal creada exitosamente",
     proceduralPart: {
-      _id: '',
-      record: '',
-      partType: '',
-      name: '',
-      documentType: '',
-      document: '',
-      email: '',
-      contact: '',
+      _id: "",
+      record: "",
+      partType: "",
+      name: "",
+      documentType: "",
+      document: "",
+      email: "",
+      contact: "",
     },
   };
 }
 
 // Mapear respuesta de creación de pago
-export function mapCreatePaymentResponse(api: any): CreatePaymentSuccessResponse {
+export function mapCreatePaymentResponse(
+  api: any
+): CreatePaymentSuccessResponse {
   return {
     message: api.message,
     payment: mapPaymentApiToModel(api.payment),
@@ -280,7 +314,9 @@ export function mapCreatePaymentResponse(api: any): CreatePaymentSuccessResponse
 }
 
 // Mapear respuesta de creación de parámetro
-export function mapCreateParameterResponse(api: any): CreateParameterSuccessResponse {
+export function mapCreateParameterResponse(
+  api: any
+): CreateParameterSuccessResponse {
   return {
     message: api.message,
     parameter: mapParameterApiToModel(api.parameter),
@@ -288,7 +324,9 @@ export function mapCreateParameterResponse(api: any): CreateParameterSuccessResp
 }
 
 // Mapear respuesta de parámetros paginados
-export function mapParametersPaginatedResponse(api: any): ParametersPaginatedResponse {
+export function mapParametersPaginatedResponse(
+  api: any
+): ParametersPaginatedResponse {
   return {
     parameters: api.parameters?.map(mapParameterApiToModel) || [],
     total: api.total,
@@ -314,18 +352,21 @@ export function mapFileUploadResponse(api: any): FileUploadResponse {
 }
 
 // Mapear respuesta de múltiples archivos
-export function mapMultipleFileUploadResponse(api: any): MultipleFileUploadResponse {
+export function mapMultipleFileUploadResponse(
+  api: any
+): MultipleFileUploadResponse {
   return {
     success: api.success,
     message: api.message,
-    data: api.data?.map((file: any) => ({
-      originalName: file.originalName,
-      filename: file.filename,
-      size: file.size,
-      mimetype: file.mimetype,
-      url: file.url,
-      s3Key: file.s3Key,
-    })) || [],
+    data:
+      api.data?.map((file: any) => ({
+        originalName: file.originalName,
+        filename: file.filename,
+        size: file.size,
+        mimetype: file.mimetype,
+        url: file.url,
+        s3Key: file.s3Key,
+      })) || [],
     count: api.count,
   };
 }
@@ -337,7 +378,7 @@ export function mapFileInfoResponse(api: any): FileInfoResponse {
     maxFileSize: api.maxFileSize,
     maxFiles: api.maxFiles,
   };
-} 
+}
 
 // Mapear performance de API a modelo
 export function mapPerformanceApiToModel(api: any): PerformanceData {
@@ -347,21 +388,25 @@ export function mapPerformanceApiToModel(api: any): PerformanceData {
     record: api.record,
     performanceType: api.performanceType,
     responsible: api.responsible,
-    observation: api.observation || api.observations || '',
+    observation: api.observation || api.observations || "",
     createdAt: api.createdAt,
     updatedAt: api.updatedAt,
     deletedAt: api.deletedAt || null,
   };
 }
 
-export function mapCreatePerformanceResponse(api: any): CreatePerformanceSuccessResponse {
+export function mapCreatePerformanceResponse(
+  api: any
+): CreatePerformanceSuccessResponse {
   return {
     message: api.message,
     performance: mapPerformanceApiToModel(api.performance || api.record || api),
   };
 }
 
-export function mapDeletePerformanceResponse(api: any): DeletePerformanceSuccessResponse {
+export function mapDeletePerformanceResponse(
+  api: any
+): DeletePerformanceSuccessResponse {
   return {
     message: api.message,
   };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface Department {
   codigo: string;
@@ -31,7 +31,8 @@ interface LocationData {
 export function useLocationData(): LocationData {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [allCities, setAllCities] = useState<City[]>([]);
-  const [despachoJudicialData, setDespachoJudicialData] = useState<DespachoData>({});
+  const [despachoJudicialData, setDespachoJudicialData] =
+    useState<DespachoData>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,12 +43,15 @@ export function useLocationData(): LocationData {
         setError(null);
 
         // Verificar caché para divipola
-        const cachedDepartments = sessionStorage.getItem('divipola_departments');
-        const cachedCities = sessionStorage.getItem('divipola_cities');
-        const cachedDespachos = sessionStorage.getItem('despacho_judicial_data');
+        const cachedDepartments = sessionStorage.getItem(
+          "divipola_departments"
+        );
+        const cachedCities = sessionStorage.getItem("divipola_cities");
+        const cachedDespachos = sessionStorage.getItem(
+          "despacho_judicial_data"
+        );
 
         if (cachedDepartments && cachedCities && cachedDespachos) {
-          console.log('📊 [LOCATION_DATA] Usando datos en caché');
           setDepartments(JSON.parse(cachedDepartments));
           setAllCities(JSON.parse(cachedCities));
           setDespachoJudicialData(JSON.parse(cachedDespachos));
@@ -56,18 +60,17 @@ export function useLocationData(): LocationData {
         }
 
         // Cargar datos de divipola
-        console.log('📊 [LOCATION_DATA] Cargando datos de divipola...');
-        const divipolaResponse = await fetch('/divipola.json');
+        const divipolaResponse = await fetch("/divipola.json");
         if (!divipolaResponse.ok) {
-          throw new Error('Error al cargar datos de divipola');
+          throw new Error("Error al cargar datos de divipola");
         }
         const divipolaData = await divipolaResponse.json();
 
         // Cargar datos de despacho judicial
-        console.log('📋 [LOCATION_DATA] Cargando datos de despacho judicial...');
-        const despachoResponse = await fetch('/despacho_judicial.json');
+
+        const despachoResponse = await fetch("/despacho_judicial.json");
         if (!despachoResponse.ok) {
-          throw new Error('Error al cargar datos de despacho judicial');
+          throw new Error("Error al cargar datos de despacho judicial");
         }
         const despachoData = await despachoResponse.json();
 
@@ -76,7 +79,7 @@ export function useLocationData(): LocationData {
         const allCitiesData = departmentsData.flatMap((dept: Department) =>
           dept.municipios.map((municipio) => ({
             ...municipio,
-            departamento: dept.nombre
+            departamento: dept.nombre,
           }))
         );
 
@@ -86,17 +89,20 @@ export function useLocationData(): LocationData {
         setDespachoJudicialData(despachoData);
 
         // Guardar en caché
-        sessionStorage.setItem('divipola_departments', JSON.stringify(departmentsData));
-        sessionStorage.setItem('divipola_cities', JSON.stringify(allCitiesData));
-        sessionStorage.setItem('despacho_judicial_data', JSON.stringify(despachoData));
-
-        console.log('✅ [LOCATION_DATA] Datos cargados exitosamente');
-        console.log('📊 [LOCATION_DATA] Departamentos:', departmentsData.length);
-        console.log('🏙️ [LOCATION_DATA] Ciudades:', allCitiesData.length);
-
+        sessionStorage.setItem(
+          "divipola_departments",
+          JSON.stringify(departmentsData)
+        );
+        sessionStorage.setItem(
+          "divipola_cities",
+          JSON.stringify(allCitiesData)
+        );
+        sessionStorage.setItem(
+          "despacho_judicial_data",
+          JSON.stringify(despachoData)
+        );
       } catch (err) {
-        console.error('❌ [LOCATION_DATA] Error:', err);
-        setError(err instanceof Error ? err.message : 'Error desconocido');
+        setError(err instanceof Error ? err.message : "Error desconocido");
       } finally {
         setLoading(false);
       }
@@ -110,6 +116,6 @@ export function useLocationData(): LocationData {
     allCities,
     despachoJudicialData,
     loading,
-    error
+    error,
   };
 }
