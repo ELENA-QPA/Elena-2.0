@@ -11,12 +11,6 @@ export async function middleware(request: NextRequest) {
     const res = NextResponse.next();
     const pathName = request.nextUrl.pathname;
 
-    console.log('[MIDDLEWARE][Request]:', {
-        pathName,
-        hasToken: !!token,
-        tokenPreview: token ? `${token.substring(0, 20)}...` : 'null'
-    });
-
     // Si navega al login, elimina las cookies automáticamente
     if (pathName === '/login') {
         console.log('[MIDDLEWARE][Login Route]: Limpiando cookies');
@@ -27,11 +21,9 @@ export async function middleware(request: NextRequest) {
 
     // Si navega al registro, verificar que sea administrador
     if (pathName === '/register') {
-        console.log('[MIDDLEWARE][Register Route]: Verificando permisos de administrador');
         
         // Si no hay token, redirigir al login
         if (!token) {
-            console.log('[MIDDLEWARE][Register - No Token]: Redirigiendo a login');
             return NextResponse.redirect(new URL('/login', request.url));
         }
 
@@ -47,52 +39,36 @@ export async function middleware(request: NextRequest) {
             const user = response.data;
             const role: UserRoleType = Array.isArray(user.rol) ? user.rol[0] : user.rol || user.role;
 
-            console.log('[MIDDLEWARE][Register - Role Check]:', { role, isAdmin: role === UserRole.ADMINISTRADOR });
-
             // Solo permitir acceso a administradores
             if (role !== UserRole.ADMINISTRADOR) {
-                console.log('[MIDDLEWARE][Register - Access Denied]: Usuario no es administrador');
                 return NextResponse.redirect(new URL('/no-autorizado', request.url));
             }
 
             // Si es administrador, permitir acceso
             return res;
         } catch (error: any) {
-            console.error('[MIDDLEWARE][Register - Auth Error]:', error.message);
             return NextResponse.redirect(new URL('/login', request.url));
         }
     }
 
     // Si no hay token, redirigir al login
     if (!token) {
-        console.log('[MIDDLEWARE][No Token]: Redirigiendo a login');
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
     try {
-        console.log('[MIDDLEWARE][Validating Token]: Verificando token con API');
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}${apiUrls.profile.getMe}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
             timeout: 10000, // 10 segundos timeout
         });
-        console.log('[MIDDLEWARE][Perfil][Respuesta]:', response.data);
 
         // Adaptar el usuario según la respuesta del login
         // Si el rol viene como array, tomamos el primero
         let user = response.data;
         // ✅ CORREGIDO: El backend envía "roles" (plural), no "rol" (singular)
         let role: UserRoleType = Array.isArray(user.roles) ? user.roles[0] : user.roles || user.rol || user.role;
-        
-        console.log('[MIDDLEWARE][Role Processing]:', {
-            originalRoles: user.roles,
-            originalRol: user.rol,
-            originalRole: user.role,
-            rolesIsArray: Array.isArray(user.roles),
-            extractedRole: role,
-            isAdmin: role === UserRole.ADMINISTRADOR
-        });
         // Si el token viene en el body, lo actualizamos
         if (user.token) {
             token = user.token;
@@ -108,8 +84,6 @@ export async function middleware(request: NextRequest) {
             role: role // Agregar también en formato string para compatibilidad
         };
         
-        console.log('[MIDDLEWARE][Normalized User]:', normalizedUser);
-        
         // Guardar token y usuario en cookies
         const userEncoded = Buffer.from(JSON.stringify(normalizedUser)).toString('base64');
         res.cookies.set('user', userEncoded);
@@ -119,12 +93,6 @@ export async function middleware(request: NextRequest) {
             sameSite: 'lax',
             // NO httpOnly
             // secure: process.env.NODE_ENV === 'production', // solo en prod
-        });
-
-        console.log('[MIDDLEWARE][Auth Success]:', {
-            role,
-            hasUser: !!user,
-            hasToken: !!token
         });
 
         // Redirección inicial desde root
@@ -137,7 +105,6 @@ export async function middleware(request: NextRequest) {
         // Solo los analistas y usuarios básicos tienen restricciones
         if (role === 'Usuario' || role === UserRole.ANALISTA_LEGAL_I || role === UserRole.ANALISTA_LEGAL_II || role === UserRole.ANALISTA_LEGAL_III) {
             if (pathName !== '/' && !pathName.startsWith('/dashboard')) {
-                console.log('[MIDDLEWARE][Access Denied]: Usuario sin permisos para:', pathName);
                 return NextResponse.redirect(new URL('/no-autorizado', request.url));
             }
         }
@@ -168,7 +135,6 @@ export async function middleware(request: NextRequest) {
             console.log('[MIDDLEWARE][Unknown Error]: Error desconocido de validación');
         }
 
-        console.log('[MIDDLEWARE][Auth Failed]: Redirigiendo a login');
         return NextResponse.redirect(new URL('/login', request.url));
     }
 }

@@ -6,7 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import {Calendar, dayjsLocalizer, View } from "react-big-calendar";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
-import { Evento } from "@/data/interfaces/audiencias.interface";
+import { Evento } from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import {EventMonth, Event} from "./Event";
 import { Toolbar } from "./toolbar";
 

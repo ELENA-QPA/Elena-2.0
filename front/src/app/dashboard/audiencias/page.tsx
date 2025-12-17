@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 
 const AudienciasView = dynamic(() => import("@/views/AudienciasView/AudienciasView"));
