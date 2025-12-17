@@ -40,6 +40,8 @@ export const estadoLabels: Record<Estado, string> = {
 export const eventoSchema = z.object({
   title: z.string().min(1),
   demandante: z.string().min(1),
+  contacto_demandante: z.string(),
+  email_demandante: z.string().email(),
   demandado: z.string().min(1),
   juzgado: z.string().min(1),
   abogado: z.string(),
@@ -62,15 +64,19 @@ interface EventModalProps {
   onCreate?: (evento: EventoForm) => void;
   initialData?: Partial<EventoForm>;
   lawyersRecord?: Record<string, string>;
+  editing: boolean;
+  isEditable: boolean;
 }
 
-export function EventModal({ open, onClose, onCreate, initialData, lawyersRecord = {} }: EventModalProps) {
+export function EventModal({ open, onClose, onCreate, initialData, editing, isEditable, lawyersRecord = {} }: EventModalProps) {
   
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
     defaultValues: {
       title: "",
       demandante: "",
+      contacto_demandante: "",
+      email_demandante: "",
       demandado: "",
       juzgado: "",
       abogado: "",
@@ -109,77 +115,88 @@ export function EventModal({ open, onClose, onCreate, initialData, lawyersRecord
         className="sm:max-w-2xl"
         onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Crear Evento</DialogTitle>
-          <DialogDescription>Completa los campos para crear un nuevo evento.</DialogDescription>
+          <DialogTitle>{editing ? "Editar Evento" : "Crear Evento"}</DialogTitle>
+          <DialogDescription>Completa los campos para el evento.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <Label>Radicado</Label>
-              <Input {...form.register("title")} />
+              <Input disabled={true} {...form.register("title")} />
               {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
-            </div>
-
-          <div>
-              <Label>Abogado</Label>
-              <Select
-                value={form.watch("abogado")}
-                onValueChange={(v) => form.setValue("abogado", v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un abogado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(lawyersRecord).length > 0 ? (
-                    Object.entries(lawyersRecord).map(([name, id]) => (
-                      <SelectItem key={id} value={id}>
-                        {name}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="no-lawyers" disabled>
-                      No hay abogados disponibles
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              {errors.abogado && <p className="text-red-500 text-xs">{errors.abogado.message}</p>}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Demandante</Label>
-              <Input {...form.register("demandante")} />
             </div>
 
             <div>
               <Label>Demandado</Label>
-              <Input {...form.register("demandado")} />
+              <Input disabled={isEditable} {...form.register("demandado")} />
+            </div>
+
+            <div>
+                <Label>Abogado</Label>
+                <Select
+                  disabled={isEditable} 
+                  value={form.watch("abogado")}
+                  onValueChange={(v) => form.setValue("abogado", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un abogado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(lawyersRecord).length > 0 ? (
+                      Object.entries(lawyersRecord).map(([name, id]) => (
+                        <SelectItem className="hover:bg-gray-200" key={id} value={id}>
+                          {name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-lawyers" disabled>
+                        No hay abogados disponibles
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+                {errors.abogado && <p className="text-red-500 text-xs">{errors.abogado.message}</p>}
+              </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>Demandante</Label>
+              <Input disabled={isEditable} {...form.register("demandante")} />
+            </div>
+
+            <div>
+              <Label>Telefono Demandante</Label>
+              <Input disabled={isEditable} {...form.register("contacto_demandante")} />
+            </div>
+
+            <div>
+              <Label>Email Demandante</Label>
+              <Input disabled={isEditable} {...form.register("email_demandante")} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Juzgado</Label>
-              <Input {...form.register("juzgado")} />
+              <Input disabled={isEditable} {...form.register("juzgado")} />
             </div>
 
             <div>
               <Label>Código Interno</Label>
-              <Input {...form.register("codigo_interno")} />
+              <Input disabled={true} {...form.register("codigo_interno")} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Inicio</Label>
-              <Input type="datetime-local" {...form.register("start")} />
+              <Input disabled={isEditable} type="datetime-local" {...form.register("start")} />
             </div>
             <div>
               <Label>Fin</Label>
-              <Input type="datetime-local" {...form.register("end")} />
+              <Input disabled={isEditable} type="datetime-local" {...form.register("end")} />
             </div>
           </div>
 
@@ -205,7 +222,7 @@ export function EventModal({ open, onClose, onCreate, initialData, lawyersRecord
                 </SelectTrigger>
                 <SelectContent>
                   {ESTADOS.map((est) => (
-                    <SelectItem key={est} value={est}>
+                    <SelectItem className="hover:bg-gray-200" key={est} value={est}>
                       {estadoLabels[est]}
                     </SelectItem>
                   ))}
@@ -217,7 +234,7 @@ export function EventModal({ open, onClose, onCreate, initialData, lawyersRecord
           <DialogFooter>
             <Button variant="outline" type="button" onClick={closeModal}>Cancelar</Button>
             <Button type="submit" className="bg-pink-600 hover:bg-pink-700" onClick={closeModal}>
-              Crear
+              {editing ? "Actualizar" : "Crear"}
             </Button>
           </DialogFooter>
         </form>

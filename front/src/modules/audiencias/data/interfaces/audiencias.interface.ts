@@ -15,6 +15,8 @@ export const LegendColors: Record<string, string> = {
 export interface Evento {
   title: string;
   demandante: string;
+  contacto_demandante: string;
+  email_demandante: string;
   demandado: string;
   juzgado: string;
   start: Date;

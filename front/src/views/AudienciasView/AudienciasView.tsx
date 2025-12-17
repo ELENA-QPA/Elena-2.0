@@ -16,6 +16,7 @@ import { getCookie } from "cookies-next";
 import { CookiesKeysEnum } from "@/utilities/enums";
 import { useAuth } from "@/utilities/helpers/auth/useAuth"
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
+import { set } from "lodash"
 
 
 
@@ -23,10 +24,11 @@ export default function AudienciasView() {
   
   const [initialEventData, setInitialEventData] = useState<Partial<EventoForm>>()
   const [showEventModal, setShowEventModal] = useState(false)
+  const [editingMode, setEditingMode] = useState(false);
 
   const { user, token, role, isLoading, isAuthenticated } = useAuth();
-  
-   const { lawyersRecord, loadLawyers } = useLawyers()
+  const ableToEdit = role !== 'Administrador';
+  const { lawyersRecord, loadLawyers } = useLawyers()
 
   useEffect(() => {
     loadLawyers()
@@ -53,6 +55,7 @@ export default function AudienciasView() {
       start: string_start,
       end: string_end
     });
+    setEditingMode(true);
     setShowEventModal(true);
   };
 
@@ -62,6 +65,7 @@ export default function AudienciasView() {
       end: formatForInput(slot.end),
     });
     setShowEventModal(true);
+    setEditingMode(false);
   };
 
   if (isLoading) {
@@ -128,7 +132,7 @@ export default function AudienciasView() {
           <Button 
             className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg w-full sm:w-auto text-xs sm:text-sm" 
             onClick={() => {
-              setInitialEventData(undefined);
+              setEditingMode(false);
               setShowEventModal(true);
             }}
           >
@@ -148,6 +152,8 @@ export default function AudienciasView() {
           onClose={handleCloseModal} 
           initialData={initialEventData}
           lawyersRecord={lawyersRecord}
+          isEditable={ableToEdit}
+          editing={editingMode}
         />
       </div>
     </> 
