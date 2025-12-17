@@ -68,6 +68,11 @@ const mainItems = [
         href: "/dashboard/monolegal/importar",
         icon: Upload,
       },
+      {
+        title: "Audiencias",
+        href: "/dashboard/audiencias",
+        icon: CalendarDays,
+      },
     ],
   },
   {
@@ -75,13 +80,13 @@ const mainItems = [
     href: "/dashboard/equipo",
     icon: Users,
   },
-  
+
   {
-    title: "Audiencias",
-    href: "/dashboard/audiencias",
+    title: "Estadísticas y métricas",
+    href: "/dashboard/estadisticas",
     icon: CalendarDays,
   },
-]
+];
 
 // Items de configuración (al fondo)
 const configItems = [

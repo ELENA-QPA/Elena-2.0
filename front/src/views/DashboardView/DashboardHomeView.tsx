@@ -84,13 +84,13 @@ export default function DashboardHomeView() {
       <main className="flex-1 flex flex-col items-center justify-center py-12 px-4 mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
           
-          {/* NUEVA TARJETA: Unidad de Litigios */}
+          {/* Unidad de Litigios */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
             <div className="flex items-center justify-between w-full mb-6">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Unidad de Litigios</h2>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Accede a las herramientas de gestión de expedientes e importación de datos.
+                  Accede a las herramientas de gestión de expedientes, importación de datos y audiencias.
                 </p>
               </div>
               <div className="w-16 h-16 rounded-full border-2 border-pink-200 bg-pink-50 flex items-center justify-center flex-shrink-0 ml-4">
@@ -99,25 +99,33 @@ export default function DashboardHomeView() {
             </div>
             
             {/* Opciones dentro de la card */}
-            <div className="flex flex-col gap-3 w-full">
-              <Link 
-                href="/dashboard/expedientes" 
-                className="flex items-center gap-3 bg-gray-900 text-white px-5 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-              >
-                <FileText className="w-5 h-5" />
-                <span>Gestión de Expedientes</span>
-              </Link>
-              
-              <Link 
-                href="/dashboard/monolegal/importar" 
-                className="flex items-center gap-3 bg-pink-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
-              >
-                <Upload className="w-5 h-5" />
-                <span>Monolegal / Importar</span>
-              </Link>
-            </div>
-          </div>
+            <div className="grid grid-cols-2 gap-2">
+  <Link 
+    href="/dashboard/expedientes" 
+    className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+  >
+    <FileText className="w-4 h-4" />
+    <span>Gestión Expedientes</span>
+  </Link>
+  
+  <Link 
+    href="/dashboard/audiencias" 
+    className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+  >
+    <CalendarDays className="w-4 h-4" />
+    <span>Audiencias</span>
+  </Link>
 
+  <Link 
+    href="/dashboard/monolegal/importar" 
+    className="inline-flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-700 transition-colors"
+  >
+    <Upload className="w-4 h-4" />
+    <span>Monolegal / Importar</span>
+  </Link>
+</div>
+
+          </div>
           {/* Tarjeta Estadísticas y métricas */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
             <div className="flex items-center justify-between w-full mb-6">
@@ -140,7 +148,7 @@ export default function DashboardHomeView() {
           </div>
 
           {/* Tarjeta Audiencias*/}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
+          {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
             <div className="flex items-center justify-between w-full mb-6">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Audiencias</h2>
@@ -158,7 +166,7 @@ export default function DashboardHomeView() {
             >
               Ingresar
             </Link>
-          </div>
+          </div> */}
 
           {/* Tarjeta Configuración */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
