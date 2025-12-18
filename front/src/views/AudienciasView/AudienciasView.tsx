@@ -10,13 +10,8 @@ import { EstadosLeyenda } from "./components/EstadosLeyend"
 import { EventModal, EventoForm } from "./components/EventModal"
 import { Evento } from "@/modules/audiencias/data/interfaces/audiencias.interface"
 import dayjs from "dayjs"
-import { useProfile } from "@/modules/perfil/hook/useProfile"
-
-import { getCookie } from "cookies-next";
-import { CookiesKeysEnum } from "@/utilities/enums";
 import { useAuth } from "@/utilities/helpers/auth/useAuth"
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
-import { set } from "lodash"
 
 
 
@@ -33,8 +28,6 @@ export default function AudienciasView() {
   useEffect(() => {
     loadLawyers()
   }, []) 
-
-  console.log("Lawyers record in AudienciasView:", lawyersRecord);
 
   const formatForInput = (date?: Date) =>
     date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
