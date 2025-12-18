@@ -67,6 +67,10 @@ export default function ExpedientesView({
   const [userRole, setUserRole] = useState<string | null>(null);
   const { casos, loading, error, getAllCasos, deleteCaso } = useCaso();
 
+  // Estados para sincronización con Monolegal
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncResults, setSyncResults] = useState<any>(null);
+
   // Estados para filtros y paginación
   const [showFilters, setShowFilters] = useState(false);
   const [dateFrom, setDateFrom] = useState<string>("");
@@ -522,11 +526,62 @@ export default function ExpedientesView({
     [deleteCaso]
   );
 
-  useEffect(() => {
-    // Ejecutar checkAuth siempre para establecer el rol
-    checkAuth();
+  // Función para sincronizar con Monolegal
+  const handleSyncMonolegal = useCallback(async () => {
+    setIsSyncing(true);
+    setSyncResults(null);
 
-    // Si tenemos datos iniciales del servidor, usarlos (solo una vez)
+    try {
+      const token = getCookie(CookiesKeysEnum.token);
+
+      if (!token) {
+        toast.error("No se encontró token de autenticación");
+        setIsSyncing(false);
+        return;
+      }
+
+      console.log("[SYNC][Monolegal] Iniciando sincronización...");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/monolegal/sync`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({}),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        console.log("[SYNC][Monolegal] Sincronización exitosa:", data);
+        setSyncResults(data);
+
+        toast.success(
+          `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`
+        );
+        
+        setTimeout(() => {
+          loadMoreFromServer();
+        }, 2000);
+      } else {
+        console.error("[SYNC][Monolegal] Error:", data);
+        toast.error(data.message || "Error al sincronizar con Monolegal");
+      }
+    } catch (error: any) {
+      console.error("[SYNC][Monolegal] Error:", error);
+      toast.error("Error al sincronizar con Monolegal: " + error.message);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [loadMoreFromServer]);
+
+  useEffect(() => {    
+    checkAuth();
+    
     if (initialCasos.length > 0 && allLoadedCasos.length === 0) {
       console.log("[EXPEDIENTES][Server Data]: Usando datos del servidor", {
         count: initialCasos.length,
@@ -535,8 +590,7 @@ export default function ExpedientesView({
       });
       setAllLoadedCasos(initialCasos);
       setAuthStatus("authenticated");
-
-      // Determinar si hay más datos para cargar
+      
       if (initialTotal && initialTotal > initialCasos.length) {
         setHasMoreToLoad(true);
       } else {
@@ -544,8 +598,7 @@ export default function ExpedientesView({
       }
       return;
     }
-
-    // Si hay error inicial del servidor, mostrarlo
+    
     if (initialError) {
       console.log(
         "[EXPEDIENTES][Server Error]: Error del servidor",
@@ -555,10 +608,9 @@ export default function ExpedientesView({
       setAuthStatus("authenticated");
       return;
     }
-
-    // Si no hay datos del servidor, cargar primer lote
+    
     console.log("[EXPEDIENTES][Loading Data]: Iniciando carga de expedientes");
-    loadMoreFromServer(); // Cargar primer lote de 20 registros
+    loadMoreFromServer(); 
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect separado para manejar cambios en los datos después de cargas
@@ -692,7 +744,7 @@ export default function ExpedientesView({
           .map((c) => ({ id: c._id, department: c.department })),
       });
     }
-    
+
     // Filtro por jurisdicción
     if (jurisdictionFilter !== "all" && jurisdictionFilter.trim()) {
       console.log("[EXPEDIENTES][Jurisdiction Filter]:", {
@@ -1278,7 +1330,7 @@ export default function ExpedientesView({
             )}
           </p>
         </div>
-        <Link
+        {/* <Link
           href="/dashboard/informacion-caso?mode=create"
           className="flex-shrink-0"
         >
@@ -1287,7 +1339,35 @@ export default function ExpedientesView({
             <span className="hidden xs:inline">Nuevo Expediente</span>
             <span className="xs:hidden">Nuevo</span>
           </Button>
-        </Link>
+        </Link> */}
+        <div className="flex gap-2 flex-shrink-0">
+          {/* Botón Sincronizar Monolegal */}
+          <Button
+            onClick={handleSyncMonolegal}
+            disabled={isSyncing}
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm"
+            title="Sincronizar con Monolegal"
+          >
+            <RefreshCw
+              className={`h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ${
+                isSyncing ? "animate-spin" : ""
+              }`}
+            />
+            <span className="hidden sm:inline">
+              {isSyncing ? "Sincronizando..." : "Sincronizar"}
+            </span>
+            <span className="sm:hidden">Sync</span>
+          </Button>
+
+          {/* Botón Nuevo Expediente */}
+          <Link href="/dashboard/informacion-caso?mode=create">
+            <Button className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm">
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Nuevo Expediente</span>
+              <span className="xs:hidden">Nuevo</span>
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Card>
@@ -2041,4 +2121,57 @@ export default function ExpedientesView({
       </Card>
     </div>
   );
+  {
+    /* Modal de resultados de sincronización */
+  }
+  {
+    syncResults && (
+      <Card className="mt-4">
+        <CardHeader>
+          <CardTitle>Resultados de Sincronización</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl font-bold text-gray-700">
+                {syncResults.summary.total}
+              </div>
+              <div className="text-sm text-gray-500">Total</div>
+            </div>
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">
+                {syncResults.summary.created}
+              </div>
+              <div className="text-sm text-green-600">Creados</div>
+            </div>
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">
+                {syncResults.summary.updated}
+              </div>
+              <div className="text-sm text-blue-600">Actualizados</div>
+            </div>
+            <div className="text-center p-4 bg-yellow-50 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-600">
+                {syncResults.summary.skipped}
+              </div>
+              <div className="text-sm text-yellow-600">Omitidos</div>
+            </div>
+            <div className="text-center p-4 bg-red-50 rounded-lg">
+              <div className="text-2xl font-bold text-red-600">
+                {syncResults.summary.errors}
+              </div>
+              <div className="text-sm text-red-600">Errores</div>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => setSyncResults(null)}
+            className="w-full"
+          >
+            Cerrar
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 }

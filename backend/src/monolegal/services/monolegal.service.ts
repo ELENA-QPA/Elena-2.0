@@ -9,6 +9,7 @@ import {
 } from '../../procedural-part/entities/procedural-part.entity';
 import { Performance } from '../../perfomance/entities/perfomance.entity';
 import { MonolegalRow, ProcessResult } from '../dto/import-monolegal.dto';
+import { MonolegalApiService } from './monolegal-api.service';
 
 @Injectable()
 export class MonolegalService {
@@ -17,6 +18,7 @@ export class MonolegalService {
     @InjectModel(ProceduralPart.name)
     private proceduralPartModel: Model<ProceduralPart>,
     @InjectModel(Performance.name) private performanceModel: Model<Performance>,
+    private readonly monolegalApiService: MonolegalApiService,
   ) {}
 
   async importFromExcel(
@@ -360,6 +362,183 @@ export class MonolegalService {
       return undefined;
     } catch (error) {
       return undefined;
+    }
+  }
+
+  async syncFromApi(userId: string, fecha?: Date): Promise<any> {
+    const fechaConsulta = fecha || new Date();
+    const fechaFormateada =
+      this.monolegalApiService.formatearFechaMonolegal(fechaConsulta);
+
+    try {
+      console.log('📡 Iniciando sincronización desde API Monolegal...');
+      console.log('📅 Fecha:', fechaFormateada);
+
+      // 1. Verificar si hay cambios
+      const resumen = await this.monolegalApiService.getResumenCambios(
+        fechaFormateada,
+      );
+
+      if (!resumen.tieneCambios) {
+        return {
+          success: true,
+          message: 'No hay cambios para sincronizar',
+          summary: {
+            total: 0,
+            created: 0,
+            updated: 0,
+            skipped: 0,
+            errors: 0,
+          },
+          details: [],
+        };
+      }
+
+      console.log(
+        `📊 Hay ${resumen.estadisticas.numeroExpedientes} expedientes con cambios`,
+      );
+
+      // 2. Obtener todos los cambios
+      const cambios = await this.monolegalApiService.getTodosCambios(
+        fechaFormateada,
+      );
+
+      const results: ProcessResult[] = [];
+      let created = 0;
+      let updated = 0;
+      let skipped = 0;
+      let errors = 0;
+
+      // 3. Procesar cada cambio
+      for (const cambio of cambios) {
+        try {
+          const result = await this.processApiChange(cambio, userId);
+          results.push(result);
+
+          if (result.status === 'created') created++;
+          else if (result.status === 'updated') updated++;
+          else if (result.status === 'skipped') skipped++;
+          else if (result.status === 'error') errors++;
+        } catch (error) {
+          errors++;
+          results.push({
+            radicado: cambio.numero || 'Desconocido',
+            status: 'error',
+            message: error.message,
+          });
+        }
+      }
+
+      return {
+        success: true,
+        message: 'Sincronización completada',
+        summary: {
+          total: cambios.length,
+          created,
+          updated,
+          skipped,
+          errors,
+        },
+        details: results,
+      };
+    } catch (error) {
+      console.error('❌ Error en sincronización API:', error);
+      throw new BadRequestException(
+        `Error al sincronizar con Monolegal: ${error.message}`,
+      );
+    }
+  }
+
+  private async processApiChange(
+    cambio: any,
+    userId: string,
+  ): Promise<ProcessResult> {
+    const radicado = cambio.numero?.trim();
+
+    if (!radicado) {
+      return {
+        radicado: 'Sin radicado',
+        status: 'skipped',
+        message: 'No tiene número de proceso',
+      };
+    }
+
+    console.log('🔍 Procesando:', radicado);
+
+    // Buscar si ya existe el registro
+    let record = await this.recordModel.findOne({ radicado: radicado });
+
+    // Generar internalCode si no existe
+    let internalCode = record?.internalCode;
+
+    if (!internalCode) {
+      const year = new Date().getFullYear();
+      const count = await this.recordModel.countDocuments({
+        internalCode: { $regex: `^ML-${year}-` },
+      });
+      internalCode = `ML-${year}-${String(count + 1).padStart(4, '0')}`;
+    }
+
+    const recordData = {
+      radicado: radicado,
+      internalCode,
+      despachoJudicial: cambio.despacho?.trim() || '',
+      etapaProcesal: '',
+      ultimaActuacion: cambio.ultimaActuacion?.trim() || '',
+      fechaUltimaActuacion: this.parseDate(cambio.ultimoRegistro),
+      sincronizadoMonolegal: true,
+      fechaSincronizacion: new Date(),
+      etiqueta: cambio.etiqueta || '',
+    };
+
+    if (record) {
+      // Actualizar registro existente
+      Object.assign(record, recordData);
+      await record.save();
+
+      // Actualizar actuación
+      if (cambio.ultimaActuacion) {
+        await this.createOrUpdatePerformance(record._id, {
+          ultimaActuacion: cambio.ultimaActuacion,
+          etapaProcesal: '',
+        });
+      }
+
+      return {
+        radicado,
+        status: 'updated',
+        message: 'Registro actualizado desde API',
+      };
+    } else {
+      // Crear nuevo registro
+      const newRecord = new this.recordModel({
+        user: userId,
+        ...recordData,
+        clientType: 'Otro',
+        country: 'Colombia',
+      });
+
+      await newRecord.save();
+
+      // Crear partes procesales
+      await this.createProceduralParts(newRecord._id, {
+        demandantes: cambio.demandantes || '',
+        demandados: cambio.demandados || '',
+      });
+
+      // Crear actuación
+      if (cambio.ultimaActuacion) {
+        await this.createOrUpdatePerformance(newRecord._id, {
+          ultimaActuacion: cambio.ultimaActuacion,
+          etapaProcesal: '',
+        });
+      }
+
+      return {
+        radicado,
+        status: 'created',
+        message: 'Registro creado desde API',
+      };
     }
   }
 }
