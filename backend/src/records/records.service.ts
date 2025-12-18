@@ -36,6 +36,7 @@ import { secondConsecutivePart } from '../common/constants/second-consecutive-pa
 import { GetStatisticsDto } from './dto/get-statistics.dto';
 import { ByClientDto } from './dto/by-client-document.dto';
 import { ByInternalCodeDto } from './dto/by-internal-code.dto';
+import { getInternalCodeByIdDto } from './dto/get-internal-code.dto';
 // import { Multer } from 'multer';
 
 @Injectable()
@@ -2017,7 +2018,7 @@ export class RecordsService {
           internalCode,
           deletedAt: { $exists: false },
         })
-        .select(' internalCode processType jurisdiction settled');
+        .select(' internalCode processType jurisdiction settled office');
 
       if (!record) {
         throw new NotFoundException(
@@ -2037,6 +2038,8 @@ export class RecordsService {
         .filter((part) => part.partType === 'demandante')
         .map((part) => ({
           name: part.name,
+          email: part.email,
+          contact : part.contact,
         }));
 
       const defendants = allPartsForRecord
@@ -2173,4 +2176,34 @@ export class RecordsService {
     }
   }
   // -----------------------------------------------------
+  async getInternalCodeById(body: getInternalCodeByIdDto) {
+    try {
+      const { id } = body;
+
+      const record = await this.recordModel
+        .findOne({
+          _id: id,
+          deletedAt: { $exists: false },
+        })
+        .select('internalCode')
+        .lean();
+
+      if (!record) {
+        throw new NotFoundException(
+          `No se encontró el caso con id: ${id}`,
+        );
+      }
+      return {
+        internalCode: record.internalCode
+      };
+
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException(
+        'Error al obtener el código interno',
+      );
+    }
+  }
 }

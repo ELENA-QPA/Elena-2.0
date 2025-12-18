@@ -126,10 +126,9 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
               <Input disabled={true} {...form.register("title")} />
               {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
             </div>
-
             <div>
-              <Label>Demandado</Label>
-              <Input disabled={isEditable} {...form.register("demandado")} />
+              <Label>Código Interno</Label>
+              <Input disabled={true} {...form.register("codigo_interno")} />
             </div>
 
             <div>
@@ -179,13 +178,12 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
 
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <Label>Demandado</Label>
+              <Input disabled={isEditable} {...form.register("demandado")} />
+            </div>
+            <div>
               <Label>Juzgado</Label>
               <Input disabled={isEditable} {...form.register("juzgado")} />
-            </div>
-
-            <div>
-              <Label>Código Interno</Label>
-              <Input disabled={true} {...form.register("codigo_interno")} />
             </div>
           </div>
 

@@ -18,7 +18,7 @@ import { PaymentModule } from './payment/payment.module';
 import { ParametersModule } from './parameters/parameters.module';
 import { CommonModule } from './common/common.module';
 import { MonolegalModule } from './monolegal/monolegal.module';
-
+import { OrchestratorModule } from './orchestrator/orchestrator.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,6 +62,7 @@ import { MonolegalModule } from './monolegal/monolegal.module';
     ParametersModule,
     CommonModule,
     MonolegalModule,
+    OrchestratorModule
   ],
   controllers: [AppController],
   providers: [AppService],
