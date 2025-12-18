@@ -42,7 +42,7 @@ export function useProfile() {
     try {
       const token = getToken();
       const data = await profileRepository.getUsersByRol(rol, token);
-      return data;
+      return data || [];
     } catch (err: any) {
       setError(err.message);
       return [];

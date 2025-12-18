@@ -9,7 +9,7 @@ export type HttpRequest = {
   params?: any,
   token?: string,
   isAuth?: boolean,
-  isMultipart?: boolean,
+  isMultipart?: boolean
 }
 
 export type UploadFileParams = {

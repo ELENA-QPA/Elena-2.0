@@ -74,10 +74,14 @@ export class ProfileRepositoryImpl implements ProfileRepository {
       });
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         return axiosRequest.body;
-      } else {
-        throw new CustomError(axiosRequest.body?.message || "Error al obtener usuarios por rol");
-      }
-    } catch (error) {
+      }  else {
+      throw new CustomError(axiosRequest.body?.message || "Error al obtener usuarios por rol");
+    }
+    } catch (error: any) {
+      if (error?.statusCode === 403 || error?.response?.status === 403) {
+        console.warn('Usuario no tiene permisos para ver abogados (catch)');
+        return []; 
+    }
       console.error("Error in getUsersByRol:", error);
       throw error;
     }
