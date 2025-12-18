@@ -1413,7 +1413,7 @@ export default function InformacionCasoFormViewOld() {
     if (!despachoJudicialData) return;  
 
     if (caso) {
-      console.log('[CASE_LOAD] Datos del caso:', { city: caso.city, office: caso.office });
+      console.log('[CASE_LOAD] Datos del caso:', { city: caso.city, office: caso.despachoJudicial });
     }
 
     // Solo procesar durante la carga inicial del caso en modo EDIT, no en modo CREATE
@@ -1463,7 +1463,7 @@ export default function InformacionCasoFormViewOld() {
       // Si no hay ciudad en el formulario pero sí en el caso, procesar directamente
       console.log('[CASE_LOAD] Procesando ciudad directamente del caso');
       const caseCity = caso.city;
-      const caseDespacho = caso.office;
+      const caseDespacho = caso.despachoJudicial;
       const normalizedCaseCity = caseCity ? normalizeCityName(caseCity) : '';
 
       if (caseCity) {
@@ -1522,7 +1522,7 @@ export default function InformacionCasoFormViewOld() {
         console.log("[FORM_RESET] Datos del caso para reset:", {
           department: caso.department,
           city: caso.city,
-          office: caso.office,
+          office: caso.despachoJudicial,
           location: caso.location
         });
         console.log("[FORM_RESET] Tipo de location:", typeof caso.location);
@@ -1537,7 +1537,7 @@ export default function InformacionCasoFormViewOld() {
                 // Llenar campos principales del formulario
         form.reset({
           clientType: caso.clientType || "",
-          internalCode: caso.internalCode || "",
+          internalCode: caso.etiqueta|| "",
           department: caso.department || "",
           city: caso.city ? normalizeCityName(caso.city) : "",
           country: caso.country || "COLOMBIA",
@@ -1546,10 +1546,10 @@ export default function InformacionCasoFormViewOld() {
           creationDate: sanitizeDate(caso.createdAt),
           jurisdiction: caso.jurisdiction || "",
           location: caso.location || undefined,
-          despachoJudicial: caso.office || "",
+          despachoJudicial: caso.despachoJudicial || "",
           // El backend puede devolver el número de radicado en la propiedad `settled`.
           // Usamos `caso.settled` como prioridad y `caso.internalCode` como fallback para mantener compatibilidad.
-          numeroRadicado: (caso as any).settled || caso.internalCode || "",
+          numeroRadicado: (caso as any).settled || caso.etiqueta || "",
           demandantePart: caso.proceduralParts?.filter(p => p.partType === "demandante").map(p => ({
             name: p.name || "",
             documentType: p.documentType || "",
