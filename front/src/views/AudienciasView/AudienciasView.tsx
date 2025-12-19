@@ -13,10 +13,12 @@ import dayjs from "dayjs"
 import { useAuth } from "@/utilities/helpers/auth/useAuth"
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
 import { useAudience } from "@/modules/audiencias/hooks/useAudience"
+import { LawyerFilter } from "./components/lawyerFilter"
 
 
 export default function AudienciasView() {
   
+  const [idEvent, setIdEvent] = useState("");
   const [initialEventData, setInitialEventData] = useState<Partial<EventoForm>>()
   const [showEventModal, setShowEventModal] = useState(false)
   const [editingMode, setEditingMode] = useState(false);
@@ -42,10 +44,11 @@ export default function AudienciasView() {
   const handleCloseModal = () => {
     setShowEventModal(false);
     setInitialEventData(undefined);
-    fetchAllAudiences();
   }
 
   const handleSelectEvent = (event: Evento) => {
+    const id = event.idEvent
+    setIdEvent(id);
     const string_start = formatForInput(event.start);
     const string_end = formatForInput(event.end);
     setInitialEventData({
@@ -106,13 +109,14 @@ export default function AudienciasView() {
     )
   }
 
-
   return (
     <>
       <div className="p-2 sm:p-4 md:p-6 min-w-0 overflow-x-hidden">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+        <div className=" grid grid-cols-3 gap-2">
           <div className="min-w-0 flex-1">
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate">Calendario de audiencias</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate">
+              Calendario de audiencias
+            </h1>
             <p className="text-gray-600 mt-1 text-xs sm:text-sm">
               Ver las audiencias programadas en el sistema.
               {role && (
@@ -127,8 +131,11 @@ export default function AudienciasView() {
 
             <EstadosLeyenda />
           </div>
-          <Button 
-            className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg w-full sm:w-auto text-xs sm:text-sm" 
+    
+          <LawyerFilter lawyersRecord={lawyersRecord} onFilter={() => {}} isVisible = {!ableToEdit} />
+
+          <Button
+            className="justify-self-end w-fit bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm"
             onClick={() => {
               setEditingMode(false);
               setShowEventModal(true);
@@ -138,8 +145,8 @@ export default function AudienciasView() {
             <span className="hidden xs:inline">Nueva Audiencia</span>
             <span className="xs:hidden">Nuevo</span>
           </Button>
+          
         </div>
-
         <AudienceCalendar 
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
@@ -153,6 +160,7 @@ export default function AudienciasView() {
           lawyersRecord={lawyersRecord}
           isEditable={ableToEdit}
           editing={editingMode}
+          idEvent={idEvent}
         />
       </div>
     </> 

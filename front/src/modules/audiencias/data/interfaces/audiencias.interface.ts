@@ -22,6 +22,7 @@ export const LegendColors: Record<string, string> = {
 };
 
 export interface Evento {
+  idEvent:string;
   title: string;
   demandante: string;
   contacto_demandante: string;
@@ -50,7 +51,8 @@ export interface AudienceInterface{
   is_valid: boolean;
 }
 
-export interface AudienceCreate{
+
+export interface AudienceBase {
   start: Date;
   end: Date;
   lawyer: string;
@@ -59,6 +61,10 @@ export interface AudienceCreate{
   state: Estado;
   is_valid: boolean;
 }
+
+export interface AudienceCreate extends AudienceBase {}
+
+export interface AudienceUpdate extends Partial<AudienceBase> {}
 
 export interface ProceduralPart {
   name: string;
@@ -91,11 +97,11 @@ export interface AudienceOrchestratorResponse {
 
 export const eventoSchema = z.object({
   title: z.string(),
-  demandante: z.string().min(1),
-  contacto_demandante: z.string(),
-  email_demandante: z.string().email(),
-  demandado: z.string().min(1),
-  juzgado: z.string().min(1),
+  demandante: z.string().optional(),
+  contacto_demandante: z.string().optional(),
+  email_demandante: z.string().email().optional().or(z.literal("")),
+  demandado: z.string().optional(),
+  juzgado: z.string().optional(),
   abogado_id: z.string(),
   record_id: z.string(),
   start: z.string(),

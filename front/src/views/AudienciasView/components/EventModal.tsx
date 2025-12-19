@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Estado, ESTADOS, EventoForm, eventoSchema } from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import { useEffect, useState } from "react";
 import { useAudience } from "@/modules/audiencias/hooks/useAudience";
-import { mapEventoFormToAudienceCreate } from "@/modules/audiencias/data/adapters/audience.adapter";
+import { mapEventoFormToAudienceCreate, mapEventoFormToAudienceUpdate } from "@/modules/audiencias/data/adapters/audience.adapter";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
@@ -39,6 +39,7 @@ interface EventModalProps {
   lawyersRecord?: Record<string, string>;
   editing: boolean;
   isEditable: boolean;
+  idEvent:string;
 }
 
 const DEFAULT_FORM_VALUES: EventoForm = {
@@ -58,8 +59,8 @@ const DEFAULT_FORM_VALUES: EventoForm = {
   record_id: "",
 };
 
-export function EventModal({ open, onClose, initialData, editing, isEditable, lawyersRecord = {}, }: EventModalProps) {
-  const { error, setError, fetchAudienceByInternalCode, createAudience } = useAudience();
+export function EventModal({ open, onClose, initialData, editing, isEditable, lawyersRecord = {}, idEvent}: EventModalProps) {
+  const { error, setError, fetchAudienceByInternalCode, createAudience, updateAudience} = useAudience();
 
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
@@ -70,6 +71,8 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
     if (open) {
       form.reset(initialData || DEFAULT_FORM_VALUES);
       console.log("initial", initialData);
+      console.log("idEvent", idEvent)
+      console.log("editing? ", editing)
       setError(null);
     }
     
@@ -104,7 +107,7 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
       form.reset(syncedData);
     };
 
-  const submit = async (values: EventoForm) => {
+  const create = async(values: EventoForm) => {
       if (!values.record_id) {
         setError("No se encontró el ID del registro. Por favor, sincroniza primero.");
         return;
@@ -119,6 +122,38 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
         onClose();
         
       }
+  };
+
+  const edit = async(values: EventoForm) =>{
+    if (!idEvent) {
+        setError("Error recuperando el ID del evento");
+        return;
+      }
+
+      const audienceData = mapEventoFormToAudienceUpdate(values);
+      const result = await updateAudience(idEvent,audienceData);
+
+    if (result.success) {
+      form.reset(DEFAULT_FORM_VALUES);
+      window.location.reload();
+      onClose();
+      
+    }
+  }
+
+  const submit = async (values: EventoForm) => {
+    try {
+      console.log("edit 2 ", editing)
+      console.log("id event 2 ", idEvent)
+      if (!editing) {
+        await create(values); 
+      } else {
+        console.log("llamando edit");
+        await edit(values); 
+      }
+    } catch (err: any) {
+      setError("Ocurrió un error al guardar el evento");
+    }
   };
 
   const closeModal = () => {

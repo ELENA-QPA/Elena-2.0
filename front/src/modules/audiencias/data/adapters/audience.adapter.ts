@@ -1,10 +1,13 @@
+import dayjs from 'dayjs';
 import {
   AudienceOrchestratorResponse,
   Evento,
   Estado,
   getRecordByInternalCodeResponse,
   EventoForm,
-  AudienceCreate
+  AudienceCreate,
+  AudienceBase,
+  AudienceUpdate
 } from '../interfaces/audiencias.interface';
 
 const toBigCalendarDate = (isoDate: string | Date): Date => {
@@ -25,6 +28,7 @@ export const mapAudiencesToEvents = (
   const { audience, record } = api;
 
   return {
+    idEvent: audience._id,
     title: record.settled ?? '',
     demandante: record.proceduralParts?.plaintiff?.name ?? '',
     contacto_demandante: record.proceduralParts?.plaintiff?.contact ?? '',
@@ -45,7 +49,7 @@ export const mapAudiencesToEvents = (
 
 export const mapRecordToEvent = (
   api: getRecordByInternalCodeResponse
-): Evento => {
+): EventoForm => {
   const {record} = api;
 
     return {
@@ -55,37 +59,54 @@ export const mapRecordToEvent = (
     email_demandante: record.proceduralParts?.plaintiff?.email ?? '',
     demandado: record.proceduralParts?.defendant?.name ?? '',
     juzgado: record.office,
-    start: new Date(),
-    end: new Date(),
+    start: dayjs(new Date).format("YYYY-MM-DDTHH:mm") ,
+    end: dayjs(new Date).format("YYYY-MM-DDTHH:mm") ,
     link_teams: '',
     codigo_interno: record.internalCode,
     estado: 'Programada',
     monto_conciliado: undefined,
     abogado_id: "",
-    abogado: "",
     record_id: record._id,
   };
 }
 
-export const mapEventoFormToAudienceCreate = (
-    formData: EventoForm,
-  ): AudienceCreate => {
-    const isValid = Boolean(
-      formData.start &&
-      formData.end &&
-      formData.abogado_id &&
-      formData.record_id &&
-      formData.link_teams &&
-      formData.estado
-    );
+const mapEventoFormToAudienceBase = (
+  formData: Partial<EventoForm>
+): Partial<AudienceBase> => {
+  const base: Partial<AudienceBase> = {};
 
-    return {
-      start: new Date(formData.start),
-      end: new Date(formData.end),
-      lawyer: formData.abogado_id,
-      record: formData.record_id,
-      link: formData.link_teams || "",
-      state: formData.estado,
-      is_valid: isValid,
-    };
+  if (formData.start) base.start = new Date(formData.start);
+  if (formData.end) base.end = new Date(formData.end);
+  if (formData.abogado_id) base.lawyer = formData.abogado_id;
+  if (formData.record_id) base.record = formData.record_id;
+  if (formData.link_teams !== undefined) base.link = formData.link_teams || "";
+  if (formData.estado) base.state = formData.estado;
+
+  return base;
+};
+export const mapEventoFormToAudienceCreate = (
+  formData: EventoForm
+): AudienceCreate => {
+  const base = mapEventoFormToAudienceBase(formData);
+
+  const isValid = Boolean(
+    formData.start &&
+    formData.end &&
+    formData.abogado_id &&
+    formData.record_id &&
+    formData.estado
+  );
+
+  return {
+    ...(base as AudienceBase),
+    is_valid: isValid,
   };
+};
+
+export const mapEventoFormToAudienceUpdate = (
+  formData: Partial<EventoForm>
+): AudienceUpdate => {
+  return {
+    ...mapEventoFormToAudienceBase(formData),
+  };
+};

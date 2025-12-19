@@ -1,5 +1,5 @@
 import { injectable } from "inversify/lib/annotation/injectable";
-import { Evento, AudienceCreate } from "../interfaces/audiencias.interface";
+import { Evento, AudienceCreate, AudienceUpdate, EventoForm } from "../interfaces/audiencias.interface";
 import { AxiosHttpClient } from "@/config/protocols/http/axios-http-client";
 import { HttpClient, HttpStatusCode } from "@/config/protocols/http/http_utilities";
 import { apiUrls } from "@/config/protocols/http/api_urls";
@@ -15,9 +15,11 @@ export abstract class AudienceRepository {
     lawyerId: string
   ): Promise<Evento[]>;
   
-  abstract getRecordByInternalCode(internalCode:string): Promise<Evento>;
+  abstract getRecordByInternalCode(internalCode:string): Promise<EventoForm>;
 
   abstract createAudience( body:AudienceCreate): Promise<AudienceCreate>;
+
+  abstract updateAudience( id: string, body:AudienceUpdate): Promise<AudienceUpdate>;
   
 }
 
@@ -67,7 +69,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
   async getRecordByInternalCode(
     internalCode:string
-  ): Promise<Evento> {
+  ): Promise<EventoForm> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getRecordByInternal,
       method: 'post',
@@ -100,6 +102,26 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
     throw new CustomError(
       response.body?.message || 'Error creating audience'
+    );
+  }
+
+  async updateAudience(
+    id: string,
+    audience: AudienceUpdate
+  ): Promise<AudienceUpdate> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.audiencias.updateAudience}${id}`,
+      method: 'put',
+      body: JSON.stringify(audience),
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return response.body;
+    }
+
+    throw new CustomError(
+      response.body?.message || 'Error updating audience'
     );
   }
 

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import container from '@/lib/di/container';
 import { AudienceRepository } from '../data/repositories/audience.repository';
-import { AudienceCreate, Evento } from '../data/interfaces/audiencias.interface';
+import { AudienceCreate, AudienceUpdate, Evento } from '../data/interfaces/audiencias.interface';
 import { getToken } from '@/utilities/helpers/auth/checkAuth';
 
 export function useAudience() {
@@ -72,6 +72,22 @@ export function useAudience() {
     }
   };
 
+  const updateAudience = async (id: string, audienceData: AudienceUpdate) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.updateAudience(id, audienceData);
+      setError(null);
+      return { success: true, data };
+    } catch (err: any) {
+      console.error('Error updating audience:', err);
+      setError(err.message || 'Error al actualizar la audiencia');
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     audiences,
     loading,
@@ -80,6 +96,7 @@ export function useAudience() {
     fetchAllAudiences,
     fetchAudiencesByLawyer,
     fetchAudienceByInternalCode,
-    createAudience
+    createAudience,
+    updateAudience
   };
 }
