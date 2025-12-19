@@ -7,6 +7,7 @@ import { ProfileRepository, ProfileRepositoryImpl } from '@/modules/perfil/data/
 import { CasoRepository, CasoRepositoryImpl } from '@/modules/informacion-caso/data/repositories/caso.repository';
 import { EstadisticasRepository, EstadisticasRepositoryImpl } from '@/modules/estadisticas/data/repositories/estadisticas.repository';
 import { LocalStorageProtocol, LocalStorageProtocolImpl } from "@/config/protocols/cache/local_cache";
+import { AudienceRepository, AudienceRepositoryImpl } from "@/modules/audiencias/data/repositories/audience.repository";
 
 const container = new Container();
 
@@ -15,6 +16,7 @@ container.bind(HttpClient).to(AxiosHttpClient).inSingletonScope();
 container.bind<AuthRepository>("AuthRepository").to(AuthRepositoryImpl).inSingletonScope();
 container.bind<TeamRepository>("TeamRepository").to(TeamRepositoryImpl).inSingletonScope();
 container.bind<ProfileRepository>("ProfileRepository").to(ProfileRepositoryImpl).inSingletonScope();
+container.bind<AudienceRepository>("AudienceRepository").to(AudienceRepositoryImpl).inSingletonScope();
 container.bind(LocalStorageProtocol).to(LocalStorageProtocolImpl).inSingletonScope();
 container.bind(AuthRepositoryImpl).toSelf();
 container.bind(TeamRepositoryImpl).toSelf();

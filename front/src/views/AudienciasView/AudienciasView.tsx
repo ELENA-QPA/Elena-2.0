@@ -12,7 +12,8 @@ import { Evento } from "@/modules/audiencias/data/interfaces/audiencias.interfac
 import dayjs from "dayjs"
 import { useAuth } from "@/utilities/helpers/auth/useAuth"
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
-
+import {jwtDecode, JwtPayload} from 'jwt-decode';
+import { useAudience } from "@/modules/audiencias/hooks/useAudience"
 
 
 export default function AudienciasView() {
@@ -21,12 +22,14 @@ export default function AudienciasView() {
   const [showEventModal, setShowEventModal] = useState(false)
   const [editingMode, setEditingMode] = useState(false);
 
-  const { user, token, role, isLoading, isAuthenticated } = useAuth();
+  const { user, token, role, isLoading, isAuthenticated, id } = useAuth();
+  const { audiences, fetchAudiencesByLawyer, fetchAllAudiences } = useAudience();
   const ableToEdit = role !== 'Administrador';
   const { lawyersRecord, loadLawyers } = useLawyers()
 
   useEffect(() => {
     loadLawyers()
+    fetchAllAudiences();
   }, []) 
 
   const formatForInput = (date?: Date) =>
@@ -138,6 +141,7 @@ export default function AudienciasView() {
         <AudienceCalendar 
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
+          events = {audiences}
         />
         
         <EventModal 

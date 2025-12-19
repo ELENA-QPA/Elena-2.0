@@ -86,4 +86,9 @@ export const apiUrls = {
     documentationMonthly: "/api/records/statistics/documentation/monthly",
     processTracking: "/api/records/statistics/processes/tracking",
   },
+
+  orchestrator: {
+    getAll: '/api/orchestrator/audience/all',
+    getByLawyer: '/api/orchestrator/audience'
+  },
 };

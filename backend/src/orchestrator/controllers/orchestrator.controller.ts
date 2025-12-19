@@ -3,8 +3,9 @@ import { OrchestratorService } from '../services/orchestrator.service';
 import { InternalCodeDto, IdRecordDto, IdLawyerDto } from '../dto/records-service.dto';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiKeyAuth } from 'src/auth/decorators';
+import { ApiKeyAuth, Auth } from 'src/auth/decorators';
 import { AudienceService } from 'src/audience/services/audience.service';
+import { ValidRoles } from 'src/auth/interfaces';
 
 @ApiTags('Orchestrator')
 @Controller('orchestrator')
@@ -15,7 +16,6 @@ export class OrchestratorController {
 
    private readonly logger = new Logger(OrchestratorService.name);
 
-  @ApiKeyAuth()
   @Post('record')
   @HttpCode(HttpStatus.OK)
   async getRecord(@Body() body: IdRecordDto): Promise<RecordAdaptedResponse> {
@@ -23,6 +23,7 @@ export class OrchestratorController {
     return this.orchestratorService.getRecordByInternalCode(internalCodeDto);
   }
 
+  @Auth(ValidRoles.admin)
   @Get("audience/all")
   findAll() {
     return this.orchestratorService.getAllAudiences();

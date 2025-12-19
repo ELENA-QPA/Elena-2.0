@@ -5,12 +5,14 @@ export interface AuthData {
   user: any | null;
   token: string;
   role: string;
+  id: string
 }
 
 export const getAuthData = (): AuthData => {
   let user = null;
   let token = "";
   let role = "";
+  let id="";
 
   try {
     const authToken = getCookie(CookiesKeysEnum.token);
@@ -33,7 +35,7 @@ export const getAuthData = (): AuthData => {
     console.error("Error al obtener datos de autenticación:", error);
   }
 
-  return { user, token, role };
+  return { user, token, role, id };
 };
 
 export const isAuthenticated = (): boolean => {

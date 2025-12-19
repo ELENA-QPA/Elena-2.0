@@ -23,8 +23,42 @@ export interface Evento {
   end: Date;
   link_teams: string;
   codigo_interno: string;
-  resumen_hechos: string;
   estado: Estado;
   monto_conciliado?: number;
   abogado: string;
+}
+
+export interface AudienceInterface{
+  _id: string;
+  record: string;
+  lawyer: string;
+  state: string;
+  start: Date;
+  end: Date;
+  link?: string;
+  is_valid: boolean;
+}
+
+export interface ProceduralPart {
+  name: string;
+  email?: string;
+  contact?: string;
+}
+
+export interface ProceduralParts{
+  plaintiff: ProceduralPart| null;
+  defendant: ProceduralPart | null;
+}
+
+export interface RecordAudience {
+  _id: string;
+  internalCode: string;
+  office: string;
+  settled: string;
+  proceduralParts: ProceduralParts;
+}
+
+export interface AudienceOrchestratorResponse {
+  audience : AudienceInterface,  
+  record: RecordAudience
 }
