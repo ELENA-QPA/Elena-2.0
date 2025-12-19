@@ -7,12 +7,11 @@ import { Loader2, RefreshCw, Plus} from "lucide-react"
 import { AudienceCalendar} from "./components/AudienceCalendar"
 import Link from "next/link";
 import { EstadosLeyenda } from "./components/EstadosLeyend"
-import { EventModal, EventoForm } from "./components/EventModal"
-import { Evento } from "@/modules/audiencias/data/interfaces/audiencias.interface"
+import { EventModal } from "./components/EventModal"
+import { Evento, EventoForm } from "@/modules/audiencias/data/interfaces/audiencias.interface"
 import dayjs from "dayjs"
 import { useAuth } from "@/utilities/helpers/auth/useAuth"
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
-import {jwtDecode, JwtPayload} from 'jwt-decode';
 import { useAudience } from "@/modules/audiencias/hooks/useAudience"
 
 
@@ -22,7 +21,7 @@ export default function AudienciasView() {
   const [showEventModal, setShowEventModal] = useState(false)
   const [editingMode, setEditingMode] = useState(false);
 
-  const { user, token, role, isLoading, isAuthenticated, id } = useAuth();
+  const { role, isLoading, isAuthenticated, id } = useAuth();
   const { audiences, fetchAudiencesByLawyer, fetchAllAudiences } = useAudience();
   const ableToEdit = role !== 'Administrador';
   const { lawyersRecord, loadLawyers } = useLawyers()
@@ -38,9 +37,12 @@ export default function AudienciasView() {
   const handleRetry = () => {
   }
 
+
+  console.log("aud ", audiences);
   const handleCloseModal = () => {
     setShowEventModal(false);
     setInitialEventData(undefined);
+    fetchAllAudiences();
   }
 
   const handleSelectEvent = (event: Evento) => {

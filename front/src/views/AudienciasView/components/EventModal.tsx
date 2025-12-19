@@ -19,44 +19,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 
 // import { eventoSchema, EventoForm } from "@/data/schemas/evento.schema";
-import { Estado } from "@/modules/audiencias/data/interfaces/audiencias.interface";
-import { z } from "zod";
+import { Estado, ESTADOS, EventoForm, eventoSchema } from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import { useEffect, useState } from "react";
-
-export const ESTADOS = [
-  "Programada",
-  "Celebrada",
-  "No_celebrada",
-  "Conciliada",
-] as const satisfies Estado[];
+import { useAudience } from "@/modules/audiencias/hooks/useAudience";
+import { mapEventoFormToAudienceCreate } from "@/modules/audiencias/data/adapters/audience.adapter";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
   Celebrada: "Celebrada",
-  No_celebrada: "No celebrada",
+  No_celebrada: "No Celebrada",
   Conciliada: "Conciliada",
 };
-
-export const eventoSchema = z.object({
-  title: z.string().min(1),
-  demandante: z.string().min(1),
-  contacto_demandante: z.string(),
-  email_demandante: z.string().email(),
-  demandado: z.string().min(1),
-  juzgado: z.string().min(1),
-  abogado: z.string(),
-
-  start: z.string(),
-  end: z.string(),
-
-  link_teams: z.string().url().optional().or(z.literal("")),
-  codigo_interno: z.string().optional(),
-
-  estado: z.enum(ESTADOS),
-
-  monto_conciliado: z.coerce.number().optional(),
-});
-export type EventoForm = z.infer<typeof eventoSchema>;
 
 interface EventModalProps {
   open: boolean;
@@ -68,44 +41,89 @@ interface EventModalProps {
   isEditable: boolean;
 }
 
-export function EventModal({ open, onClose, onCreate, initialData, editing, isEditable, lawyersRecord = {} }: EventModalProps) {
-  
+const DEFAULT_FORM_VALUES: EventoForm = {
+  title: "",
+  demandante: "",
+  contacto_demandante: "",
+  email_demandante: "",
+  demandado: "",
+  juzgado: "",
+  abogado_id: "",
+  codigo_interno: "",
+  link_teams: "",
+  estado: "Programada",
+  start: "",
+  end: "",
+  monto_conciliado: undefined,
+  record_id: "",
+};
+
+export function EventModal({ open, onClose, initialData, editing, isEditable, lawyersRecord = {}, }: EventModalProps) {
+  const { error, setError, fetchAudienceByInternalCode, createAudience } = useAudience();
+
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
-    defaultValues: {
-      title: "",
-      demandante: "",
-      contacto_demandante: "",
-      email_demandante: "",
-      demandado: "",
-      juzgado: "",
-      abogado: "",
-      codigo_interno: "",
-      link_teams: "",
-      estado: "Programada",
-      start: "",
-      end: "",
-    },
+    defaultValues: DEFAULT_FORM_VALUES
   });
 
   useEffect(() => {
-    form.reset({
-      ...initialData,
-    });
+    if (open) {
+      form.reset(initialData || DEFAULT_FORM_VALUES);
+      console.log("initial", initialData);
+      setError(null);
+    }
     
-  }, [open]);
+  }, [open, initialData]);
 
   const estadoActual = form.watch("estado");
   const blockAmount = estadoActual !== "Conciliada";
 
+  const handleSync = async () => {
+      const internalCode = form.getValues("codigo_interno");
 
-  const submit = (values: EventoForm) => {
-    onCreate?.(values);
-    form.reset();
+      if (!internalCode) {
+        return;
+      }
+
+      const result = await fetchAudienceByInternalCode(internalCode);
+
+      if (!result.success) {
+        form.reset({
+        ...DEFAULT_FORM_VALUES
+        });
+        return;
+      }
+
+      const syncedData: Partial<EventoForm> = {
+        ...result.data,
+        start: initialData?.start,
+        end: initialData?.end,
+      };
+      
+      console.log("syn", syncedData);
+      form.reset(syncedData);
+    };
+
+  const submit = async (values: EventoForm) => {
+      if (!values.record_id) {
+        setError("No se encontró el ID del registro. Por favor, sincroniza primero.");
+        return;
+      }
+
+      const audienceData = mapEventoFormToAudienceCreate(values);
+      const result = await createAudience(audienceData);
+
+      if (result.success) {
+        form.reset(DEFAULT_FORM_VALUES);
+        window.location.reload();
+        onClose();
+        
+      }
   };
 
   const closeModal = () => {
     form.reset();
+    setError(null);
     onClose();
   };
 
@@ -130,15 +148,15 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
             </div>
             <div>
               <Label>Código Interno</Label>
-              <Input disabled={true} {...form.register("codigo_interno")} />
+              <Input disabled={editing} {...form.register("codigo_interno")} />
             </div>
 
             <div>
                 <Label>Abogado</Label>
                 <Select
                   disabled={isEditable} 
-                  value={form.watch("abogado")}
-                  onValueChange={(v) => form.setValue("abogado", v)}
+                  value={form.watch("abogado_id")}
+                  onValueChange={(v) => form.setValue("abogado_id", v)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona un abogado" />
@@ -157,35 +175,35 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
                     )}
                   </SelectContent>
                 </Select>
-                {errors.abogado && <p className="text-red-500 text-xs">{errors.abogado.message}</p>}
+                {errors.abogado_id && <p className="text-red-500 text-xs">{errors.abogado_id.message}</p>}
               </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
               <Label>Demandante</Label>
-              <Input disabled={isEditable} {...form.register("demandante")} />
+              <Input disabled={true} {...form.register("demandante")} />
             </div>
 
             <div>
               <Label>Telefono Demandante</Label>
-              <Input disabled={isEditable} {...form.register("contacto_demandante")} />
+              <Input disabled={true} {...form.register("contacto_demandante")} />
             </div>
 
             <div>
               <Label>Email Demandante</Label>
-              <Input disabled={isEditable} {...form.register("email_demandante")} />
+              <Input disabled={true} {...form.register("email_demandante")} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Demandado</Label>
-              <Input disabled={isEditable} {...form.register("demandado")} />
+              <Input disabled={true} {...form.register("demandado")} />
             </div>
             <div>
               <Label>Juzgado</Label>
-              <Input disabled={isEditable} {...form.register("juzgado")} />
+              <Input disabled={true} {...form.register("juzgado")} />
             </div>
           </div>
 
@@ -232,12 +250,32 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
           </div>
 
           <DialogFooter>
-            <Button variant="outline" type="button" onClick={closeModal}>Cancelar</Button>
-            <Button type="submit" className="bg-pink-600 hover:bg-pink-700" onClick={closeModal}>
-              {editing ? "Actualizar" : "Crear"}
-            </Button>
+              {!editing && (
+                <Button
+                  type="button"
+                  className="bg-pink-600 hover:bg-pink-700 mr-auto"
+                  onClick={handleSync}
+                >
+                  Sincronizar
+                </Button>
+              )}
+            <div className="flex gap-2">
+              <Button variant="outline" type="button" onClick={closeModal}>
+                Cancelar
+              </Button>
+              <Button type="submit" className="bg-pink-600 hover:bg-pink-700">
+                {editing ? "Actualizar" : "Crear"}
+              </Button>
+            </div>
+
           </DialogFooter>
         </form>
+
+        {error && (
+          <div className="rounded-md bg-red-100 border border-red-400 p-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

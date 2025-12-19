@@ -1,7 +1,7 @@
 export enum EstadoAudiencia {
     PROGRAMADA = 'Programada',
     CELEBRADA = 'Celebrada',
-    NO_CELEBRADA = 'No Celebrada',
+    NO_CELEBRADA = 'No_celebrada',
     CONCILIADA = 'Conciliada',  
 
 }

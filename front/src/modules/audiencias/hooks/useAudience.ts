@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import container from '@/lib/di/container';
 import { AudienceRepository } from '../data/repositories/audience.repository';
-import { Evento } from '../data/interfaces/audiencias.interface';
+import { AudienceCreate, Evento } from '../data/interfaces/audiencias.interface';
 import { getToken } from '@/utilities/helpers/auth/checkAuth';
 
 export function useAudience() {
@@ -40,11 +40,46 @@ export function useAudience() {
     }
   };
 
+  const fetchAudienceByInternalCode = async (internalCode: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.getRecordByInternalCode(internalCode);
+      setError(null);
+      return { success: true, data };
+    } catch (err: any) {
+      console.error('Error fetching audience:', err);
+      setError(err.message || 'No se encontró el código interno');
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const createAudience = async (audienceData: AudienceCreate) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.createAudience( audienceData);
+      setError(null);
+      return { success: true, data };
+    } catch (err: any) {
+      console.error('Error creating audience:', err);
+      setError(err.message || 'Error al crear la audiencia');
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     audiences,
     loading,
     error,
+    setError,
     fetchAllAudiences,
     fetchAudiencesByLawyer,
+    fetchAudienceByInternalCode,
+    createAudience
   };
 }

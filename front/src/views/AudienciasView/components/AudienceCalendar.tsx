@@ -69,6 +69,8 @@ export function AudienceCalendar({ onSelectSlot, onSelectEvent, events }: Audien
 
         onSelectSlot={(slot) => onSelectSlot?.(slot)}
         onSelectEvent={(event) => onSelectEvent?.(event)}
+
+        popup
       />
     </div>
   );

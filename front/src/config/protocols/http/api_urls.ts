@@ -89,6 +89,11 @@ export const apiUrls = {
 
   orchestrator: {
     getAll: '/api/orchestrator/audience/all',
-    getByLawyer: '/api/orchestrator/audience'
+    getByLawyer: '/api/orchestrator/audience',
+    getRecordByInternal: '/api/orchestrator/record/internalCode',
   },
+
+  audiencias: {
+    updateAudience: '/api/audiences/'
+  }
 };

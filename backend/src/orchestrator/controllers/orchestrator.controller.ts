@@ -23,6 +23,12 @@ export class OrchestratorController {
     return this.orchestratorService.getRecordByInternalCode(internalCodeDto);
   }
 
+  @Post('record/internalCode')
+  @HttpCode(HttpStatus.OK)
+  async getRecordByInternalCode(@Body() body: InternalCodeDto): Promise<RecordAdaptedResponse> {
+    return this.orchestratorService.getRecordByInternalCode(body);
+  }
+
   @Auth(ValidRoles.admin)
   @Get("audience/all")
   findAll() {
