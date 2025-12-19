@@ -1,14 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, Logger } from '@nestjs/common';
 import { OrchestratorService } from '../services/orchestrator.service';
-import { InternalCodeDto, IdRecordDto } from '../dto/records-service.dto';
+import { InternalCodeDto, IdRecordDto, IdLawyerDto } from '../dto/records-service.dto';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiKeyAuth } from 'src/auth/decorators';
+import { AudienceService } from 'src/audience/services/audience.service';
 
 @ApiTags('Orchestrator')
 @Controller('orchestrator')
 export class OrchestratorController {
-  constructor(private readonly orchestratorService: OrchestratorService) {}
+  constructor(private readonly orchestratorService: OrchestratorService,
+              private readonly audienceService: AudienceService
+            ) {}
 
    private readonly logger = new Logger(OrchestratorService.name);
 
@@ -16,20 +19,18 @@ export class OrchestratorController {
   @Post('record')
   @HttpCode(HttpStatus.OK)
   async getRecord(@Body() body: IdRecordDto): Promise<RecordAdaptedResponse> {
-    this.logger.log("antes de llamar getInternal");
     const internalCodeDto: InternalCodeDto = await this.orchestratorService.getInternalCodeById(body);
-    this.logger.log("despues ");
     return this.orchestratorService.getRecordByInternalCode(internalCodeDto);
   }
 
-  @Get()
+  @Get("audience/all")
   findAll() {
-    return this.orchestratorService.findAll();
+    return this.orchestratorService.getAllAudiences();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orchestratorService.findOne(+id);
+  @Post('audience')
+  findOne(@Body() body: IdLawyerDto) {
+    return this.orchestratorService.getAudienceByLawyer(body);
   }
 
 

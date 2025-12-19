@@ -3,7 +3,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RecordsService } from 'src/records/records.service';
 import { RecordAdapter } from '../adapters/record.adapter';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
-import { IdRecordDto, InternalCodeDto } from '../dto/records-service.dto';
+import { IdLawyerDto, IdRecordDto, InternalCodeDto } from '../dto/records-service.dto';
+import { AudienceService } from 'src/audience/services/audience.service';
+import { AudienceResponse } from 'src/audience/interfaces/audience.interfaces';
+import { AudienceOrchestratorResponse } from '../interfaces/audience.interface';
 
 @Injectable()
 export class OrchestratorService {
@@ -11,6 +14,7 @@ export class OrchestratorService {
   private readonly logger = new Logger(OrchestratorService.name);
 
   constructor(
+    private readonly audienceService: AudienceService,
     private readonly recordsService: RecordsService,
     private readonly recordAdapter: RecordAdapter,
   ) {}
@@ -29,8 +33,8 @@ export class OrchestratorService {
   }
 
   async getRecordByInternalCode(
-    dto: InternalCodeDto,
-  ): Promise<RecordAdaptedResponse> {
+      dto: InternalCodeDto,
+    ): Promise<RecordAdaptedResponse> {
     try {
 
       const recordResponse = await this.recordsService
@@ -60,5 +64,60 @@ export class OrchestratorService {
       );
       throw error;
     }}
+
+  async getRecordById(dto:IdRecordDto):Promise<RecordAdaptedResponse>{
+    const internalCodeDto:InternalCodeDto = await this.getInternalCodeById(dto);
+    const record = await this.getRecordByInternalCode(internalCodeDto);
+    return record;
+
+  }
+  async buildAudienceResponce(audienceResponse: AudienceResponse) : Promise<AudienceOrchestratorResponse>{ 
+    const recordIdDto:IdRecordDto = { id: audienceResponse.audience.record };
+    const recordResponse:RecordAdaptedResponse = await this.getRecordById(recordIdDto);
+    return {
+        ...audienceResponse,
+        record: recordResponse.record,
+        };
+
+  }
+
+  async getFilteresAudiences(query):Promise<AudienceOrchestratorResponse[]>{
+    try {
+      const audiences = await this.audienceService.findAll(query);
+
+      const audiencesResponse = await Promise.all(
+        audiences.map(audience =>
+          this.buildAudienceResponce(audience)
+        )
+      );
+
+      return audiencesResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  async getAllAudiences(): Promise<AudienceOrchestratorResponse[]> {
+    try {
+      const query = { is_valid: 'true' };
+      const audiencesResponse = await this.getFilteresAudiences(query);
+      return audiencesResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAudienceByLawyer(lawyerDto:IdLawyerDto): Promise<AudienceOrchestratorResponse[]> {
+    try{
+      const query = {
+        is_valid: true,
+        lawyer: lawyerDto.lawyer, // 👈 SOLO EL STRING
+      };
+      const audiencesResponse = await this.getFilteresAudiences(query);
+      return audiencesResponse;
+    } catch (error){
+      throw error;
+    }
+  }
 
 }

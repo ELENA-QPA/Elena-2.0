@@ -6,7 +6,7 @@ export enum EstadoAudiencia {
 
 }
 
-export interface AudienceResponse {
+export interface AudienceInterface{
   _id: string;
   record: string;
   lawyer: string;
@@ -15,6 +15,8 @@ export interface AudienceResponse {
   end: Date;
   link?: string;
   is_valid: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+}
+
+export interface AudienceResponse{
+    audience: AudienceInterface
 }

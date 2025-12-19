@@ -13,17 +13,17 @@ export class AudienceService {
   private readonly logger = new Logger(AudienceService.name);
 
   private transformAudienceToResponse(audience: any): AudienceResponse {
-    return {
-      _id: audience._id.toString(),
-      record: audience.record.toString(),
-      lawyer: audience.lawyer.toString(),
-      state: audience.state,
-      start: audience.start,
-      end: audience.end,
-      link: audience.link,
-      is_valid: audience.is_valid,
-      createdAt: audience.createdAt,
-      updatedAt: audience.updatedAt,
+    return { 
+      audience:{
+        _id: audience._id.toString(),
+        record: audience.record.toString(),
+        lawyer: audience.lawyer.toString(),
+        state: audience.state,
+        start: audience.start,
+        end: audience.end,
+        link: audience.link,
+        is_valid: audience.is_valid
+      }
     };
   }
 

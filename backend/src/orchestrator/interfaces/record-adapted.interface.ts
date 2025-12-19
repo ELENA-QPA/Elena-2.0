@@ -19,7 +19,6 @@ export interface RecordAdapted {
 }
 
 export interface RecordAdaptedResponse {
-  message: string;
   record: RecordAdapted;
 }
 

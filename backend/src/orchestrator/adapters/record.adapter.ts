@@ -44,7 +44,6 @@ export class RecordAdapter {
     };
 
     return {
-      message: response.message,
       record: adaptedRecord,
     };
   }
