@@ -1,3 +1,4 @@
+import { Lawyer } from "./lawyers.interface";
 
 export type Estado =
     | "Programada"
@@ -31,7 +32,7 @@ export interface Evento {
 export interface AudienceInterface{
   _id: string;
   record: string;
-  lawyer: string;
+  lawyer: Lawyer;
   state: string;
   start: Date;
   end: Date;

@@ -33,7 +33,7 @@ export const mapAudienceToEvento = (
     link_teams: audience.link ?? '',
     codigo_interno: record.internalCode,
     estado: audience.state as Estado,
-    monto_conciliado: undefined, // if not provided yet
-    abogado: "",
+    monto_conciliado: undefined,
+    abogado: audience.lawyer._id,
   };
 };

@@ -6,7 +6,7 @@ export enum EstadoAudiencia {
 
 }
 
-export interface AudienceInterface{
+export interface AudienceBase{
   _id: string;
   record: string;
   lawyer: string;
@@ -17,6 +17,15 @@ export interface AudienceInterface{
   is_valid: boolean;
 }
 
+export interface Lawyer{
+  _id: string;
+  name: string;
+}
+
+export interface AudiencePopulated extends Omit<AudienceBase, 'lawyer'> {
+  lawyer: Lawyer;
+}
+
 export interface AudienceResponse{
-    audience: AudienceInterface
+    audience: AudiencePopulated
 }

@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 // import { eventoSchema, EventoForm } from "@/data/schemas/evento.schema";
 import { Estado } from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const ESTADOS = [
   "Programada",
@@ -88,13 +88,15 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
     },
   });
 
- useEffect(() => {
-  form.reset({
-    ...initialData,
-  });
-  
-}, [open]);
+  useEffect(() => {
+    form.reset({
+      ...initialData,
+    });
+    
+  }, [open]);
 
+  const estadoActual = form.watch("estado");
+  const blockAmount = estadoActual !== "Conciliada";
 
 
   const submit = (values: EventoForm) => {
@@ -206,7 +208,7 @@ export function EventModal({ open, onClose, onCreate, initialData, editing, isEd
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Monto Conciliado</Label>
-              <Input type="number" {...form.register("monto_conciliado")} />
+              <Input disabled={blockAmount} type="number" {...form.register("monto_conciliado")} />
             </div>
 
             <div>

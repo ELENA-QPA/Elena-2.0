@@ -6,7 +6,7 @@ import { Audience } from '../entities/audience.entity';
 import { CreateAudienceDto } from '../dto/create-audience.dto';
 import { UpdateAudienceDto } from '../dto/update-audience.dto';
 import { QueryAudienceDto } from '../dto/query-audience.dto';
-import { AudienceResponse } from '../interfaces/audience.interfaces';
+import { AudiencePopulated, AudienceResponse } from '../interfaces/audience.interfaces';
 
 @Injectable()
 export class AudienceService {
@@ -17,7 +17,10 @@ export class AudienceService {
       audience:{
         _id: audience._id.toString(),
         record: audience.record.toString(),
-        lawyer: audience.lawyer.toString(),
+        lawyer: {
+        _id: audience.lawyer._id,
+        name: audience.lawyer.name + " " + audience.lawyer.lastname,
+        },
         state: audience.state,
         start: audience.start,
         end: audience.end,
@@ -75,14 +78,13 @@ export class AudienceService {
       }
 
       if(queryDto.is_valid){
-        this.logger.log("estamos en is valid");
         filter.is_valid = queryDto.is_valid;
       }
-      this.logger.log("salimoooos");
 
       const audiences = await this.audienceModel
         .find(filter)
         .sort({ start: -1 })
+        .populate('lawyer', 'name lastname _id')
         .lean();
 
       return audiences.map(audience => this.transformAudienceToResponse(audience));
@@ -105,7 +107,8 @@ export class AudienceService {
           _id: id,
           deletedAt: { $exists: false },
         })
-        .lean();
+        .populate('lawyer', 'name lastname _id')
+        .lean<AudiencePopulated>();
 
       if (!audience) {
         throw new NotFoundException(
@@ -113,6 +116,7 @@ export class AudienceService {
         );
       }
 
+      this.logger.log("ss ", audience.lawyer.name)
       return this.transformAudienceToResponse(audience);
     } catch (error) {
       if (error instanceof NotFoundException || error instanceof BadRequestException) {

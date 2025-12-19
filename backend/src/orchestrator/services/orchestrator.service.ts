@@ -111,7 +111,7 @@ export class OrchestratorService {
     try{
       const query = {
         is_valid: true,
-        lawyer: lawyerDto.lawyer, // 👈 SOLO EL STRING
+        lawyer: lawyerDto.lawyer,
       };
       const audiencesResponse = await this.getFilteresAudiences(query);
       return audiencesResponse;

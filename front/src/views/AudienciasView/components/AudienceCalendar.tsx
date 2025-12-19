@@ -34,7 +34,6 @@ export function AudienceCalendar({ onSelectSlot, onSelectEvent, events }: Audien
   };
 
 
-
   const components = useMemo(() => ({
     event: Event,
     month : { event: EventMonth },
