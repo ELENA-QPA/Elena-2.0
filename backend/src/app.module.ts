@@ -19,6 +19,7 @@ import { ParametersModule } from './parameters/parameters.module';
 import { CommonModule } from './common/common.module';
 import { MonolegalModule } from './monolegal/monolegal.module';
 import { OrchestratorModule } from './orchestrator/orchestrator.module';
+import { AudienceModule } from './audience/audience.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,7 +63,8 @@ import { OrchestratorModule } from './orchestrator/orchestrator.module';
     ParametersModule,
     CommonModule,
     MonolegalModule,
-    OrchestratorModule
+    OrchestratorModule,
+    AudienceModule
   ],
   controllers: [AppController],
   providers: [AppService],
