@@ -20,7 +20,7 @@ import { CommonModule } from './common/common.module';
 import { MonolegalModule } from './monolegal/monolegal.module';
 import { OrchestratorModule } from './orchestrator/orchestrator.module';
 import { AudienceModule } from './audience/audience.module';
-import { NotificationsModule } from './notifications/notifications.module';
+import { NotificationModule } from './notifications/notifications.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -66,7 +66,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     MonolegalModule,
     OrchestratorModule,
     AudienceModule,
-    NotificationsModule
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
