@@ -1,26 +1,36 @@
 import { injectable } from "inversify/lib/annotation/injectable";
-import { Evento, AudienceCreate, AudienceUpdate, EventoForm } from "../interfaces/audiencias.interface";
+import {
+  Evento,
+  AudienceCreate,
+  AudienceUpdate,
+  EventoForm,
+} from "../interfaces/audiencias.interface";
 import { AxiosHttpClient } from "@/config/protocols/http/axios-http-client";
-import { HttpClient, HttpStatusCode } from "@/config/protocols/http/http_utilities";
+import {
+  HttpClient,
+  HttpStatusCode,
+} from "@/config/protocols/http/http_utilities";
 import { apiUrls } from "@/config/protocols/http/api_urls";
 import { CustomError } from "@/data/errors/custom-error";
 import { inject } from "inversify/lib/annotation/inject";
-import { mapAudiencesToEvents, mapRecordToEvent } from "../adapters/audience.adapter";
-
+import {
+  mapAudiencesToEvents,
+  mapRecordToEvent,
+} from "../adapters/audience.adapter";
 
 export abstract class AudienceRepository {
   abstract getAll(token?: string): Promise<Evento[]>;
-  
-  abstract getAllByLawyer(
-    lawyerId: string
-  ): Promise<Evento[]>;
-  
-  abstract getRecordByInternalCode(internalCode:string): Promise<EventoForm>;
 
-  abstract createAudience( body:AudienceCreate): Promise<AudienceCreate>;
+  abstract getAllByLawyer(lawyerId: string): Promise<Evento[]>;
 
-  abstract updateAudience( id: string, body:AudienceUpdate): Promise<AudienceUpdate>;
-  
+  abstract getRecordByInternalCode(internalCode: string): Promise<EventoForm>;
+
+  abstract createAudience(body: AudienceCreate): Promise<AudienceCreate>;
+
+  abstract updateAudience(
+    id: string,
+    body: AudienceUpdate
+  ): Promise<AudienceUpdate>;
 }
 
 @injectable()
@@ -34,7 +44,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
   async getAll(token?: string): Promise<Evento[]> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getAll,
-      method: 'get',
+      method: "get",
       token,
       isAuth: true,
     });
@@ -43,36 +53,30 @@ export class AudienceRepositoryImpl implements AudienceRepository {
       return response.body.map(mapAudiencesToEvents);
     }
 
-    throw new CustomError(
-      response.body?.message || 'Error fetching audiences'
-    );
+    throw new CustomError(response.body?.message || "Error fetching audiences");
   }
 
-  async getAllByLawyer(
-    lawyerId: string,
-  ): Promise<Evento[]> {
+  async getAllByLawyer(lawyerId: string): Promise<Evento[]> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getByLawyer,
-      method: 'post',
+      method: "post",
       body: JSON.stringify({ lawyer: lawyerId }),
       isAuth: true,
     });
 
-    if (response.statusCode === HttpStatusCode.ok) {
+    if (response.statusCode === HttpStatusCode.created) {
       return response.body.map(mapAudiencesToEvents);
     }
 
     throw new CustomError(
-      response.body?.message || 'Error fetching audiences by lawyer'
+      response.body?.message || "Error fetching audiences by lawyer"
     );
   }
 
-  async getRecordByInternalCode(
-    internalCode:string
-  ): Promise<EventoForm> {
+  async getRecordByInternalCode(internalCode: string): Promise<EventoForm> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getRecordByInternal,
-      method: 'post',
+      method: "post",
       body: JSON.stringify({ internalCode: internalCode }),
       isAuth: true,
     });
@@ -82,16 +86,14 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     }
 
     throw new CustomError(
-      response.body?.message || 'Error fetching by InternalCode'
+      response.body?.message || "Error fetching by InternalCode"
     );
   }
 
-  async createAudience(
-    audience: AudienceCreate
-  ): Promise<AudienceCreate> {
+  async createAudience(audience: AudienceCreate): Promise<AudienceCreate> {
     const response = await this.httpClient.request({
       url: apiUrls.audiencias.updateAudience,
-      method: 'post',
+      method: "post",
       body: JSON.stringify(audience),
       isAuth: true,
     });
@@ -100,9 +102,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
       return response.body;
     }
 
-    throw new CustomError(
-      response.body?.message || 'Error creating audience'
-    );
+    throw new CustomError(response.body?.message || "Error creating audience");
   }
 
   async updateAudience(
@@ -111,19 +111,17 @@ export class AudienceRepositoryImpl implements AudienceRepository {
   ): Promise<AudienceUpdate> {
     const response = await this.httpClient.request({
       url: `${apiUrls.audiencias.updateAudience}${id}`,
-      method: 'put',
+      method: "put",
       body: JSON.stringify(audience),
       isAuth: true,
     });
+
+    console.log("monto: ", audience.monto);
 
     if (response.statusCode === HttpStatusCode.ok) {
       return response.body;
     }
 
-    throw new CustomError(
-      response.body?.message || 'Error updating audience'
-    );
+    throw new CustomError(response.body?.message || "Error updating audience");
   }
-
-  
 }

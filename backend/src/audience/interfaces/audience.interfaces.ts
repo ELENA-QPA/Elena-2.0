@@ -10,6 +10,7 @@ export interface AudienceBase{
   _id: string;
   record: string;
   lawyer: string;
+  monto: number;
   state: string;
   start: Date;
   end: Date;

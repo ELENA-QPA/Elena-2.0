@@ -2018,7 +2018,9 @@ export class RecordsService {
           internalCode,
           deletedAt: { $exists: false },
         })
-        .select(' internalCode processType jurisdiction settled office');
+        .select(
+          ' internalCode processType jurisdiction settled office clientType',
+        );
 
       if (!record) {
         throw new NotFoundException(
@@ -2039,7 +2041,7 @@ export class RecordsService {
         .map((part) => ({
           name: part.name,
           email: part.email,
-          contact : part.contact,
+          contact: part.contact,
         }));
 
       const defendants = allPartsForRecord
@@ -2189,21 +2191,16 @@ export class RecordsService {
         .lean();
 
       if (!record) {
-        throw new NotFoundException(
-          `No se encontró el caso con id: ${id}`,
-        );
+        throw new NotFoundException(`No se encontró el caso con id: ${id}`);
       }
       return {
-        internalCode: record.internalCode
+        internalCode: record.internalCode,
       };
-
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException(
-        'Error al obtener el código interno',
-      );
+      throw new BadRequestException('Error al obtener el código interno');
     }
   }
 }

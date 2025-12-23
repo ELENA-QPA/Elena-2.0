@@ -1,9 +1,12 @@
-
-import { useState } from 'react';
-import container from '@/lib/di/container';
-import { AudienceRepository } from '../data/repositories/audience.repository';
-import { AudienceCreate, AudienceUpdate, Evento } from '../data/interfaces/audiencias.interface';
-import { getToken } from '@/utilities/helpers/auth/checkAuth';
+import { useState } from "react";
+import container from "@/lib/di/container";
+import { AudienceRepository } from "../data/repositories/audience.repository";
+import {
+  AudienceCreate,
+  AudienceUpdate,
+  Evento,
+} from "../data/interfaces/audiencias.interface";
+import { getToken } from "@/utilities/helpers/auth/checkAuth";
 
 export function useAudience() {
   const [audiences, setAudiences] = useState<Evento[]>([]);
@@ -11,7 +14,7 @@ export function useAudience() {
   const [error, setError] = useState<string | null>(null);
 
   const audienceRepository =
-    container.get<AudienceRepository>('AudienceRepository');
+    container.get<AudienceRepository>("AudienceRepository");
 
   const fetchAllAudiences = async () => {
     setLoading(true);
@@ -44,28 +47,30 @@ export function useAudience() {
     setLoading(true);
     setError(null);
     try {
-      const data = await audienceRepository.getRecordByInternalCode(internalCode);
+      const data = await audienceRepository.getRecordByInternalCode(
+        internalCode
+      );
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error('Error fetching audience:', err);
-      setError(err.message || 'No se encontró el código interno');
+      console.error("Error fetching audience:", err);
+      setError(err.message || "No se encontró el código interno");
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const createAudience = async (audienceData: AudienceCreate) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await audienceRepository.createAudience( audienceData);
+      const data = await audienceRepository.createAudience(audienceData);
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error('Error creating audience:', err);
-      setError(err.message || 'Error al crear la audiencia');
+      console.error("Error creating audience:", err);
+      setError(err.message || "Error al crear la audiencia");
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
@@ -80,8 +85,8 @@ export function useAudience() {
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error('Error updating audience:', err);
-      setError(err.message || 'Error al actualizar la audiencia');
+      console.error("Error updating audience:", err);
+      setError(err.message || "Error al actualizar la audiencia");
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
@@ -97,6 +102,6 @@ export function useAudience() {
     fetchAudiencesByLawyer,
     fetchAudienceByInternalCode,
     createAudience,
-    updateAudience
+    updateAudience,
   };
 }

@@ -1,20 +1,18 @@
-
 import { Injectable } from '@nestjs/common';
-import { 
-  RecordAdaptedResponse, 
+import {
+  RecordAdaptedResponse,
   RecordAdapted,
-  ProceduralPartAdapted 
+  ProceduralPartAdapted,
 } from '../interfaces/record-adapted.interface';
 
 @Injectable()
 export class RecordAdapter {
-
   adapt(response): RecordAdaptedResponse {
     const { record } = response;
 
     const plaintiffs = record.proceduralParts.plaintiffs;
 
-    const plaintiff: ProceduralPartAdapted | null = 
+    const plaintiff: ProceduralPartAdapted | null =
       plaintiffs.length > 0
         ? {
             name: plaintiffs[0].name,
@@ -22,10 +20,10 @@ export class RecordAdapter {
             contact: plaintiffs[0].contact,
           }
         : null;
-    
+
     const defendants = record.proceduralParts.defendants;
-    
-    const defendant: ProceduralPartAdapted | null = 
+
+    const defendant: ProceduralPartAdapted | null =
       defendants.length > 0
         ? {
             name: defendants[0].name,
@@ -34,6 +32,7 @@ export class RecordAdapter {
 
     const adaptedRecord: RecordAdapted = {
       _id: record._id,
+      client: record.clientType,
       internalCode: record.internalCode,
       office: record.office,
       settled: record.settled,
@@ -47,5 +46,4 @@ export class RecordAdapter {
       record: adaptedRecord,
     };
   }
-
 }

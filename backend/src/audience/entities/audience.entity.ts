@@ -1,44 +1,44 @@
-
-import { Schema } from "@nestjs/mongoose";
+import { Schema } from '@nestjs/mongoose';
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, ObjectId } from 'mongoose';
-import { EstadoAudiencia } from "../interfaces/audience.interfaces";
+import { EstadoAudiencia } from '../interfaces/audience.interfaces';
 
 @Schema({ timestamps: true })
 export class Audience extends Document {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Record',
-    required: true,
   })
   record: ObjectId;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
   })
   lawyer: ObjectId;
 
-  @Prop({ 
-    enum: EstadoAudiencia, 
-    default: EstadoAudiencia.PROGRAMADA 
+  @Prop({
+    enum: EstadoAudiencia,
+    default: EstadoAudiencia.PROGRAMADA,
   })
   state: EstadoAudiencia;
 
-  @Prop({ required: true })
+  @Prop()
   start: Date;
 
-  @Prop({ required: true })
+  @Prop()
   end: Date;
 
   @Prop()
   link?: string;
 
-  @Prop({ default: false})
+  @Prop()
   is_valid: boolean;
 
-  @Prop({ type: Date })
+  @Prop()
+  monto?: number;
+
+  @Prop()
   deletedAt?: Date;
 }
 

@@ -1,60 +1,84 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, RefreshCw, Plus} from "lucide-react"
-import { AudienceCalendar} from "./components/AudienceCalendar"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, RefreshCw, Plus } from "lucide-react";
+import { AudienceCalendar } from "./components/AudienceCalendar";
 import Link from "next/link";
-import { EstadosLeyenda } from "./components/EstadosLeyend"
-import { EventModal } from "./components/EventModal"
-import { Evento, EventoForm } from "@/modules/audiencias/data/interfaces/audiencias.interface"
-import dayjs from "dayjs"
-import { useAuth } from "@/utilities/helpers/auth/useAuth"
-import { useLawyers } from "@/modules/audiencias/hooks/useLawyers"
-import { useAudience } from "@/modules/audiencias/hooks/useAudience"
-import { LawyerFilter } from "./components/lawyerFilter"
-
+import { EstadosLeyenda } from "./components/EstadosLeyend";
+import { EventModal } from "./components/EventModal";
+import {
+  Evento,
+  EventoForm,
+} from "@/modules/audiencias/data/interfaces/audiencias.interface";
+import dayjs from "dayjs";
+import { useAuth } from "@/utilities/helpers/auth/useAuth";
+import { useLawyers } from "@/modules/audiencias/hooks/useLawyers";
+import { useAudience } from "@/modules/audiencias/hooks/useAudience";
+import { LawyerFilter } from "./components/lawyerFilter";
 
 export default function AudienciasView() {
-  
   const [idEvent, setIdEvent] = useState("");
-  const [initialEventData, setInitialEventData] = useState<Partial<EventoForm>>()
-  const [showEventModal, setShowEventModal] = useState(false)
+  const [initialEventData, setInitialEventData] =
+    useState<Partial<EventoForm>>();
+  const [showEventModal, setShowEventModal] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
 
   const { role, isLoading, isAuthenticated, id } = useAuth();
-  const { audiences, fetchAudiencesByLawyer, fetchAllAudiences } = useAudience();
-  const ableToEdit = role !== 'Administrador';
-  const { lawyersRecord, loadLawyers } = useLawyers()
+  const { audiences, fetchAudiencesByLawyer, fetchAllAudiences } =
+    useAudience();
+  const notAdmin = role !== "Administrador";
+  const { lawyersRecord, loadLawyers } = useLawyers();
+
+  const noLawyerValue = "_ALL_";
 
   useEffect(() => {
-    loadLawyers()
-    fetchAllAudiences();
-  }, []) 
+    if (isLoading || !isAuthenticated || !role || !id) {
+      return;
+    }
+    loadLawyers();
+    loadAudiences();
+  }, [role, id, isLoading, isAuthenticated]);
+
+  console.log("loading aud for id ", role, id);
+
+  const loadAudiences = () => {
+    notAdmin ? fetchAudiencesByLawyer(id) : fetchAllAudiences();
+  };
+
+  const filter = (idLawyer: string) => {
+    console.log("entrando en filter");
+    if (idLawyer == noLawyerValue) {
+      console.log("fetch_all");
+      fetchAllAudiences();
+    } else {
+      fetchAudiencesByLawyer(idLawyer);
+    }
+
+    console.log("filtered ", audiences);
+  };
 
   const formatForInput = (date?: Date) =>
     date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
 
-  const handleRetry = () => {
-  }
-
+  const handleRetry = () => {};
 
   console.log("aud ", audiences);
   const handleCloseModal = () => {
     setShowEventModal(false);
     setInitialEventData(undefined);
-  }
+  };
 
   const handleSelectEvent = (event: Evento) => {
-    const id = event.idEvent
+    const id = event.idEvent;
     setIdEvent(id);
     const string_start = formatForInput(event.start);
     const string_end = formatForInput(event.end);
     setInitialEventData({
       ...event,
       start: string_start,
-      end: string_end
+      end: string_end,
     });
     setEditingMode(true);
     setShowEventModal(true);
@@ -79,7 +103,8 @@ export default function AudienciasView() {
           </div>
         </div>
       </div>
-    )}
+    );
+  }
 
   if (!isAuthenticated) {
     return (
@@ -106,7 +131,7 @@ export default function AudienciasView() {
           </AlertDescription>
         </Alert>
       </div>
-    )
+    );
   }
 
   return (
@@ -122,8 +147,14 @@ export default function AudienciasView() {
               {role && (
                 <span className="ml-1 sm:ml-2 text-xs sm:text-sm">
                   • Rol:
-                  <span className={`font-medium ${role === 'Administrador' ? 'text-green-600' : 'text-blue-600'}`}>
-                    {role === 'Administrador' ? 'Admin' : 'Usuario'}
+                  <span
+                    className={`font-medium ${
+                      role === "Administrador"
+                        ? "text-green-600"
+                        : "text-blue-600"
+                    }`}
+                  >
+                    {role === "Administrador" ? "Admin" : "Usuario"}
                   </span>
                 </span>
               )}
@@ -131,8 +162,13 @@ export default function AudienciasView() {
 
             <EstadosLeyenda />
           </div>
-    
-          <LawyerFilter lawyersRecord={lawyersRecord} onFilter={() => {}} isVisible = {!ableToEdit} />
+
+          <LawyerFilter
+            lawyersRecord={lawyersRecord}
+            onFilter={filter}
+            isVisible={!notAdmin}
+            noLawyerValue={noLawyerValue}
+          />
 
           <Button
             className="justify-self-end w-fit bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm"
@@ -145,24 +181,23 @@ export default function AudienciasView() {
             <span className="hidden xs:inline">Nueva Audiencia</span>
             <span className="xs:hidden">Nuevo</span>
           </Button>
-          
         </div>
-        <AudienceCalendar 
+        <AudienceCalendar
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
-          events = {audiences}
+          events={audiences}
         />
-        
-        <EventModal 
+
+        <EventModal
           open={showEventModal}
-          onClose={handleCloseModal} 
+          onClose={handleCloseModal}
           initialData={initialEventData}
           lawyersRecord={lawyersRecord}
-          isEditable={ableToEdit}
+          isEditable={notAdmin}
           editing={editingMode}
           idEvent={idEvent}
         />
       </div>
-    </> 
-  )
+    </>
+  );
 }

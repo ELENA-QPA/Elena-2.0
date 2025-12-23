@@ -1,4 +1,3 @@
-
 export interface ProceduralPartAdapted {
   name: string;
   email?: string;
@@ -16,6 +15,7 @@ export interface RecordAdapted {
   office: string;
   settled: string;
   proceduralParts: ProceduralPartsAdapted;
+  client: string;
 }
 
 export interface RecordAdaptedResponse {

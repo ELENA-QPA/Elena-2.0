@@ -15,14 +15,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 // import { eventoSchema, EventoForm } from "@/data/schemas/evento.schema";
-import { Estado, ESTADOS, EventoForm, eventoSchema } from "@/modules/audiencias/data/interfaces/audiencias.interface";
+import {
+  Estado,
+  ESTADOS,
+  EventoForm,
+  eventoSchema,
+} from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import { useEffect, useState } from "react";
 import { useAudience } from "@/modules/audiencias/hooks/useAudience";
-import { mapEventoFormToAudienceCreate, mapEventoFormToAudienceUpdate } from "@/modules/audiencias/data/adapters/audience.adapter";
+import {
+  mapEventoFormToAudienceCreate,
+  mapEventoFormToAudienceUpdate,
+} from "@/modules/audiencias/data/adapters/audience.adapter";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
@@ -39,7 +53,7 @@ interface EventModalProps {
   lawyersRecord?: Record<string, string>;
   editing: boolean;
   isEditable: boolean;
-  idEvent:string;
+  idEvent: string;
 }
 
 const DEFAULT_FORM_VALUES: EventoForm = {
@@ -55,101 +69,114 @@ const DEFAULT_FORM_VALUES: EventoForm = {
   estado: "Programada",
   start: "",
   end: "",
-  monto_conciliado: undefined,
+  monto_conciliado: 0,
   record_id: "",
 };
 
-export function EventModal({ open, onClose, initialData, editing, isEditable, lawyersRecord = {}, idEvent}: EventModalProps) {
-  const { error, setError, fetchAudienceByInternalCode, createAudience, updateAudience} = useAudience();
+export function EventModal({
+  open,
+  onClose,
+  initialData,
+  editing,
+  isEditable,
+  lawyersRecord = {},
+  idEvent,
+}: EventModalProps) {
+  const {
+    error,
+    setError,
+    fetchAudienceByInternalCode,
+    createAudience,
+    updateAudience,
+  } = useAudience();
 
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
-    defaultValues: DEFAULT_FORM_VALUES
+    defaultValues: DEFAULT_FORM_VALUES,
   });
 
   useEffect(() => {
     if (open) {
       form.reset(initialData || DEFAULT_FORM_VALUES);
       console.log("initial", initialData);
-      console.log("idEvent", idEvent)
-      console.log("editing? ", editing)
+      console.log("idEvent", idEvent);
+      console.log("editing? ", editing);
       setError(null);
     }
-    
   }, [open, initialData]);
 
   const estadoActual = form.watch("estado");
   const blockAmount = estadoActual !== "Conciliada";
 
   const handleSync = async () => {
-      const internalCode = form.getValues("codigo_interno");
+    const internalCode = form.getValues("codigo_interno");
 
-      if (!internalCode) {
-        return;
-      }
+    if (!internalCode) {
+      return;
+    }
 
-      const result = await fetchAudienceByInternalCode(internalCode);
+    const result = await fetchAudienceByInternalCode(internalCode);
 
-      if (!result.success) {
-        form.reset({
-        ...DEFAULT_FORM_VALUES
-        });
-        return;
-      }
+    if (!result.success) {
+      form.reset({
+        ...DEFAULT_FORM_VALUES,
+      });
+      return;
+    }
 
-      const syncedData: Partial<EventoForm> = {
-        ...result.data,
-        start: initialData?.start,
-        end: initialData?.end,
-      };
-      
-      console.log("syn", syncedData);
-      form.reset(syncedData);
+    const syncedData: Partial<EventoForm> = {
+      ...result.data,
+      start: initialData?.start,
+      end: initialData?.end,
     };
 
-  const create = async(values: EventoForm) => {
-      if (!values.record_id) {
-        setError("No se encontró el ID del registro. Por favor, sincroniza primero.");
-        return;
-      }
-
-      const audienceData = mapEventoFormToAudienceCreate(values);
-      const result = await createAudience(audienceData);
-
-      if (result.success) {
-        form.reset(DEFAULT_FORM_VALUES);
-        window.location.reload();
-        onClose();
-        
-      }
+    console.log("syn", syncedData);
+    form.reset(syncedData);
   };
 
-  const edit = async(values: EventoForm) =>{
-    if (!idEvent) {
-        setError("Error recuperando el ID del evento");
-        return;
-      }
+  const create = async (values: EventoForm) => {
+    if (!values.record_id) {
+      setError(
+        "No se encontró el ID del registro. Por favor, sincroniza primero."
+      );
+      return;
+    }
 
-      const audienceData = mapEventoFormToAudienceUpdate(values);
-      const result = await updateAudience(idEvent,audienceData);
+    const audienceData = mapEventoFormToAudienceCreate(values);
+    const result = await createAudience(audienceData);
 
     if (result.success) {
       form.reset(DEFAULT_FORM_VALUES);
       window.location.reload();
       onClose();
-      
     }
-  }
+  };
+
+  const edit = async (values: EventoForm) => {
+    if (!idEvent) {
+      setError("Error recuperando el ID del evento");
+      return;
+    }
+
+    const audienceData = mapEventoFormToAudienceUpdate(values);
+    const result = await updateAudience(idEvent, audienceData);
+
+    if (result.success) {
+      form.reset(DEFAULT_FORM_VALUES);
+      window.location.reload();
+      onClose();
+    }
+  };
 
   const submit = async (values: EventoForm) => {
     try {
-      console.log("edit 2 ", editing)
-      console.log("id event 2 ", idEvent)
+      console.log("edit 2 ", editing);
+      console.log("id event 2 ", idEvent);
       if (!editing) {
-        await create(values); 
+        await create(values);
       } else {
         console.log("llamando edit");
-        await edit(values); 
+        await edit(values);
       }
     } catch (err: any) {
       setError("Ocurrió un error al guardar el evento");
@@ -166,12 +193,17 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
 
   return (
     <Dialog open={open} onOpenChange={closeModal}>
-      <DialogContent 
+      <DialogContent
         className="sm:max-w-2xl"
-        onOpenAutoFocus={(e) => e.preventDefault()}>
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
-          <DialogTitle>{editing ? "Editar Evento" : "Crear Evento"}</DialogTitle>
-          <DialogDescription>Completa los campos para el evento.</DialogDescription>
+          <DialogTitle>
+            {editing ? "Editar Evento" : "Crear Evento"}
+          </DialogTitle>
+          <DialogDescription>
+            Completa los campos para el evento.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
@@ -179,7 +211,9 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
             <div>
               <Label>Radicado</Label>
               <Input disabled={true} {...form.register("title")} />
-              {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
+              {errors.title && (
+                <p className="text-red-500 text-xs">{errors.title.message}</p>
+              )}
             </div>
             <div>
               <Label>Código Interno</Label>
@@ -187,31 +221,39 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
             </div>
 
             <div>
-                <Label>Abogado</Label>
-                <Select
-                  disabled={isEditable} 
-                  value={form.watch("abogado_id")}
-                  onValueChange={(v) => form.setValue("abogado_id", v)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un abogado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(lawyersRecord).length > 0 ? (
-                      Object.entries(lawyersRecord).map(([name, id]) => (
-                        <SelectItem className="hover:bg-gray-200" key={id} value={id}>
-                          {name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-lawyers" disabled>
-                        No hay abogados disponibles
+              <Label>Abogado</Label>
+              <Select
+                disabled={isEditable}
+                value={form.watch("abogado_id")}
+                onValueChange={(v) => form.setValue("abogado_id", v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un abogado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(lawyersRecord).length > 0 ? (
+                    Object.entries(lawyersRecord).map(([name, id]) => (
+                      <SelectItem
+                        className="hover:bg-gray-200"
+                        key={id}
+                        value={id}
+                      >
+                        {name}
                       </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-                {errors.abogado_id && <p className="text-red-500 text-xs">{errors.abogado_id.message}</p>}
-              </div>
+                    ))
+                  ) : (
+                    <SelectItem value="no-lawyers" disabled>
+                      No hay abogados disponibles
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              {errors.abogado_id && (
+                <p className="text-red-500 text-xs">
+                  {errors.abogado_id.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
@@ -222,7 +264,10 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
 
             <div>
               <Label>Telefono Demandante</Label>
-              <Input disabled={true} {...form.register("contacto_demandante")} />
+              <Input
+                disabled={true}
+                {...form.register("contacto_demandante")}
+              />
             </div>
 
             <div>
@@ -245,11 +290,19 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Inicio</Label>
-              <Input disabled={isEditable} type="datetime-local" {...form.register("start")} />
+              <Input
+                disabled={isEditable}
+                type="datetime-local"
+                {...form.register("start")}
+              />
             </div>
             <div>
               <Label>Fin</Label>
-              <Input disabled={isEditable} type="datetime-local" {...form.register("end")} />
+              <Input
+                disabled={isEditable}
+                type="datetime-local"
+                {...form.register("end")}
+              />
             </div>
           </div>
 
@@ -261,7 +314,13 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Monto Conciliado</Label>
-              <Input disabled={blockAmount} type="number" {...form.register("monto_conciliado")} />
+              <Input
+                disabled={blockAmount}
+                type="number"
+                {...form.register("monto_conciliado", {
+                  valueAsNumber: true,
+                })}
+              />
             </div>
 
             <div>
@@ -275,7 +334,11 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
                 </SelectTrigger>
                 <SelectContent>
                   {ESTADOS.map((est) => (
-                    <SelectItem className="hover:bg-gray-200" key={est} value={est}>
+                    <SelectItem
+                      className="hover:bg-gray-200"
+                      key={est}
+                      value={est}
+                    >
                       {estadoLabels[est]}
                     </SelectItem>
                   ))}
@@ -285,15 +348,15 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
           </div>
 
           <DialogFooter>
-              {!editing && (
-                <Button
-                  type="button"
-                  className="bg-pink-600 hover:bg-pink-700 mr-auto"
-                  onClick={handleSync}
-                >
-                  Sincronizar
-                </Button>
-              )}
+            {!editing && (
+              <Button
+                type="button"
+                className="bg-pink-600 hover:bg-pink-700 mr-auto"
+                onClick={handleSync}
+              >
+                Sincronizar
+              </Button>
+            )}
             <div className="flex gap-2">
               <Button variant="outline" type="button" onClick={closeModal}>
                 Cancelar
@@ -302,7 +365,6 @@ export function EventModal({ open, onClose, initialData, editing, isEditable, la
                 {editing ? "Actualizar" : "Crear"}
               </Button>
             </div>
-
           </DialogFooter>
         </form>
 

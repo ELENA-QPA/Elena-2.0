@@ -27,7 +27,16 @@ export class AudienceController {
   @ApiResponse({ status: 201, description: 'Audiencia creada exitosamente' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   create(@Body() createAudienceDto: CreateAudienceDto) {
-    return this.audienceService.create(createAudienceDto);
+    return this.audienceService.create(createAudienceDto, true);
+  }
+
+  @Post('/monolegal')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear una nueva audiencia desde monolegal' })
+  @ApiResponse({ status: 201, description: 'Audiencia creada exitosamente' })
+  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  createMono(@Body() createAudienceDto: CreateAudienceDto) {
+    return this.audienceService.create(createAudienceDto, false);
   }
 
   @Post('/all')
@@ -50,9 +59,15 @@ export class AudienceController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Actualizar una audiencia' })
-  @ApiResponse({ status: 200, description: 'Audiencia actualizada exitosamente' })
+  @ApiResponse({
+    status: 200,
+    description: 'Audiencia actualizada exitosamente',
+  })
   @ApiResponse({ status: 404, description: 'Audiencia no encontrada' })
-  update(@Param('id') id: string, @Body() updateAudienceDto: UpdateAudienceDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAudienceDto: UpdateAudienceDto,
+  ) {
     return this.audienceService.update(id, updateAudienceDto);
   }
 

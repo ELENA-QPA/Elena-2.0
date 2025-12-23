@@ -1,11 +1,7 @@
 import { Lawyer } from "./lawyers.interface";
 import { z } from "zod";
 
-export type Estado =
-    | "Programada"
-    | "Celebrada"
-    | "No_celebrada"
-    | "Conciliada";
+export type Estado = "Programada" | "Celebrada" | "No_celebrada" | "Conciliada";
 
 export const ESTADOS = [
   "Programada",
@@ -15,14 +11,14 @@ export const ESTADOS = [
 ] as const;
 
 export const LegendColors: Record<string, string> = {
-    Rappi: "bg-orange-600",
-    Didi: "bg-blue-600",
-    Uber: "bg-gray-900",
-    Otro: "bg-green-600",
+  Rappi: "bg-orange-600",
+  Didi: "bg-blue-600",
+  Uber: "bg-gray-900",
+  Otro: "bg-green-600",
 };
 
 export interface Evento {
-  idEvent:string;
+  idEvent: string;
   title: string;
   demandante: string;
   contacto_demandante: string;
@@ -40,7 +36,7 @@ export interface Evento {
   record_id: string;
 }
 
-export interface AudienceInterface{
+export interface AudienceInterface {
   _id: string;
   record: string;
   lawyer: Lawyer;
@@ -49,8 +45,8 @@ export interface AudienceInterface{
   end: Date;
   link?: string;
   is_valid: boolean;
+  monto: number;
 }
-
 
 export interface AudienceBase {
   start: Date;
@@ -60,6 +56,7 @@ export interface AudienceBase {
   link: string;
   state: Estado;
   is_valid: boolean;
+  monto?: number;
 }
 
 export interface AudienceCreate extends AudienceBase {}
@@ -72,8 +69,8 @@ export interface ProceduralPart {
   contact?: string;
 }
 
-export interface ProceduralParts{
-  plaintiff: ProceduralPart| null;
+export interface ProceduralParts {
+  plaintiff: ProceduralPart | null;
   defendant: ProceduralPart | null;
 }
 
@@ -90,10 +87,9 @@ export interface getRecordByInternalCodeResponse {
 }
 
 export interface AudienceOrchestratorResponse {
-  audience : AudienceInterface,  
-  record: RecordAudience
+  audience: AudienceInterface;
+  record: RecordAudience;
 }
-
 
 export const eventoSchema = z.object({
   title: z.string(),
@@ -109,6 +105,6 @@ export const eventoSchema = z.object({
   link_teams: z.string().url().optional().or(z.literal("")),
   codigo_interno: z.string().optional(),
   estado: z.enum(ESTADOS),
-  monto_conciliado: z.coerce.number().optional(),
+  monto_conciliado: z.number().optional(),
 });
 export type EventoForm = z.infer<typeof eventoSchema>;

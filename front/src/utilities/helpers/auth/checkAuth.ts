@@ -5,14 +5,14 @@ export interface AuthData {
   user: any | null;
   token: string;
   role: string;
-  id: string
+  id: string;
 }
 
 export const getAuthData = (): AuthData => {
   let user = null;
   let token = "";
   let role = "";
-  let id="";
+  let id = "";
 
   try {
     const authToken = getCookie(CookiesKeysEnum.token);
@@ -20,16 +20,15 @@ export const getAuthData = (): AuthData => {
       token = authToken as string;
     }
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const userData = window.localStorage.getItem("user");
       if (userData) {
         user = JSON.parse(userData);
-        const rol = user.rol.includes("Administrador") ? "Administrador" : "";
+        const rol = user.rol.includes("Administrador")
+          ? "Administrador"
+          : user.rol[0];
         role = rol;
       }
- 
-
-
     }
   } catch (error) {
     console.error("Error al obtener datos de autenticación:", error);
@@ -43,7 +42,6 @@ export const isAuthenticated = (): boolean => {
   return !!token;
 };
 
-
 export const getToken = (): string => {
   const authToken = getCookie(CookiesKeysEnum.token);
   return authToken ? (authToken as string) : "";
@@ -51,7 +49,7 @@ export const getToken = (): string => {
 
 export const getUser = (): any | null => {
   try {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const userData = window.localStorage.getItem("user");
       return userData ? JSON.parse(userData) : null;
     }
@@ -60,7 +58,6 @@ export const getUser = (): any | null => {
   }
   return null;
 };
-
 
 export const getRole = (): string => {
   const userRole = getCookie(CookiesKeysEnum.role);
