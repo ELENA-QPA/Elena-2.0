@@ -5,13 +5,11 @@ import { RecordsModule } from 'src/records/records.module';
 import { RecordAdapter } from './adapters/record.adapter';
 import { AudienceModule } from 'src/audience/audience.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { NotificationModule } from 'src/notifications/notifications.module';
 
 @Module({
-  imports: [RecordsModule, 
-            AudienceModule,
-            AuthModule],
+  imports: [RecordsModule, AudienceModule, AuthModule, NotificationModule],
   controllers: [OrchestratorController],
-  providers: [OrchestratorService,
-              RecordAdapter],
+  providers: [OrchestratorService, RecordAdapter],
 })
 export class OrchestratorModule {}

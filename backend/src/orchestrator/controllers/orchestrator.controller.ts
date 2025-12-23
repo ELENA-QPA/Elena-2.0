@@ -1,6 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Query,
+  Logger,
+} from '@nestjs/common';
 import { OrchestratorService } from '../services/orchestrator.service';
-import { InternalCodeDto, IdRecordDto, IdLawyerDto } from '../dto/records-service.dto';
+import {
+  InternalCodeDto,
+  IdRecordDto,
+  IdLawyerDto,
+} from '../dto/records-service.dto';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiKeyAuth, Auth } from 'src/auth/decorators';
@@ -10,27 +26,31 @@ import { ValidRoles } from 'src/auth/interfaces';
 @ApiTags('Orchestrator')
 @Controller('orchestrator')
 export class OrchestratorController {
-  constructor(private readonly orchestratorService: OrchestratorService,
-              private readonly audienceService: AudienceService
-            ) {}
+  constructor(
+    private readonly orchestratorService: OrchestratorService,
+    private readonly audienceService: AudienceService,
+  ) {}
 
-   private readonly logger = new Logger(OrchestratorService.name);
+  private readonly logger = new Logger(OrchestratorService.name);
 
   @Post('record')
   @HttpCode(HttpStatus.OK)
   async getRecord(@Body() body: IdRecordDto): Promise<RecordAdaptedResponse> {
-    const internalCodeDto: InternalCodeDto = await this.orchestratorService.getInternalCodeById(body);
+    const internalCodeDto: InternalCodeDto =
+      await this.orchestratorService.getInternalCodeById(body);
     return this.orchestratorService.getRecordByInternalCode(internalCodeDto);
   }
 
   @Post('record/internalCode')
   @HttpCode(HttpStatus.OK)
-  async getRecordByInternalCode(@Body() body: InternalCodeDto): Promise<RecordAdaptedResponse> {
+  async getRecordByInternalCode(
+    @Body() body: InternalCodeDto,
+  ): Promise<RecordAdaptedResponse> {
     return this.orchestratorService.getRecordByInternalCode(body);
   }
 
   @Auth(ValidRoles.admin)
-  @Get("audience/all")
+  @Get('audience/all')
   findAll() {
     return this.orchestratorService.getAllAudiences();
   }
@@ -40,11 +60,11 @@ export class OrchestratorController {
     return this.orchestratorService.getAudienceByLawyer(body);
   }
 
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orchestratorService.remove(+id);
+  @Post('bulk')
+  @HttpCode(HttpStatus.CREATED)
+  async bulkCreateAudiences(@Body() bulkCreateDto) {
+    return await this.orchestratorService.bulkCreateAudiencesWithNotifications(
+      bulkCreateDto.audiences,
+    );
   }
-
-
 }

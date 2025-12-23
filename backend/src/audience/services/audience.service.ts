@@ -31,11 +31,11 @@ export class AudienceService {
     'end',
   ] as const;
 
-  private isValidMongoId(value: any): boolean {
+  public isValidMongoId(value: any): boolean {
     return value && Types.ObjectId.isValid(value);
   }
 
-  private isValidDate(value: any): boolean {
+  public isValidDate(value: any): boolean {
     if (!value) return false;
     const date = new Date(value);
     return !isNaN(date.getTime());
@@ -123,7 +123,7 @@ export class AudienceService {
       if (error instanceof BadRequestException) {
         throw error;
       }
-      throw new BadRequestException('error al crear audiencia');
+      throw new BadRequestException('error al crear audiencia ', error.message);
     }
   }
 
