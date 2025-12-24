@@ -11,6 +11,9 @@ export class Notification extends Document {
   })
   audience: Types.ObjectId;
 
+  @Prop()
+  message: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 

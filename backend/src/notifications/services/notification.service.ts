@@ -23,6 +23,7 @@ export class NotificationService {
     return {
       _id: notification._id.toString(),
       audience_id: notification.audience._id.toString(),
+      message: notification.message,
       createdAt: notification.createdAt,
       updatedAt: notification.updatedAt,
     };

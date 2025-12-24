@@ -12,6 +12,11 @@ export interface BulkCreateResult {
   notifications_created: number;
 }
 
+export interface FieldValidationResult {
+  toDelete: string[];
+  messages: string[];
+}
+
 // {
 //   "audiences": [
 //     // 1: Audiencia completamente válida

@@ -77,22 +77,37 @@ export class AudienceService {
   }
 
   private transformAudienceToResponse(audience: any): AudienceResponse {
-    return {
+    const response: any = {
       audience: {
         _id: audience._id.toString(),
-        record: audience.record.toString(),
-        lawyer: {
-          _id: audience.lawyer._id,
-          name: audience.lawyer.name + ' ' + audience.lawyer.lastname,
-        },
         monto: audience.monto || 0,
         state: audience.state,
-        start: audience.start,
-        end: audience.end,
         link: audience.link,
         is_valid: audience.is_valid,
       },
     };
+
+    if (audience.record) {
+      response.audience.record = audience.record.toString();
+    }
+
+    if (audience.lawyer) {
+      this.logger.log('Entro en tiene lawyer');
+      response.audience.lawyer = {
+        _id: audience.lawyer._id,
+        name: audience.lawyer.name + ' ' + audience.lawyer.lastname,
+      };
+    }
+
+    if (audience.start) {
+      response.audience.start = audience.start;
+    }
+
+    if (audience.end) {
+      response.audience.end = audience.end;
+    }
+
+    return response;
   }
 
   async create(
@@ -184,7 +199,6 @@ export class AudienceService {
         );
       }
 
-      this.logger.log('ss ', audience.lawyer.name);
       return this.transformAudienceToResponse(audience);
     } catch (error) {
       if (

@@ -12,6 +12,7 @@ import { AudienceResponse } from 'src/audience/interfaces/audience.interfaces';
 import {
   AudienceOrchestratorResponse,
   BulkCreateResult,
+  FieldValidationResult,
 } from '../interfaces/audience.interface';
 import { NotificationService } from 'src/notifications/services/notification.service';
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
@@ -27,35 +28,52 @@ export class OrchestratorService {
     private readonly recordAdapter: RecordAdapter,
   ) {}
 
-  private sanitizeAudienceDto(dto: CreateAudienceDto): CreateAudienceDto {
+  private getFields(dto: CreateAudienceDto): FieldValidationResult {
+    const toDelete: string[] = [];
+    const messages: string[] = [];
+
+    if (!dto.record) {
+      messages.push('record: faltante');
+    } else if (!this.audienceService.isValidMongoId(dto.record)) {
+      toDelete.push('record');
+      messages.push(`record:(${dto.record})`);
+    }
+
+    if (!dto.lawyer) {
+      messages.push('lawyer: faltante');
+    } else if (!this.audienceService.isValidMongoId(dto.lawyer)) {
+      toDelete.push('lawyer');
+      messages.push(`lawyer:(${dto.lawyer})`);
+    }
+
+    if (!dto.start) {
+      messages.push('start: faltante');
+    } else if (!this.audienceService.isValidDate(dto.start)) {
+      toDelete.push('start');
+      messages.push(`start:(${dto.start})`);
+    }
+
+    if (!dto.end) {
+      messages.push('end: faltante');
+    } else if (!this.audienceService.isValidDate(dto.end)) {
+      toDelete.push('end');
+      messages.push(`end:(${dto.end})`);
+    }
+
+    return { toDelete, messages };
+  }
+
+  private sanitizeAudienceDto(
+    dto: CreateAudienceDto,
+    toDelete: string[],
+  ): CreateAudienceDto {
     const sanitized: CreateAudienceDto = { ...dto };
 
-    if (
-      sanitized.record &&
-      !this.audienceService.isValidMongoId(sanitized.record)
-    ) {
-      delete sanitized.record;
-      this.logger.warn(`Campo 'record' inválido removido: ${dto.record}`);
+    for (const field of toDelete) {
+      if (field in sanitized) {
+        delete sanitized[field];
+      }
     }
-
-    if (
-      sanitized.lawyer &&
-      !this.audienceService.isValidMongoId(sanitized.lawyer)
-    ) {
-      delete sanitized.lawyer;
-      this.logger.warn(`Campo 'lawyer' inválido removido: ${dto.lawyer}`);
-    }
-
-    if (sanitized.start && !this.audienceService.isValidDate(sanitized.start)) {
-      delete sanitized.start;
-      this.logger.warn(`Campo 'start' inválido removido: ${dto.start}`);
-    }
-
-    if (sanitized.end && !this.audienceService.isValidDate(sanitized.end)) {
-      delete sanitized.end;
-      this.logger.warn(`Campo 'end' inválido removido: ${dto.end}`);
-    }
-
     return sanitized;
   }
 
@@ -161,7 +179,8 @@ export class OrchestratorService {
 
     for (const dto of audienceDtos) {
       try {
-        const sanitizedDto = this.sanitizeAudienceDto(dto);
+        const { toDelete, messages } = this.getFields(dto);
+        const sanitizedDto = this.sanitizeAudienceDto(dto, toDelete);
 
         const createdAudience = await this.audienceService.create(
           sanitizedDto,
@@ -175,6 +194,7 @@ export class OrchestratorService {
           try {
             await this.notificationService.create({
               audience: createdAudience._id,
+              message: 'Faltantes' + messages.join(', '),
             });
             result.notifications_created++;
             notificationCreated = true;
