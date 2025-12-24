@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { IUser } from "@/data/interfaces/user.interface";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { NotificationBell } from "./notification-bell";
+import { useAuth } from "@/utilities/helpers/auth/useAuth";
 
 interface AppBarProps {
   user?: IUser;
@@ -27,7 +28,9 @@ interface AppBarProps {
 
 export const AppBar = ({ user, className, ...props }: AppBarProps) => {
   const router = useRouter();
+  const { role } = useAuth();
 
+  const isAdmin = role === "Administrador";
   // Verificar si estamos dentro de un SidebarProvider
   let hasSidebarProvider = false;
   try {
@@ -124,7 +127,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
         {/* <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
           <Phone className="h-5 w-5" />
         </Button> */}
-        <NotificationBell />
+        {isAdmin && <NotificationBell />}
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

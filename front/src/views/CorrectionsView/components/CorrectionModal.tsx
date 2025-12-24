@@ -1,9 +1,9 @@
+// components/CorrectionModal.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,6 +40,7 @@ interface NotificationCorrectionModalProps {
   onClose: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  onCorrectionSuccess: () => void;
 }
 
 const DEFAULT_FORM_VALUES: EventoForm = {
@@ -74,8 +75,8 @@ export function NotificationCorrectionModal({
   onClose,
   onNext,
   onPrevious,
+  onCorrectionSuccess,
 }: NotificationCorrectionModalProps) {
-  const router = useRouter();
   const {
     error,
     setError,
@@ -106,10 +107,8 @@ export function NotificationCorrectionModal({
 
   const toDatetimeLocal = (value?: string | Date): string => {
     if (!value) return "";
-
     const date = new Date(value);
     if (isNaN(date.getTime())) return "";
-
     return date.toISOString().slice(0, 16);
   };
 
@@ -117,7 +116,7 @@ export function NotificationCorrectionModal({
     try {
       const result = await fetchAudience(notification.audience_id);
 
-      console.log("audiecne to fix ", result.data);
+      console.log("audience to fix ", result.data);
 
       if (result.success && result.data) {
         const audience = result.data.audience;
@@ -144,7 +143,7 @@ export function NotificationCorrectionModal({
       }
     } catch (err) {
       console.error("Error loading audience:", err);
-      setError("Error al cargar los datos de la audiencia ");
+      setError("Error al cargar los datos de la audiencia");
     }
   };
 
@@ -218,9 +217,9 @@ export function NotificationCorrectionModal({
       if (result.success) {
         setShowSuccessMessage(true);
         setError(null);
-
         setTimeout(async () => {
           await deleteNotification(notification._id);
+          onCorrectionSuccess();
         }, 2000);
       }
     } catch (err: any) {
@@ -255,12 +254,16 @@ export function NotificationCorrectionModal({
         <div className="flex items-center gap-2 p-4 mb-4 bg-green-50 border border-green-200 rounded-md">
           <CheckCircle2 className="h-5 w-5 text-green-600" />
           <span className="text-green-800 font-medium">
-            Corrección exitosa! Pasando a la siguiente...
+            Corrección exitosa!{" "}
+            {totalNotifications > 1
+              ? "Pasando a la siguiente..."
+              : "Redirigiendo..."}
           </span>
         </div>
       )}
 
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        {/* ... resto del formulario sin cambios ... */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <Label>Radicado</Label>

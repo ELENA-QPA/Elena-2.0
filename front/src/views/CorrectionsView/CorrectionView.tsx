@@ -1,3 +1,4 @@
+// app/dashboard/corrections/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,10 +18,23 @@ export default function NotificationCorrectionPage() {
   useEffect(() => {
     const indexParam = searchParams.get("index");
     if (indexParam) {
-      setCurrentIndex(parseInt(indexParam));
+      const parsedIndex = parseInt(indexParam);
+      setCurrentIndex(
+        Math.min(parsedIndex, Math.max(0, notifications.length - 1))
+      );
     }
     setIsLoading(false);
-  }, [searchParams]);
+  }, [searchParams, notifications.length]);
+
+  useEffect(() => {
+    if (notifications.length === 0) return;
+
+    if (currentIndex >= notifications.length) {
+      const newIndex = Math.max(0, notifications.length - 1);
+      setCurrentIndex(newIndex);
+      router.replace(`/dashboard/corrections?index=${newIndex}`);
+    }
+  }, [notifications.length, currentIndex, router]);
 
   const handleClose = () => {
     router.push("/dashboard/audiencias");
@@ -41,6 +55,17 @@ export default function NotificationCorrectionPage() {
       router.push(`/dashboard/corrections?index=${prevIndex}`);
     }
   };
+
+  const handleCorrectionSuccess = () => {
+    if (notifications.length > 1) {
+      const newIndex = Math.min(currentIndex, notifications.length - 2);
+      setCurrentIndex(newIndex);
+      router.replace(`/dashboard/corrections?index=${newIndex}`);
+    } else {
+      router.push("/dashboard/audiencias");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -72,6 +97,14 @@ export default function NotificationCorrectionPage() {
 
   const currentNotification = notifications[currentIndex];
 
+  if (!currentNotification) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-pink-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <NotificationCorrectionModal
@@ -82,6 +115,7 @@ export default function NotificationCorrectionPage() {
         onClose={handleClose}
         onNext={handleNext}
         onPrevious={handlePrevious}
+        onCorrectionSuccess={handleCorrectionSuccess}
       />
     </div>
   );

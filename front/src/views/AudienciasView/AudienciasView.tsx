@@ -170,17 +170,19 @@ export default function AudienciasView() {
             noLawyerValue={noLawyerValue}
           />
 
-          <Button
-            className="justify-self-end w-fit bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm"
-            onClick={() => {
-              setEditingMode(false);
-              setShowEventModal(true);
-            }}
-          >
-            <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline">Nueva Audiencia</span>
-            <span className="xs:hidden">Nuevo</span>
-          </Button>
+          {!notAdmin && (
+            <Button
+              className="justify-self-end w-fit bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm"
+              onClick={() => {
+                setEditingMode(false);
+                setShowEventModal(true);
+              }}
+            >
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Nueva Audiencia</span>
+              <span className="xs:hidden">Nuevo</span>
+            </Button>
+          )}
         </div>
         <AudienceCalendar
           onSelectSlot={handleSelectSlot}

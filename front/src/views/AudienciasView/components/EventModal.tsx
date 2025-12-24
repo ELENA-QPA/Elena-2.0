@@ -37,6 +37,7 @@ import {
   mapEventoFormToAudienceCreate,
   mapEventoFormToAudienceUpdate,
 } from "@/modules/audiencias/data/adapters/audience.adapter";
+import { useAuth } from "@/utilities/helpers/auth/useAuth";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
@@ -94,6 +95,9 @@ export function EventModal({
     resolver: zodResolver(eventoSchema),
     defaultValues: DEFAULT_FORM_VALUES,
   });
+
+  const { role } = useAuth();
+  const isAdmin = role === "Administrador";
 
   useEffect(() => {
     if (open) {
@@ -222,32 +226,40 @@ export function EventModal({
 
             <div>
               <Label>Abogado</Label>
-              <Select
-                disabled={isEditable}
-                value={form.watch("abogado_id")}
-                onValueChange={(v) => form.setValue("abogado_id", v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un abogado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(lawyersRecord).length > 0 ? (
-                    Object.entries(lawyersRecord).map(([name, id]) => (
-                      <SelectItem
-                        className="hover:bg-gray-200"
-                        key={id}
-                        value={id}
-                      >
-                        {name}
+              {isAdmin ? (
+                <Select
+                  disabled={isEditable}
+                  value={form.watch("abogado_id")}
+                  onValueChange={(v) => form.setValue("abogado_id", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un abogado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(lawyersRecord).length > 0 ? (
+                      Object.entries(lawyersRecord).map(([name, id]) => (
+                        <SelectItem
+                          className="hover:bg-gray-200"
+                          key={id}
+                          value={id}
+                        >
+                          {name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-lawyers" disabled>
+                        No hay abogados disponibles
                       </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="no-lawyers" disabled>
-                      No hay abogados disponibles
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+                    )}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  disabled={true}
+                  value="Usted ha sido asignado"
+                  className="bg-gray-50 text-gray-700"
+                />
+              )}
               {errors.abogado_id && (
                 <p className="text-red-500 text-xs">
                   {errors.abogado_id.message}
