@@ -22,28 +22,28 @@ const toBigCalendarDate = (isoDate: string | Date): Date => {
   );
 };
 
-export const mapAudiencesToEvents = (
+export const mapAudiencesToEvents: (
   api: AudienceOrchestratorResponse
-): Evento => {
+) => Evento = (api) => {
   const { audience, record } = api;
 
   return {
     idEvent: audience._id,
-    title: record.settled ?? "",
-    demandante: record.proceduralParts?.plaintiff?.name ?? "",
-    contacto_demandante: record.proceduralParts?.plaintiff?.contact ?? "",
-    email_demandante: record.proceduralParts?.plaintiff?.email ?? "",
-    demandado: record.proceduralParts?.defendant?.name ?? "",
-    juzgado: record.office,
+    title: record?.settled ?? "",
+    demandante: record?.proceduralParts?.plaintiff?.name ?? "",
+    contacto_demandante: record?.proceduralParts?.plaintiff?.contact ?? "",
+    email_demandante: record?.proceduralParts?.plaintiff?.email ?? "",
+    demandado: record?.proceduralParts?.defendant?.name ?? "",
+    juzgado: record?.office ?? "",
     start: toBigCalendarDate(audience.start),
     end: toBigCalendarDate(audience.end),
     link_teams: audience.link ?? "",
-    codigo_interno: record.internalCode,
+    codigo_interno: record?.internalCode ?? "",
     estado: audience.state as Estado,
     monto_conciliado: audience.monto,
     abogado_id: audience.lawyer._id,
     abogado: audience.lawyer.name,
-    record_id: record._id,
+    record_id: record?._id ?? "",
   };
 };
 

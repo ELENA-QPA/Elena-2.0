@@ -88,7 +88,7 @@ export interface getRecordByInternalCodeResponse {
 
 export interface AudienceOrchestratorResponse {
   audience: AudienceInterface;
-  record: RecordAudience;
+  record?: RecordAudience;
 }
 
 export const eventoSchema = z.object({

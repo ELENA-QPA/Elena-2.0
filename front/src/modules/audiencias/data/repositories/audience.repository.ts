@@ -4,6 +4,7 @@ import {
   AudienceCreate,
   AudienceUpdate,
   EventoForm,
+  AudienceOrchestratorResponse,
 } from "../interfaces/audiencias.interface";
 import { AxiosHttpClient } from "@/config/protocols/http/axios-http-client";
 import {
@@ -31,6 +32,10 @@ export abstract class AudienceRepository {
     id: string,
     body: AudienceUpdate
   ): Promise<AudienceUpdate>;
+
+  abstract getAudienceById(
+    AudienceId: string
+  ): Promise<AudienceOrchestratorResponse>;
 }
 
 @injectable()
@@ -51,6 +56,23 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
     if (response.statusCode === HttpStatusCode.ok) {
       return response.body.map(mapAudiencesToEvents);
+    }
+
+    throw new CustomError(response.body?.message || "Error fetching audiences");
+  }
+
+  async getAudienceById(
+    AudienceId: string
+  ): Promise<AudienceOrchestratorResponse> {
+    const response = await this.httpClient.request({
+      url: apiUrls.orchestrator.getAudience,
+      method: "post",
+      body: JSON.stringify({ id: AudienceId }),
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return response.body;
     }
 
     throw new CustomError(response.body?.message || "Error fetching audiences");

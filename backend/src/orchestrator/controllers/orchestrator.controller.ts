@@ -16,6 +16,7 @@ import {
   InternalCodeDto,
   IdRecordDto,
   IdLawyerDto,
+  IdAudienceDto,
 } from '../dto/records-service.dto';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import { ApiTags } from '@nestjs/swagger';
@@ -58,6 +59,12 @@ export class OrchestratorController {
   @Post('audience')
   findOne(@Body() body: IdLawyerDto) {
     return this.orchestratorService.getAudienceByLawyer(body);
+  }
+
+  @Post('audience/fix')
+  @HttpCode(HttpStatus.OK)
+  findAudience(@Body() body: IdAudienceDto) {
+    return this.orchestratorService.getAudienceById(body);
   }
 
   @Post('bulk')

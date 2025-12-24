@@ -14,11 +14,12 @@ import { useRouter } from "next/navigation";
 
 export const NotificationBell = () => {
   const router = useRouter();
-  const { notifications, count, deleteNotification } = useNotifications();
+  const { notifications, count } = useNotifications();
 
   const handleVerifyClick = (audienceId: string, notificationId: string) => {
-    console.log("Verificar audiencia:", audienceId);
-    deleteNotification(notificationId);
+    const index = notifications.findIndex((n) => n._id === notificationId);
+
+    router.push(`/dashboard/corrections?index=${index >= 0 ? index : 0}`);
   };
 
   return (

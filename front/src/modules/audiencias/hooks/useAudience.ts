@@ -30,6 +30,20 @@ export function useAudience() {
     }
   };
 
+  const fetchAudience = async (AudienceId: string) => {
+    setLoading(true);
+    try {
+      const data = await audienceRepository.getAudienceById(AudienceId);
+      return { success: true, data };
+    } catch (err: any) {
+      console.error("Error fetching audience:", err);
+      setError(err.message || "Error fetching audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchAudiencesByLawyer = async (lawyerId: string) => {
     setLoading(true);
     try {
@@ -99,6 +113,7 @@ export function useAudience() {
     error,
     setError,
     fetchAllAudiences,
+    fetchAudience,
     fetchAudiencesByLawyer,
     fetchAudienceByInternalCode,
     createAudience,

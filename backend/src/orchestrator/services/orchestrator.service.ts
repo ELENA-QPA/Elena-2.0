@@ -3,6 +3,7 @@ import { RecordsService } from 'src/records/records.service';
 import { RecordAdapter } from '../adapters/record.adapter';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import {
+  IdAudienceDto,
   IdLawyerDto,
   IdRecordDto,
   InternalCodeDto,
@@ -16,6 +17,7 @@ import {
 } from '../interfaces/audience.interface';
 import { NotificationService } from 'src/notifications/services/notification.service';
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
+import { Audience } from 'src/audience/entities/audience.entity';
 
 @Injectable()
 export class OrchestratorService {
@@ -110,12 +112,19 @@ export class OrchestratorService {
   }
 
   async getRecordById(dto: IdRecordDto): Promise<RecordAdaptedResponse> {
-    const internalCodeDto: InternalCodeDto = await this.getInternalCodeById(
-      dto,
-    );
-    const record = await this.getRecordByInternalCode(internalCodeDto);
-    return record;
+    try {
+      const internalCodeDto: InternalCodeDto = await this.getInternalCodeById(
+        dto,
+      );
+
+      const record = await this.getRecordByInternalCode(internalCodeDto);
+
+      return record;
+    } catch (error) {
+      return {} as RecordAdaptedResponse;
+    }
   }
+
   async buildAudienceResponce(
     audienceResponse: AudienceResponse,
   ): Promise<AudienceOrchestratorResponse> {
@@ -129,7 +138,7 @@ export class OrchestratorService {
     };
   }
 
-  async getFilteresAudiences(query): Promise<AudienceOrchestratorResponse[]> {
+  async getFilteredAudiences(query): Promise<AudienceOrchestratorResponse[]> {
     try {
       const audiences = await this.audienceService.findAll(query);
 
@@ -146,7 +155,7 @@ export class OrchestratorService {
   async getAllAudiences(): Promise<AudienceOrchestratorResponse[]> {
     try {
       const query = { is_valid: 'true' };
-      const audiencesResponse = await this.getFilteresAudiences(query);
+      const audiencesResponse = await this.getFilteredAudiences(query);
       return audiencesResponse;
     } catch (error) {
       throw error;
@@ -161,10 +170,22 @@ export class OrchestratorService {
         is_valid: true,
         lawyer: lawyerDto.lawyer,
       };
-      const audiencesResponse = await this.getFilteresAudiences(query);
+      const audiencesResponse = await this.getFilteredAudiences(query);
       return audiencesResponse;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async getAudienceById(
+    dto: IdAudienceDto,
+  ): Promise<AudienceOrchestratorResponse> {
+    try {
+      const audiencesResponse = await this.audienceService.findOne(dto.id);
+      const response = await this.buildAudienceResponce(audiencesResponse);
+      return response;
+    } catch (error) {
+      return {} as AudienceOrchestratorResponse;
     }
   }
 
@@ -194,7 +215,7 @@ export class OrchestratorService {
           try {
             await this.notificationService.create({
               audience: createdAudience._id,
-              message: 'Faltantes' + messages.join(', '),
+              message: 'Faltantes ' + messages.join(', '),
             });
             result.notifications_created++;
             notificationCreated = true;
