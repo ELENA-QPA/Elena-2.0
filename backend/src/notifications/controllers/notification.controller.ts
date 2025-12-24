@@ -28,6 +28,12 @@ export class NotificationController {
     return this.notificationService.findAll();
   }
 
+  @Get('count')
+  async count() {
+    const count = await this.notificationService.count();
+    return { count };
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.notificationService.findOne(id);

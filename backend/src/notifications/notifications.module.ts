@@ -6,6 +6,7 @@ import {
   Notification,
   NotificationSchema,
 } from './entities/notification.entity';
+import { NotificationsGateway } from './gateway/notifications.gateway';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import {
     ]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationService],
+  providers: [NotificationService, NotificationsGateway],
   exports: [NotificationService],
 })
 export class NotificationModule {}

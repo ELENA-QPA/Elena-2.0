@@ -29,7 +29,7 @@ export const apiUrls = {
     update: "/api/records",
     delete: "/api/records",
   },
-  
+
   // Documentos
   document: {
     create: "/api/document/create",
@@ -75,12 +75,16 @@ export const apiUrls = {
   // Estadísticas
   statistics: {
     activeInactiveByMonth: "/api/records/statistics/active-inactive-by-month",
-    lawsuitsHearingsByMonth: "/api/records/statistics/lawsuits-hearings-by-month",
+    lawsuitsHearingsByMonth:
+      "/api/records/statistics/lawsuits-hearings-by-month",
     processesByState: "/api/records/statistics/processes-by-state",
     processesByStateYear: "/api/records/statistics/processes-by-state-year",
-    finishedProcessesByStateYear: "/api/records/statistics/finished-processes-by-state-year",
-    departmentCityMetrics: "/api/records/statistics/processes/by-department-city",
-    percentageByDepartment: "/api/records/statistics/processes-percentage-by-department",
+    finishedProcessesByStateYear:
+      "/api/records/statistics/finished-processes-by-state-year",
+    departmentCityMetrics:
+      "/api/records/statistics/processes/by-department-city",
+    percentageByDepartment:
+      "/api/records/statistics/processes-percentage-by-department",
     filedLawsuitsByUser: "/api/records/statistics/filed-lawsuits-by-user",
     documentation: "/api/records/statistics/documentation",
     documentationMonthly: "/api/records/statistics/documentation/monthly",
@@ -88,12 +92,18 @@ export const apiUrls = {
   },
 
   orchestrator: {
-    getAll: '/api/orchestrator/audience/all',
-    getByLawyer: '/api/orchestrator/audience',
-    getRecordByInternal: '/api/orchestrator/record/internalCode',
+    getAll: "/api/orchestrator/audience/all",
+    getByLawyer: "/api/orchestrator/audience",
+    getRecordByInternal: "/api/orchestrator/record/internalCode",
   },
 
   audiencias: {
-    updateAudience: '/api/audiences/'
-  }
+    updateAudience: "/api/audiences/",
+  },
+
+  notifications: {
+    getAll: "http://localhost:4000/api/notifications",
+    delete: "http://localhost:4000/api/notifications",
+    websocket: "http://localhost:4000/notifications",
+  },
 };
