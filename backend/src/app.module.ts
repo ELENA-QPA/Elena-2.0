@@ -36,20 +36,22 @@ import { NotificationModule } from './notifications/notifications.module';
     MailerModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          host: configService.get('EMAIL_HOST'),
-          port: '465',
-          secure: true,
+          host: configService.get('SMTP_HOST'),
+          port: Number(configService.get('SMTP_PORT')),
+          secure: false,
           auth: {
-            type: 'login',
-            user: configService.get('EMAIL_USER'),
-            pass: configService.get('EMAIL_PASSWORD'),
+            user: configService.get('SMTP_USER'),
+            pass: configService.get('SMTP_PASS'),
           },
         },
+        defaults: {
+          from: `"Tu Aplicación" <jramos@qpalliance.co>`,
+        },
         template: {
-          dir: path.join(__dirname, '../src/templates'),
+          dir: path.join(process.cwd(), 'src', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
-            strict: true,
+            strict: false,
           },
         },
       }),

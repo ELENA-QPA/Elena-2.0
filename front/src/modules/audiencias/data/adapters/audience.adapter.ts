@@ -75,8 +75,8 @@ const mapEventoFormToAudienceBase = (
 ): Partial<AudienceBase> => {
   const base: Partial<AudienceBase> = {};
 
-  if (formData.start) base.start = new Date(formData.start);
-  if (formData.end) base.end = new Date(formData.end);
+  if (formData.start) base.start = formData.start;
+  if (formData.end) base.end = formData.end;
   if (formData.abogado_id) base.lawyer = formData.abogado_id;
   if (formData.record_id) base.record = formData.record_id;
   if (formData.link_teams !== undefined) base.link = formData.link_teams || "";

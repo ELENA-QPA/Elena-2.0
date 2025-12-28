@@ -97,7 +97,6 @@ export function EventModal({
   });
 
   const { role } = useAuth();
-  const isAdmin = role === "Administrador";
 
   useEffect(() => {
     if (open) {
@@ -146,6 +145,7 @@ export function EventModal({
       return;
     }
 
+    console.log("valores audiencia nueva ", values);
     const audienceData = mapEventoFormToAudienceCreate(values);
     const result = await createAudience(audienceData);
 
@@ -226,7 +226,7 @@ export function EventModal({
 
             <div>
               <Label>Abogado</Label>
-              {isAdmin ? (
+              {!isEditable ? (
                 <Select
                   disabled={isEditable}
                   value={form.watch("abogado_id")}
@@ -373,7 +373,11 @@ export function EventModal({
               <Button variant="outline" type="button" onClick={closeModal}>
                 Cancelar
               </Button>
-              <Button type="submit" className="bg-pink-600 hover:bg-pink-700">
+              <Button
+                type="submit"
+                className="bg-pink-600 hover:bg-pink-700"
+                disabled={isEditable}
+              >
                 {editing ? "Actualizar" : "Crear"}
               </Button>
             </div>

@@ -49,8 +49,8 @@ export interface AudienceInterface {
 }
 
 export interface AudienceBase {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   lawyer: string;
   record: string;
   link: string;

@@ -17,13 +17,14 @@ import {
 } from '../interfaces/audience.interface';
 import { NotificationService } from 'src/notifications/services/notification.service';
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
-import { Audience } from 'src/audience/entities/audience.entity';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class OrchestratorService {
   private readonly logger = new Logger(OrchestratorService.name);
 
   constructor(
+    private readonly authService: AuthService,
     private readonly audienceService: AudienceService,
     private readonly recordsService: RecordsService,
     private readonly notificationService: NotificationService,
@@ -232,5 +233,70 @@ export class OrchestratorService {
       }
     }
     return result;
+  }
+
+  private colombiaToUTC(dateString: string): Date {
+    const date = new Date(dateString);
+
+    return new Date(date.getTime() + 5 * 60 * 60 * 1000);
+  }
+
+  private async checkLawyerAvailability(
+    lawyerId: string,
+    start: Date,
+    end: Date,
+  ): Promise<boolean> {
+    const audiences: AudienceResponse[] = await this.audienceService.findAll({
+      lawyer: lawyerId,
+    });
+
+    for (const audienceWrapper of audiences) {
+      const audience = audienceWrapper.audience;
+      const audienceStart = new Date(audience.start);
+      const audienceEnd = new Date(audience.end);
+
+      const hasConflict = start < audienceEnd && end > audienceStart;
+
+      if (hasConflict) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  async findAvailableLawyer(start: string, end: string): Promise<string> {
+    const lawyers = await this.authService.byRol('lawyer');
+
+    if (lawyers.length === 0) {
+      throw new Error('No hay abogados disponibles en el sistema');
+    }
+    const lawyerIds: string[] = lawyers.map((lawyer) => lawyer._id.toString());
+
+    let lastCheckedId: string = lawyerIds[0];
+
+    const startDate = this.colombiaToUTC(start);
+    const endDate = this.colombiaToUTC(end);
+
+    while (lawyerIds.length > 0) {
+      const randomIndex = Math.floor(Math.random() * lawyerIds.length);
+      const selectedLawyerId = lawyerIds[randomIndex];
+      lastCheckedId = selectedLawyerId;
+
+      const isAvailable = await this.checkLawyerAvailability(
+        selectedLawyerId,
+        startDate,
+        endDate,
+      );
+
+      if (isAvailable) {
+        return selectedLawyerId;
+      }
+
+      lawyerIds[randomIndex] = lawyerIds[lawyerIds.length - 1];
+      lawyerIds.pop();
+    }
+
+    return lastCheckedId;
   }
 }
