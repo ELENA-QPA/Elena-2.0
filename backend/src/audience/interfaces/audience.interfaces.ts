@@ -15,6 +15,11 @@ export interface AudienceBase {
   end?: Date;
   link?: string;
   is_valid: boolean;
+  notifications?: {
+    oneMonth: { sent: boolean; sentAt?: Date };
+    fifteenDays: { sent: boolean; sentAt?: Date };
+    oneDay: { sent: boolean; sentAt?: Date };
+  };
 }
 
 export interface Lawyer {

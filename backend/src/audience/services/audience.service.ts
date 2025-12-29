@@ -11,6 +11,7 @@ import { CreateAudienceDto } from '../dto/create-audience.dto';
 import { UpdateAudienceDto } from '../dto/update-audience.dto';
 import { QueryAudienceDto } from '../dto/query-audience.dto';
 import {
+  AudienceBase,
   AudiencePopulated,
   AudienceResponse,
 } from '../interfaces/audience.interfaces';
@@ -18,6 +19,27 @@ import {
 @Injectable()
 export class AudienceService {
   private readonly logger = new Logger(AudienceService.name);
+
+  private readonly colombianHolidays2025: Date[] = [
+    new Date('2025-01-01'),
+    new Date('2025-01-06'),
+    new Date('2025-03-24'),
+    new Date('2025-04-17'),
+    new Date('2025-04-18'),
+    new Date('2025-05-01'),
+    new Date('2025-06-02'),
+    new Date('2025-06-23'),
+    new Date('2025-06-30'),
+    new Date('2025-07-07'),
+    new Date('2025-07-20'),
+    new Date('2025-08-07'),
+    new Date('2025-08-18'),
+    new Date('2025-10-13'),
+    new Date('2025-11-03'),
+    new Date('2025-11-17'),
+    new Date('2025-12-08'),
+    new Date('2025-12-25'),
+  ];
 
   constructor(
     @InjectModel(Audience.name)
@@ -30,6 +52,65 @@ export class AudienceService {
     'start',
     'end',
   ] as const;
+
+  private isBusinessDay(date: Date): boolean {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) return false;
+
+    const dateStr = date.toISOString().split('T')[0];
+    return !this.colombianHolidays2025.some(
+      (holiday) => holiday.toISOString().split('T')[0] === dateStr,
+    );
+  }
+
+  private subtractBusinessDays(endDate: Date, businessDays: number): Date {
+    let currentDate = new Date(endDate);
+    let daysSubtracted = 0;
+
+    while (daysSubtracted < businessDays) {
+      currentDate.setDate(currentDate.getDate() - 1);
+
+      if (this.isBusinessDay(currentDate)) {
+        daysSubtracted++;
+      }
+    }
+
+    return currentDate;
+  }
+
+  private isExactlyNBusinessDaysBefore(
+    targetDate: Date,
+    businessDays: number,
+  ): boolean {
+    const today = new Date('2025-12-29T08:00:00Z');
+    today.setHours(0, 0, 0, 0);
+
+    const notificationDate = this.subtractBusinessDays(
+      targetDate,
+      businessDays,
+    );
+    notificationDate.setHours(0, 0, 0, 0);
+
+    this.logger.log(businessDays, ' n date ', notificationDate);
+
+    return today.getTime() === notificationDate.getTime();
+  }
+
+  async resetNotificationsOnValidation(audienceId: string): Promise<void> {
+    await this.audienceModel.updateOne(
+      { _id: audienceId },
+      {
+        $set: {
+          'notifications.oneMonth.sent': false,
+          'notifications.oneMonth.sentAt': null,
+          'notifications.fifteenDays.sent': false,
+          'notifications.fifteenDays.sentAt': null,
+          'notifications.oneDay.sent': false,
+          'notifications.oneDay.sentAt': null,
+        },
+      },
+    );
+  }
 
   public isValidMongoId(value: any): boolean {
     return value && Types.ObjectId.isValid(value);
@@ -234,6 +315,18 @@ export class AudienceService {
         }
       }
 
+      if (updateAudienceDto.is_valid !== undefined) {
+        const existingAudience = await this.audienceModel.findById(id);
+
+        if (
+          existingAudience &&
+          !existingAudience.is_valid &&
+          updateAudienceDto.is_valid
+        ) {
+          await this.resetNotificationsOnValidation(id);
+        }
+      }
+
       const updatedAudience = await this.audienceModel
         .findOneAndUpdate(
           {
@@ -311,6 +404,95 @@ export class AudienceService {
         error.stack,
       );
       throw new BadRequestException('Error al eliminar la audiencia');
+    }
+  }
+  private async sendReminder(
+    audience: any,
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
+  ): Promise<void> {
+    try {
+      // await this.emailService.sendAudienceReminder({
+      //   to: audience.lawyer.email,
+      //   lawyerName: `${audience.lawyer.name} ${audience.lawyer.lastname}`,
+      //   audienceDate: audience.start,
+      //   reminderType: type,
+      //   recordInfo: audience.record,
+      // });
+
+      // Marcar como enviado
+      await this.audienceModel.updateOne(
+        { _id: audience._id },
+        {
+          $set: {
+            [`notifications.${type}.sent`]: true,
+            [`notifications.${type}.sentAt`]: new Date(),
+          },
+        },
+      );
+
+      this.logger.log(
+        `Recordatorio ${type} enviado para audiencia ${audience._id}`,
+      );
+    } catch (error) {}
+  }
+
+  // @Cron('0 8 * * 1-5')
+  async processReminders(): Promise<void> {
+    const today = new Date('2025-12-29T08:00:00Z');
+    console.log('dia ', today.getDay());
+
+    if (!this.isBusinessDay(today)) {
+      this.logger.log('Hoy no es día hábil, saltando recordatorios');
+      return;
+    }
+
+    try {
+      const audiencesOneMonth = await this.audienceModel
+        .find({
+          is_valid: true,
+          deletedAt: { $exists: false },
+          'notifications.oneMonth.sent': false,
+        })
+        .lean<AudienceBase[]>();
+
+      for (const audience of audiencesOneMonth) {
+        const audienceStart = new Date(audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
+          await this.sendReminder(audience, 'oneMonth');
+        }
+      }
+
+      const audiencesFifteenDays = await this.audienceModel
+        .find({
+          is_valid: true,
+          deletedAt: { $exists: false },
+          'notifications.fifteenDays.sent': false,
+        })
+        .lean<AudienceBase[]>();
+
+      for (const audience of audiencesFifteenDays) {
+        const audienceStart = new Date(audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 15)) {
+          await this.sendReminder(audience, 'fifteenDays');
+        }
+      }
+
+      const audiencesOneDay = await this.audienceModel
+        .find({
+          is_valid: true,
+          deletedAt: { $exists: false },
+          'notifications.oneDay.sent': false,
+        })
+        .lean<AudienceBase[]>();
+
+      for (const audience of audiencesOneDay) {
+        const audienceStart = new Date(audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 1)) {
+          await this.sendReminder(audience, 'oneDay');
+        }
+      }
+    } catch (error) {
+      this.logger.error('Error procesando recordatorios', error.stack);
     }
   }
 }
