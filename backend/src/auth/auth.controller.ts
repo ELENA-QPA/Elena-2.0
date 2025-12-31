@@ -117,12 +117,6 @@ export class AuthController {
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
-
-  @Get('testemail')
-  sendTestEmail() {
-    return this.authService.sendTestEmail();
-  }
-
   // -----------------------------------------------------
   @ApiOperation({ summary: 'Olvidó contraseña' })
   @ApiResponse({

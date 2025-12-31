@@ -1,4 +1,3 @@
-// components/CorrectionModal.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -116,8 +115,6 @@ export function NotificationCorrectionModal({
     try {
       const result = await fetchAudience(notification.audience_id);
 
-      console.log("audience to fix ", result.data);
-
       if (result.success && result.data) {
         const audience = result.data.audience;
 
@@ -142,7 +139,6 @@ export function NotificationCorrectionModal({
         });
       }
     } catch (err) {
-      console.error("Error loading audience:", err);
       setError("Error al cargar los datos de la audiencia");
     }
   };
@@ -263,7 +259,6 @@ export function NotificationCorrectionModal({
       )}
 
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        {/* ... resto del formulario sin cambios ... */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <Label>Radicado</Label>

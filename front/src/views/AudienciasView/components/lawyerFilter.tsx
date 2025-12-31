@@ -27,7 +27,6 @@ export function LawyerFilter({
   const [selectedLawyerId, setSelectedLawyerId] = useState<string>("");
 
   const handleFilterClick = () => {
-    console.log("handle filter ", selectedLawyerId);
     if (selectedLawyerId) {
       onFilter(selectedLawyerId);
     }

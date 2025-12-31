@@ -41,30 +41,22 @@ export default function AudienciasView() {
     loadAudiences();
   }, [role, id, isLoading, isAuthenticated]);
 
-  console.log("loading aud for id ", role, id);
-
   const loadAudiences = () => {
     notAdmin ? fetchAudiencesByLawyer(id) : fetchAllAudiences();
   };
 
   const filter = (idLawyer: string) => {
-    console.log("entrando en filter");
     if (idLawyer == noLawyerValue) {
-      console.log("fetch_all");
       fetchAllAudiences();
     } else {
       fetchAudiencesByLawyer(idLawyer);
     }
-
-    console.log("filtered ", audiences);
   };
 
   const formatForInput = (date?: Date) =>
     date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
 
   const handleRetry = () => {};
-
-  console.log("aud ", audiences);
   const handleCloseModal = () => {
     setShowEventModal(false);
     setInitialEventData(undefined);

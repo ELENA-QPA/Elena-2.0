@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -11,26 +10,16 @@ import { CreateAudienceDto } from '../dto/create-audience.dto';
 import { UpdateAudienceDto } from '../dto/update-audience.dto';
 import { QueryAudienceDto } from '../dto/query-audience.dto';
 import {
-  AudienceBase,
   AudiencePopulated,
   AudienceResponse,
 } from '../interfaces/audience.interfaces';
 
 @Injectable()
 export class AudienceService {
-  private readonly logger = new Logger(AudienceService.name);
-
   constructor(
     @InjectModel(Audience.name)
     private readonly audienceModel: Model<Audience>,
   ) {}
-
-  private readonly REQUIRED_FIELDS = [
-    'record',
-    'lawyer',
-    'start',
-    'end',
-  ] as const;
 
   // Metodos auxilaires para updetear la bandera de recordatorios
   async resetNotificationsOnValidation(audienceId: string): Promise<void> {
@@ -62,8 +51,6 @@ export class AudienceService {
         },
       },
     );
-
-    this.logger.log('actualizando ', audienceId);
   }
 
   //Metodos auxilaires para validar si una audiencia es valdia
@@ -131,7 +118,6 @@ export class AudienceService {
     }
 
     if (audience.lawyer) {
-      this.logger.log('Entro en tiene lawyer');
       response.audience.lawyer = {
         _id: audience.lawyer._id,
         name: audience.lawyer.name + ' ' + audience.lawyer.lastname,
@@ -225,7 +211,6 @@ export class AudienceService {
         this.transformAudienceToResponse(audience),
       );
     } catch (error) {
-      this.logger.error('Error al obtener audiencias', error.stack);
       throw new BadRequestException('Error al obtener las audiencias');
     }
   }
@@ -260,7 +245,6 @@ export class AudienceService {
       ) {
         throw error;
       }
-      this.logger.error(`Error al obtener audiencia con id ${id}`, error.stack);
       throw new BadRequestException('Error al obtener la audiencia');
     }
   }
@@ -316,8 +300,6 @@ export class AudienceService {
         );
       }
 
-      this.logger.log(`Audiencia actualizada con ID: ${id}`);
-
       return this.transformAudienceToResponse(updatedAudience);
     } catch (error) {
       if (
@@ -326,10 +308,6 @@ export class AudienceService {
       ) {
         throw error;
       }
-      this.logger.error(
-        `Error al actualizar audiencia con id ${id}`,
-        error.stack,
-      );
       throw new BadRequestException('Error al actualizar la audiencia');
     }
   }
@@ -359,8 +337,6 @@ export class AudienceService {
         );
       }
 
-      this.logger.log(`Audiencia eliminada (soft delete) con ID: ${id}`);
-
       return {
         message: `Audiencia con id ${id} eliminada exitosamente`,
       };
@@ -371,10 +347,6 @@ export class AudienceService {
       ) {
         throw error;
       }
-      this.logger.error(
-        `Error al eliminar audiencia con id ${id}`,
-        error.stack,
-      );
       throw new BadRequestException('Error al eliminar la audiencia');
     }
   }

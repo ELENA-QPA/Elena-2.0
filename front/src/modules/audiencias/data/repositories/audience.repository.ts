@@ -138,8 +138,6 @@ export class AudienceRepositoryImpl implements AudienceRepository {
       isAuth: true,
     });
 
-    console.log("monto: ", audience.monto);
-
     if (response.statusCode === HttpStatusCode.ok) {
       return response.body;
     }

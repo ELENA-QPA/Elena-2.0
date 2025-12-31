@@ -27,7 +27,6 @@ import {
 import { IUser } from 'src/records/interfaces/user.interface';
 import { GroupDto } from './dto/groupDto';
 import { ValidRoles } from './interfaces';
-import mongoose, { Types } from 'mongoose';
 import { RecordsService } from 'src/records/records.service';
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,30 +66,6 @@ export class AuthService {
       };
     } catch (error) {
       this.handleExceptions(error);
-    }
-  }
-
-  async sendTestEmail() {
-    try {
-      const result = await this.mailerService.sendMail({
-        to: 'jramos@qpalliance.co',
-        subject: 'Test SMTP Brevo',
-        html: '<h1>Si ves esto, SMTP funciona 🎉</h1>',
-      });
-
-      console.log('✅ Email enviado exitosamente:', result);
-      return {
-        success: true,
-        message: 'Email enviado correctamente',
-        messageId: result.messageId,
-      };
-    } catch (error) {
-      console.error('❌ Error al enviar email:', error);
-      return {
-        success: false,
-        message: 'Error al enviar email',
-        error: error.message,
-      };
     }
   }
 

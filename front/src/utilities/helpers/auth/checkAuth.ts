@@ -30,9 +30,7 @@ export const getAuthData = (): AuthData => {
         role = rol;
       }
     }
-  } catch (error) {
-    console.error("Error al obtener datos de autenticación:", error);
-  }
+  } catch (error) {}
 
   return { user, token, role, id };
 };
@@ -53,9 +51,7 @@ export const getUser = (): any | null => {
       const userData = window.localStorage.getItem("user");
       return userData ? JSON.parse(userData) : null;
     }
-  } catch (error) {
-    console.error("Error al obtener usuario:", error);
-  }
+  } catch (error) {}
   return null;
 };
 

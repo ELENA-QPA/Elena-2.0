@@ -7,11 +7,7 @@ import * as Handlebars from 'handlebars';
 
 @Injectable()
 export class ReminderService {
-  private readonly logger = new Logger(ReminderService.name);
-
-  constructor(@InjectQueue('reminders') private reminderQueue: Queue) {
-    this.logger.log('[INIT] ReminderService initialized');
-  }
+  constructor(@InjectQueue('reminders') private reminderQueue: Queue) {}
 
   async sendEmail(emailData: EmailReminderData): Promise<void> {
     await this.reminderQueue.add('send-email', emailData, {
@@ -43,7 +39,6 @@ export class ReminderService {
 
   async cleanQueue(olderThanMs: number = 24 * 60 * 60 * 1000): Promise<void> {
     await this.reminderQueue.clean(olderThanMs);
-    this.logger.log('Cola de recordatorios limpiada');
   }
 
   async getFailedJobs() {
@@ -54,7 +49,6 @@ export class ReminderService {
     const job = await this.reminderQueue.getJob(jobId);
     if (job) {
       await job.retry();
-      this.logger.log(`Job ${jobId} reencolado para reintento`);
     }
   }
 

@@ -61,9 +61,7 @@ export const useNotifications = () => {
         const data: NotificationResponse[] = await response.json();
         setNotifications(data);
         setCount(data.length);
-      } catch (error) {
-        console.error("Error al cargar notificaciones:", error);
-      }
+      } catch (error) {}
     };
 
     fetchNotifications();

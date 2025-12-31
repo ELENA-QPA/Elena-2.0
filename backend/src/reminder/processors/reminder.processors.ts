@@ -17,11 +17,8 @@ export class ReminderProcessor {
     try {
       await this.mailerService.sendMail(data);
 
-      this.logger.log(`✓ Email enviado exitosamente a ${data.to}`);
-
       return { success: true, to: data.to };
     } catch (error) {
-      this.logger.error(`✗ Error enviando email a ${data.to}`, error.stack);
       throw error;
     }
   }

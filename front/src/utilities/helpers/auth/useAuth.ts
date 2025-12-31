@@ -18,16 +18,14 @@ export const useAuth = () => {
   useEffect(() => {
     const data = getAuthData();
 
-  let decodedToken = null;
-  if (data.token) {
-    try {
-      const cleanToken = data.token.trim().replace(/^["']+|["']+$/g, '');
-      decodedToken = jwtDecode<CustomJwtPayload>(cleanToken);
-      const id = decodedToken.id;
-      data.id = id;
-    } catch (error) {
-        console.error("Error decoding token:", error);
-      }
+    let decodedToken = null;
+    if (data.token) {
+      try {
+        const cleanToken = data.token.trim().replace(/^["']+|["']+$/g, "");
+        decodedToken = jwtDecode<CustomJwtPayload>(cleanToken);
+        const id = decodedToken.id;
+        data.id = id;
+      } catch (error) {}
     }
 
     setAuthData(data);
@@ -37,6 +35,6 @@ export const useAuth = () => {
   return {
     ...authData,
     isLoading,
-    isAuthenticated: !!authData.token
+    isAuthenticated: !!authData.token,
   };
 };

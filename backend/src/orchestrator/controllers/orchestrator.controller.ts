@@ -3,12 +3,8 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   HttpCode,
   HttpStatus,
-  Query,
   Logger,
 } from '@nestjs/common';
 import { OrchestratorService } from '../services/orchestrator.service';
@@ -20,7 +16,7 @@ import {
 } from '../dto/records-service.dto';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiKeyAuth, Auth } from 'src/auth/decorators';
+import { Auth } from 'src/auth/decorators';
 import { AudienceService } from 'src/audience/services/audience.service';
 import { ValidRoles } from 'src/auth/interfaces';
 

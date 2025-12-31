@@ -22,11 +22,9 @@ import { AuthService } from 'src/auth/auth.service';
 import { ReminderService } from 'src/reminder/services/reminder.services';
 import { EmailReminderData } from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class OrchestratorService {
-  private readonly logger = new Logger(OrchestratorService.name);
   private readonly openai: OpenAI;
   private readonly model: string;
 
@@ -105,8 +103,6 @@ export class OrchestratorService {
     );
     notificationDate.setHours(0, 0, 0, 0);
 
-    this.logger.log('para ' + businessDays + 'fecha ' + notificationDate);
-
     return today.getTime() === notificationDate.getTime();
   }
 
@@ -124,15 +120,9 @@ export class OrchestratorService {
       context: audienceData,
     };
 
-    this.logger.log('send email....');
-
     await this.reminderService.sendEmail(emailData);
 
     await this.audienceService.markNotificationAsSent(audience._id, type);
-
-    this.logger.log(
-      `Recordatorio ${type} encolado para audiencia ${audience._id}`,
-    );
   }
 
   // metodos auxiliares para procesar audiencias con campos faltantes
@@ -197,10 +187,6 @@ export class OrchestratorService {
 
       return adaptedResponse;
     } catch (error) {
-      this.logger.error(
-        `Error en orquestación de record: ${error.message}`,
-        error.stack,
-      );
       throw error;
     }
   }
@@ -210,10 +196,6 @@ export class OrchestratorService {
       const result = await this.recordsService.getInternalCodeById(dto);
       return result;
     } catch (error) {
-      this.logger.error(
-        `Error en orquestación para obtener internalCode: ${error.message}`,
-        error.stack,
-      );
       throw error;
     }
   }
@@ -329,16 +311,10 @@ export class OrchestratorService {
             });
             result.notifications_created++;
             notificationCreated = true;
-          } catch (notificationError) {
-            this.logger.error(
-              `Error al crear notificación para audiencia ${createdAudience._id}`,
-              notificationError,
-            );
-          }
+          } catch (notificationError) {}
         }
       } catch (error) {
         result.failed++;
-        this.logger.error('Error al procesar audiencia', error);
       }
     }
     return result;
@@ -442,29 +418,12 @@ export class OrchestratorService {
         },
       });
 
-      const usage = response.usage;
-
-      this.logger.log(
-        `OpenAI usage → prompt: ${usage?.input_tokens}, ` +
-          `completion: ${usage?.output_tokens}, ` +
-          `total: ${usage?.total_tokens}`,
-      );
-
-      this.logger.log('prompt ' + prompt);
-
-      this.logger.log('RAW RESPONSE:\n' + JSON.stringify(response, null, 2));
-
       const content = response.output_text;
       if (!content) {
-        this.logger.log('no content');
         return { start: null, end: null };
-      } else {
-        this.logger.log(content);
       }
-
       return this.safeParse(content);
     } catch (error) {
-      this.logger.error('OpenAI error', error);
       return { start: null, end: null };
     }
   }
@@ -504,7 +463,6 @@ export class OrchestratorService {
     const today = new Date();
 
     if (!this.isBusinessDay(today)) {
-      this.logger.log('Hoy no es día hábil, saltando recordatorios');
       return;
     }
 
@@ -514,14 +472,10 @@ export class OrchestratorService {
         notificationOneMonthSent: 'false',
       };
       const audiencesOneMonth = await this.getFilteredAudiences(queryOneMonth);
-      this.logger.log('audiences one month ' + audiencesOneMonth.length);
 
       for (const audienceData of audiencesOneMonth) {
         const audienceStart = new Date(audienceData.audience.start);
         if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
-          this.logger.log(
-            `[ENQUEUE] oneMonth audience=${audienceData.audience._id}`,
-          );
           await this.enqueueReminder(audienceData, 'oneMonth');
         }
       }
@@ -534,14 +488,9 @@ export class OrchestratorService {
         queryFifteenDays,
       );
 
-      this.logger.log('audiences 15 dyas ' + audiencesFifteenDays.length);
-
       for (const audienceData of audiencesFifteenDays) {
         const audienceStart = new Date(audienceData.audience.start);
         if (this.isExactlyNBusinessDaysBefore(audienceStart, 15)) {
-          this.logger.log(
-            `[ENQUEUE] fifteenDays audience=${audienceData.audience._id}`,
-          );
           await this.enqueueReminder(audienceData, 'fifteenDays');
         }
       }
@@ -551,20 +500,14 @@ export class OrchestratorService {
         notificationOneDaySent: 'false',
       };
       const audiencesOneDay = await this.getFilteredAudiences(queryOneDay);
-      this.logger.log('audiences one day ' + audiencesOneDay.length);
 
       for (const audienceData of audiencesOneDay) {
         const audienceStart = new Date(audienceData.audience.start);
         if (this.isExactlyNBusinessDaysBefore(audienceStart, 1)) {
-          this.logger.log(
-            `[ENQUEUE] oneDay audience=${audienceData.audience._id}`,
-          );
           await this.enqueueReminder(audienceData, 'oneDay');
         }
       }
-    } catch (error) {
-      this.logger.error('Error procesando recordatorios', error.stack);
-    }
+    } catch (error) {}
   }
 
   async getQueueStats() {

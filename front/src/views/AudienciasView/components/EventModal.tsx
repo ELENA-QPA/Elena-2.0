@@ -22,9 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-
-// import { eventoSchema, EventoForm } from "@/data/schemas/evento.schema";
 import {
   Estado,
   ESTADOS,
@@ -101,9 +98,6 @@ export function EventModal({
   useEffect(() => {
     if (open) {
       form.reset(initialData || DEFAULT_FORM_VALUES);
-      console.log("initial", initialData);
-      console.log("idEvent", idEvent);
-      console.log("editing? ", editing);
       setError(null);
     }
   }, [open, initialData]);
@@ -133,7 +127,6 @@ export function EventModal({
       end: initialData?.end,
     };
 
-    console.log("syn", syncedData);
     form.reset(syncedData);
   };
 
@@ -144,8 +137,6 @@ export function EventModal({
       );
       return;
     }
-
-    console.log("valores audiencia nueva ", values);
     const audienceData = mapEventoFormToAudienceCreate(values);
     const result = await createAudience(audienceData);
 
@@ -174,12 +165,9 @@ export function EventModal({
 
   const submit = async (values: EventoForm) => {
     try {
-      console.log("edit 2 ", editing);
-      console.log("id event 2 ", idEvent);
       if (!editing) {
         await create(values);
       } else {
-        console.log("llamando edit");
         await edit(values);
       }
     } catch (err: any) {

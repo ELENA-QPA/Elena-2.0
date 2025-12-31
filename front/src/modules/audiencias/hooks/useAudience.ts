@@ -36,7 +36,6 @@ export function useAudience() {
       const data = await audienceRepository.getAudienceById(AudienceId);
       return { success: true, data };
     } catch (err: any) {
-      console.error("Error fetching audience:", err);
       setError(err.message || "Error fetching audiencia");
       return { success: false, error: err.message };
     } finally {
@@ -67,7 +66,6 @@ export function useAudience() {
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error("Error fetching audience:", err);
       setError(err.message || "No se encontró el código interno");
       return { success: false, error: err.message };
     } finally {
@@ -83,7 +81,6 @@ export function useAudience() {
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error("Error creating audience:", err);
       setError(err.message || "Error al crear la audiencia");
       return { success: false, error: err.message };
     } finally {
@@ -99,7 +96,6 @@ export function useAudience() {
       setError(null);
       return { success: true, data };
     } catch (err: any) {
-      console.error("Error updating audience:", err);
       setError(err.message || "Error al actualizar la audiencia");
       return { success: false, error: err.message };
     } finally {
