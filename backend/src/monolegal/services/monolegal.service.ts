@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as XLSX from 'xlsx';
@@ -8,17 +8,21 @@ import {
   PartType,
 } from '../../procedural-part/entities/procedural-part.entity';
 import { Performance } from '../../perfomance/entities/perfomance.entity';
-import { MonolegalRow, ProcessResult } from '../dto/import-monolegal.dto';
+import { ProcessResult, SyncResponse } from '../dto/import-monolegal.dto';
 import { MonolegalApiService } from './monolegal-api.service';
+import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
 
 @Injectable()
 export class MonolegalService {
+  private readonly logger = new Logger(MonolegalService.name);
+
   constructor(
     @InjectModel(Record.name) private recordModel: Model<Record>,
     @InjectModel(ProceduralPart.name)
     private proceduralPartModel: Model<ProceduralPart>,
     @InjectModel(Performance.name) private performanceModel: Model<Performance>,
     private readonly monolegalApiService: MonolegalApiService,
+    private readonly juzgadoNormalizer: JuzgadoNormalizerService,
   ) {}
 
   async importFromExcel(
@@ -122,9 +126,7 @@ export class MonolegalService {
     const demandantes = row['Demandantes'] || row['demandantes'] || '';
     const demandados = row['Demandados'] || row['demandados'] || '';
     const despacho = row['Despacho'] || row['despacho'] || '';
-
     const etiqueta = row['Etiqueta'] || row['etiqueta'] || '';
-
     const etapaProcesal =
       row['Etapa Procesal'] ||
       row['Etapa procesal'] ||
@@ -135,11 +137,6 @@ export class MonolegalService {
       row['Ultima Actuacion'] ||
       row['ultima actuacion'] ||
       '';
-    const fechaRegistro =
-      row['Fecha de último Registro'] ||
-      row['Fecha de ultimo Registro'] ||
-      row['fecha registro'] ||
-      '';
 
     if (!radicado || radicado.trim() === '') {
       return {
@@ -149,7 +146,16 @@ export class MonolegalService {
       };
     }
 
-    let record = await this.recordModel.findOne({ radicado: radicado.trim() });
+    const ciudadExtraida = this.extractCityFromDespacho(despacho);
+
+    const despachoNormalizado = this.normalizeDespacho(
+      despacho.trim(),
+      ciudadExtraida,
+    );
+
+    const record = await this.recordModel.findOne({
+      radicado: radicado.trim(),
+    });
 
     let internalCode = record?.internalCode;
 
@@ -164,11 +170,11 @@ export class MonolegalService {
     const recordData = {
       radicado: radicado.trim(),
       internalCode,
-      despachoJudicial: despacho.trim(),
+      despachoJudicial: despachoNormalizado,
+      city: ciudadExtraida,
       etiqueta: etiqueta.trim(),
       etapaProcesal: etapaProcesal.trim(),
       ultimaActuacion: ultimaActuacion.trim(),
-      fechaUltimaActuacion: this.parseDate(fechaRegistro),
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
     };
@@ -193,7 +199,7 @@ export class MonolegalService {
       const newRecord = new this.recordModel({
         user: userId,
         ...recordData,
-        clientType: 'Otro',
+        clientType: row['Tipo Cliente'] || row['clientType'] || 'Otro',
         country: 'Colombia',
       });
 
@@ -365,16 +371,12 @@ export class MonolegalService {
     }
   }
 
-  async syncFromApi(userId: string, fecha?: Date): Promise<any> {
+  async syncFromApi(userId: string, fecha?: Date): Promise<SyncResponse> {
     const fechaConsulta = fecha || new Date();
     const fechaFormateada =
       this.monolegalApiService.formatearFechaMonolegal(fechaConsulta);
 
     try {
-      console.log('📡 Iniciando sincronización desde API Monolegal...');
-      console.log('📅 Fecha:', fechaFormateada);
-
-      // 1. Verificar si hay cambios
       const resumen = await this.monolegalApiService.getResumenCambios(
         fechaFormateada,
       );
@@ -391,34 +393,47 @@ export class MonolegalService {
             errors: 0,
           },
           details: [],
+          updatedRecords: [],
         };
       }
 
-      console.log(
-        `📊 Hay ${resumen.estadisticas.numeroExpedientes} expedientes con cambios`,
-      );
-
-      // 2. Obtener todos los cambios
       const cambios = await this.monolegalApiService.getTodosCambios(
         fechaFormateada,
       );
 
       const results: ProcessResult[] = [];
+      const updatedRecords: Array<{
+        radicado: string;
+        despachoJudicial: string;
+        city: string;
+        ultimaActuacion: string;
+      }> = [];
+
       let created = 0;
       let updated = 0;
       let skipped = 0;
       let errors = 0;
 
-      // 3. Procesar cada cambio
       for (const cambio of cambios) {
         try {
           const result = await this.processApiChange(cambio, userId);
           results.push(result);
 
-          if (result.status === 'created') created++;
-          else if (result.status === 'updated') updated++;
-          else if (result.status === 'skipped') skipped++;
-          else if (result.status === 'error') errors++;
+          if (result.status === 'created') {
+            created++;
+          } else if (result.status === 'updated') {
+            updated++;
+            updatedRecords.push({
+              radicado: result.radicado,
+              despachoJudicial: result.details?.despachoJudicial || '',
+              city: result.details?.city || '',
+              ultimaActuacion: result.details?.ultimaActuacion || '',
+            });
+          } else if (result.status === 'skipped') {
+            skipped++;
+          } else if (result.status === 'error') {
+            errors++;
+          }
         } catch (error) {
           errors++;
           results.push({
@@ -440,13 +455,98 @@ export class MonolegalService {
           errors,
         },
         details: results,
+        updatedRecords,
       };
     } catch (error) {
-      console.error('❌ Error en sincronización API:', error);
       throw new BadRequestException(
         `Error al sincronizar con Monolegal: ${error.message}`,
       );
     }
+  }
+
+  private extractCityFromDespacho(despacho: string): string {
+    if (!despacho || despacho.trim() === '') return '';
+
+    const despachoNorm = despacho.trim().toUpperCase();
+
+    const pattern1 = /\s+DE\s+([A-ZÁÉÍÓÚÑ\s\.]+)(?:\s*\*)?$/i;
+    const match1 = despachoNorm.match(pattern1);
+    if (match1 && match1[1]) {
+      return this.capitalizeCityName(match1[1].trim().replace(/\*$/, ''));
+    }
+
+    const pattern2 = /\s+EN\s+([A-ZÁÉÍÓÚÑ\s\.]+)(?:\s*\*)?$/i;
+    const match2 = despachoNorm.match(pattern2);
+    if (match2 && match2[1]) {
+      return this.capitalizeCityName(match2[1].trim().replace(/\*$/, ''));
+    }
+
+    const lastDe = despachoNorm.lastIndexOf(' DE ');
+    if (lastDe !== -1) {
+      const afterDe = despachoNorm
+        .substring(lastDe + 4)
+        .trim()
+        .replace(/\*$/, '');
+      if (afterDe.length > 0 && afterDe.length < 50) {
+        return this.capitalizeCityName(afterDe);
+      }
+    }
+
+    return '';
+  }
+
+  private capitalizeCityName(ciudad: string): string {
+    const specialCases: { [key: string]: string } = {
+      'BOGOTA D.C.': 'Bogotá D.C.',
+      'BOGOTA DC': 'Bogotá D.C.',
+      'SANTA MARTA': 'Santa Marta',
+      'SANTA FE DE BOGOTA': 'Santa Fe de Bogotá',
+    };
+
+    const upperCiudad = ciudad.toUpperCase().trim();
+    if (specialCases[upperCiudad]) {
+      return specialCases[upperCiudad];
+    }
+
+    return ciudad
+      .toLowerCase()
+      .split(' ')
+      .map((word, index) => {
+        if (word.length === 0) return word;
+
+        if (word === 'd.c.' || word === 'dc') return 'D.C.';
+
+        if (
+          index > 0 &&
+          ['de', 'del', 'la', 'las', 'los', 'el'].includes(word)
+        ) {
+          return word;
+        }
+
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+  }
+
+  private normalizeDespacho(despacho: string, city: string): string {
+    return this.juzgadoNormalizer.normalizeJuzgado(despacho, city);
+  }
+
+  private extractFechaFromUltimaAnotacion(
+    ultimaAnotacion: string,
+  ): string | null {
+    if (!ultimaAnotacion || typeof ultimaAnotacion !== 'string') {
+      return null;
+    }
+
+    const regex = /(\d{1,2}\/\d{1,2}\/\d{4})/;
+    const match = ultimaAnotacion.match(regex);
+
+    if (match && match[1]) {
+      return match[1];
+    }
+
+    return null;
   }
 
   private async processApiChange(
@@ -463,12 +563,78 @@ export class MonolegalService {
       };
     }
 
-    console.log('🔍 Procesando:', radicado);
+    let ciudad = '';
+    let ubicacion = '';
+    let idProcesoMonolegal = '';
 
-    // Buscar si ya existe el registro
-    let record = await this.recordModel.findOne({ radicado: radicado });
+    try {
+      if (cambio.id) {
+        const expedienteDetalle = await this.monolegalApiService.getExpediente(
+          cambio.id,
+        );
 
-    // Generar internalCode si no existe
+        if (
+          cambio.ultimosCambiosEnFuentes &&
+          cambio.ultimosCambiosEnFuentes.length > 0
+        ) {
+          const fuenteUnificada = cambio.ultimosCambiosEnFuentes.find(
+            (f: any) => f.fuente?.toLowerCase() === 'unificada' && f.idProceso,
+          );
+
+          if (fuenteUnificada) {
+            idProcesoMonolegal = fuenteUnificada.idProceso;
+          } else {
+            this.logger.warn(
+              `No hay fuente Unificada en ultimosCambiosEnFuentes para ${radicado}`,
+            );
+          }
+        }
+
+        ciudad = expedienteDetalle.ciudad || '';
+        ubicacion = expedienteDetalle.ubicacion || '';
+
+        if (!ciudad || ciudad.trim() === '') {
+          const despacho = cambio.despacho || '';
+          const ciudadExtraida = this.extractCityFromDespacho(despacho);
+
+          if (ciudadExtraida) {
+            ciudad = ciudadExtraida;
+            this.logger.log(
+              `Ciudad extraída del despacho para ${radicado}: "${ciudad}"`,
+            );
+          }
+        }
+
+        if (
+          !ubicacion &&
+          expedienteDetalle.procesosEnFuentesDatos?.length > 0
+        ) {
+          const fuenteActiva = expedienteDetalle.procesosEnFuentesDatos.find(
+            (f: any) => f.activo === true || f.estado === 2,
+          );
+          if (fuenteActiva) {
+            ubicacion = fuenteActiva.tipoFuente || '';
+          }
+        }
+      } else {
+        this.logger.warn(
+          `El cambio para ${radicado} no tiene ID, no se puede obtener detalles del expediente`,
+        );
+      }
+    } catch (error) {
+      this.logger.error(
+        `Error al obtener detalles del expediente para ${radicado}: ${error.message}`,
+      );
+    }
+
+    const despachoOriginal = cambio.despacho?.trim() || '';
+    const despachoNormalizado = this.normalizeDespacho(
+      despachoOriginal,
+      ciudad,
+    );
+
+    const record = await this.recordModel.findOne({ radicado: radicado });
+
     let internalCode = record?.internalCode;
 
     if (!internalCode) {
@@ -479,24 +645,29 @@ export class MonolegalService {
       internalCode = `ML-${year}-${String(count + 1).padStart(4, '0')}`;
     }
 
+    const ultimaAnotacionTexto = cambio.ultimaAnotacion || '';
+    const fechaExtraida =
+      this.extractFechaFromUltimaAnotacion(ultimaAnotacionTexto);
+
     const recordData = {
       radicado: radicado,
       internalCode,
-      despachoJudicial: cambio.despacho?.trim() || '',
+      despachoJudicial: despachoNormalizado,
+      city: ciudad,
+      location: ubicacion,
+      idProcesoMonolegal: idProcesoMonolegal,
       etapaProcesal: '',
       ultimaActuacion: cambio.ultimaActuacion?.trim() || '',
-      fechaUltimaActuacion: this.parseDate(cambio.ultimoRegistro),
+      ultimaAnotacion: fechaExtraida || ultimaAnotacionTexto,
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
-      etiqueta: cambio.etiqueta || '',
+      etiqueta: (cambio.etiqueta || '').replace(/\s+/g, ''),
     };
 
     if (record) {
-      // Actualizar registro existente
       Object.assign(record, recordData);
       await record.save();
 
-      // Actualizar actuación
       if (cambio.ultimaActuacion) {
         await this.createOrUpdatePerformance(record._id, {
           ultimaActuacion: cambio.ultimaActuacion,
@@ -508,25 +679,28 @@ export class MonolegalService {
         radicado,
         status: 'updated',
         message: 'Registro actualizado desde API',
+        details: {
+          despachoJudicial: recordData.despachoJudicial,
+          city: recordData.city,
+          ultimaActuacion: recordData.ultimaActuacion,
+          ultimaAnotacion: recordData.ultimaAnotacion,
+        },
       };
     } else {
-      // Crear nuevo registro
       const newRecord = new this.recordModel({
         user: userId,
         ...recordData,
-        clientType: 'Otro',
+        clientType: cambio.demandados || 'Otro',
         country: 'Colombia',
       });
 
       await newRecord.save();
 
-      // Crear partes procesales
       await this.createProceduralParts(newRecord._id, {
         demandantes: cambio.demandantes || '',
         demandados: cambio.demandados || '',
       });
 
-      // Crear actuación
       if (cambio.ultimaActuacion) {
         await this.createOrUpdatePerformance(newRecord._id, {
           ultimaActuacion: cambio.ultimaActuacion,
@@ -540,5 +714,160 @@ export class MonolegalService {
         message: 'Registro creado desde API',
       };
     }
+  }
+
+  async renormalizeAllJuzgados(): Promise<any> {
+    try {
+      const records = await this.recordModel
+        .find({
+          sincronizadoMonolegal: true,
+        })
+        .exec();
+
+      if (records.length === 0) {
+        return {
+          success: true,
+          message: 'No hay registros para normalizar',
+          summary: {
+            total: 0,
+            updated: 0,
+            unchanged: 0,
+            errors: 0,
+          },
+        };
+      }
+
+      let updated = 0;
+      let unchanged = 0;
+      let errors = 0;
+
+      for (const record of records) {
+        try {
+          if (
+            !record.despachoJudicial ||
+            record.despachoJudicial.trim() === ''
+          ) {
+            this.logger.warn(`${record.radicado}: Sin despacho judicial`);
+            unchanged++;
+            continue;
+          }
+
+          const despachoOriginal = record.despachoJudicial;
+          const ciudad = record.city || '';
+
+          const despachoNormalizado = this.normalizeDespacho(
+            despachoOriginal,
+            ciudad,
+          );
+
+          if (despachoNormalizado !== despachoOriginal) {
+            record.despachoJudicial = despachoNormalizado;
+            await record.save();
+            updated++;
+          } else {
+            unchanged++;
+          }
+        } catch (error) {
+          errors++;
+          this.logger.error(`Error en ${record.radicado}: ${error.message}`);
+        }
+      }
+
+      return {
+        success: true,
+        message: 'Re-normalización completada',
+        summary: {
+          total: records.length,
+          updated,
+          unchanged,
+          errors,
+        },
+      };
+    } catch (error) {
+      this.logger.error(`Error en re-normalización: ${error.message}`);
+      throw new BadRequestException(
+        `Error al re-normalizar juzgados: ${error.message}`,
+      );
+    }
+  }
+
+  async updateAllUltimaAnotacion(): Promise<any> {
+    try {
+      const records = await this.recordModel.find({}).exec();
+
+      if (records.length === 0) {
+        return {
+          success: true,
+          message: 'No hay registros para actualizar',
+          summary: {
+            total: 0,
+            updated: 0,
+            skipped: 0,
+            errors: 0,
+          },
+        };
+      }
+
+      let updated = 0;
+      let skipped = 0;
+      let errors = 0;
+      const details = [];
+
+      for (const record of records) {
+        try {
+          const ultimaAnotacion = (record as any).ultimaAnotacion;
+
+          if (!ultimaAnotacion || typeof ultimaAnotacion !== 'string') {
+            skipped++;
+            continue;
+          }
+
+          const fechaExtraida =
+            this.extractFechaFromUltimaAnotacion(ultimaAnotacion);
+
+          if (fechaExtraida) {
+            if (fechaExtraida !== ultimaAnotacion) {
+              (record as any).ultimaAnotacion = fechaExtraida;
+              await record.save();
+              updated++;
+
+              details.push({
+                radicado: record.radicado,
+                ultimaAnotacion: fechaExtraida,
+                original: ultimaAnotacion,
+              });
+            } else {
+              skipped++;
+            }
+          } else {
+            skipped++;
+          }
+        } catch (error) {
+          errors++;
+          this.logger.error(`Error en ${record.radicado}: ${error.message}`);
+        }
+      }
+
+      return {
+        success: true,
+        message: 'Actualización de ultimaAnotacion completada',
+        summary: {
+          total: records.length,
+          updated: updated,
+          skipped: skipped,
+          errors: errors,
+        },
+        details: details.slice(0, 10),
+      };
+    } catch (error) {
+      this.logger.error(`Error en actualización: ${error.message}`);
+      throw new BadRequestException(
+        `Error al actualizar ultimaAnotacion: ${error.message}`,
+      );
+    }
+  }
+
+  async getActuacionesProceso(idProceso: string): Promise<any[]> {
+    return this.monolegalApiService.getActuacionesPorIdProceso(idProceso);
   }
 }

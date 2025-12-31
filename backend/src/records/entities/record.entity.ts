@@ -1,7 +1,6 @@
 import { Schema } from '@nestjs/mongoose';
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, ObjectId } from 'mongoose';
-import { IsOptional } from 'class-validator';
 import { Estado, TipoEstado } from '../dto/create-record.dto';
 
 @Schema()
@@ -14,6 +13,9 @@ export class Record extends Document {
 
   @Prop()
   clientType: string;
+
+  @Prop()
+  demandados: string;
 
   @Prop()
   internalCode: string;
@@ -75,18 +77,22 @@ export class Record extends Document {
   @Prop()
   ultimaActuacion: string;
 
-  @Prop()
-  fechaUltimaActuacion: Date;
-
   @Prop({ default: false })
   sincronizadoMonolegal: boolean;
 
   @Prop()
   fechaSincronizacion: Date;
+
+  @Prop()
+  ultimaAnotacion?: string;
+
+  @Prop()
+  idProcesoMonolegal?: string;
 }
 
 export const RecordSchema = SchemaFactory.createForClass(Record);
 RecordSchema.methods.toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __v, ...record } = this.toObject();
   return record;
 };

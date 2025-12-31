@@ -2,7 +2,7 @@
     "departamentos": [{
             "codigo": "AMZ",
             "abreviatura": "AMZ",
-            "nombre": "AMAZONAS",
+            "nombre": "Amazonas",
             "municipios": [
                 { "codigo": "91263000", "nombre": "El Encanto" },
                 { "codigo": "91405000", "nombre": "La Chorrera" },
@@ -19,7 +19,7 @@
         {
             "codigo": "ANT",
             "abreviatura": "ANT",
-            "nombre": "ANTIOQUIA",
+            "nombre": "Antioquia",
             "municipios": [
                 { "codigo": "05002000", "nombre": "Abejorral" },
                 { "codigo": "05004000", "nombre": "Abriaqui" },
@@ -186,7 +186,7 @@
         {
             "codigo": "ARU",
             "abreviatura": "ARU",
-            "nombre": "ARAUCA",
+            "nombre": "Arauca",
             "municipios": [
                 { "codigo": "81001000", "nombre": "Arauca" },
                 { "codigo": "81065000", "nombre": "Arauquita" },
@@ -203,7 +203,7 @@
         {
             "codigo": "ATL",
             "abreviatura": "ATL",
-            "nombre": "ATLÁNTICO",
+            "nombre": "Atlántico",
             "municipios": [
                 { "codigo": "08078000", "nombre": "Baranoa" },
                 { "codigo": "08001000", "nombre": "Barranquilla" },
@@ -243,7 +243,7 @@
         {
             "codigo": "BOL",
             "abreviatura": "BOL",
-            "nombre": "BOLÍVAR",
+            "nombre": "Bolívar",
             "municipios": [
                 { "codigo": "13006000", "nombre": "Achi" },
                 { "codigo": "13030000", "nombre": "Altos Del Rosario" },
@@ -309,7 +309,7 @@
         {
             "codigo": "BOY",
             "abreviatura": "BOY",
-            "nombre": "BOYACÁ",
+            "nombre": "Boyacá",
             "municipios": [
                 { "codigo": "15022000", "nombre": "Almeida" },
                 { "codigo": "15047000", "nombre": "Aquitania" },
@@ -450,7 +450,7 @@
         {
             "codigo": "CAL",
             "abreviatura": "CAL",
-            "nombre": "CALDAS",
+            "nombre": "Caldas",
             "municipios": [
                 { "codigo": "17013000", "nombre": "Aguadas" },
                 { "codigo": "17042000", "nombre": "Anserma" },
@@ -499,7 +499,7 @@
         {
             "codigo": "CAQ",
             "abreviatura": "CAQ",
-            "nombre": "CAQUETÁ",
+            "nombre": "Caquetá",
             "municipios": [
                 { "codigo": "18029000", "nombre": "Albania" },
                 { "codigo": "18094000", "nombre": "Belen De Los Andaquies" },
@@ -524,7 +524,7 @@
         {
             "codigo": "CAS",
             "abreviatura": "CAS",
-            "nombre": "CASANARE",
+            "nombre": "Casanare",
             "municipios": [
                 { "codigo": "85010000", "nombre": "Aguazul" },
                 { "codigo": "85015000", "nombre": "Chameza" },
@@ -555,7 +555,7 @@
         {
             "codigo": "CAU",
             "abreviatura": "CAU",
-            "nombre": "CAUCA",
+            "nombre": "Cauca",
             "municipios": [
                 { "codigo": "19022000", "nombre": "Almaguer" },
                 { "codigo": "19050000", "nombre": "Argelia" },
@@ -604,7 +604,7 @@
         {
             "codigo": "CES",
             "abreviatura": "CES",
-            "nombre": "CESAR",
+            "nombre": "Cesar",
             "municipios": [
                 { "codigo": "20011000", "nombre": "Aguachica" },
                 { "codigo": "20013000", "nombre": "Agustin Codazzi" },
@@ -644,7 +644,7 @@
         {
             "codigo": "CHO",
             "abreviatura": "CHO",
-            "nombre": "CHOCÓ",
+            "nombre": "Chocó",
             "municipios": [
                 { "codigo": "27006000", "nombre": "Acandi" },
                 { "codigo": "27025000", "nombre": "Alto Baudo" },
@@ -688,7 +688,7 @@
         {
             "codigo": "COR",
             "abreviatura": "COR",
-            "nombre": "CÓRDOBA",
+            "nombre": "Córdoba",
             "municipios": [
                 { "codigo": "23068000", "nombre": "Ayapel" },
                 { "codigo": "23079000", "nombre": "Buena vista" },
@@ -733,7 +733,7 @@
         {
             "codigo": "CUN",
             "abreviatura": "CUN",
-            "nombre": "CUNDINAMARCA",
+            "nombre": "Cundinamarca",
             "municipios": [
                 { "codigo": "25001000", "nombre": "Agua De Dios" },
                 { "codigo": "25019000", "nombre": "Alban" },
@@ -880,7 +880,7 @@
         {
             "codigo": "GUA",
             "abreviatura": "GUA",
-            "nombre": "GUAINÍA",
+            "nombre": "Guainía",
             "municipios": [
                 { "codigo": "94343000", "nombre": "Barranco Mina" },
                 { "codigo": "94886000", "nombre": "Cacahual" },
@@ -897,7 +897,7 @@
         {
             "codigo": "GUV",
             "abreviatura": "GUV",
-            "nombre": "GUAVIARE",
+            "nombre": "Guaviare",
             "municipios": [
                 { "codigo": "95025000", "nombre": "El Retorno" },
                 { "codigo": "95200000", "nombre": "Miraflores" },
@@ -907,7 +907,7 @@
         {
             "codigo": "HUI",
             "abreviatura": "HUI",
-            "nombre": "HUILA",
+            "nombre": "Huila",
             "municipios": [
                 { "codigo": "41006000", "nombre": "Acevedo" },
                 { "codigo": "41013000", "nombre": "Agrado" },
@@ -955,7 +955,7 @@
         {
             "codigo": "GUJ",
             "abreviatura": "GUJ",
-            "nombre": "LA GUAJIRA",
+            "nombre": "La Guajira",
             "municipios": [
                 { "codigo": "44035000", "nombre": "Albania" },
                 { "codigo": "44098001", "nombre": "Buenavista" },
@@ -979,7 +979,7 @@
         {
             "codigo": "MAG",
             "abreviatura": "MAG",
-            "nombre": "MAGDALENA",
+            "nombre": "Magdalena",
             "municipios": [
                 { "codigo": "47030000", "nombre": "Algarrobo" },
                 { "codigo": "47053000", "nombre": "Aracataca" },
@@ -1031,7 +1031,7 @@
         {
             "codigo": "MET",
             "abreviatura": "MET",
-            "nombre": "META",
+            "nombre": "Meta",
             "municipios": [
                 { "codigo": "50006000", "nombre": "Acacias" },
                 { "codigo": "50110000", "nombre": "Barranca De Upia" },
@@ -1068,7 +1068,7 @@
         {
             "codigo": "NAR",
             "abreviatura": "NAR",
-            "nombre": "NARIÑO",
+            "nombre": "Nariño",
             "municipios": [
                 { "codigo": "52019000", "nombre": "Alban" },
                 { "codigo": "52022000", "nombre": "Aldana" },
@@ -1174,7 +1174,7 @@
         {
             "codigo": "NOR",
             "abreviatura": "NOR",
-            "nombre": "NORTE DE SANTANDER",
+            "nombre": "Norte de Santander",
             "municipios": [
                 { "codigo": "54003000", "nombre": "Abrego" },
                 { "codigo": "54051000", "nombre": "Arboledas" },
@@ -1222,7 +1222,7 @@
         {
             "codigo": "PUT",
             "abreviatura": "PUT",
-            "nombre": "PUTUMAYO",
+            "nombre": "Putumayo",
             "municipios": [
                 { "codigo": "86219000", "nombre": "Colon" },
                 { "codigo": "86001000", "nombre": "Mocoa" },
@@ -1246,7 +1246,7 @@
         {
             "codigo": "QUI",
             "abreviatura": "QUI",
-            "nombre": "QUINDÍO",
+            "nombre": "Quindío",
             "municipios": [
                 { "codigo": "63001000", "nombre": "Armenia" },
                 { "codigo": "63130001", "nombre": "Barcelona" },
@@ -1266,7 +1266,7 @@
         {
             "codigo": "RIS",
             "abreviatura": "RIS",
-            "nombre": "RISARALDA",
+            "nombre": "Risaralda",
             "municipios": [
                 { "codigo": "66045000", "nombre": "Apia" },
                 { "codigo": "66075000", "nombre": "Balboa" },
@@ -1289,7 +1289,7 @@
         {
             "codigo": "SAP",
             "abreviatura": "SAP",
-            "nombre": "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA",
+            "nombre": "San Andrés, Providencia y Santa Catalina",
             "municipios": [
                 { "codigo": "88564000", "nombre": "Providencia" },
                 { "codigo": "88564001", "nombre": "Santa Catalina" },
@@ -1299,7 +1299,7 @@
         {
             "codigo": "SAN",
             "abreviatura": "SAN",
-            "nombre": "SANTANDER",
+            "nombre": "Santander",
             "municipios": [
                 { "codigo": "68013000", "nombre": "Aguada" },
                 { "codigo": "68020000", "nombre": "Albania" },
@@ -1401,7 +1401,7 @@
         {
             "codigo": "SUC",
             "abreviatura": "SUC",
-            "nombre": "SUCRE",
+            "nombre": "Sucre",
             "municipios": [
                 { "codigo": "70110000", "nombre": "Buenavista" },
                 { "codigo": "70124000", "nombre": "Caimito" },
@@ -1434,7 +1434,7 @@
         {
             "codigo": "TOL",
             "abreviatura": "TOL",
-            "nombre": "TOLIMA",
+            "nombre": "Tolima",
             "municipios": [
                 { "codigo": "73024000", "nombre": "Alpujarra" },
                 { "codigo": "73026000", "nombre": "Alvarado" },
@@ -1521,7 +1521,7 @@
         {
             "codigo": "VAC",
             "abreviatura": "VAC",
-            "nombre": "VALLE DEL CAUCA",
+            "nombre": "Valle del Cauca",
             "municipios": [
                 { "codigo": "76020000", "nombre": "Alcala" },
                 { "codigo": "76036000", "nombre": "Andalucia" },
@@ -1574,7 +1574,7 @@
         {
             "codigo": "VAU",
             "abreviatura": "VAU",
-            "nombre": "VAUPÉS",
+            "nombre": "Vaupés",
             "municipios": [
                 { "codigo": "97161000", "nombre": "Caruru" },
                 { "codigo": "97511000", "nombre": "Pacoa" },
@@ -1589,7 +1589,7 @@
         {
             "codigo": "VIC",
             "abreviatura": "VIC",
-            "nombre": "VICHADA",
+            "nombre": "Vichada",
             "municipios": []
         }
     ]

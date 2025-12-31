@@ -13,23 +13,44 @@ export class ImportMonolegalDto {
 
 export interface MonolegalRow {
   'Número Proceso': string;
-  'Demandantes': string;
-  'Demandados': string;
-  'Despacho': string;
+  Demandantes: string;
+  Demandados: string;
+  Despacho: string;
   'Etapa Procesal': string;
   'Última Actuación': string;
   'Fecha de último Registro': string;
   'Fuentes Activas': string;
-  'Etiqueta': string;
+  Etiqueta: string;
 }
 
 export interface ProcessResult {
   radicado: string;
   status: 'created' | 'updated' | 'skipped' | 'error';
   message: string;
-  despachoJudicial?: string;
-  etapaProcesal?: string;
-  ultimaActuacion?: string;
-  fechaUltimaActuacion?: Date;
-  fechaSincronizacion?: Date;
+  details?: {
+    despachoJudicial?: string;
+    city?: string;
+    etapaProcesal?: string;
+    ultimaActuacion?: string;
+    ultimaAnotacion?: Date;
+  };
+}
+
+export interface SyncResponse {
+  success: boolean;
+  message: string;
+  summary: {
+    total: number;
+    created: number;
+    updated: number;
+    skipped: number;
+    errors: number;
+  };
+  details: ProcessResult[];
+  updatedRecords?: Array<{
+    radicado: string;
+    despachoJudicial: string;
+    city: string;
+    ultimaActuacion: string;
+  }>;
 }

@@ -8,12 +8,12 @@ const MONGO_URI = process.env.MONGODB_CNN;
 
 async function checkMigrationStatus() {
   try {
-    console.log('🔍 Conectando a MongoDB...');
+    console.log('Conectando a MongoDB...');
     await mongoose.connect(MONGO_URI);
     const db = mongoose.connection.db;
 
-    console.log('✅ Conexión exitosa a MongoDB');
-    console.log('📊 Base de datos:', db.databaseName);
+    console.log('Conexión exitosa a MongoDB');
+    console.log('Base de datos:', db.databaseName);
     console.log('='.repeat(60));
 
     // 1. Verificar colecciones existentes
@@ -25,10 +25,10 @@ async function checkMigrationStatus() {
     // 2. Verificar records
     const recordsCollection = db.collection('records');
     const recordsCount = await recordsCollection.countDocuments();
-    console.log(`📄 Records en la base de datos: ${recordsCount}`);
+    console.log(`Records en la base de datos: ${recordsCount}`);
 
     if (recordsCount > 0) {
-      console.log('📋 Primeros 3 records:');
+      console.log('Primeros 3 records:');
       const sampleRecords = await recordsCollection.find({}).limit(3).toArray();
       sampleRecords.forEach((record, index) => {
         console.log(`  ${index + 1}. ID: ${record._id}`);
@@ -68,13 +68,13 @@ async function checkMigrationStatus() {
       .collection('performances')
       .countDocuments();
 
-    console.log(`👥 Procedural Parts: ${proceduralPartsCount}`);
-    console.log(`📊 Performances: ${performancesCount}`);
+    console.log(`Procedural Parts: ${proceduralPartsCount}`);
+    console.log(`Performances: ${performancesCount}`);
     console.log('');
 
     // 5. Verificar integridad de las relaciones
     if (recordsCount > 0 && proceduralPartsCount > 0) {
-      console.log('🔍 Verificando integridad de relaciones...');
+      console.log('Verificando integridad de relaciones...');
       const proceduralPartsWithRecords = await db
         .collection('proceduralparts')
         .aggregate([
@@ -95,14 +95,14 @@ async function checkMigrationStatus() {
         .toArray();
 
       console.log(
-        `✅ Procedural Parts con relaciones válidas: ${proceduralPartsWithRecords.length}/${proceduralPartsCount}`,
+        `Procedural Parts con relaciones válidas: ${proceduralPartsWithRecords.length}/${proceduralPartsCount}`,
       );
     }
 
     console.log('='.repeat(60));
-    console.log('✅ Verificación completa');
+    console.log('Verificación completa');
   } catch (error) {
-    console.error('❌ Error verificando el estado de la migración:', error);
+    console.error('Error verificando el estado de la migración:', error);
   } finally {
     await mongoose.disconnect();
     console.log('🔌 Desconectado de MongoDB');
@@ -116,7 +116,7 @@ if (require.main === module) {
       process.exit(0);
     })
     .catch((error) => {
-      console.error('💥 Error:', error);
+      console.error('Error:', error);
       process.exit(1);
     });
 }

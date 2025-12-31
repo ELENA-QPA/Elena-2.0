@@ -8,43 +8,33 @@ import {
   Delete,
   Query,
   UseGuards,
-  Res,
   UseInterceptors,
   UploadedFiles,
   BadRequestException,
-  ValidationPipe,
 } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RecordsService } from './records.service';
 import { UpdateRecordDto } from './dto/update-record.dto';
-import { CreateCompleteRecordDto } from './dto/create-complete-record.dto';
+
 import { CreateCompleteRecordWithFilesDto } from './dto/create-complete-record-with-files.dto';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiExcludeEndpoint,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
+
 import { Auth, GetUser, ApiKeyAuth } from 'src/auth/decorators';
 import { IUser } from './interfaces/user.interface';
-import { ValidRoles } from 'src/auth/interfaces';
-import { AddCommentDto } from './dto/add-comment.dto';
-import { DraftRecordDto } from './dto/draft.record.dto';
-import { QueryRecordsDto } from './dto/query-records.dto';
 import { PaginationDto } from 'src/common/dto/paginaton.dto';
 import { GetMaxInternalCodeDto } from './dto/get-max-internal-code.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { FileService } from 'src/common/services/file.service';
 import { GetStatisticsDto } from './dto/get-statistics.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-// DTO para el tracking de procesos por mes
 export class GetProcessTrackingDto {
   @ApiProperty({
     example: 'January',
@@ -63,7 +53,6 @@ import { CreateProceduralPartForRecordDto } from '../procedural-part/dto/create-
 import { CreatePaymentForRecordDto } from '../payment/dto/create-payment-for-record.dto';
 import { DocumentService } from 'src/document/document.service';
 import { ByClientDto } from './dto/by-client-document.dto';
-import { ProceduralPart } from 'src/procedural-part/entities/procedural-part.entity';
 import { ProceduralPartService } from 'src/procedural-part/procedural-part.service';
 import { ByInternalCodeDto } from './dto/by-internal-code.dto';
 import { FileLocalService } from 'src/common/services/file-local.service';
@@ -71,14 +60,12 @@ import { FileLocalService } from 'src/common/services/file-local.service';
 @ApiTags('Casos')
 @Controller('records')
 export class RecordsController {
-  // -----------------------------------------------------
   constructor(
     private readonly recordsService: RecordsService,
     private readonly documentService: DocumentService,
     private readonly proceduralPartService: ProceduralPartService,
   ) {}
 
-  // Helper method para validar y transformar DTOs desde JSON strings
   private async validateAndTransform<T>(
     data: any,
     DtoClass: new () => T,
@@ -105,7 +92,7 @@ export class RecordsController {
 
     return dtoInstances as T[];
   }
-  // -----------------------------------------------------
+
   @ApiOperation({ summary: 'Crear caso completo con archivos adjuntos' })
   @ApiBearerAuth()
   @Auth()
@@ -222,7 +209,6 @@ export class RecordsController {
     schema: {
       type: 'object',
       properties: {
-        // Campos del record (REQUERIDOS)
         clientType: {
           type: 'string',
           enum: ['Rappi', 'Uber', 'Didi', 'Otro'],
@@ -230,7 +216,6 @@ export class RecordsController {
           description: 'REQUERIDO: Tipo de cliente',
         },
 
-        // Campos opcionales del record
         internalCode: { type: 'string', example: 'INT-2025-001' },
         department: { type: 'string', example: 'Bogotá D.C.' },
         personType: { type: 'string', example: 'Natural' },
@@ -284,7 +269,6 @@ export class RecordsController {
       },
     },
   })
-  //@UseInterceptors(FilesInterceptor('files', 10))
   @UseInterceptors(FilesInterceptor('files', 10, FileLocalService.multerConfig))
   async createCompleteWithFiles(
     @GetUser() user: IUser,
@@ -356,8 +340,6 @@ export class RecordsController {
       throw error;
     }
   }
-
-  // // -----------------------------------------------------
 
   @ApiOperation({ summary: 'Buscar todos los expedientes del usuario' })
   @ApiBearerAuth()
@@ -556,7 +538,6 @@ export class RecordsController {
     @Query() paginationDto: PaginationDto,
   ): Promise<any> {
     const result = await this.recordsService.getMyRecords(user, paginationDto);
-    // Para cada record, obtener relaciones igual que findById
     const recordsWithRelations = await Promise.all(
       (result.records || []).map(async (record: any) => {
         const id = record._id?.toString?.() || record.id;
@@ -589,10 +570,8 @@ export class RecordsController {
       count: result.count,
     };
   }
-  // // -----------------------------------------------------
+
   @ApiOperation({ summary: 'Buscar caso por ID con todas sus relaciones' })
-  // @ApiBearerAuth()
-  // @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     example: {
@@ -699,7 +678,7 @@ export class RecordsController {
   findById(@Param('id') id: string) {
     return this.recordsService.findById(id);
   }
-  // ----------------------------------------------------------------------------------------------------
+
   @ApiOperation({
     summary:
       'Obtener el mayor internal code para un tipo de proceso específico',
@@ -750,8 +729,6 @@ export class RecordsController {
       getMaxInternalCodeDto.processType,
     );
   }
-
-  // ----------------------------------------------------------------------------------------------------
 
   @ApiOperation({ summary: 'Actualizar caso' })
   @ApiBearerAuth()
@@ -812,7 +789,6 @@ export class RecordsController {
   ) {
     return this.recordsService.updateRecord(id, updateRecordDto);
   }
-  // -----------------------------------------------------
 
   @ApiOperation({ summary: 'Eliminar caso y todas sus relaciones' })
   @ApiBearerAuth()
@@ -853,7 +829,6 @@ export class RecordsController {
   deleteRecord(@GetUser() user: IUser, @Param('id') id: string) {
     return this.recordsService.deleteRecord(user, id);
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -871,7 +846,7 @@ export class RecordsController {
       activeProcesses: 150,
       inactiveProcesses: 75,
       totalProcesses: 225,
-      filterType: 'ACTIVO', // Indica el filtro aplicado: 'ACTIVO', 'FINALIZADO' o 'ALL'
+      filterType: 'ACTIVO',
       monthlyMetrics: [
         {
           month: 1,
@@ -887,7 +862,6 @@ export class RecordsController {
           inactiveProcesses: 6,
           totalProcesses: 18,
         },
-        // ... resto de meses
       ],
       summary: {
         mostActiveMonth: {
@@ -925,15 +899,11 @@ export class RecordsController {
     const type = getStatisticsDto.type;
     return this.recordsService.getActiveInactiveProcessesByMonth(year, type);
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
       'Obtener estadísticas de demandas radicadas y audiencias fijadas por mes por año',
   })
-  // @ApiBearerAuth()
-  // @Auth()
-  // @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description:
@@ -953,7 +923,6 @@ export class RecordsController {
             monthName: 'February',
             count: 12,
           },
-          // ... rest of months
         ],
       },
       scheduledHearings: {
@@ -969,7 +938,6 @@ export class RecordsController {
             monthName: 'February',
             count: 7,
           },
-          // ... rest of months
         ],
       },
       summary: {
@@ -995,7 +963,6 @@ export class RecordsController {
       year,
     );
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -1055,7 +1022,6 @@ export class RecordsController {
       getProcessStatisticsDto.type,
     );
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -1155,7 +1121,6 @@ export class RecordsController {
               monthName: 'Febrero',
               count: 6,
             },
-            // ... resto de meses
           ],
         },
       ],
@@ -1179,7 +1144,6 @@ export class RecordsController {
       year,
     );
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -1279,7 +1243,6 @@ export class RecordsController {
               monthName: 'Febrero',
               count: 4,
             },
-            // ... resto de meses
           ],
         },
       ],
@@ -1303,7 +1266,7 @@ export class RecordsController {
       year,
     );
   }
-  // -----------------------------------------------------
+
   @ApiOperation({
     summary:
       'Obtener métricas agrupadas por departamento y ciudad-Rapidez media de fijacion y celebracion de audiencia',
@@ -1315,7 +1278,7 @@ export class RecordsController {
   async getMetricsByDepartmentAndCity() {
     return this.recordsService.getMetricsByDepartmentAndCity();
   }
-  // -----------------------------------------------------
+
   @ApiOperation({
     summary: 'Obtener cantidad y porcentaje de casos por departamento y ciudad',
   })
@@ -1326,7 +1289,6 @@ export class RecordsController {
   async getCasesCountAndPercentageByDepartment() {
     return this.recordsService.getCasesCountAndPercentageByDepartment();
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -1353,10 +1315,10 @@ export class RecordsController {
       },
     },
   })
-  async getActiveByOffice(@GetUser() user: IUser) {
+  async getActiveByOffice() {
     return this.recordsService.getActiveProcessCountByOffice();
   }
-  // -----------------------------------------------------
+
   @ApiOperation({ summary: 'Obtener demandas radicadas por user por año' })
   @ApiBearerAuth()
   @Auth()
@@ -1365,7 +1327,7 @@ export class RecordsController {
   async getFiledLawsuitsByUserByYear(@Body() dto: GetStatisticsDto) {
     return this.recordsService.getFiledLawsuitsByUserByYear(dto);
   }
-  // -----------------------------------------------------
+
   @ApiOperation({
     summary: 'Obtener estadísticas relativas a la documentación',
   })
@@ -1376,7 +1338,7 @@ export class RecordsController {
   async getStatisticsDocumentation() {
     return this.documentService.getStatisticsDocumentation();
   }
-  //------------------------------------------------------
+
   @ApiOperation({
     summary: 'Obtener data de documentos con porciento por mes por año',
   })
@@ -1387,7 +1349,7 @@ export class RecordsController {
   async getMonthlyDocumentationStats(@Body() body: GetStatisticsDto) {
     return this.documentService.getDocumentationMetrics(body);
   }
-  // -----------------------------------------------------
+
   @ApiOperation({
     summary: 'Obtener seguimiento de procesos radicados en un mes específico',
   })
@@ -1398,7 +1360,6 @@ export class RecordsController {
   async getProcessTracking(@Body() body: GetProcessTrackingDto) {
     return this.recordsService.getProcessTracking(body.month, body.year);
   }
-  // -----------------------------------------------------
 
   @ApiOperation({
     summary:
@@ -1409,7 +1370,7 @@ export class RecordsController {
   async getRecordsByClient(@Body() body: ByClientDto) {
     return this.proceduralPartService.getRecordsByClient(body);
   }
-  // -----------------------------------------------------
+
   @ApiOperation({ summary: 'Obtener caso por internalCode' })
   @ApiKeyAuth()
   @Post('by-internal-code')
@@ -1419,7 +1380,6 @@ export class RecordsController {
     return this.recordsService.getRecordDetailsByInternalCode(internalCodeDto);
   }
 
-  // -----------------------------------------------------
   @ApiOperation({
     summary:
       'Obtener detalles completos de todos los casos activos y finalizados por número de documento del cliente',
@@ -1429,5 +1389,4 @@ export class RecordsController {
   async getDetailedRecordsByClient(@Body() body: ByClientDto) {
     return this.recordsService.getDetailedRecordsByClient(body);
   }
-  // -----------------------------------------------------
 }
