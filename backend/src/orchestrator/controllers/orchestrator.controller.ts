@@ -105,4 +105,9 @@ export class OrchestratorController {
   extractRange(@Body() dto) {
     return this.orchestratorService.extractDate(dto.text);
   }
+
+  @Get('test-audience')
+  sendTestAudienceEmail() {
+    return this.orchestratorService.sendTestAudienceEmail();
+  }
 }

@@ -22,6 +22,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { ReminderService } from 'src/reminder/services/reminder.services';
 import { EmailReminderData } from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class OrchestratorService {
@@ -36,6 +37,7 @@ export class OrchestratorService {
     private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,
     private readonly recordAdapter: RecordAdapter,
+    private readonly mailerService: MailerService,
   ) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -607,5 +609,58 @@ export class OrchestratorService {
 
   async cleanQueue() {
     return this.reminderService.cleanQueue();
+  }
+
+  async sendTestAudienceEmail() {
+    const payload = {
+      audience: {
+        _id: '6953e7bdd572f2dd4e5463b0',
+        monto: 0,
+        state: 'Programada',
+        link: '',
+        is_valid: true,
+        record: '69534683102eaab137d7d6a0',
+        lawyer: {
+          _id: '6953437bd41bd4c76ea3cb2e',
+          name: 'Carolina Herrera',
+        },
+        start: '2026-01-29T15:00:00.000Z',
+        end: '2026-01-29T16:30:00.000Z',
+      },
+      record: {
+        _id: '69534683102eaab137d7d6a0',
+        client: 'Rappi',
+        internalCode: 'R001',
+        office: 'sassa',
+        settled: '43423',
+        proceduralParts: {
+          plaintiff: {
+            name: 'jose',
+            email: 'simoncitoramos@gmail.com',
+            contact: '3195823782',
+          },
+          defendant: {
+            name: 'Rappi',
+          },
+        },
+      },
+    };
+
+    payload.audience = this.reminderService.buildAudienceContext(
+      payload.audience,
+    );
+
+    this.logger.log('paylaod compelto ' + payload);
+    await this.mailerService.sendMail({
+      to: 'jramos@qpalliance.co',
+      subject: 'Notificación de audiencia (prueba)',
+      template: './audience-notification',
+      context: payload,
+    });
+
+    return {
+      success: true,
+      message: 'Email de audiencia enviado correctamente',
+    };
   }
 }

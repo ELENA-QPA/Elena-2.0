@@ -7,6 +7,7 @@ import { AudienceModule } from 'src/audience/audience.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { NotificationModule } from 'src/notifications/notifications.module';
 import { ReminderModule } from 'src/reminder/reminder.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ReminderModule } from 'src/reminder/reminder.module';
     AuthModule,
     NotificationModule,
     ReminderModule,
+    MailerModule,
   ],
   controllers: [OrchestratorController],
   providers: [OrchestratorService, RecordAdapter],
