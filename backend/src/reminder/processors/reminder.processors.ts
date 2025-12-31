@@ -12,38 +12,26 @@ export class ReminderProcessor {
 
   @Process('send-email')
   async handleSendEmail(job: Job<EmailReminderData>) {
-    const { to, subject, templateName, templateData, metadata } = job.data;
-
-    this.logger.log(
-      `Procesando email para ${to} - ${metadata?.reminderType || 'general'}`,
-    );
+    const data = job.data;
 
     try {
-      //   // Enviar email usando el servicio de email
-      //   await this.mailerService.sendTemplatedEmail({
-      //     to,
-      //     subject,
-      //     template: templateName,
-      //     context: templateData,
-      //   });
+      await this.mailerService.sendMail(data);
 
-      this.logger.log(`✓ Email enviado exitosamente a ${to}`);
+      this.logger.log(`✓ Email enviado exitosamente a ${data.to}`);
 
-      return { success: true, to, metadata };
+      return { success: true, to: data.to };
     } catch (error) {
-      this.logger.error(`✗ Error enviando email a ${to}`, error.stack);
+      this.logger.error(`✗ Error enviando email a ${data.to}`, error.stack);
       throw error;
     }
   }
 
   @OnQueueFailed()
   async handleFailedEmail(job: Job<EmailReminderData>, error: Error) {
-    const { to, metadata } = job.data;
+    const { to } = job.data;
 
     this.logger.error(
-      `Email falló definitivamente para ${to} después de ${
-        job.attemptsMade
-      } intentos. Metadata: ${JSON.stringify(metadata)}`,
+      `Email falló definitivamente para ${to} después de ${job.attemptsMade} intentos.`,
       error.stack,
     );
   }

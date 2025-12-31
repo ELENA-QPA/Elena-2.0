@@ -16,7 +16,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     NotificationModule,
     ReminderModule,
-    MailerModule,
   ],
   controllers: [OrchestratorController],
   providers: [OrchestratorService, RecordAdapter],

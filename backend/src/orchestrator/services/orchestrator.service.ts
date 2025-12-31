@@ -37,7 +37,6 @@ export class OrchestratorService {
     private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,
     private readonly recordAdapter: RecordAdapter,
-    private readonly mailerService: MailerService,
   ) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -106,26 +105,9 @@ export class OrchestratorService {
     );
     notificationDate.setHours(0, 0, 0, 0);
 
+    this.logger.log('para ' + businessDays + 'fecha ' + notificationDate);
+
     return today.getTime() === notificationDate.getTime();
-  }
-
-  private getReminderTemplateInfo(type: 'oneMonth' | 'fifteenDays' | 'oneDay') {
-    const templates = {
-      oneMonth: {
-        subject: 'Recordatorio: Audiencia en 1 mes',
-        template: 'audience-reminder-one-month',
-      },
-      fifteenDays: {
-        subject: 'Recordatorio: Audiencia en 15 días',
-        template: 'audience-reminder-fifteen-days',
-      },
-      oneDay: {
-        subject: 'Recordatorio: Audiencia mañana',
-        template: 'audience-reminder-one-day',
-      },
-    };
-
-    return templates[type];
   }
 
   private async enqueueReminder(
@@ -133,34 +115,16 @@ export class OrchestratorService {
     type: 'oneMonth' | 'fifteenDays' | 'oneDay',
   ): Promise<void> {
     const { audience, record } = audienceData;
-    this.logger.log(`[QUEUE] Adding job type=${type} audience=${audience._id}`);
-
-    const templateInfo = this.getReminderTemplateInfo(type);
+    audienceData.audience = this.reminderService.buildAudienceContext(audience);
 
     const emailData: EmailReminderData = {
-      to: audience.lawyer.name,
-      subject: templateInfo.subject,
-      templateName: templateInfo.template,
-      templateData: {
-        lawyerName: audience.lawyer.name,
-        audienceDate: audience.start,
-        audienceTime: new Date(audience.start).toLocaleTimeString('es-CO'),
-        recordInfo: {
-          settled: record?.settled,
-          internalCode: record?.internalCode,
-          plaintiff: record?.proceduralParts?.plaintiff?.name,
-          defendant: record?.proceduralParts?.defendant?.name,
-          office: record?.office,
-        },
-        audienceLink: audience.link,
-        reminderType: type,
-      },
-      metadata: {
-        entityId: audience._id,
-        entityType: 'audience',
-        reminderType: `reminder-${type}`,
-      },
+      to: record.proceduralParts.plaintiff.email,
+      subject: 'Notificación de audiencia',
+      template: './audience-notification',
+      context: audienceData,
     };
+
+    this.logger.log('send email....');
 
     await this.reminderService.sendEmail(emailData);
 
@@ -609,58 +573,5 @@ export class OrchestratorService {
 
   async cleanQueue() {
     return this.reminderService.cleanQueue();
-  }
-
-  async sendTestAudienceEmail() {
-    const payload = {
-      audience: {
-        _id: '6953e7bdd572f2dd4e5463b0',
-        monto: 0,
-        state: 'Programada',
-        link: '',
-        is_valid: true,
-        record: '69534683102eaab137d7d6a0',
-        lawyer: {
-          _id: '6953437bd41bd4c76ea3cb2e',
-          name: 'Carolina Herrera',
-        },
-        start: '2026-01-29T15:00:00.000Z',
-        end: '2026-01-29T16:30:00.000Z',
-      },
-      record: {
-        _id: '69534683102eaab137d7d6a0',
-        client: 'Rappi',
-        internalCode: 'R001',
-        office: 'sassa',
-        settled: '43423',
-        proceduralParts: {
-          plaintiff: {
-            name: 'jose',
-            email: 'simoncitoramos@gmail.com',
-            contact: '3195823782',
-          },
-          defendant: {
-            name: 'Rappi',
-          },
-        },
-      },
-    };
-
-    payload.audience = this.reminderService.buildAudienceContext(
-      payload.audience,
-    );
-
-    this.logger.log('paylaod compelto ' + payload);
-    await this.mailerService.sendMail({
-      to: 'jramos@qpalliance.co',
-      subject: 'Notificación de audiencia (prueba)',
-      template: './audience-notification',
-      context: payload,
-    });
-
-    return {
-      success: true,
-      message: 'Email de audiencia enviado correctamente',
-    };
   }
 }

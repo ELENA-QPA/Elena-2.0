@@ -14,7 +14,6 @@ export class ReminderService {
   }
 
   async sendEmail(emailData: EmailReminderData): Promise<void> {
-    this.logger.log('[QUEUE] Adding send-email job');
     await this.reminderQueue.add('send-email', emailData, {
       attempts: 3,
       backoff: {
