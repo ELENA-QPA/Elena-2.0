@@ -1,4 +1,5 @@
 "use client"
+console.log('?? PAGE.TSX CARGADO');
 
 import dynamic from 'next/dynamic';
 import Loading from './loading';
@@ -28,3 +29,4 @@ export default function InformacionCasoPage() {
     </div>
   );
 }
+

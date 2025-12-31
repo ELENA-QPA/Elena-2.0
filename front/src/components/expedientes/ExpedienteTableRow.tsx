@@ -67,13 +67,6 @@ const ExpedienteTableRow = memo(
           </span>
         </TableCell>
 
-        {/* Ubicación Expediente */}
-        <TableCell className="bg-white max-w-[150px]">
-          <span className="truncate block" title={caso.location || "N/A"}>
-            {caso.location || "N/A"}
-          </span>
-        </TableCell>
-
         {/* Despacho Judicial */}
         <TableCell className="bg-white max-w-[200px]">
           <span
@@ -136,24 +129,30 @@ const ExpedienteTableRow = memo(
         <TableCell className="bg-white">
           <div className="flex flex-col gap-1">
             <span className="font-medium">
-              {caso.fechaUltimaActuacion || caso.updatedAt || caso.createdAt
+              {caso.ultimaAnotacion
                 ? (() => {
-                    const date = new Date(
-                      (caso.fechaUltimaActuacion || caso.updatedAt) ??
-                        caso.createdAt ??
-                        ""
-                    );                    
-                    const year = date.getUTCFullYear();
-                    const month = String(date.getUTCMonth() + 1).padStart(
-                      2,
-                      "0"
-                    );
-                    const day = String(date.getUTCDate()).padStart(2, "0");
-                    return `${day}/${month}/${year}`;
+                    if (
+                      typeof caso.ultimaAnotacion === "string" &&
+                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(caso.ultimaAnotacion)
+                    ) {
+                      return caso.ultimaAnotacion;
+                    }
+
+                    const date = new Date(caso.ultimaAnotacion);
+                    if (!isNaN(date.getTime())) {
+                      const year = date.getUTCFullYear();
+                      const month = String(date.getUTCMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      const day = String(date.getUTCDate()).padStart(2, "0");
+                      return `${day}/${month}/${year}`;
+                    }
+
+                    return "N/A";
                   })()
                 : "N/A"}
             </span>
-            
           </div>
         </TableCell>
 

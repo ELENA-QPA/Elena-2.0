@@ -6,6 +6,8 @@ import {
   UseGuards,
   BadRequestException,
   Body,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -145,11 +147,13 @@ export class MonolegalController {
           radicado: '76001310502120240023500',
           status: 'created',
           message: 'Registro creado desde API',
+          ultimaActuacion: 'Auto que ordena requerimiento',
         },
         {
           radicado: '76001310502120240020400',
           status: 'updated',
           message: 'Registro actualizado desde API',
+          ultimaActuacion: 'Auto que ordena requerimiento',
         },
       ],
     },
@@ -163,11 +167,70 @@ export class MonolegalController {
       error: 'Bad Request',
     },
   })
+  @Post('sync')
   async syncWithMonolegal(
     @GetUser() user: IUser,
     @Body() body?: { fecha?: string },
   ) {
-    const fecha = body?.fecha ? new Date(body.fecha) : new Date();
+    let fecha: Date;
+
+    if (body?.fecha) {
+      const [year, month, day] = body.fecha.split('-').map(Number);
+      fecha = new Date(year, month - 1, day, 12, 0, 0);
+    } else {
+      fecha = new Date();
+    }
+
     return this.monolegalService.syncFromApi(user._id.toString(), fecha);
+  }
+
+  @Post('renormalize-juzgados')
+  @ApiOperation({
+    summary: 'Re-normalizar todos los juzgados existentes',
+  })
+  async renormalizeJuzgados() {
+    return this.monolegalService.renormalizeAllJuzgados();
+  }
+
+  @Post('update-ultima-anotacion')
+  @ApiOperation({
+    summary: 'Actualizar campo ultimaAnotacion en todos los registros',
+    description: `
+    Actualiza el campo ultimaAnotacion de todos los registros existentes.
+  `,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Actualización completada exitosamente',
+    example: {
+      success: true,
+      message: 'Actualización de ultimaAnotacion completada',
+      summary: {
+        total: 150,
+        updated: 145,
+        skipped: 5,
+        errors: 0,
+      },
+    },
+  })
+  async updateUltimaAnotacion() {
+    return this.monolegalService.updateAllUltimaAnotacion();
+  }
+
+  @Get('actuaciones/:idProceso')
+  @ApiOperation({
+    summary: 'Obtener actuaciones de un proceso desde Monolegal',
+    description: 'Obtiene todas las actuaciones usando el idProcesoMonolegal',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Actuaciones obtenidas exitosamente',
+  })
+  async getActuaciones(@Param('idProceso') idProceso: string) {
+    return this.monolegalService.getActuacionesProceso(idProceso);
   }
 }

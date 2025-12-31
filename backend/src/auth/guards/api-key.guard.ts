@@ -21,9 +21,9 @@ export class ApiKeyGuard implements CanActivate {
 
     const validApiKey = this.configService.get<string>('apiKey');
 
-    console.log('📨 API Key recibida:', apiKey);
-    console.log('✅ API Key válida esperada:', validApiKey);
-    console.log('🔍 ¿Son iguales?:', apiKey === validApiKey);
+    console.log('API Key recibida:', apiKey);
+    console.log('API Key válida esperada:', validApiKey);
+    console.log('¿Son iguales?:', apiKey === validApiKey);
 
     if (!validApiKey) {
       throw new UnauthorizedException('API Key not configured');

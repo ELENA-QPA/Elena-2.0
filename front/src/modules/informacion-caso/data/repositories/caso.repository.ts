@@ -1,7 +1,10 @@
 import { inject } from "inversify/lib/annotation/inject";
 import { injectable } from "inversify/lib/annotation/injectable";
 import { AxiosHttpClient } from "@/config/protocols/http/axios-http-client";
-import { HttpClient, HttpStatusCode } from "@/config/protocols/http/http_utilities";
+import {
+  HttpClient,
+  HttpStatusCode,
+} from "@/config/protocols/http/http_utilities";
 import { apiUrls } from "@/config/protocols/http/api_urls";
 import { CustomError } from "@/data/errors/custom-error";
 import {
@@ -31,7 +34,7 @@ import {
   FileInfoResponse,
   CreatePerformanceSuccessResponse,
   DeletePerformanceSuccessResponse,
-  ErrorResponse
+  ErrorResponse,
 } from "../interfaces/caso.interface";
 import {
   mapCreateCasoResponse,
@@ -45,54 +48,128 @@ import {
   mapParametersPaginatedResponse,
   mapFileUploadResponse,
   mapMultipleFileUploadResponse,
-  mapFileInfoResponse
-  ,mapCreatePerformanceResponse, mapDeletePerformanceResponse
+  mapFileInfoResponse,
+  mapCreatePerformanceResponse,
+  mapDeletePerformanceResponse,
 } from "../adapters/caso.adapter";
 
 export abstract class CasoRepository {
   // Casos
-  abstract createCaso(data: CreateCasoBody, token?: string): Promise<CreateCasoSuccessResponse | ErrorResponse>;
-  abstract getAllCasos(limit?: number, offset?: number, token?: string): Promise<CasosPaginatedResponse | ErrorResponse>;
-  abstract getCasoById(id: string, token?: string): Promise<GetCasoSuccessResponse | ErrorResponse>;
+  abstract createCaso(
+    data: CreateCasoBody,
+    token?: string
+  ): Promise<CreateCasoSuccessResponse | ErrorResponse>;
+  abstract getAllCasos(
+    limit?: number,
+    offset?: number,
+    token?: string
+  ): Promise<CasosPaginatedResponse | ErrorResponse>;
+  abstract getCasoById(
+    id: string,
+    token?: string
+  ): Promise<GetCasoSuccessResponse | ErrorResponse>;
   // Actualiza solamente la información general del caso
-  abstract updateCaso(id: string, data: UpdateCasoBody, token?: string): Promise<GetCasoSuccessResponse | ErrorResponse>;
+  abstract updateCaso(
+    id: string,
+    data: UpdateCasoBody,
+    token?: string
+  ): Promise<GetCasoSuccessResponse | ErrorResponse>;
   // Elimina el caso y todas sus relaciones
-  abstract deleteCaso(id: string, token?: string): Promise<{ message: string } | ErrorResponse>;
-  
+  abstract deleteCaso(
+    id: string,
+    token?: string
+  ): Promise<{ message: string } | ErrorResponse>;
+
   // Documentos
-  abstract createDocument(data: CreateDocumentBody, token?: string): Promise<CreateDocumentSuccessResponse | ErrorResponse>;
-  abstract updateDocument(id: string, data: UpdateDocumentBody, token?: string): Promise<any>;
+  abstract createDocument(
+    data: CreateDocumentBody,
+    token?: string
+  ): Promise<CreateDocumentSuccessResponse | ErrorResponse>;
+  abstract updateDocument(
+    id: string,
+    data: UpdateDocumentBody,
+    token?: string
+  ): Promise<any>;
   abstract deleteDocument(id: string, token?: string): Promise<any>;
-  
+
   // Intervinientes
-  abstract createIntervener(data: CreateIntervenerBody, token?: string): Promise<CreateIntervenerSuccessResponse | ErrorResponse>;
-  abstract updateIntervener(id: string, data: CreateIntervenerBody, token?: string): Promise<any>;
+  abstract createIntervener(
+    data: CreateIntervenerBody,
+    token?: string
+  ): Promise<CreateIntervenerSuccessResponse | ErrorResponse>;
+  abstract updateIntervener(
+    id: string,
+    data: CreateIntervenerBody,
+    token?: string
+  ): Promise<any>;
   abstract deleteIntervener(id: string, token?: string): Promise<any>;
-  
+
   // Partes Procesales
-  abstract createProceduralPart(data: CreateProceduralPartBody, token?: string): Promise<CreateProceduralPartSuccessResponse | ErrorResponse>;
-  abstract updateProceduralPart(id: string, data: CreateProceduralPartBody, token?: string): Promise<any>;
+  abstract createProceduralPart(
+    data: CreateProceduralPartBody,
+    token?: string
+  ): Promise<CreateProceduralPartSuccessResponse | ErrorResponse>;
+  abstract updateProceduralPart(
+    id: string,
+    data: CreateProceduralPartBody,
+    token?: string
+  ): Promise<any>;
   abstract deleteProceduralPart(id: string, token?: string): Promise<any>;
-  
+
   // Pagos
-  abstract createPayment(data: CreatePaymentBody, token?: string): Promise<CreatePaymentSuccessResponse | ErrorResponse>;
-  abstract updatePayment(id: string, data: CreatePaymentBody, token?: string): Promise<any>;
+  abstract createPayment(
+    data: CreatePaymentBody,
+    token?: string
+  ): Promise<CreatePaymentSuccessResponse | ErrorResponse>;
+  abstract updatePayment(
+    id: string,
+    data: CreatePaymentBody,
+    token?: string
+  ): Promise<any>;
   abstract deletePayment(id: string, token?: string): Promise<any>;
-  
+
   // Parámetros
-  abstract createParameter(data: CreateParameterBody, token?: string): Promise<CreateParameterSuccessResponse | ErrorResponse>;
-  abstract searchParameters(data: SearchParametersBody, limit?: number, offset?: number, token?: string): Promise<ParametersPaginatedResponse | ErrorResponse>;
+  abstract createParameter(
+    data: CreateParameterBody,
+    token?: string
+  ): Promise<CreateParameterSuccessResponse | ErrorResponse>;
+  abstract searchParameters(
+    data: SearchParametersBody,
+    limit?: number,
+    offset?: number,
+    token?: string
+  ): Promise<ParametersPaginatedResponse | ErrorResponse>;
   abstract deleteParameter(id: string, token?: string): Promise<any>;
-  
+
   // Archivos
-  abstract uploadSingleFile(file: File, token?: string): Promise<FileUploadResponse | ErrorResponse>;
-  abstract uploadMultipleFiles(files: File[], token?: string): Promise<MultipleFileUploadResponse | ErrorResponse>;
+  abstract uploadSingleFile(
+    file: File,
+    token?: string
+  ): Promise<FileUploadResponse | ErrorResponse>;
+  abstract uploadMultipleFiles(
+    files: File[],
+    token?: string
+  ): Promise<MultipleFileUploadResponse | ErrorResponse>;
   abstract deleteFile(s3Key: string, token?: string): Promise<any>;
-  abstract getFileInfo(token?: string): Promise<FileInfoResponse | ErrorResponse>;
+  abstract getFileInfo(
+    token?: string
+  ): Promise<FileInfoResponse | ErrorResponse>;
 
   // Actuaciones / Performances
-  abstract createPerformance(data: CreatePerformanceBody, token?: string): Promise<CreatePerformanceSuccessResponse | ErrorResponse>;
-  abstract deletePerformance(id: string, token?: string): Promise<DeletePerformanceSuccessResponse | ErrorResponse>;
+  abstract createPerformance(
+    data: CreatePerformanceBody,
+    token?: string
+  ): Promise<CreatePerformanceSuccessResponse | ErrorResponse>;
+  abstract deletePerformance(
+    id: string,
+    token?: string
+  ): Promise<DeletePerformanceSuccessResponse | ErrorResponse>;
+
+  // Actuaciones de Monolegal
+  abstract getActuacionesMonolegal(
+    radicado: string,
+    token?: string
+  ): Promise<any[]>;
 }
 
 @injectable()
@@ -100,49 +177,50 @@ export class CasoRepositoryImpl implements CasoRepository {
   constructor(@inject(HttpClient) private httpClient: AxiosHttpClient) {}
 
   // Casos
-  async createCaso(data: CreateCasoBody, token?: string): Promise<CreateCasoSuccessResponse | ErrorResponse> {
+  async createCaso(
+    data: CreateCasoBody,
+    token?: string
+  ): Promise<CreateCasoSuccessResponse | ErrorResponse> {
     try {
-      console.log("[CASOS][createCaso][Request]:", data);
-      
       // Crear FormData para envío multipart
       const formData = new FormData();
-      
-  // Agregar campos básicos
-  formData.append('clientType', data.clientType);
+
+      // Agregar campos básicos
+      formData.append("clientType", data.clientType);
       // formData.append('consecutive', "");
-      formData.append('responsible', data.responsible);
-      formData.append('department', data.department);
-  // Ciudad y número de radicado (si vienen)
-  if (data.city) formData.append('city', data.city);
-  if ((data as any).numeroRadicado) formData.append('numeroRadicado', (data as any).numeroRadicado);
-      formData.append('personType', data.personType);
-      formData.append('jurisdiction', data.jurisdiction);
-      formData.append('processType', data.processType);
-      formData.append('office', data.office);
-      formData.append('settled', data.settled);
-      formData.append('country', data.country);
-      if (data.location) formData.append('location', data.location);
-  // 'estado' no debe enviarse en la creación desde el frontend - lo maneja el backend
-      
+      formData.append("responsible", data.responsible);
+      formData.append("department", data.department);
+      // Ciudad y número de radicado (si vienen)
+      if (data.city) formData.append("city", data.city);
+      if ((data as any).numeroRadicado)
+        formData.append("numeroRadicado", (data as any).numeroRadicado);
+      formData.append("personType", data.personType);
+      formData.append("jurisdiction", data.jurisdiction);
+      formData.append("processType", data.processType);
+      formData.append("office", data.office);
+      formData.append("settled", data.settled);
+      formData.append("country", data.country);
+      if (data.location) formData.append("location", data.location);
+      // 'estado' no debe enviarse en la creación desde el frontend - lo maneja el backend
+
       // Agregar arrays como JSON strings
-      formData.append('documents', JSON.stringify(data.documents));
-      formData.append('interveners', JSON.stringify(data.interveners));
-      formData.append('proceduralParts', JSON.stringify(data.proceduralParts));
-      formData.append('payments', JSON.stringify(data.payments));      // Agregar archivos si existen
+      formData.append("documents", JSON.stringify(data.documents));
+      formData.append("interveners", JSON.stringify(data.interveners));
+      formData.append("proceduralParts", JSON.stringify(data.proceduralParts));
+      formData.append("payments", JSON.stringify(data.payments)); // Agregar archivos si existen
       if (data.files && data.files.length > 0) {
         data.files.forEach((file, index) => {
           if (file instanceof File) {
-            formData.append('files', file);
-          } else if (typeof file === 'string') {
-            formData.append('files', file);
+            formData.append("files", file);
+          } else if (typeof file === "string") {
+            formData.append("files", file);
           }
         });
       }
-      
+
       // Agregar metadata de archivos
       if (data.filesMetadata) {
-        console.log("FILES METADATA")
-        formData.append('filesMetadata', data.filesMetadata);
+        formData.append("filesMetadata", data.filesMetadata);
       }
 
       const axiosRequest = await this.httpClient.request({
@@ -153,8 +231,6 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
         isMultipart: true,
       });
-
-      console.log("[CASOS][createCaso][Response]:", axiosRequest);
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapCreateCasoResponse(axiosRequest.body);
@@ -173,7 +249,8 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.error("[CASOS][createCaso][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
       console.log("[CASOS][createCaso][Catch Error Response]:", errorResponse);
@@ -181,9 +258,12 @@ export class CasoRepositoryImpl implements CasoRepository {
     }
   }
 
-  async getAllCasos(limit: number = 10, offset: number = 0, token?: string): Promise<CasosPaginatedResponse | ErrorResponse> {
+  async getAllCasos(
+    limit: number = 10,
+    offset: number = 0,
+    token?: string
+  ): Promise<CasosPaginatedResponse | ErrorResponse> {
     try {
-      console.log("[CASOS][getAllCasos][Request]:", { limit, offset });
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.casos.getAll}?limit=${limit}&offset=${offset}`,
         method: "post",
@@ -191,9 +271,10 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
       });
 
-      console.log("[CASOS][getAllCasos][Response]:", axiosRequest);
-
-      if (axiosRequest.statusCode === HttpStatusCode.ok || axiosRequest.statusCode === HttpStatusCode.created) {
+      if (
+        axiosRequest.statusCode === HttpStatusCode.ok ||
+        axiosRequest.statusCode === HttpStatusCode.created
+      ) {
         const response = mapCasosPaginatedResponse(axiosRequest.body);
         console.log("[CASOS][getAllCasos][Mapped Response]:", response);
         return response;
@@ -210,7 +291,8 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.error("[CASOS][getAllCasos][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
       console.log("[CASOS][getAllCasos][Catch Error Response]:", errorResponse);
@@ -218,14 +300,17 @@ export class CasoRepositoryImpl implements CasoRepository {
     }
   }
 
-  async getCasoById(id: string, token?: string): Promise<GetCasoSuccessResponse | ErrorResponse> {
+  async getCasoById(
+    id: string,
+    token?: string
+  ): Promise<GetCasoSuccessResponse | ErrorResponse> {
     try {
       console.log("[CASOS][getCasoById][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.casos.getOne}/${id}`,
         method: "get",
-        // isAuth: true,
+        isAuth: true,
         token,
       });
 
@@ -233,36 +318,37 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         const response = mapGetCasoResponse(axiosRequest.body);
+
         console.log("[CASOS][getCasoById][Mapped Response]:", response);
         return response;
       } else {
-        const errorResponse = {
+        return {
+          error: true,
+          message: `Error: Status code ${axiosRequest.statusCode}`,
           statusCode: axiosRequest.statusCode,
-          message: axiosRequest.body.message || "Error al obtener caso",
-          error: axiosRequest.body.error || "Unknown Error",
-        };
-        console.log("[CASOS][getCasoById][Error Response]:", errorResponse);
-        return errorResponse;
+        } as unknown as ErrorResponse;
       }
     } catch (error: any) {
-      console.error("[CASOS][getCasoById][Error]:", error);
-      const errorResponse = {
-        statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
-        error: error.response?.data?.error || "Unknown Error",
-      };
-      console.log("[CASOS][getCasoById][Catch Error Response]:", errorResponse);
-      return errorResponse;
+      console.error("[DEBUG] Error capturado en catch");
+      console.error("[DEBUG] Error completo:", error);
+      console.error("[DEBUG] Error.message:", error.message);
+      console.error("[DEBUG] Error.stack:", error.stack);
+
+      return {
+        error: true,
+        message: error.message || "Error desconocido",
+        statusCode: error.statusCode || 500,
+      } as unknown as ErrorResponse;
     }
   }
 
-  async updateCaso(id: string, data: UpdateCasoBody, token?: string): Promise<GetCasoSuccessResponse | ErrorResponse> {
+  async updateCaso(
+    id: string,
+    data: UpdateCasoBody,
+    token?: string
+  ): Promise<GetCasoSuccessResponse | ErrorResponse> {
     try {
-      console.log("[CASOS][updateCaso][Request]:", { id, data });
-      console.log("[CASOS][updateCaso][Location field]:", data.location);
       const axiosRequest = await this.httpClient.request({
-        // Usar la ruta de actualización de casos definida en apiUrls
-        // Endpoint esperado: /api/records/update/{id}
         url: `${apiUrls.casos.update}/${id}`,
         method: "patch",
         body: JSON.stringify(data),
@@ -271,12 +357,9 @@ export class CasoRepositoryImpl implements CasoRepository {
         headers: { "Content-Type": "application/json" },
       });
 
-      console.log("[CASOS][updateCaso][Response]:", axiosRequest);
-      console.log("[CASOS][updateCaso][Response Body]:", axiosRequest.body);
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         const response = mapGetCasoResponse(axiosRequest.body);
-        console.log("[CASOS][updateCaso][Mapped Response]:", response);
-        console.log("[CASOS][updateCaso][Location in response]:", response.record?.location);
+
         return response;
       } else {
         const errorResponse = {
@@ -284,37 +367,36 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al actualizar caso",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[CASOS][updateCaso][Error Response]:", errorResponse);
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[CASOS][updateCaso][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[CASOS][updateCaso][Catch Error Response]:", errorResponse);
       return errorResponse;
     }
   }
 
-  async deleteCaso(id: string, token?: string): Promise<{ message: string } | ErrorResponse> {
+  async deleteCaso(
+    id: string,
+    token?: string
+  ): Promise<{ message: string } | ErrorResponse> {
     try {
-      console.log("[CASOS][deleteCaso][Request]:", { id });
-      
       const axiosRequest = await this.httpClient.request({
-        url: `${apiUrls.casos.delete}/${id}`, // Usa la misma base URL pero con DELETE
+        url: `${apiUrls.casos.delete}/${id}`,
         method: "delete",
         isAuth: true,
         token,
       });
 
-      console.log("[CASOS][deleteCaso][Response]:", axiosRequest);
-
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[CASOS][deleteCaso][Success]:", axiosRequest.body);
-        return { message: axiosRequest.body.message || "Caso eliminado exitosamente" };
+        return {
+          message: axiosRequest.body.message || "Caso eliminado exitosamente",
+        };
       } else {
         return {
           statusCode: axiosRequest.statusCode,
@@ -326,19 +408,22 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.error("[CASOS][deleteCaso][Catch Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado al eliminar caso",
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Error inesperado al eliminar caso",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[CASOS][deleteCaso][Catch Error Response]:", errorResponse);
       return errorResponse;
     }
   }
 
   // Documentos
-  async createDocument(data: CreateDocumentBody, token?: string): Promise<CreateDocumentSuccessResponse | ErrorResponse> {
+  async createDocument(
+    data: CreateDocumentBody,
+    token?: string
+  ): Promise<CreateDocumentSuccessResponse | ErrorResponse> {
     try {
-      console.log("[DOCUMENT][createDocument][Request]:", data);
-      // La API espera multipart/form-data con el archivo y campos
       const formData = new FormData();
       formData.append("recordId", data.recordId);
       formData.append("category", data.category);
@@ -350,7 +435,6 @@ export class CasoRepositoryImpl implements CasoRepository {
       formData.append("responsibleType", data.responsibleType);
       formData.append("responsible", data.responsible);
       if (data.observations) formData.append("observations", data.observations);
-      // file puede ser File o string (url/key)
       if ((data as any).file) {
         try {
           // Si es File, append directo
@@ -374,8 +458,6 @@ export class CasoRepositoryImpl implements CasoRepository {
         isMultipart: true,
       });
 
-      console.log("[DOCUMENT][createDocument][Response]:", axiosRequest);
-
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapCreateDocumentResponse(axiosRequest.body);
         console.log("[DOCUMENT][createDocument][Mapped Response]:", response);
@@ -386,7 +468,10 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al crear documento",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[DOCUMENT][createDocument][Error Response]:", errorResponse);
+        console.log(
+          "[DOCUMENT][createDocument][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error) {
@@ -399,10 +484,12 @@ export class CasoRepositoryImpl implements CasoRepository {
     }
   }
 
-  async updateDocument(id: string, data: UpdateDocumentBody, token?: string): Promise<any> {
+  async updateDocument(
+    id: string,
+    data: UpdateDocumentBody,
+    token?: string
+  ): Promise<any> {
     try {
-      console.log("[DOCUMENT][updateDocument][Request]:", { id, data });
-      // ✅ CORREGIDO: Usar JSON body según API PATCH /api/document/{id}
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.document.update}/${id}`,
         method: "patch",
@@ -412,14 +499,12 @@ export class CasoRepositoryImpl implements CasoRepository {
         isMultipart: false,
       });
 
-      console.log("[DOCUMENT][updateDocument][Response]:", axiosRequest);
-
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[DOCUMENT][updateDocument][Success]:", axiosRequest.body);
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al actualizar documento");
-        console.log("[DOCUMENT][updateDocument][Error]:", error);
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al actualizar documento"
+        );
         throw error;
       }
     } catch (error) {
@@ -431,7 +516,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deleteDocument(id: string, token?: string): Promise<any> {
     try {
       console.log("[DOCUMENT][deleteDocument][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.document.delete}/${id}`,
         method: "delete",
@@ -445,7 +530,9 @@ export class CasoRepositoryImpl implements CasoRepository {
         console.log("[DOCUMENT][deleteDocument][Success]:", axiosRequest.body);
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar documento");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar documento"
+        );
         console.log("[DOCUMENT][deleteDocument][Error]:", error);
         throw error;
       }
@@ -456,10 +543,11 @@ export class CasoRepositoryImpl implements CasoRepository {
   }
 
   // Intervinientes
-  async createIntervener(data: CreateIntervenerBody, token?: string): Promise<CreateIntervenerSuccessResponse | ErrorResponse> {
+  async createIntervener(
+    data: CreateIntervenerBody,
+    token?: string
+  ): Promise<CreateIntervenerSuccessResponse | ErrorResponse> {
     try {
-      console.log("[INTERVENER][createIntervener][Request]:", data);
-      
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.intervener.create,
         method: "post",
@@ -473,11 +561,20 @@ export class CasoRepositoryImpl implements CasoRepository {
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         try {
           const response = mapCreateIntervenerResponse(axiosRequest.body);
-          console.log("[INTERVENER][createIntervener][Mapped Response]:", response);
+          console.log(
+            "[INTERVENER][createIntervener][Mapped Response]:",
+            response
+          );
           return response;
         } catch (mappingError: any) {
-          console.error("[INTERVENER][createIntervener][Mapping Error]:", mappingError);
-          console.error("[INTERVENER][createIntervener][Raw Response Body]:", axiosRequest.body);
+          console.error(
+            "[INTERVENER][createIntervener][Mapping Error]:",
+            mappingError
+          );
+          console.error(
+            "[INTERVENER][createIntervener][Raw Response Body]:",
+            axiosRequest.body
+          );
           const errorResponse = {
             statusCode: 500,
             message: `Error al procesar respuesta del servidor: ${mappingError.message}`,
@@ -491,25 +588,36 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al crear interviniente",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[INTERVENER][createIntervener][Error Response]:", errorResponse);
+        console.log(
+          "[INTERVENER][createIntervener][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[INTERVENER][createIntervener][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[INTERVENER][createIntervener][Catch Error Response]:", errorResponse);
+      console.log(
+        "[INTERVENER][createIntervener][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
-  async updateIntervener(id: string, data: CreateIntervenerBody, token?: string): Promise<any> {
+  async updateIntervener(
+    id: string,
+    data: CreateIntervenerBody,
+    token?: string
+  ): Promise<any> {
     try {
       console.log("[INTERVENER][updateIntervener][Request]:", { id, data });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.intervener.update}/${id}`,
         method: "patch",
@@ -521,10 +629,15 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.log("[INTERVENER][updateIntervener][Response]:", axiosRequest);
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[INTERVENER][updateIntervener][Success]:", axiosRequest.body);
+        console.log(
+          "[INTERVENER][updateIntervener][Success]:",
+          axiosRequest.body
+        );
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al actualizar interviniente");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al actualizar interviniente"
+        );
         console.log("[INTERVENER][updateIntervener][Error]:", error);
         throw error;
       }
@@ -537,7 +650,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deleteIntervener(id: string, token?: string): Promise<any> {
     try {
       console.log("[INTERVENER][deleteIntervener][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.intervener.delete}/${id}`,
         method: "delete",
@@ -548,10 +661,15 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.log("[INTERVENER][deleteIntervener][Response]:", axiosRequest);
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[INTERVENER][deleteIntervener][Success]:", axiosRequest.body);
+        console.log(
+          "[INTERVENER][deleteIntervener][Success]:",
+          axiosRequest.body
+        );
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar interviniente");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar interviniente"
+        );
         console.log("[INTERVENER][deleteIntervener][Error]:", error);
         throw error;
       }
@@ -562,10 +680,13 @@ export class CasoRepositoryImpl implements CasoRepository {
   }
 
   // Partes Procesales
-  async createProceduralPart(data: CreateProceduralPartBody, token?: string): Promise<CreateProceduralPartSuccessResponse | ErrorResponse> {
+  async createProceduralPart(
+    data: CreateProceduralPartBody,
+    token?: string
+  ): Promise<CreateProceduralPartSuccessResponse | ErrorResponse> {
     try {
       console.log("[PROCEDURAL_PART][createProceduralPart][Request]:", data);
-      
+
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.proceduralPart.create,
         method: "post",
@@ -574,11 +695,17 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
       });
 
-      console.log("[PROCEDURAL_PART][createProceduralPart][Response]:", axiosRequest);
+      console.log(
+        "[PROCEDURAL_PART][createProceduralPart][Response]:",
+        axiosRequest
+      );
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapCreateProceduralPartResponse(axiosRequest.body);
-        console.log("[PROCEDURAL_PART][createProceduralPart][Mapped Response]:", response);
+        console.log(
+          "[PROCEDURAL_PART][createProceduralPart][Mapped Response]:",
+          response
+        );
         return response;
       } else {
         const errorResponse = {
@@ -586,25 +713,39 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al crear parte procesal",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[PROCEDURAL_PART][createProceduralPart][Error Response]:", errorResponse);
+        console.log(
+          "[PROCEDURAL_PART][createProceduralPart][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[PROCEDURAL_PART][createProceduralPart][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[PROCEDURAL_PART][createProceduralPart][Catch Error Response]:", errorResponse);
+      console.log(
+        "[PROCEDURAL_PART][createProceduralPart][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
-  async updateProceduralPart(id: string, data: CreateProceduralPartBody, token?: string): Promise<any> {
+  async updateProceduralPart(
+    id: string,
+    data: CreateProceduralPartBody,
+    token?: string
+  ): Promise<any> {
     try {
-      console.log("[PROCEDURAL_PART][updateProceduralPart][Request]:", { id, data });
-      
+      console.log("[PROCEDURAL_PART][updateProceduralPart][Request]:", {
+        id,
+        data,
+      });
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.proceduralPart.update}/${id}`,
         method: "patch",
@@ -613,18 +754,29 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
       });
 
-      console.log("[PROCEDURAL_PART][updateProceduralPart][Response]:", axiosRequest);
+      console.log(
+        "[PROCEDURAL_PART][updateProceduralPart][Response]:",
+        axiosRequest
+      );
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[PROCEDURAL_PART][updateProceduralPart][Success]:", axiosRequest.body);
+        console.log(
+          "[PROCEDURAL_PART][updateProceduralPart][Success]:",
+          axiosRequest.body
+        );
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al actualizar parte procesal");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al actualizar parte procesal"
+        );
         console.log("[PROCEDURAL_PART][updateProceduralPart][Error]:", error);
         throw error;
       }
     } catch (error) {
-      console.error("[PROCEDURAL_PART][updateProceduralPart][Catch Error]:", error);
+      console.error(
+        "[PROCEDURAL_PART][updateProceduralPart][Catch Error]:",
+        error
+      );
       throw error;
     }
   }
@@ -632,7 +784,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deleteProceduralPart(id: string, token?: string): Promise<any> {
     try {
       console.log("[PROCEDURAL_PART][deleteProceduralPart][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.proceduralPart.delete}/${id}`,
         method: "delete",
@@ -640,27 +792,41 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
       });
 
-      console.log("[PROCEDURAL_PART][deleteProceduralPart][Response]:", axiosRequest);
+      console.log(
+        "[PROCEDURAL_PART][deleteProceduralPart][Response]:",
+        axiosRequest
+      );
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[PROCEDURAL_PART][deleteProceduralPart][Success]:", axiosRequest.body);
+        console.log(
+          "[PROCEDURAL_PART][deleteProceduralPart][Success]:",
+          axiosRequest.body
+        );
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar parte procesal");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar parte procesal"
+        );
         console.log("[PROCEDURAL_PART][deleteProceduralPart][Error]:", error);
         throw error;
       }
     } catch (error) {
-      console.error("[PROCEDURAL_PART][deleteProceduralPart][Catch Error]:", error);
+      console.error(
+        "[PROCEDURAL_PART][deleteProceduralPart][Catch Error]:",
+        error
+      );
       throw error;
     }
   }
 
   // Pagos
-  async createPayment(data: CreatePaymentBody, token?: string): Promise<CreatePaymentSuccessResponse | ErrorResponse> {
+  async createPayment(
+    data: CreatePaymentBody,
+    token?: string
+  ): Promise<CreatePaymentSuccessResponse | ErrorResponse> {
     try {
       console.log("[PAYMENT][createPayment][Request]:", data);
-      
+
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.payment.create,
         method: "post",
@@ -688,18 +854,26 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.error("[PAYMENT][createPayment][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[PAYMENT][createPayment][Catch Error Response]:", errorResponse);
+      console.log(
+        "[PAYMENT][createPayment][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
-  async updatePayment(id: string, data: CreatePaymentBody, token?: string): Promise<any> {
+  async updatePayment(
+    id: string,
+    data: CreatePaymentBody,
+    token?: string
+  ): Promise<any> {
     try {
       console.log("[PAYMENT][updatePayment][Request]:", { id, data });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.payment.update}/${id}`,
         method: "patch",
@@ -714,7 +888,9 @@ export class CasoRepositoryImpl implements CasoRepository {
         console.log("[PAYMENT][updatePayment][Success]:", axiosRequest.body);
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al actualizar pago");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al actualizar pago"
+        );
         console.log("[PAYMENT][updatePayment][Error]:", error);
         throw error;
       }
@@ -727,7 +903,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deletePayment(id: string, token?: string): Promise<any> {
     try {
       console.log("[PAYMENT][deletePayment][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.payment.delete}/${id}`,
         method: "delete",
@@ -741,7 +917,9 @@ export class CasoRepositoryImpl implements CasoRepository {
         console.log("[PAYMENT][deletePayment][Success]:", axiosRequest.body);
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar pago");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar pago"
+        );
         console.log("[PAYMENT][deletePayment][Error]:", error);
         throw error;
       }
@@ -752,10 +930,13 @@ export class CasoRepositoryImpl implements CasoRepository {
   }
 
   // Parámetros
-  async createParameter(data: CreateParameterBody, token?: string): Promise<CreateParameterSuccessResponse | ErrorResponse> {
+  async createParameter(
+    data: CreateParameterBody,
+    token?: string
+  ): Promise<CreateParameterSuccessResponse | ErrorResponse> {
     try {
       console.log("[PARAMETER][createParameter][Request]:", data);
-      
+
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.parameter.create,
         method: "post",
@@ -776,25 +957,41 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al crear parámetro",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[PARAMETER][createParameter][Error Response]:", errorResponse);
+        console.log(
+          "[PARAMETER][createParameter][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[PARAMETER][createParameter][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[PARAMETER][createParameter][Catch Error Response]:", errorResponse);
+      console.log(
+        "[PARAMETER][createParameter][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
-  async searchParameters(data: SearchParametersBody, limit: number = 10, offset: number = 0, token?: string): Promise<ParametersPaginatedResponse | ErrorResponse> {
+  async searchParameters(
+    data: SearchParametersBody,
+    limit: number = 10,
+    offset: number = 0,
+    token?: string
+  ): Promise<ParametersPaginatedResponse | ErrorResponse> {
     try {
-      console.log("[PARAMETER][searchParameters][Request]:", { data, limit, offset });
-      
+      console.log("[PARAMETER][searchParameters][Request]:", {
+        data,
+        limit,
+        offset,
+      });
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.parameter.search}?limit=${limit}&offset=${offset}`,
         method: "post",
@@ -807,7 +1004,10 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         const response = mapParametersPaginatedResponse(axiosRequest.body);
-        console.log("[PARAMETER][searchParameters][Mapped Response]:", response);
+        console.log(
+          "[PARAMETER][searchParameters][Mapped Response]:",
+          response
+        );
         return response;
       } else {
         const errorResponse = {
@@ -815,17 +1015,24 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al buscar parámetros",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[PARAMETER][searchParameters][Error Response]:", errorResponse);
+        console.log(
+          "[PARAMETER][searchParameters][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[PARAMETER][searchParameters][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[PARAMETER][searchParameters][Catch Error Response]:", errorResponse);
+      console.log(
+        "[PARAMETER][searchParameters][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
@@ -833,7 +1040,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deleteParameter(id: string, token?: string): Promise<any> {
     try {
       console.log("[PARAMETER][deleteParameter][Request]:", { id });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.parameter.delete}/${id}`,
         method: "delete",
@@ -844,10 +1051,15 @@ export class CasoRepositoryImpl implements CasoRepository {
       console.log("[PARAMETER][deleteParameter][Response]:", axiosRequest);
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
-        console.log("[PARAMETER][deleteParameter][Success]:", axiosRequest.body);
+        console.log(
+          "[PARAMETER][deleteParameter][Success]:",
+          axiosRequest.body
+        );
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar parámetro");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar parámetro"
+        );
         console.log("[PARAMETER][deleteParameter][Error]:", error);
         throw error;
       }
@@ -858,16 +1070,19 @@ export class CasoRepositoryImpl implements CasoRepository {
   }
 
   // Archivos
-  async uploadSingleFile(file: File, token?: string): Promise<FileUploadResponse | ErrorResponse> {
+  async uploadSingleFile(
+    file: File,
+    token?: string
+  ): Promise<FileUploadResponse | ErrorResponse> {
     try {
-      console.log("[FILE_UPLOAD][uploadSingleFile][Request]:", { 
-        fileName: file.name, 
-        fileSize: file.size, 
-        fileType: file.type 
+      console.log("[FILE_UPLOAD][uploadSingleFile][Request]:", {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
       });
-      
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.fileUpload.single,
@@ -882,7 +1097,10 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapFileUploadResponse(axiosRequest.body);
-        console.log("[FILE_UPLOAD][uploadSingleFile][Mapped Response]:", response);
+        console.log(
+          "[FILE_UPLOAD][uploadSingleFile][Mapped Response]:",
+          response
+        );
         return response;
       } else {
         const errorResponse = {
@@ -890,31 +1108,41 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al subir archivo",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[FILE_UPLOAD][uploadSingleFile][Error Response]:", errorResponse);
+        console.log(
+          "[FILE_UPLOAD][uploadSingleFile][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[FILE_UPLOAD][uploadSingleFile][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[FILE_UPLOAD][uploadSingleFile][Catch Error Response]:", errorResponse);
+      console.log(
+        "[FILE_UPLOAD][uploadSingleFile][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
-  async uploadMultipleFiles(files: File[], token?: string): Promise<MultipleFileUploadResponse | ErrorResponse> {
+  async uploadMultipleFiles(
+    files: File[],
+    token?: string
+  ): Promise<MultipleFileUploadResponse | ErrorResponse> {
     try {
-      console.log("[FILE_UPLOAD][uploadMultipleFiles][Request]:", { 
+      console.log("[FILE_UPLOAD][uploadMultipleFiles][Request]:", {
         fileCount: files.length,
-        files: files.map(f => ({ name: f.name, size: f.size, type: f.type }))
+        files: files.map((f) => ({ name: f.name, size: f.size, type: f.type })),
       });
-      
+
       const formData = new FormData();
       files.forEach((file, index) => {
-        formData.append('files', file);
+        formData.append("files", file);
       });
 
       const axiosRequest = await this.httpClient.request({
@@ -926,11 +1154,17 @@ export class CasoRepositoryImpl implements CasoRepository {
         token,
       });
 
-      console.log("[FILE_UPLOAD][uploadMultipleFiles][Response]:", axiosRequest);
+      console.log(
+        "[FILE_UPLOAD][uploadMultipleFiles][Response]:",
+        axiosRequest
+      );
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapMultipleFileUploadResponse(axiosRequest.body);
-        console.log("[FILE_UPLOAD][uploadMultipleFiles][Mapped Response]:", response);
+        console.log(
+          "[FILE_UPLOAD][uploadMultipleFiles][Mapped Response]:",
+          response
+        );
         return response;
       } else {
         const errorResponse = {
@@ -938,17 +1172,24 @@ export class CasoRepositoryImpl implements CasoRepository {
           message: axiosRequest.body.message || "Error al subir archivos",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[FILE_UPLOAD][uploadMultipleFiles][Error Response]:", errorResponse);
+        console.log(
+          "[FILE_UPLOAD][uploadMultipleFiles][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[FILE_UPLOAD][uploadMultipleFiles][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[FILE_UPLOAD][uploadMultipleFiles][Catch Error Response]:", errorResponse);
+      console.log(
+        "[FILE_UPLOAD][uploadMultipleFiles][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
@@ -956,7 +1197,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async deleteFile(s3Key: string, token?: string): Promise<any> {
     try {
       console.log("[FILE_UPLOAD][deleteFile][Request]:", { s3Key });
-      
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.fileUpload.delete}/${s3Key}`,
         method: "delete",
@@ -970,7 +1211,9 @@ export class CasoRepositoryImpl implements CasoRepository {
         console.log("[FILE_UPLOAD][deleteFile][Success]:", axiosRequest.body);
         return axiosRequest.body;
       } else {
-        const error = new CustomError(axiosRequest.body?.message || "Error al eliminar archivo");
+        const error = new CustomError(
+          axiosRequest.body?.message || "Error al eliminar archivo"
+        );
         console.log("[FILE_UPLOAD][deleteFile][Error]:", error);
         throw error;
       }
@@ -983,7 +1226,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async getFileInfo(token?: string): Promise<FileInfoResponse | ErrorResponse> {
     try {
       console.log("[FILE_UPLOAD][getFileInfo][Request]:", {});
-      
+
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.fileUpload.info,
         method: "post",
@@ -1000,94 +1243,161 @@ export class CasoRepositoryImpl implements CasoRepository {
       } else {
         const errorResponse = {
           statusCode: axiosRequest.statusCode,
-          message: axiosRequest.body.message || "Error al obtener información de archivos",
+          message:
+            axiosRequest.body.message ||
+            "Error al obtener información de archivos",
           error: axiosRequest.body.error || "Unknown Error",
         };
-        console.log("[FILE_UPLOAD][getFileInfo][Error Response]:", errorResponse);
+        console.log(
+          "[FILE_UPLOAD][getFileInfo][Error Response]:",
+          errorResponse
+        );
         return errorResponse;
       }
     } catch (error: any) {
       console.error("[FILE_UPLOAD][getFileInfo][Error]:", error);
       const errorResponse = {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || "Error inesperado",
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
         error: error.response?.data?.error || "Unknown Error",
       };
-      console.log("[FILE_UPLOAD][getFileInfo][Catch Error Response]:", errorResponse);
+      console.log(
+        "[FILE_UPLOAD][getFileInfo][Catch Error Response]:",
+        errorResponse
+      );
       return errorResponse;
     }
   }
 
   // Actuaciones / Performances
-  async createPerformance(data: CreatePerformanceBody, token?: string): Promise<CreatePerformanceSuccessResponse | ErrorResponse> {
+  async createPerformance(
+    data: CreatePerformanceBody,
+    token?: string
+  ): Promise<CreatePerformanceSuccessResponse | ErrorResponse> {
     try {
-      console.log('[PERFORMANCE][createPerformance][Request]:', data);
+      console.log("[PERFORMANCE][createPerformance][Request]:", data);
       const axiosRequest = await this.httpClient.request({
         url: apiUrls.performance.create,
-        method: 'post',
+        method: "post",
         body: JSON.stringify(data),
         isAuth: true,
         token,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
 
-      console.log('[PERFORMANCE][createPerformance][Response]:', axiosRequest);
+      console.log("[PERFORMANCE][createPerformance][Response]:", axiosRequest);
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapCreatePerformanceResponse(axiosRequest.body);
-        console.log('[PERFORMANCE][createPerformance][Mapped]:', response);
+        console.log("[PERFORMANCE][createPerformance][Mapped]:", response);
         return response;
       } else if (axiosRequest.statusCode === HttpStatusCode.badRequest) {
         return {
           statusCode: axiosRequest.statusCode,
-          message: axiosRequest.body.message || 'Transición de estado inválida',
-          error: axiosRequest.body.error || 'Bad Request',
+          message: axiosRequest.body.message || "Transición de estado inválida",
+          error: axiosRequest.body.error || "Bad Request",
         };
       } else {
         return {
           statusCode: axiosRequest.statusCode,
-          message: axiosRequest.body.message || 'Error al crear actuación',
-          error: axiosRequest.body.error || 'Unknown Error',
+          message: axiosRequest.body.message || "Error al crear actuación",
+          error: axiosRequest.body.error || "Unknown Error",
         };
       }
     } catch (error: any) {
-      console.error('[PERFORMANCE][createPerformance][Error]:', error);
+      console.error("[PERFORMANCE][createPerformance][Error]:", error);
       return {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || 'Error inesperado al crear actuación',
-        error: error.response?.data?.error || 'Internal Server Error',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Error inesperado al crear actuación",
+        error: error.response?.data?.error || "Internal Server Error",
       };
     }
   }
 
-  async deletePerformance(id: string, token?: string): Promise<DeletePerformanceSuccessResponse | ErrorResponse> {
+  async deletePerformance(
+    id: string,
+    token?: string
+  ): Promise<DeletePerformanceSuccessResponse | ErrorResponse> {
     try {
-      console.log('[PERFORMANCE][deletePerformance][Request]:', { id });
+      console.log("[PERFORMANCE][deletePerformance][Request]:", { id });
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.performance.delete}/${id}`,
-        method: 'delete',
+        method: "delete",
         isAuth: true,
         token,
       });
 
-      console.log('[PERFORMANCE][deletePerformance][Response]:', axiosRequest);
+      console.log("[PERFORMANCE][deletePerformance][Response]:", axiosRequest);
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         const response = mapDeletePerformanceResponse(axiosRequest.body);
-        console.log('[PERFORMANCE][deletePerformance][Mapped]:', response);
+        console.log("[PERFORMANCE][deletePerformance][Mapped]:", response);
         return response;
       } else {
         return {
           statusCode: axiosRequest.statusCode,
-          message: axiosRequest.body.message || 'Error al eliminar actuación',
-          error: axiosRequest.body.error || 'Unknown Error',
+          message: axiosRequest.body.message || "Error al eliminar actuación",
+          error: axiosRequest.body.error || "Unknown Error",
         };
       }
     } catch (error: any) {
-      console.error('[PERFORMANCE][deletePerformance][Error]:', error);
+      console.error("[PERFORMANCE][deletePerformance][Error]:", error);
       return {
         statusCode: error.response?.status || 500,
-        message: error.response?.data?.message || error.message || 'Error inesperado al eliminar actuación',
-        error: error.response?.data?.error || 'Internal Server Error',
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Error inesperado al eliminar actuación",
+        error: error.response?.data?.error || "Internal Server Error",
       };
     }
   }
-} 
+
+  // Actuaciones de Monolegal
+  async getActuacionesMonolegal(
+    radicado: string,
+    token?: string
+  ): Promise<any[]> {
+    try {
+      console.log("[MONOLEGAL][getActuacionesMonolegal][Request]:", {
+        radicado,
+      });
+
+      const axiosRequest = await this.httpClient.request({
+        url: `${apiUrls.monolegal.actuaciones}/${radicado}`,
+        method: "get",
+        isAuth: true,
+        token,
+      });
+
+      console.log(
+        "[MONOLEGAL][getActuacionesMonolegal][Response]:",
+        axiosRequest
+      );
+
+      if (axiosRequest.statusCode === HttpStatusCode.ok) {
+        const actuaciones = axiosRequest.body || [];
+        console.log(
+          "[MONOLEGAL][getActuacionesMonolegal][Success]:",
+          actuaciones.length,
+          "actuaciones"
+        );
+        return actuaciones;
+      } else {
+        console.error(
+          "[MONOLEGAL][getActuacionesMonolegal][Error]:",
+          axiosRequest.body
+        );
+        return [];
+      }
+    } catch (error: any) {
+      console.error(
+        "[MONOLEGAL][getActuacionesMonolegal][Catch Error]:",
+        error
+      );
+      return [];
+    }
+  }
+}

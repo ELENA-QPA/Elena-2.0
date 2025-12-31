@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HttpModule } from '@nestjs/axios';
-import { MonolegalController } from './Controllers/monolegal.controller';
+import { MonolegalController } from './controllers/monolegal.controller';
 import { MonolegalService } from './services/monolegal.service';
 import { MonolegalApiService } from './services/monolegal-api.service';
+import { JuzgadoNormalizerService } from './services/juzgado-normalizer.service';
 import { Record, RecordSchema } from '../records/entities/record.entity';
 import {
   ProceduralPart,
@@ -35,7 +36,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
   ],
   controllers: [MonolegalController],
-  providers: [MonolegalService, MonolegalApiService],
+  providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService],
   exports: [MonolegalService, MonolegalApiService],
 })
 export class MonolegalModule {}

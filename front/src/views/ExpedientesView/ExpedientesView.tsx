@@ -95,9 +95,28 @@ export default function ExpedientesView({
   const [availableDespachos, setAvailableDespachos] = useState<string[]>([]);
   const [hasDespachoOptions, setHasDespachoOptions] = useState<boolean>(false);
 
+  // Estados para ordenamiento de columnas
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  // Función para manejar ordenamiento por columna
+  const handleSort = useCallback(
+    (column: string) => {
+      if (sortColumn === column) {
+        // Si ya está ordenado por esta columna, cambiar dirección
+        setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+      } else {
+        // Nueva columna, ordenar ascendente
+        setSortColumn(column);
+        setSortDirection("asc");
+      }
+    },
+    [sortColumn]
+  );
+
   // Paginación híbrida: carga progresiva del servidor, paginación local
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
   const [totalRecords, setTotalRecords] = useState(initialTotal ?? 0);
 
   // Debug: Log para verificar inicialización
@@ -132,16 +151,45 @@ export default function ExpedientesView({
         // Cargar divipola.json
         const divipolaResponse = await fetch("/divipola.json");
         const divipolaData = await divipolaResponse.json();
-        setDepartments(divipolaData.departamentos);
+
+        // Función para capitalizar nombres (primera letra mayúscula, resto minúscula)
+        const capitalizeName = (name: string) => {
+          if (!name) return "";
+          return name
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+        };
+
+        // Capitalizar nombres de departamentos y municipios
+        const departamentosFormateados = divipolaData.departamentos.map(
+          (dept: any) => ({
+            ...dept,
+            nombre: capitalizeName(dept.nombre),
+            municipios: dept.municipios.map((mun: any) => ({
+              ...mun,
+              nombre: capitalizeName(mun.nombre),
+            })),
+          })
+        );
+
+        console.log(
+          "[DIVIPOLA] Departamentos formateados:",
+          departamentosFormateados.slice(0, 3)
+        );
+
+        setDepartments(departamentosFormateados);
 
         // Cargar todas las ciudades de todos los departamentos
-        const allCitiesData = divipolaData.departamentos.flatMap((dept: any) =>
+        const allCitiesData = departamentosFormateados.flatMap((dept: any) =>
           dept.municipios.map((municipio: any) => ({
             ...municipio,
             departamento: dept.nombre,
           }))
         );
         setAllCities(allCitiesData);
+
         // Inicialmente no cargar ciudades hasta que se necesiten
         setAvailableCities([]);
 
@@ -563,7 +611,7 @@ export default function ExpedientesView({
         toast.success(
           `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`
         );
-        
+
         setTimeout(() => {
           loadMoreFromServer();
         }, 2000);
@@ -579,26 +627,35 @@ export default function ExpedientesView({
     }
   }, [loadMoreFromServer]);
 
-  useEffect(() => {    
+  useEffect(() => {
     checkAuth();
-    
+
     if (initialCasos.length > 0 && allLoadedCasos.length === 0) {
+      // Eliminar duplicados por _id
+      const uniqueCasos = initialCasos.filter(
+        (caso, index, self) =>
+          index === self.findIndex((c) => c._id === caso._id)
+      );
+
       console.log("[EXPEDIENTES][Server Data]: Usando datos del servidor", {
         count: initialCasos.length,
+        unique: uniqueCasos.length,
+        duplicatesRemoved: initialCasos.length - uniqueCasos.length,
         initialTotal,
-        hasMoreData: initialTotal > initialCasos.length,
+        hasMoreData: initialTotal > uniqueCasos.length,
       });
-      setAllLoadedCasos(initialCasos);
+
+      setAllLoadedCasos(uniqueCasos); // ← Usar uniqueCasos en vez de initialCasos
       setAuthStatus("authenticated");
-      
-      if (initialTotal && initialTotal > initialCasos.length) {
+
+      if (initialTotal && initialTotal > uniqueCasos.length) {
         setHasMoreToLoad(true);
       } else {
         setHasMoreToLoad(false);
       }
       return;
     }
-    
+
     if (initialError) {
       console.log(
         "[EXPEDIENTES][Server Error]: Error del servidor",
@@ -608,9 +665,9 @@ export default function ExpedientesView({
       setAuthStatus("authenticated");
       return;
     }
-    
+
     console.log("[EXPEDIENTES][Loading Data]: Iniciando carga de expedientes");
-    loadMoreFromServer(); 
+    loadMoreFromServer(1000);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect separado para manejar cambios en los datos después de cargas
@@ -642,23 +699,47 @@ export default function ExpedientesView({
 
   // Filtrar casos por búsqueda y filtros (memoizado)
   const filteredCasos = useMemo(() => {
-    let filtered = allLoadedCasos;
+    // PRIMERO: Eliminar duplicados por _id
+    const uniqueCasos = allLoadedCasos.filter(
+      (caso, index, self) =>
+        index === self.findIndex((c: Caso) => c._id === caso._id)
+    );
 
-    // Filtro por texto de búsqueda
+    console.log("[EXPEDIENTES][Dedup in Filter]:", {
+      original: allLoadedCasos.length,
+      unique: uniqueCasos.length,
+      duplicatesRemoved: allLoadedCasos.length - uniqueCasos.length,
+    });
+
+    let filtered = uniqueCasos;
+
+    // 1. Filtro por BÚSQUEDA DE TEXTO (nombre, código, etc)
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase().trim();
+
+      // Si parece un número de radicado (solo dígitos y más de 15 caracteres), buscar exacto
+      const isRadicadoSearch = /^\d{15,}$/.test(searchTerm.trim());
+
       filtered = filtered.filter((caso) => {
-        // Buscar en campos principales
+        if (isRadicadoSearch) {
+          // Búsqueda exacta para radicados
+          const radicado =
+            caso.numeroRadicado || caso.radicado || caso.settled || "";
+          return radicado === searchTerm.trim();
+        }
+
+        // Búsqueda parcial para otros campos
         const searchableFields = [
-          caso.internalCode,
+          caso.etiqueta,
           caso.proceduralParts?.[0]?.name,
+          caso.numeroRadicado,
           caso.estado,
           caso.clientType,
           caso.department,
           caso.city,
-          caso.office,
+          caso.despachoJudicial,
+          caso.ultimaAnotacion,
           caso.processType,
-          caso.jurisdiction,
         ]
           .filter(Boolean)
           .map((field) => field?.toString().toLowerCase() || "");
@@ -667,254 +748,222 @@ export default function ExpedientesView({
       });
     }
 
-    // Filtro por código interno
+    // 2. Filtro por CÓDIGO INTERNO
     if (internalCodeFilter.trim()) {
       const codeLower = internalCodeFilter.toLowerCase().trim();
-      filtered = filtered.filter((caso) =>
-        caso.internalCode?.toLowerCase().includes(codeLower)
+      filtered = filtered.filter(
+        (caso) =>
+          caso.internalCode?.toLowerCase().includes(codeLower) ||
+          caso.etiqueta?.toLowerCase().includes(codeLower)
       );
     }
 
-    // Filtro por estado
+    // 3. Filtro por ESTADO
     if (estadoFilter !== "all") {
-      console.log("[EXPEDIENTES][Estado Filter]:", {
-        estadoFilter,
-        beforeCount: filtered.length,
-        sampleEstados: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, estado: c.estado })),
-      });
       filtered = filtered.filter((caso) => caso.estado === estadoFilter);
-      console.log("[EXPEDIENTES][Estado Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, estado: c.estado })),
-      });
     }
 
-    // Filtro por tipo de cliente
+    // 4. Filtro por TIPO DE CLIENTE
     if (clientTypeFilter !== "all") {
-      console.log("[EXPEDIENTES][ClientType Filter]:", {
-        clientTypeFilter,
-        beforeCount: filtered.length,
-        sampleClientTypes: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, clientType: c.clientType })),
-      });
       filtered = filtered.filter(
         (caso) => caso.clientType === clientTypeFilter
       );
-      console.log("[EXPEDIENTES][ClientType Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, clientType: c.clientType })),
-      });
     }
 
-    // Filtro por departamento
+    console.log(
+      "[FILTER DEBUG] Casos sample:",
+      allLoadedCasos.slice(0, 3).map((c) => ({
+        city: c.city,
+        department: c.department,
+        despachoJudicial: c.despachoJudicial,
+      }))
+    );
+
+    // 5. Filtro por DEPARTAMENTO
     if (departmentFilter !== "all") {
-      console.log("[EXPEDIENTES][Department Filter]:", {
-        departmentFilter,
-        beforeCount: filtered.length,
-        sampleDepartments: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, department: c.department })),
-        allUniqueDepartments: [
-          ...new Set(filtered.map((c) => c.department)),
-        ].slice(0, 10),
-      });
       filtered = filtered.filter((caso) => {
-        const matches = compareNames(caso.department || "", departmentFilter);
-        if (matches) {
-          console.log("[EXPEDIENTES][Department Match]:", {
-            casoDepartment: caso.department,
-            filterDepartment: departmentFilter,
-            normalizedCaso: normalizeString(caso.department || ""),
-            normalizedFilter: normalizeString(departmentFilter),
-          });
+        if (caso.department) {
+          return compareNames(caso.department, departmentFilter);
         }
-        return matches;
-      });
-      console.log("[EXPEDIENTES][Department Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, department: c.department })),
+        if (caso.city && allCities.length > 0) {
+          const cityData = allCities.find((c) =>
+            compareNames(c.nombre, caso.city || "")
+          );
+          if (cityData) {
+            return compareNames(cityData.departamento, departmentFilter);
+          }
+        }
+        return false;
       });
     }
 
-    // Filtro por jurisdicción
+    // 6. Filtro por CIUDAD
+    if (cityFilter !== "all") {
+      filtered = filtered.filter((caso) => {
+        if (!caso.city) return false;
+
+        const casoCity = normalizeString(caso.city);
+        const filterCity = normalizeString(cityFilter);
+
+        // Comparación directa normalizada
+        if (casoCity === filterCity) return true;
+
+        // Comparación parcial (por si una contiene a la otra)
+        if (casoCity.includes(filterCity) || filterCity.includes(casoCity))
+          return true;
+
+        // Usar compareNames para variaciones
+        return compareNames(caso.city, cityFilter);
+      });
+    }
+
+    // 7. Filtro por DESPACHO/JURISDICCIÓN
     if (jurisdictionFilter !== "all" && jurisdictionFilter.trim()) {
-      console.log("[EXPEDIENTES][Jurisdiction Filter]:", {
-        jurisdictionFilter,
-        beforeCount: filtered.length,
-        sampleJurisdictions: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, jurisdiction: c.jurisdiction })),
-      });
-
-      // Filtrar por jurisdicción (no por office/despacho)
-      filtered = filtered.filter(
-        (caso) => caso.jurisdiction === jurisdictionFilter
-      );
-
-      console.log("[EXPEDIENTES][Jurisdiction Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, jurisdiction: c.jurisdiction })),
+      filtered = filtered.filter((caso) => {
+        // Si hay despachos específicos de la ciudad, comparar exacto
+        if (hasDespachoOptions) {
+          return caso.office === jurisdictionFilter;
+        } else {
+          // Si es búsqueda libre, usar includes
+          return caso.office
+            ?.toLowerCase()
+            .includes(jurisdictionFilter.toLowerCase());
+        }
       });
     }
 
-    // Filtro por tipo de proceso
+    // 8. Filtro por TIPO DE PROCESO
     if (processTypeFilter !== "all") {
-      console.log("[EXPEDIENTES][ProcessType Filter]:", {
-        processTypeFilter,
-        beforeCount: filtered.length,
-        sampleProcessTypes: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, processType: c.processType })),
-      });
       filtered = filtered.filter(
         (caso) => caso.processType === processTypeFilter
       );
-      console.log("[EXPEDIENTES][ProcessType Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, processType: c.processType })),
-      });
     }
 
-    // Filtro por ciudad
-    if (cityFilter !== "all") {
-      console.log("[EXPEDIENTES][City Filter]:", {
-        cityFilter,
-        beforeCount: filtered.length,
-        sampleCities: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, city: c.city })),
-        allUniqueCities: [...new Set(filtered.map((c) => c.city))].slice(0, 10),
-      });
-      filtered = filtered.filter((caso) => {
-        const matches = compareNames(caso.city || "", cityFilter);
-        if (matches) {
-          console.log("[EXPEDIENTES][City Match]:", {
-            casoCity: caso.city,
-            filterCity: cityFilter,
-            normalizedCaso: normalizeString(caso.city || ""),
-            normalizedFilter: normalizeString(cityFilter),
-          });
-        }
-        return matches;
-      });
-      console.log("[EXPEDIENTES][City Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, city: c.city })),
-      });
-    }
-
-    // Filtro por ubicación
+    // 9. Filtro por UBICACIÓN
     if (locationFilter !== "all") {
-      console.log("[EXPEDIENTES][Location Filter]:", {
-        locationFilter,
-        beforeCount: filtered.length,
-        sampleLocations: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, location: c.location })),
-      });
       filtered = filtered.filter((caso) => caso.location === locationFilter);
-      console.log("[EXPEDIENTES][Location Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, location: c.location })),
-      });
     }
 
-    // Filtro por tipo
+    // 10. Filtro por TIPO (Activo/Inactivo)
     if (typeFilter !== "all") {
-      console.log("[EXPEDIENTES][Type Filter]:", {
-        typeFilter,
-        beforeCount: filtered.length,
-        sampleTypes: filtered
-          .slice(0, 5)
-          .map((c) => ({ id: c._id, type: c.type })),
-      });
       filtered = filtered.filter((caso) => caso.type === typeFilter);
-      console.log("[EXPEDIENTES][Type Filter Result]:", {
-        afterCount: filtered.length,
-        filteredSample: filtered
-          .slice(0, 3)
-          .map((c) => ({ id: c._id, type: c.type })),
-      });
     }
 
-    // Filtro por fechas
+    // Función para parsear fecha DD/MM/YY o DD/MM/YYYY
+    const parseDate = (dateStr: string): Date | null => {
+      if (!dateStr) return null;
+
+      // Si ya es una fecha ISO, parsearla directamente
+      if (dateStr.includes("-")) {
+        const parsed = new Date(dateStr);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      }
+
+      // Formato DD/MM/YY o DD/MM/YYYY
+      const parts = dateStr.split("/");
+      if (parts.length === 3) {
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1; // Meses van de 0-11
+        let year = parseInt(parts[2], 10);
+
+        // Si el año es de 2 dígitos, asumir 2000+
+        if (year < 100) {
+          year += 2000;
+        }
+
+        const parsed = new Date(year, month, day);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      }
+
+      return null;
+    };
+
+    // 11. Filtro por FECHA DESDE
     if (dateFrom) {
-      console.log("[EXPEDIENTES][Date Filter Debug - From]:", {
-        dateFrom,
-        dateFromType: typeof dateFrom,
-        sampleDates: filtered.slice(0, 3).map((c) => ({
-          id: c._id,
-          updatedAt: c.updatedAt,
-          createdAt: c.createdAt,
-          updatedAtType: typeof c.updatedAt,
-          createdAtType: typeof c.createdAt,
-        })),
-      });
-      filtered = filtered.filter((caso) => {
-        const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
-        const fromDate = new Date(dateFrom);
-        const isValid =
-          !isNaN(casoDate.getTime()) && !isNaN(fromDate.getTime());
-        console.log("[EXPEDIENTES][Date Filter - From]:", {
-          casoId: caso._id,
-          casoDate: casoDate.toISOString(),
-          fromDate: fromDate.toISOString(),
-          isValid,
-          result: isValid ? casoDate >= fromDate : false,
+      const fromDate = parseDate(dateFrom);
+      if (fromDate) {
+        fromDate.setHours(0, 0, 0, 0);
+        filtered = filtered.filter((caso) => {
+          const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
+          return !isNaN(casoDate.getTime()) && casoDate >= fromDate;
         });
-        return isValid ? casoDate >= fromDate : false;
-      });
+      }
     }
 
+    // 12. Filtro por FECHA HASTA
     if (dateTo) {
-      console.log("[EXPEDIENTES][Date Filter Debug - To]:", {
-        dateTo,
-        dateToType: typeof dateTo,
-        sampleDates: filtered.slice(0, 3).map((c) => ({
-          id: c._id,
-          updatedAt: c.updatedAt,
-          createdAt: c.createdAt,
-        })),
-      });
-      filtered = filtered.filter((caso) => {
-        const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
-        const toDate = new Date(dateTo);
-        toDate.setHours(23, 59, 59, 999); // Incluir todo el día
-        const isValid = !isNaN(casoDate.getTime()) && !isNaN(toDate.getTime());
-        console.log("[EXPEDIENTES][Date Filter - To]:", {
-          casoId: caso._id,
-          casoDate: casoDate.toISOString(),
-          toDate: toDate.toISOString(),
-          isValid,
-          result: isValid ? casoDate <= toDate : false,
+      const toDate = parseDate(dateTo);
+      if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
+        filtered = filtered.filter((caso) => {
+          const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
+          return !isNaN(casoDate.getTime()) && casoDate <= toDate;
         });
-        return isValid ? casoDate <= toDate : false;
-      });
+      }
     }
 
-    // Ordenar por fecha de última actualización (updatedAt) descendente
-    filtered.sort((a, b) => {
-      const fechaA = new Date(a.updatedAt || a.createdAt || 0);
-      const fechaB = new Date(b.updatedAt || b.createdAt || 0);
-      return fechaB.getTime() - fechaA.getTime(); // Más reciente primero
-    });
+    // Ordenar según la columna seleccionada
+    if (sortColumn) {
+      filtered.sort((a, b) => {
+        let valueA: any;
+        let valueB: any;
+
+        switch (sortColumn) {
+          case "internalCode":
+            // Extraer número del código interno (ej: "ML-2025-0016" -> 16)
+            const numA = parseInt(a.internalCode?.replace(/\D/g, "") || "0");
+            const numB = parseInt(b.internalCode?.replace(/\D/g, "") || "0");
+            valueA = numA;
+            valueB = numB;
+            break;
+          case "name":
+            valueA = (a.proceduralParts?.[0]?.name || "").toLowerCase();
+            valueB = (b.proceduralParts?.[0]?.name || "").toLowerCase();
+            break;
+          case "radicado":
+            valueA = a.numeroRadicado || a.radicado || "";
+            valueB = b.numeroRadicado || b.radicado || "";
+            break;
+          case "despacho":
+            valueA = (a.despachoJudicial || "").toLowerCase();
+            valueB = (b.despachoJudicial || "").toLowerCase();
+            break;
+          case "city":
+            valueA = (a.city || "").toLowerCase();
+            valueB = (b.city || "").toLowerCase();
+            break;
+          case "clientType":
+            valueA = (a.clientType || "").toLowerCase();
+            valueB = (b.clientType || "").toLowerCase();
+            break;
+          case "type":
+            valueA = (a.type || "").toLowerCase();
+            valueB = (b.type || "").toLowerCase();
+            break;
+          case "estado":
+            valueA = (a.estado || "").toLowerCase();
+            valueB = (b.estado || "").toLowerCase();
+            break;
+          case "updatedAt":
+            valueA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+            valueB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+            break;
+          default:
+            return 0;
+        }
+
+        if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else {
+      // Ordenamiento por defecto: fecha más reciente
+      filtered.sort((a, b) => {
+        const fechaA = new Date(a.updatedAt || a.createdAt || 0);
+        const fechaB = new Date(b.updatedAt || b.createdAt || 0);
+        return fechaB.getTime() - fechaA.getTime();
+      });
+    }
 
     return filtered;
   }, [
@@ -924,15 +973,17 @@ export default function ExpedientesView({
     estadoFilter,
     clientTypeFilter,
     departmentFilter,
+    cityFilter,
     jurisdictionFilter,
     processTypeFilter,
-    cityFilter,
     locationFilter,
     typeFilter,
     dateFrom,
     dateTo,
     compareNames,
     hasDespachoOptions,
+    sortColumn,
+    sortDirection,
   ]);
 
   // Paginación local de los datos filtrados
@@ -1459,7 +1510,7 @@ export default function ExpedientesView({
                       {uniqueValues.estados
                         .filter((estado) => estado && estado.trim() !== "")
                         .map((estado) => (
-                          <SelectItem key={estado} value={estado}>
+                          <SelectItem key={estado} value={estado!}>
                             {estado}
                           </SelectItem>
                         ))}
@@ -1513,7 +1564,7 @@ export default function ExpedientesView({
                             processType && processType.trim() !== ""
                         )
                         .map((processType) => (
-                          <SelectItem key={processType} value={processType}>
+                          <SelectItem key={processType} value={processType!}>
                             {processType}
                           </SelectItem>
                         ))}
@@ -1723,39 +1774,138 @@ export default function ExpedientesView({
             <Table className="bg-white">
               <TableHeader className="bg-pink-600">
                 <TableRow className="bg-pink-600 hover:bg-pink-600">
-                  <TableHead className="text-white font-semibold">#</TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Nombre Completo
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("internalCode")}
+                  >
+                    <div className="flex items-center gap-1">
+                      #
+                      {sortColumn === "internalCode" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Radicado
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("name")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Nombre Completo
+                      {sortColumn === "name" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Ubicación Expediente
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("radicado")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Radicado
+                      {sortColumn === "radicado" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Despacho
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("despacho")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Despacho
+                      {sortColumn === "despacho" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Ciudad
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("city")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Ciudad
+                      {sortColumn === "city" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Tipo de Cliente
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("clientType")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Tipo de Cliente
+                      {sortColumn === "clientType" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Activo
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("type")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Activo
+                      {sortColumn === "type" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Estado
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("estado")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Estado
+                      {sortColumn === "estado" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-white font-semibold">
-                    Actualizado
+                  <TableHead
+                    className="text-white font-semibold cursor-pointer hover:bg-pink-700"
+                    onClick={() => handleSort("updatedAt")}
+                  >
+                    <div className="flex items-center gap-1">
+                      Actualizado
+                      {sortColumn === "updatedAt" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        ))}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-right text-white font-semibold">
+                  <TableHead className="text-center text-white font-semibold">
                     Acciones
                   </TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody className="bg-white">
                 {currentPageCasos.length > 0 ? (
                   currentPageCasos.map((caso) => (
@@ -1768,7 +1918,7 @@ export default function ExpedientesView({
                   ))
                 ) : isLoadingMore ? (
                   <TableRow>
-                    <TableCell colSpan={11} className="text-center py-8">
+                    <TableCell colSpan={10} className="text-center py-8">
                       <div className="flex items-center justify-center">
                         <Loader2 className="animate-spin h-6 w-6 mr-2" />
                         <span>Cargando expedientes...</span>
@@ -1778,7 +1928,7 @@ export default function ExpedientesView({
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={11}
+                      colSpan={10}
                       className="text-center py-8 text-gray-500"
                     >
                       No hay expedientes registrados
@@ -1800,7 +1950,7 @@ export default function ExpedientesView({
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-gray-900 truncate text-sm">
-                        {caso.proceduralParts[0]?.name || "Sin nombre"}
+                        {caso.proceduralParts![0]?.name || "Sin nombre"}
                       </h3>
                       <p className="text-xs text-gray-600">
                         #{caso.internalCode}

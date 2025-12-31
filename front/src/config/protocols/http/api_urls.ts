@@ -107,4 +107,8 @@ export const apiUrls = {
     delete: "http://localhost:4000/api/notifications",
     websocket: "http://localhost:4000/notifications",
   },
+  // Monolegal
+  monolegal: {
+    actuaciones: "/api/monolegal/actuaciones",
+  },
 };

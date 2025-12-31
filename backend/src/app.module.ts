@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,8 +23,11 @@ import { AudienceModule } from './audience/audience.module';
 import { NotificationModule } from './notifications/notifications.module';
 import { ReminderModule } from './reminder/reminder.module';
 import { BullModule } from '@nestjs/bull';
+import { OpenaiModule } from './openai/openai.module';
+
 @Module({
   imports: [
+    OpenaiModule,
     ConfigModule.forRoot({
       load: [EnvConfiguration],
       isGlobal: true,

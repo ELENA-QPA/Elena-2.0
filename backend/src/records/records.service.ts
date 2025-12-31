@@ -1,16 +1,15 @@
-// Método duplicado eliminado para evitar conflicto de nombres.
+/* eslint-disable prefer-const */
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Res,
 } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import mongoose, { Model, ObjectId, Connection } from 'mongoose';
 import { PaginationDto } from 'src/common/dto/paginaton.dto';
-import { CreateRecordDto, Estado } from './dto/create-record.dto';
+import { CreateRecordDto } from './dto/create-record.dto';
 import { CreateCompleteRecordDto } from './dto/create-complete-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { Record } from './entities/record.entity';
@@ -18,7 +17,7 @@ import { IUser } from './interfaces/user.interface';
 import { AddCommentDto } from './dto/add-comment.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { plainToClass } from 'class-transformer';
-import { validate, validateOrReject } from 'class-validator';
+import { validate } from 'class-validator';
 import { DraftRecordDto } from './dto/draft.record.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { DocumentService } from 'src/document/document.service';
@@ -28,9 +27,7 @@ import { PaymentService } from 'src/payment/payment.service';
 import { PerfomanceService } from 'src/perfomance/perfomance.service';
 import { FileService, UploadedFile } from 'src/common/services/file.service';
 import { CreateCompleteRecordWithFilesDto } from './dto/create-complete-record-with-files.dto';
-import { count } from 'console';
 import { ValidRoles } from 'src/auth/interfaces';
-import { GetMaxInternalCodeDto } from './dto/get-max-internal-code.dto';
 import { firstConsecutivePart } from '../common/constants/first-consecutive-part.constant';
 import { secondConsecutivePart } from '../common/constants/second-consecutive-part.constant';
 import { GetStatisticsDto } from './dto/get-statistics.dto';
@@ -41,7 +38,6 @@ import { getInternalCodeByIdDto } from './dto/get-internal-code.dto';
 
 @Injectable()
 export class RecordsService {
-  // -----------------------------------------------------
   constructor(
     @InjectModel(Record.name)
     private readonly recordModel: Model<Record>,
@@ -57,19 +53,16 @@ export class RecordsService {
     private readonly fileService: FileService,
   ) {}
 
-  // -----------------------------------------------------
   /**
-   * Genera el código interno automáticamente con formato: R431-MMM-QPA-01
-   * @param clientType Tipo de cliente (ej: "Rappi", "Uber")
-   * @param documentType Tipo de documento (ej: "Memorial", "Demanda")
-   * @returns Código interno completo generado
+   * @param clientType
+   * @param documentType
+   * @returns
    */
   private async generateInternalCode(
     clientType: string,
     documentType: string,
   ): Promise<string> {
     try {
-      // Obtener los códigos de las constantes
       const firstPart = firstConsecutivePart[clientType];
       const secondPart = secondConsecutivePart[documentType];
 
@@ -92,7 +85,6 @@ export class RecordsService {
         }
       }
 
-      // Asegurar que el número mínimo sea 1 y formatear con ceros a la izquierda (3 dígitos)
       const formattedNumber = Math.max(nextClientNumber, 1)
         .toString()
         .padStart(3, '0');
@@ -105,7 +97,6 @@ export class RecordsService {
     }
   }
 
-  // -----------------------------------------------------
   private async generateDocumentConsecutive(
     internalCode: string,
     documentType: string,

@@ -136,7 +136,7 @@ export function mapCasoApiToModel(api: any): Caso {
       documents: [],
       interveners: [],
       proceduralParts: [],
-      payments: [],
+      payments: [],      
     };
   }
   
@@ -168,9 +168,10 @@ export function mapCasoApiToModel(api: any): Caso {
     etiqueta: api.etiqueta || api.label || undefined,
     etapaProcesal: api.etapaProcesal,
     ultimaActuacion: api.ultimaActuacion,
-    fechaUltimaActuacion: api.fechaUltimaActuacion,
+    ultimaAnotacion: api.ultimaAnotacion,
     sincronizadoMonolegal: api.sincronizadoMonolegal,
-    fechaSincronizacion: api.fechaSincronizacion,
+    fechaSincronizacion: api.fechaSincronizacion,    
+    idProcesoMonolegal: api.idProcesoMonolegal,
     
     user: api.user && typeof api.user === 'object' ? {
       _id: api.user._id,

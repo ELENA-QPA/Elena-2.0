@@ -71,46 +71,47 @@ export interface User {
   phone: string;
 }
 
-// Caso principal 
+// Caso principal
 export interface Caso {
   _id?: string;
-  internalCode: string;  
+  internalCode?: string; // Puede no venir
   clientType: string;
-  department: string;
+  department?: string; // Puede no venir
   city?: string;
   responsible?: string;
-  
-  // Campos de radicado 
-  numeroRadicado?: string;  
-  radicado?: string;         
-  
-  // Campos de despacho
-  despachoJudicial?: string; 
-  office?: string;          
-  
-  personType: string;
-  jurisdiction: string;
-  processType: string;
-  settled: string;
-  country: string;
-  location?: string;
-  estado: string;
-  type: string;  
 
-  etiqueta?: string;         
+  // Campos de radicado - TODOS LOS POSIBLES NOMBRES
+  numeroRadicado?: string;
+  radicado?: string; // ← Este es el que usa tu backend
+  settled?: string; // ← Alternativo
+
+  // Campos de despacho - TODOS LOS POSIBLES NOMBRES
+  despachoJudicial?: string; // ← Este es el que usa tu backend
+  office?: string; // ← Alternativo
+
+  personType?: string; // Puede no venir
+  jurisdiction?: string; // Puede no venir
+  processType?: string; // Puede no venir
+  country?: string;
+  location?: string;
+  estado?: string;
+  type?: string;
+
+  etiqueta?: string;
   etapaProcesal?: string;
   ultimaActuacion?: string;
-  fechaUltimaActuacion?: string;
+  ultimaAnotacion?: string;
   sincronizadoMonolegal?: boolean;
   fechaSincronizacion?: string;
-  
+  idProcesoMonolegal?: string;
+
   user?: User;
   createdAt?: string;
   updatedAt?: string;
-  documents: Document[];
-  interveners: Intervener[];
-  proceduralParts: ProceduralPart[];
-  payments: Payment[];
+  documents?: Document[];
+  interveners?: Intervener[];
+  proceduralParts?: ProceduralPart[];
+  payments?: Payment[];
   performances?: PerformanceData[];
 }
 
@@ -133,6 +134,7 @@ export interface CreateCasoBody {
   proceduralParts: CreateProceduralPartData[];
   payments: CreatePaymentData[];
   files?: File[] | string[];
+  ultimaAnotacion?: string;
   filesMetadata?: string;
 }
 
@@ -148,6 +150,7 @@ export interface UpdateCasoBody {
   settled?: string;
   city?: string;
   country?: string;
+  ultimaAnotacion?: string;
   location?: string;
   type?: string;
 }
