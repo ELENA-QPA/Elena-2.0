@@ -20,7 +20,10 @@ import { NotificationService } from 'src/notifications/services/notification.ser
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { ReminderService } from 'src/reminder/services/reminder.services';
-import { EmailReminderData } from 'src/reminder/interfaces/reminder.interface';
+import {
+  DaptaData,
+  EmailReminderData,
+} from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
 
 @Injectable()
@@ -121,6 +124,18 @@ export class OrchestratorService {
     };
 
     await this.reminderService.sendEmail(emailData);
+
+    const daptaData: DaptaData = {
+      phone_number: `+57${record.proceduralParts.plaintiff.contact}` || '',
+      plaintiff_name: record.proceduralParts.plaintiff.name || '',
+      defendant_name: record.proceduralParts.defendant.name || '',
+      audience_day: audienceData.audience.day || '',
+      audience_month: audienceData.audience.month || '',
+      audience_year: audienceData.audience.year || '',
+      audience_start_time: audienceData.audience.start_time || '',
+    };
+
+    await this.reminderService.enqueueDaptaCall(daptaData);
 
     await this.audienceService.markNotificationAsSent(audience._id, type);
   }
@@ -511,7 +526,7 @@ export class OrchestratorService {
   }
 
   async getQueueStats() {
-    return this.reminderService.getQueueStats();
+    return this.reminderService.getEmailQueueStats();
   }
 
   async cleanQueue() {

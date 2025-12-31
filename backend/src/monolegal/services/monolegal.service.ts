@@ -702,6 +702,7 @@ export class MonolegalService {
       });
 
       if (cambio.ultimaActuacion) {
+        console.log('imprimiendo ultima actuacion ' + cambio.ultimaActuacion);
         await this.createOrUpdatePerformance(newRecord._id, {
           ultimaActuacion: cambio.ultimaActuacion,
           etapaProcesal: '',
@@ -868,6 +869,7 @@ export class MonolegalService {
   }
 
   async getActuacionesProceso(idProceso: string): Promise<any[]> {
+    this.logger.log('tryanedo actuaciones para ' + idProceso);
     return this.monolegalApiService.getActuacionesPorIdProceso(idProceso);
   }
 }
