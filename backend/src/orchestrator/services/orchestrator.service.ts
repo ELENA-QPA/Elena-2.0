@@ -13,24 +13,163 @@ import { AudienceResponse } from 'src/audience/interfaces/audience.interfaces';
 import {
   AudienceOrchestratorResponse,
   BulkCreateResult,
+  ExtractDateResponse,
   FieldValidationResult,
 } from '../interfaces/audience.interface';
 import { NotificationService } from 'src/notifications/services/notification.service';
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { ReminderService } from 'src/reminder/services/reminder.services';
+import { EmailReminderData } from 'src/reminder/interfaces/reminder.interface';
+import OpenAI from 'openai';
 
 @Injectable()
 export class OrchestratorService {
   private readonly logger = new Logger(OrchestratorService.name);
+  private readonly openai: OpenAI;
+  private readonly model: string;
 
   constructor(
     private readonly authService: AuthService,
     private readonly audienceService: AudienceService,
     private readonly recordsService: RecordsService,
+    private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,
     private readonly recordAdapter: RecordAdapter,
-  ) {}
+  ) {
+    this.openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
+    this.model = process.env.OPENAI_MODEL ?? 'gpt-5-nano';
+  }
+
+  private readonly colombianHolidays2025: Date[] = [
+    new Date('2025-01-01'),
+    new Date('2025-01-06'),
+    new Date('2025-03-24'),
+    new Date('2025-04-17'),
+    new Date('2025-04-18'),
+    new Date('2025-05-01'),
+    new Date('2025-06-02'),
+    new Date('2025-06-23'),
+    new Date('2025-06-30'),
+    new Date('2025-07-07'),
+    new Date('2025-07-20'),
+    new Date('2025-08-07'),
+    new Date('2025-08-18'),
+    new Date('2025-10-13'),
+    new Date('2025-11-03'),
+    new Date('2025-11-17'),
+    new Date('2025-12-08'),
+    new Date('2025-12-25'),
+  ];
+
+  // Metodos auxilaires paar enviar recordatorios
+  private isBusinessDay(date: Date): boolean {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) return false;
+
+    const dateStr = date.toISOString().split('T')[0];
+    return !this.colombianHolidays2025.some(
+      (holiday) => holiday.toISOString().split('T')[0] === dateStr,
+    );
+  }
+
+  private subtractBusinessDays(endDate: Date, businessDays: number): Date {
+    let currentDate = new Date(endDate);
+    let daysSubtracted = 0;
+
+    while (daysSubtracted < businessDays) {
+      currentDate.setDate(currentDate.getDate() - 1);
+
+      if (this.isBusinessDay(currentDate)) {
+        daysSubtracted++;
+      }
+    }
+
+    return currentDate;
+  }
+
+  private isExactlyNBusinessDaysBefore(
+    targetDate: Date,
+    businessDays: number,
+  ): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const notificationDate = this.subtractBusinessDays(
+      targetDate,
+      businessDays,
+    );
+    notificationDate.setHours(0, 0, 0, 0);
+
+    return today.getTime() === notificationDate.getTime();
+  }
+
+  private getReminderTemplateInfo(type: 'oneMonth' | 'fifteenDays' | 'oneDay') {
+    const templates = {
+      oneMonth: {
+        subject: 'Recordatorio: Audiencia en 1 mes',
+        template: 'audience-reminder-one-month',
+      },
+      fifteenDays: {
+        subject: 'Recordatorio: Audiencia en 15 días',
+        template: 'audience-reminder-fifteen-days',
+      },
+      oneDay: {
+        subject: 'Recordatorio: Audiencia mañana',
+        template: 'audience-reminder-one-day',
+      },
+    };
+
+    return templates[type];
+  }
+
+  private async enqueueReminder(
+    audienceData: AudienceOrchestratorResponse,
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
+  ): Promise<void> {
+    const { audience, record } = audienceData;
+    this.logger.log(`[QUEUE] Adding job type=${type} audience=${audience._id}`);
+
+    const templateInfo = this.getReminderTemplateInfo(type);
+
+    const emailData: EmailReminderData = {
+      to: audience.lawyer.name,
+      subject: templateInfo.subject,
+      templateName: templateInfo.template,
+      templateData: {
+        lawyerName: audience.lawyer.name,
+        audienceDate: audience.start,
+        audienceTime: new Date(audience.start).toLocaleTimeString('es-CO'),
+        recordInfo: {
+          settled: record?.settled,
+          internalCode: record?.internalCode,
+          plaintiff: record?.proceduralParts?.plaintiff?.name,
+          defendant: record?.proceduralParts?.defendant?.name,
+          office: record?.office,
+        },
+        audienceLink: audience.link,
+        reminderType: type,
+      },
+      metadata: {
+        entityId: audience._id,
+        entityType: 'audience',
+        reminderType: `reminder-${type}`,
+      },
+    };
+
+    await this.reminderService.sendEmail(emailData);
+
+    await this.audienceService.markNotificationAsSent(audience._id, type);
+
+    this.logger.log(
+      `Recordatorio ${type} encolado para audiencia ${audience._id}`,
+    );
+  }
+
+  // metodos auxiliares para procesar audiencias con campos faltantes
   private getFields(dto: CreateAudienceDto): FieldValidationResult {
     const toDelete: string[] = [];
     const messages: string[] = [];
@@ -80,6 +219,7 @@ export class OrchestratorService {
     return sanitized;
   }
 
+  // metodos para obetenr records
   async getRecordByInternalCode(
     dto: InternalCodeDto,
   ): Promise<RecordAdaptedResponse> {
@@ -126,6 +266,7 @@ export class OrchestratorService {
     }
   }
 
+  //metodos para componer audiencias con records
   async buildAudienceResponce(
     audienceResponse: AudienceResponse,
   ): Promise<AudienceOrchestratorResponse> {
@@ -190,6 +331,8 @@ export class OrchestratorService {
     }
   }
 
+  // metodos para procesar audiencias a notificaciones desde monolegal
+
   async bulkCreateAudiencesWithNotifications(
     audienceDtos: CreateAudienceDto[],
   ): Promise<BulkCreateResult> {
@@ -234,6 +377,8 @@ export class OrchestratorService {
     }
     return result;
   }
+
+  // metodos para obtener abogados disponibles
 
   private colombiaToUTC(dateString: string): Date {
     const date = new Date(dateString);
@@ -298,5 +443,169 @@ export class OrchestratorService {
     }
 
     return lastCheckedId;
+  }
+
+  //Metodos para extraer fechas con OPEN AI
+
+  async extractDate(text: string): Promise<ExtractDateResponse> {
+    const prompt = `
+    Extrae la fecha y hora del siguiente texto en español y responde ÚNICAMENTE con JSON sin explicaciones.
+    Devuelve SOLO un JSON válido con las claves "start" y "end" en formato ISO 8601 UTC.
+    "start" es la fecha y hora extraída del texto.
+    "end" es exactamente "start" más 1 hora.
+    Si no puedes determinar una fecha y hora claras, devuelve:
+    {"start": null, "end": null}
+
+    Texto:
+    """
+    ${text}
+    """
+    `.trim();
+
+    try {
+      const response = await this.openai.responses.create({
+        model: this.model,
+        input: prompt,
+        top_p: 1,
+        reasoning: {
+          effort: 'low',
+        },
+
+        text: {
+          verbosity: 'low',
+        },
+      });
+
+      const usage = response.usage;
+
+      this.logger.log(
+        `OpenAI usage → prompt: ${usage?.input_tokens}, ` +
+          `completion: ${usage?.output_tokens}, ` +
+          `total: ${usage?.total_tokens}`,
+      );
+
+      this.logger.log('prompt ' + prompt);
+
+      this.logger.log('RAW RESPONSE:\n' + JSON.stringify(response, null, 2));
+
+      const content = response.output_text;
+      if (!content) {
+        this.logger.log('no content');
+        return { start: null, end: null };
+      } else {
+        this.logger.log(content);
+      }
+
+      return this.safeParse(content);
+    } catch (error) {
+      this.logger.error('OpenAI error', error);
+      return { start: null, end: null };
+    }
+  }
+
+  private safeParse(content: string): ExtractDateResponse {
+    try {
+      const parsed = JSON.parse(content);
+
+      if (!parsed.start || !parsed.end) {
+        return { start: null, end: null };
+      }
+
+      const start = new Date(parsed.start);
+      const end = new Date(parsed.end);
+
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return { start: null, end: null };
+      }
+
+      if (end <= start) {
+        return { start: null, end: null };
+      }
+
+      return {
+        start: start.toISOString(),
+        end: end.toISOString(),
+      };
+    } catch {
+      return { start: null, end: null };
+    }
+  }
+
+  //Metodos para emviar reocrdatorios de audiencias
+
+  // @Cron('0 8 * * 1-5') // Descomentar para activar en producción
+  async processReminders(): Promise<void> {
+    const today = new Date();
+
+    if (!this.isBusinessDay(today)) {
+      this.logger.log('Hoy no es día hábil, saltando recordatorios');
+      return;
+    }
+
+    try {
+      const queryOneMonth = {
+        is_valid: 'true',
+        notificationOneMonthSent: 'false',
+      };
+      const audiencesOneMonth = await this.getFilteredAudiences(queryOneMonth);
+      this.logger.log('audiences one month ' + audiencesOneMonth.length);
+
+      for (const audienceData of audiencesOneMonth) {
+        const audienceStart = new Date(audienceData.audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
+          this.logger.log(
+            `[ENQUEUE] oneMonth audience=${audienceData.audience._id}`,
+          );
+          await this.enqueueReminder(audienceData, 'oneMonth');
+        }
+      }
+
+      const queryFifteenDays = {
+        is_valid: 'true',
+        notificationFifteenDaysSent: 'false',
+      };
+      const audiencesFifteenDays = await this.getFilteredAudiences(
+        queryFifteenDays,
+      );
+
+      this.logger.log('audiences 15 dyas ' + audiencesFifteenDays.length);
+
+      for (const audienceData of audiencesFifteenDays) {
+        const audienceStart = new Date(audienceData.audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 15)) {
+          this.logger.log(
+            `[ENQUEUE] fifteenDays audience=${audienceData.audience._id}`,
+          );
+          await this.enqueueReminder(audienceData, 'fifteenDays');
+        }
+      }
+
+      const queryOneDay = {
+        is_valid: 'true',
+        notificationOneDaySent: 'false',
+      };
+      const audiencesOneDay = await this.getFilteredAudiences(queryOneDay);
+      this.logger.log('audiences one day ' + audiencesOneDay.length);
+
+      for (const audienceData of audiencesOneDay) {
+        const audienceStart = new Date(audienceData.audience.start);
+        if (this.isExactlyNBusinessDaysBefore(audienceStart, 1)) {
+          this.logger.log(
+            `[ENQUEUE] oneDay audience=${audienceData.audience._id}`,
+          );
+          await this.enqueueReminder(audienceData, 'oneDay');
+        }
+      }
+    } catch (error) {
+      this.logger.error('Error procesando recordatorios', error.stack);
+    }
+  }
+
+  async getQueueStats() {
+    return this.reminderService.getQueueStats();
+  }
+
+  async cleanQueue() {
+    return this.reminderService.cleanQueue();
   }
 }

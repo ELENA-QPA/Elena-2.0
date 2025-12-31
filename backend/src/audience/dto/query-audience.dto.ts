@@ -1,6 +1,13 @@
-import { IsOptional, IsMongoId, IsEnum, IsBoolean, IsString } from 'class-validator';
+import {
+  IsOptional,
+  IsMongoId,
+  IsEnum,
+  IsBoolean,
+  IsString,
+} from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { EstadoAudiencia } from '../interfaces/audience.interfaces';
+import { Transform } from 'class-transformer';
 
 export class QueryAudienceDto {
   @ApiPropertyOptional({
@@ -26,9 +33,24 @@ export class QueryAudienceDto {
   state?: EstadoAudiencia;
 
   @ApiPropertyOptional({
-    description: "Si la audiencia tiene todo lo necesario"
+    description: 'Si la audiencia tiene todo lo necesario',
   })
   @IsOptional()
   @IsString()
   is_valid?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  notificationOneMonthSent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  notificationFifteenDaysSent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  notificationOneDaySent?: boolean;
 }

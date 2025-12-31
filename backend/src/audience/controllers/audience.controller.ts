@@ -79,10 +79,4 @@ export class AudienceController {
   remove(@Param('id') id: string) {
     return this.audienceService.remove(id);
   }
-
-  @Post('/process')
-  async processReminders() {
-    await this.audienceService.processReminders();
-    return { message: 'Recordatorios procesados' };
-  }
 }

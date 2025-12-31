@@ -6,9 +6,16 @@ import { RecordAdapter } from './adapters/record.adapter';
 import { AudienceModule } from 'src/audience/audience.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { NotificationModule } from 'src/notifications/notifications.module';
+import { ReminderModule } from 'src/reminder/reminder.module';
 
 @Module({
-  imports: [RecordsModule, AudienceModule, AuthModule, NotificationModule],
+  imports: [
+    RecordsModule,
+    AudienceModule,
+    AuthModule,
+    NotificationModule,
+    ReminderModule,
+  ],
   controllers: [OrchestratorController],
   providers: [OrchestratorService, RecordAdapter],
 })

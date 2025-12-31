@@ -21,6 +21,8 @@ import { MonolegalModule } from './monolegal/monolegal.module';
 import { OrchestratorModule } from './orchestrator/orchestrator.module';
 import { AudienceModule } from './audience/audience.module';
 import { NotificationModule } from './notifications/notifications.module';
+import { ReminderModule } from './reminder/reminder.module';
+import { BullModule } from '@nestjs/bull';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +32,12 @@ import { NotificationModule } from './notifications/notifications.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+      },
     }),
     AuthModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
@@ -69,6 +77,7 @@ import { NotificationModule } from './notifications/notifications.module';
     OrchestratorModule,
     AudienceModule,
     NotificationModule,
+    ReminderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

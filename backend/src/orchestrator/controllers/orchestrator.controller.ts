@@ -83,4 +83,26 @@ export class OrchestratorController {
       body.end,
     );
   }
+
+  @Post('reminders/process')
+  async processReminders() {
+    await this.orchestratorService.processReminders();
+    return { message: 'Recordatorios encolados para procesamiento asíncrono' };
+  }
+
+  @Get('reminders/queue/stats')
+  async getQueueStats() {
+    return this.orchestratorService.getQueueStats();
+  }
+
+  @Post('reminders/queue/clean')
+  async cleanQueue() {
+    await this.orchestratorService.cleanQueue();
+    return { message: 'Cola limpiada exitosamente' };
+  }
+
+  @Post('extractdate')
+  extractRange(@Body() dto) {
+    return this.orchestratorService.extractDate(dto.text);
+  }
 }

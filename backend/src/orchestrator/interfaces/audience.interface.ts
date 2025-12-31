@@ -17,6 +17,11 @@ export interface FieldValidationResult {
   messages: string[];
 }
 
+export interface ExtractDateResponse {
+  start: string | null;
+  end: string | null;
+}
+
 // {
 //   "audiences": [
 //     // 1: Audiencia completamente válida
