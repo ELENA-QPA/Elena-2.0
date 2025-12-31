@@ -2,12 +2,13 @@ import { useState } from 'react';
 import container from '@/lib/di/container';
 import { ProfileRepository } from '../data/repositories/profile.repository';
 import { Profile, UpdateProfileBody } from '../data/interface/profile.interface';
+import { getToken } from '@/utilities/helpers/auth/checkAuth';
 
 export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const profileRepository = container.get(ProfileRepository);
+  const profileRepository = container.get<ProfileRepository>("ProfileRepository");
 
   const fetchProfile = async () => {
     setLoading(true);
@@ -39,8 +40,9 @@ export function useProfile() {
   const getUsersByRol = async (rol: string) => {
     setLoading(true);
     try {
-      const data = await profileRepository.getUsersByRol(rol);
-      return data.users;
+      const token = getToken();
+      const data = await profileRepository.getUsersByRol(rol, token);
+      return data || [];
     } catch (err: any) {
       setError(err.message);
       return [];

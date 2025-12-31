@@ -10,7 +10,7 @@ import { mapProfileApiToModel } from "../adapters/profile.adapter";
 export abstract class ProfileRepository {
   abstract getMe(token?: string): Promise<Profile | null>;
   abstract updateMe(body: any): Promise<any>;
-  abstract getUsersByRol(rol: string): Promise<any>;
+  abstract getUsersByRol(rol: string, token?: string): Promise<any>;
 }
 
 @injectable()
@@ -64,20 +64,23 @@ export class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
-  async getUsersByRol(rol: string): Promise<any> {
+  async getUsersByRol(rol: string, token?: string): Promise<any> {
     try {
       const axiosRequest = await this.httpClient.request({
-        url: `${apiUrls.profile.getUsersByRol}?rol=${rol}`,
+        url: `${apiUrls.profile.getUsersByRol}/${rol}`,
         method: "get",
+        token,
         isAuth: true,
       });
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         return axiosRequest.body;
-      } else {
-        throw new CustomError(axiosRequest.body?.message || "Error al obtener usuarios por rol");
-      }
-    } catch (error) {
-      console.error("Error in getUsersByRol:", error);
+      }  else {
+      throw new CustomError(axiosRequest.body?.message || "Error al obtener usuarios por rol");
+    }
+    } catch (error: any) {
+      if (error?.statusCode === 403 || error?.response?.status === 403) {
+        return []; 
+    }
       throw error;
     }
   }

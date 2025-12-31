@@ -1,4 +1,4 @@
-import { Estado, LegendColors } from "@/data/interfaces/audiencias.interface";
+import { Estado, LegendColors } from "@/modules/audiencias/data/interfaces/audiencias.interface";
 
 export function EstadosLeyenda() {
   return (

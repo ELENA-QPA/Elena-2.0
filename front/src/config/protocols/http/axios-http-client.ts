@@ -16,6 +16,7 @@ export class AxiosHttpClient implements HttpClient {
       timeout: 30000, // 30 segundos timeout
       headers: {
         'Accept': '*/*',
+        'X-Skip-Auth-Redirect': 'true'
       }
     });
 
@@ -28,6 +29,13 @@ export class AxiosHttpClient implements HttpClient {
           url: error.config?.url,
           method: error.config?.method
         });
+        
+        const skipRedirect = error.config?.headers?.['X-Skip-Auth-Redirect'] === 'true';
+
+        if (skipRedirect) {
+            console.log('[HTTP_CLIENT][Interceptor] Ignorando redirect por flag skipAuthRedirect');
+            return Promise.reject(error);
+          }
 
         // Si es error 401 o 403 (token expirado/inválido), limpiar sesión
         if (error.response?.status === 401 || error.response?.status === 403) {
@@ -60,7 +68,7 @@ export class AxiosHttpClient implements HttpClient {
 
   async request(data: HttpRequest): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse;
-    const { baseUrl, url, method, body, headers, token, params, isAuth = true, isMultipart = false } = data;
+    const { baseUrl, url, method, body, headers, token, params, isAuth = true, isMultipart = false} = data;
 
     // Debug logs para autenticación
     const cookieToken = getCookie(CookiesKeysEnum.token);
@@ -73,7 +81,7 @@ export class AxiosHttpClient implements HttpClient {
       finalToken: finalToken ? `${finalToken.substring(0, 20)}...` : 'null',
       url,
       method,
-      isMultipart
+      isMultipart,
     });
 
     const authHeader = {

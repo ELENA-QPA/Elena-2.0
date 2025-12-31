@@ -10,7 +10,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { RecordsModule } from 'src/records/records.module';
 
-
 @Module({
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
@@ -20,8 +19,8 @@ import { RecordsModule } from 'src/records/records.module';
     MongooseModule.forFeature([
       {
         name: User.name,
-        schema: UserSchema
-      }
+        schema: UserSchema,
+      },
     ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
@@ -31,16 +30,20 @@ import { RecordsModule } from 'src/records/records.module';
         return {
           secret: configService.get('JWT_SECRET'),
           signOptions: {
-            expiresIn: '120h'
-          }
-        }
-      }
+            expiresIn: '120h',
+          },
+        };
+      },
     }),
     MailerModule,
     // PrescriptionsModule
-
-
   ],
-  exports: [MongooseModule, JwtStrategy, PassportModule, JwtModule]
+  exports: [
+    MongooseModule,
+    JwtStrategy,
+    PassportModule,
+    JwtModule,
+    AuthService,
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

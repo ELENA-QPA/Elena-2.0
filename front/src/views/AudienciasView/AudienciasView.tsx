@@ -1,82 +1,104 @@
-"use client"
+"use client";
 
-import { useState, useEffect} from "react"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, RefreshCw, Plus} from "lucide-react"
-import { checkAuth } from "@/utilities/helpers/checkAuth"
-import { AudienceCalendar} from "./components/AudienceCalendar"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, RefreshCw, Plus } from "lucide-react";
+import { AudienceCalendar } from "./components/AudienceCalendar";
 import Link from "next/link";
-import { EstadosLeyenda } from "./components/EstadosLeyend"
-import { EventModal, EventoForm } from "./components/EventModal"
-import { set } from "lodash"
-import { Evento } from "@/data/interfaces/audiencias.interface"
-import { on } from "events"
-import { se } from "date-fns/locale"
-import dayjs from "dayjs"
-
-
-
+import { EstadosLeyenda } from "./components/EstadosLeyend";
+import { EventModal } from "./components/EventModal";
+import {
+  Evento,
+  EventoForm,
+} from "@/modules/audiencias/data/interfaces/audiencias.interface";
+import dayjs from "dayjs";
+import { useAuth } from "@/utilities/helpers/auth/useAuth";
+import { useLawyers } from "@/modules/audiencias/hooks/useLawyers";
+import { useAudience } from "@/modules/audiencias/hooks/useAudience";
+import { LawyerFilter } from "./components/lawyerFilter";
 
 export default function AudienciasView() {
+  const [idEvent, setIdEvent] = useState("");
+  const [initialEventData, setInitialEventData] =
+    useState<Partial<EventoForm>>();
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [editingMode, setEditingMode] = useState(false);
 
-  const [authStatus, setAuthStatus] = useState<'checking' | 'authenticated' | 'unauthenticated'>('checking')
-  const [initialEventData, setInitialEventData] = useState<Partial<EventoForm>>()
-  const [showEventModal, setShowEventModal] = useState(false)
-  const [userRole, setUserRole] = useState<string | null>(null)
- 
-const runCheck = () => {
-    const { status, role } = checkAuth()
-    setAuthStatus(status)
-    setUserRole(role)
-  }
+  const { role, isLoading, isAuthenticated, id } = useAuth();
+  const { audiences, fetchAudiencesByLawyer, fetchAllAudiences } =
+    useAudience();
+  const notAdmin = role !== "Administrador";
+  const { lawyersRecord, loadLawyers } = useLawyers();
+
+  const noLawyerValue = "_ALL_";
 
   useEffect(() => {
-    runCheck();
-  }, [])
+    if (isLoading || !isAuthenticated || !role || !id) {
+      return;
+    }
+    loadLawyers();
+    loadAudiences();
+  }, [role, id, isLoading, isAuthenticated]);
 
-const formatForInput = (date?: Date) =>
-  date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
+  const loadAudiences = () => {
+    notAdmin ? fetchAudiencesByLawyer(id) : fetchAllAudiences();
+  };
 
-const handleRetry = () => {
-    setAuthStatus('checking');
-    runCheck();
-  }
+  const filter = (idLawyer: string) => {
+    if (idLawyer == noLawyerValue) {
+      fetchAllAudiences();
+    } else {
+      fetchAudiencesByLawyer(idLawyer);
+    }
+  };
 
-const handleSelectEvent = (event: Evento) => {
-  const string_start = formatForInput(event.start);
-  const string_end = formatForInput(event.end);
-  setInitialEventData({
-    ...event,
-    start: string_start,
-    end: string_end
-  });
-  setShowEventModal(true);
-};
+  const formatForInput = (date?: Date) =>
+    date ? dayjs(date).format("YYYY-MM-DDTHH:mm") : "";
 
-const handleSelectSlot = (slot: { start: Date; end: Date }) => {
+  const handleRetry = () => {};
+  const handleCloseModal = () => {
+    setShowEventModal(false);
+    setInitialEventData(undefined);
+  };
 
-  setInitialEventData({
-    start: formatForInput(slot.start),
-    end: formatForInput(slot.end),
-  });
-  setShowEventModal(true);
-};
+  const handleSelectEvent = (event: Evento) => {
+    const id = event.idEvent;
+    setIdEvent(id);
+    const string_start = formatForInput(event.start);
+    const string_end = formatForInput(event.end);
+    setInitialEventData({
+      ...event,
+      start: string_start,
+      end: string_end,
+    });
+    setEditingMode(true);
+    setShowEventModal(true);
+  };
 
-if (authStatus === 'checking') {
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <Loader2 className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4" />
-          <p className="text-gray-600">Verificando autenticación...</p>
+  const handleSelectSlot = (slot: { start: Date; end: Date }) => {
+    setInitialEventData({
+      start: formatForInput(slot.start),
+      end: formatForInput(slot.end),
+    });
+    setShowEventModal(true);
+    setEditingMode(false);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <Loader2 className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4" />
+            <p className="text-gray-600">Verificando autenticación...</p>
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
+    );
+  }
 
-  if (authStatus === 'unauthenticated') {
+  if (!isAuthenticated) {
     return (
       <div className="p-6">
         <Alert variant="destructive">
@@ -101,22 +123,30 @@ if (authStatus === 'checking') {
           </AlertDescription>
         </Alert>
       </div>
-    )
+    );
   }
 
   return (
     <>
       <div className="p-2 sm:p-4 md:p-6 min-w-0 overflow-x-hidden">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+        <div className=" grid grid-cols-3 gap-2">
           <div className="min-w-0 flex-1">
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate">Calendario de audiencias</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate">
+              Calendario de audiencias
+            </h1>
             <p className="text-gray-600 mt-1 text-xs sm:text-sm">
               Ver las audiencias programadas en el sistema.
-              {userRole && (
+              {role && (
                 <span className="ml-1 sm:ml-2 text-xs sm:text-sm">
                   • Rol:
-                  <span className={`font-medium ${userRole === 'admin' ? 'text-green-600' : 'text-blue-600'}`}>
-                    {userRole === 'admin' ? 'Admin' : 'Usuario'}
+                  <span
+                    className={`font-medium ${
+                      role === "Administrador"
+                        ? "text-green-600"
+                        : "text-blue-600"
+                    }`}
+                  >
+                    {role === "Administrador" ? "Admin" : "Usuario"}
                   </span>
                 </span>
               )}
@@ -124,24 +154,44 @@ if (authStatus === 'checking') {
 
             <EstadosLeyenda />
           </div>
-          <Button className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg w-full sm:w-auto text-xs sm:text-sm" onClick={() => setShowEventModal(true)}>
+
+          <LawyerFilter
+            lawyersRecord={lawyersRecord}
+            onFilter={filter}
+            isVisible={!notAdmin}
+            noLawyerValue={noLawyerValue}
+          />
+
+          {!notAdmin && (
+            <Button
+              className="justify-self-end w-fit bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs sm:text-sm"
+              onClick={() => {
+                setEditingMode(false);
+                setShowEventModal(true);
+              }}
+            >
               <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <span className="hidden xs:inline">Nueva Audiencia</span>
               <span className="xs:hidden">Nuevo</span>
-          </Button>
+            </Button>
+          )}
         </div>
-
-        <AudienceCalendar 
+        <AudienceCalendar
           onSelectSlot={handleSelectSlot}
-          onSelectEvent={handleSelectEvent}/>
-        <EventModal 
-          open={showEventModal}
-          onClose={setShowEventModal} 
-          initialData={initialEventData}
+          onSelectEvent={handleSelectEvent}
+          events={audiences}
         />
 
+        <EventModal
+          open={showEventModal}
+          onClose={handleCloseModal}
+          initialData={initialEventData}
+          lawyersRecord={lawyersRecord}
+          isEditable={notAdmin}
+          editing={editingMode}
+          idEvent={idEvent}
+        />
       </div>
-      
-    </> 
-  )
+    </>
+  );
 }

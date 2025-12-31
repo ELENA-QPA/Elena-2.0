@@ -1,4 +1,4 @@
-import {Evento} from "@/data/interfaces/audiencias.interface";
+import {Evento} from "@/modules/audiencias/data/interfaces/audiencias.interface";
 import { getColorLegend} from "../utilities/utilities";
 import dayjs from "dayjs";
   

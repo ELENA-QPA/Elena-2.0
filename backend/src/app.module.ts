@@ -18,7 +18,11 @@ import { PaymentModule } from './payment/payment.module';
 import { ParametersModule } from './parameters/parameters.module';
 import { CommonModule } from './common/common.module';
 import { MonolegalModule } from './monolegal/monolegal.module';
-
+import { OrchestratorModule } from './orchestrator/orchestrator.module';
+import { AudienceModule } from './audience/audience.module';
+import { NotificationModule } from './notifications/notifications.module';
+import { ReminderModule } from './reminder/reminder.module';
+import { BullModule } from '@nestjs/bull';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,25 +33,33 @@ import { MonolegalModule } from './monolegal/monolegal.module';
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
     }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+      },
+    }),
     AuthModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
     MailerModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          host: configService.get('EMAIL_HOST'),
-          port: '465',
-          secure: true,
+          host: configService.get('SMTP_HOST'),
+          port: Number(configService.get('SMTP_PORT')),
+          secure: false,
           auth: {
-            type: 'login',
-            user: configService.get('EMAIL_USER'),
-            pass: configService.get('EMAIL_PASSWORD'),
+            user: configService.get('SMTP_USER'),
+            pass: configService.get('SMTP_PASS'),
           },
         },
+        defaults: {
+          from: `"Tu Aplicación" <jramos@qpalliance.co>`,
+        },
         template: {
-          dir: path.join(__dirname, '../src/templates'),
+          dir: path.join(process.cwd(), 'src', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
-            strict: true,
+            strict: false,
           },
         },
       }),
@@ -62,6 +74,10 @@ import { MonolegalModule } from './monolegal/monolegal.module';
     ParametersModule,
     CommonModule,
     MonolegalModule,
+    OrchestratorModule,
+    AudienceModule,
+    NotificationModule,
+    ReminderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

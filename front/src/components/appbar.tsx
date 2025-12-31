@@ -18,6 +18,8 @@ import { routes } from "@/config/routes/routes";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/data/interfaces/user.interface";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { NotificationBell } from "./notification-bell";
+import { useAuth } from "@/utilities/helpers/auth/useAuth";
 
 interface AppBarProps {
   user?: IUser;
@@ -26,7 +28,9 @@ interface AppBarProps {
 
 export const AppBar = ({ user, className, ...props }: AppBarProps) => {
   const router = useRouter();
-  
+  const { role } = useAuth();
+
+  const isAdmin = role === "Administrador";
   // Verificar si estamos dentro de un SidebarProvider
   let hasSidebarProvider = false;
   try {
@@ -37,51 +41,55 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
   }
 
   function logout() {
-    console.log('[APPBAR][DEBUG] Cerrando sesión...');
+    console.log("[APPBAR][DEBUG] Cerrando sesión...");
     deleteCookie(CookiesKeysEnum.token);
     router.replace(routes.auth.login);
   }
 
   const handlePerfilClick = () => {
-    console.log('[APPBAR][DEBUG] Función handlePerfilClick ejecutada');
+    console.log("[APPBAR][DEBUG] Función handlePerfilClick ejecutada");
     try {
-      console.log('[APPBAR][DEBUG] Intentando navegar a /dashboard/configuracion');
-      
+      console.log(
+        "[APPBAR][DEBUG] Intentando navegar a /dashboard/configuracion"
+      );
+
       // Primero intentar con router.push nativo
-      router.push('/dashboard/configuracion');
-      console.log('[APPBAR][DEBUG] Comando router.push ejecutado');
-      
+      router.push("/dashboard/configuracion");
+      console.log("[APPBAR][DEBUG] Comando router.push ejecutado");
+
       // Fallback con window.location si router.push no funciona
       setTimeout(() => {
-        if (window.location.pathname !== '/dashboard/configuracion') {
-          console.log('[APPBAR][DEBUG] Router.push falló, usando window.location como fallback');
-          window.location.href = '/dashboard/configuracion';
+        if (window.location.pathname !== "/dashboard/configuracion") {
+          console.log(
+            "[APPBAR][DEBUG] Router.push falló, usando window.location como fallback"
+          );
+          window.location.href = "/dashboard/configuracion";
         }
       }, 100);
-      
     } catch (error) {
-      console.error('[APPBAR][ERROR] Error en navegación:', error);
+      console.error("[APPBAR][ERROR] Error en navegación:", error);
       // Fallback directo en caso de error
-      window.location.href = '/dashboard/configuracion';
+      window.location.href = "/dashboard/configuracion";
     }
   };
 
   const handleConfigClick = () => {
-    console.log('[APPBAR][DEBUG] Navegando a configuración...');
+    console.log("[APPBAR][DEBUG] Navegando a configuración...");
     try {
-      router.push('/dashboard/configuracion');
-      
+      router.push("/dashboard/configuracion");
+
       // Fallback con window.location si router.push no funciona
       setTimeout(() => {
-        if (window.location.pathname !== '/dashboard/configuracion') {
-          console.log('[APPBAR][DEBUG] Router.push configuración falló, usando window.location como fallback');
-          window.location.href = '/dashboard/configuracion';
+        if (window.location.pathname !== "/dashboard/configuracion") {
+          console.log(
+            "[APPBAR][DEBUG] Router.push configuración falló, usando window.location como fallback"
+          );
+          window.location.href = "/dashboard/configuracion";
         }
       }, 100);
-      
     } catch (error) {
-      console.error('[APPBAR][ERROR] Error navegando a configuración:', error);
-      window.location.href = '/dashboard/configuracion';
+      console.error("[APPBAR][ERROR] Error navegando a configuración:", error);
+      window.location.href = "/dashboard/configuracion";
     }
   };
 
@@ -99,7 +107,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
         {hasSidebarProvider && (
           <SidebarTrigger className="flex-shrink-0 bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-xl h-8 w-8 rounded-md" />
         )}
-        
+
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center min-w-0">
           <Image
@@ -119,13 +127,13 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
         {/* <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
           <Phone className="h-5 w-5" />
         </Button> */}
-
+        {isAdmin && <NotificationBell />}
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="bg-pink-600 hover:bg-pink-700 text-white rounded-full w-7 h-7 sm:w-8 sm:h-8"
             >
               <User className="h-3 w-3 sm:h-4 sm:w-4" />
