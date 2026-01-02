@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RecordsService } from 'src/records/records.service';
 import { RecordAdapter } from '../adapters/record.adapter';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
@@ -30,7 +30,6 @@ import OpenAI from 'openai';
 export class OrchestratorService {
   private readonly openai: OpenAI;
   private readonly model: string;
-  private readonly logger = new Logger(OrchestratorService.name);
 
   constructor(
     private readonly authService: AuthService,
@@ -237,13 +236,6 @@ export class OrchestratorService {
     const recordIdDto: IdRecordDto = { id: audienceResponse.audience.record };
     const recordResponse: RecordAdaptedResponse = await this.getRecordById(
       recordIdDto,
-    );
-
-    this.logger.log(
-      'fechas del build audience ' +
-        audienceResponse.audience.start +
-        ' ' +
-        audienceResponse.audience.end,
     );
     return {
       ...audienceResponse,
@@ -533,12 +525,6 @@ export class OrchestratorService {
       const audiencesOneMonth = await this.getFilteredAudiences(queryOneMonth);
 
       for (const audienceData of audiencesOneMonth) {
-        this.logger.log(
-          'fechas del process reminder ' +
-            audienceData.audience.start +
-            ' ' +
-            audienceData.audience.end,
-        );
         const audienceStart = new Date(audienceData.audience.start);
         if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
           await this.enqueueReminder(audienceData, 'oneMonth');

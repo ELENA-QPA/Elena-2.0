@@ -39,12 +39,6 @@ export class DaptaProcessor {
 
       const result = await response.json();
 
-      this.logger.log(
-        `Llamada exitosa para ${daptaData.plaintiff_name} - Call ID: ${
-          result.dapta_phone_call?.response?.call_id || 'N/A'
-        }`,
-      );
-
       return {
         success: true,
         callId: result.dapta_phone_call?.response?.call_id,
