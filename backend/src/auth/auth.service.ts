@@ -271,7 +271,9 @@ export class AuthService {
     try {
       const userInvited = await this.userModel.create(userToInvite);
       const q = this.getJwtToken({ id: userInvited.id });
-      const invitationLink = `https://elena.qpalliance.co/aceptar_invitacion?token=${q}`;
+      // const invitationLink = `https://elena.qpalliance.co/aceptar_invitacion?token=${q}`;
+      const baseLink = this.configService.get<string>('INVITATION_LINK');
+      const invitationLink = `${baseLink}?token=${q}`;
       const emailToUserDto: EmailToUserDto = {
         email: userInvited.email,
         subject: `Invitación QPAlliance`,
