@@ -67,7 +67,7 @@ export const useNotifications = () => {
     fetchNotifications();
   }, []);
 
-  const deleteNotification = async (id: string): Promise<void> => {
+  const deleteNotification = async (id: string) => {
     try {
       const response = await fetch(`${apiUrls.notifications.delete}/${id}`, {
         method: "DELETE",
@@ -76,8 +76,10 @@ export const useNotifications = () => {
       if (!response.ok) {
         throw new Error(`Error al eliminar notificación: ${response.status}`);
       }
+
+      return { success: true };
     } catch (error) {
-      throw error;
+      return { success: false };
     }
   };
 

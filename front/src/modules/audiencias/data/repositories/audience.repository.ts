@@ -36,6 +36,8 @@ export abstract class AudienceRepository {
   abstract getAudienceById(
     AudienceId: string
   ): Promise<AudienceOrchestratorResponse>;
+
+  abstract deleteAudience(AudienceId: string): Promise<void>;
 }
 
 @injectable()
@@ -140,6 +142,20 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
     if (response.statusCode === HttpStatusCode.ok) {
       return response.body;
+    }
+
+    throw new CustomError(response.body?.message || "Error updating audience");
+  }
+
+  async deleteAudience(id: string): Promise<void> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.audiencias.deleteAudience}${id}`,
+      method: "delete",
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return;
     }
 
     throw new CustomError(response.body?.message || "Error updating audience");

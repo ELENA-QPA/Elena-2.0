@@ -132,7 +132,6 @@ export class AudienceService {
     if (audience.end) {
       response.audience.end = audience.end;
     }
-    this.logger.log('fechas de la db ' + audience.start + ' ' + audience.end);
     return response;
   }
 
