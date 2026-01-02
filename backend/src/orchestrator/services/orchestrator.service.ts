@@ -238,6 +238,13 @@ export class OrchestratorService {
     const recordResponse: RecordAdaptedResponse = await this.getRecordById(
       recordIdDto,
     );
+
+    this.logger.log(
+      'fechas del build audience ' +
+        audienceResponse.audience.start +
+        ' ' +
+        audienceResponse.audience.end,
+    );
     return {
       ...audienceResponse,
       record: recordResponse.record,
@@ -251,7 +258,6 @@ export class OrchestratorService {
       const audiencesResponse = await Promise.all(
         audiences.map((audience) => this.buildAudienceResponce(audience)),
       );
-
       return audiencesResponse;
     } catch (error) {
       throw error;
@@ -527,6 +533,12 @@ export class OrchestratorService {
       const audiencesOneMonth = await this.getFilteredAudiences(queryOneMonth);
 
       for (const audienceData of audiencesOneMonth) {
+        this.logger.log(
+          'fechas del process reminder ' +
+            audienceData.audience.start +
+            ' ' +
+            audienceData.audience.end,
+        );
         const audienceStart = new Date(audienceData.audience.start);
         if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
           await this.enqueueReminder(audienceData, 'oneMonth');
