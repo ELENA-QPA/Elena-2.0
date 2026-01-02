@@ -19,5 +19,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
   ],
   controllers: [OrchestratorController],
   providers: [OrchestratorService, RecordAdapter],
+  exports: [OrchestratorService],
 })
 export class OrchestratorModule {}

@@ -11,6 +11,7 @@ import { Performance } from '../../perfomance/entities/perfomance.entity';
 import { ProcessResult, SyncResponse } from '../dto/import-monolegal.dto';
 import { MonolegalApiService } from './monolegal-api.service';
 import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
+import { OrchestratorService } from 'src/orchestrator/services/orchestrator.service';
 
 @Injectable()
 export class MonolegalService {
@@ -23,6 +24,7 @@ export class MonolegalService {
     @InjectModel(Performance.name) private performanceModel: Model<Performance>,
     private readonly monolegalApiService: MonolegalApiService,
     private readonly juzgadoNormalizer: JuzgadoNormalizerService,
+    private readonly orchestratorService: OrchestratorService,
   ) {}
 
   async importFromExcel(
@@ -414,9 +416,24 @@ export class MonolegalService {
       let skipped = 0;
       let errors = 0;
 
+      let numAuds = 0;
+      let actuacionesAudiencia = [];
       for (const cambio of cambios) {
         try {
           const result = await this.processApiChange(cambio, userId);
+          const contieneAud = this.contieneAudienciaOConciliacion(
+            cambio.ultimaActuacion,
+            cambio.ultimaAnotacion,
+          );
+          if (contieneAud) {
+            numAuds++;
+            this.logger.log(
+              'audiencia ' +
+                cambio.ultimaActuacion +
+                '  ' +
+                cambio.ultimaAnotacion,
+            );
+          }
           results.push(result);
 
           if (result.status === 'created') {
@@ -443,6 +460,8 @@ export class MonolegalService {
           });
         }
       }
+
+      this.logger.log('NUMERO DE AUDIENCIAS ' + numAuds);
 
       return {
         success: true,
@@ -599,9 +618,9 @@ export class MonolegalService {
 
           if (ciudadExtraida) {
             ciudad = ciudadExtraida;
-            this.logger.log(
-              `Ciudad extraída del despacho para ${radicado}: "${ciudad}"`,
-            );
+            // this.logger.log(
+            //   `Ciudad extraída del despacho para ${radicado}: "${ciudad}"`,
+            // );
           }
         }
 
@@ -675,6 +694,12 @@ export class MonolegalService {
         });
       }
 
+      const audience = await this.createAudience(
+        cambio.ultimaActuacion,
+        cambio.ultimaAnotacion,
+        record._id,
+      );
+
       return {
         radicado,
         status: 'updated',
@@ -702,12 +727,17 @@ export class MonolegalService {
       });
 
       if (cambio.ultimaActuacion) {
-        console.log('imprimiendo ultima actuacion ' + cambio.ultimaActuacion);
         await this.createOrUpdatePerformance(newRecord._id, {
           ultimaActuacion: cambio.ultimaActuacion,
           etapaProcesal: '',
         });
       }
+
+      const audience = await this.createAudience(
+        cambio.ultimaActuacion,
+        cambio.ultimaAnotacion,
+        newRecord._id,
+      );
 
       return {
         radicado,
@@ -869,7 +899,46 @@ export class MonolegalService {
   }
 
   async getActuacionesProceso(idProceso: string): Promise<any[]> {
-    this.logger.log('tryanedo actuaciones para ' + idProceso);
+    // this.logger.log('tryanedo actuaciones para ' + idProceso);
     return this.monolegalApiService.getActuacionesPorIdProceso(idProceso);
+  }
+
+  private contieneAudienciaOConciliacion(
+    texto1: string,
+    texto2: string,
+  ): boolean {
+    const normalizarTexto = (texto: string): string => {
+      return texto
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const textoNormalizado1 = normalizarTexto(texto1);
+    const textoNormalizado2 = normalizarTexto(texto2);
+
+    const palabrasClave = ['audiencia'];
+
+    return palabrasClave.some(
+      (palabra) =>
+        textoNormalizado1.includes(palabra) ||
+        textoNormalizado2.includes(palabra),
+    );
+  }
+
+  private async createAudience(actuacion, anotacion, idRecord) {
+    const isAudienceActuacion = this.contieneAudienciaOConciliacion(
+      actuacion,
+      anotacion,
+    );
+    if (isAudienceActuacion) {
+      const audience = this.orchestratorService.createAudienceFromMonolegal(
+        idRecord,
+        anotacion,
+      );
+      return audience;
+    }
+
+    return {};
   }
 }

@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -20,7 +21,7 @@ export class AudienceService {
     @InjectModel(Audience.name)
     private readonly audienceModel: Model<Audience>,
   ) {}
-
+  private readonly logger = new Logger(AudienceService.name);
   // Metodos auxilaires para updetear la bandera de recordatorios
   async resetNotificationsOnValidation(audienceId: string): Promise<void> {
     await this.audienceModel.updateOne(
@@ -140,6 +141,8 @@ export class AudienceService {
     strict: boolean,
   ): Promise<Audience> {
     try {
+      this.logger.log('audiencia dto ' + JSON.stringify(createAudienceDto));
+
       if (strict) {
         const start = new Date(createAudienceDto.start);
         const end = new Date(createAudienceDto.end);

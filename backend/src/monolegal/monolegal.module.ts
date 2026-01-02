@@ -17,6 +17,7 @@ import {
 import { AuthModule } from '../auth/auth.module';
 import * as https from 'https';
 import { ConfigModule } from '@nestjs/config';
+import { OrchestratorModule } from 'src/orchestrator/orchestrator.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ConfigModule } from '@nestjs/config';
       { name: Performance.name, schema: PerfomanceSchema },
     ]),
     AuthModule,
+    OrchestratorModule,
   ],
   controllers: [MonolegalController],
   providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService],
