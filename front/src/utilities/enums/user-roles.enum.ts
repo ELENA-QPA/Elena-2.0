@@ -1,5 +1,6 @@
 export enum UserRole {
   ADMINISTRADOR = "Administrador",
+  ABOGADO = "lawyer",
   ASISTENTE_LEGAL = "Asistente Legal",
   ANALISTA_LEGAL_I = "Analista legal I",
   ANALISTA_LEGAL_II = "Analista legal II",
@@ -10,6 +11,7 @@ export const USER_ROLES = Object.values(UserRole);
 
 export const USER_ROLE_LABELS = {
   [UserRole.ADMINISTRADOR]: "Administrador",
+  [UserRole.ABOGADO]: "Abogado",
   [UserRole.ASISTENTE_LEGAL]: "Asistente Legal",
   [UserRole.ANALISTA_LEGAL_I]: "Analista Legal I",
   [UserRole.ANALISTA_LEGAL_II]: "Analista Legal II",

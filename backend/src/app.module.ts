@@ -56,7 +56,7 @@ import { OpenaiModule } from './openai/openai.module';
           },
         },
         defaults: {
-          from: `"Tu Aplicación" <jramos@qpalliance.co>`,
+          from: configService.get('EMAIL_USER'),
         },
         template: {
           dir: path.join(process.cwd(), 'src', 'templates'),
