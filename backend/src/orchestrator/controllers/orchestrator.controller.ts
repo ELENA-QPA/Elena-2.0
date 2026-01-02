@@ -71,6 +71,14 @@ export class OrchestratorController {
     );
   }
 
+  @Post('singlebulk')
+  @HttpCode(HttpStatus.CREATED)
+  async CreateAudiences(@Body() body) {
+    return await this.orchestratorService.createAudiencesWithNotifications(
+      body,
+    );
+  }
+
   @Post('availablelawyer')
   @HttpCode(HttpStatus.CREATED)
   async getAvailableLawyer(@Body() body) {

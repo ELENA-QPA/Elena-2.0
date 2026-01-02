@@ -30,6 +30,7 @@ import OpenAI from 'openai';
 export class OrchestratorService {
   private readonly openai: OpenAI;
   private readonly model: string;
+  private readonly logger = new Logger(OrchestratorService.name);
 
   constructor(
     private readonly authService: AuthService,
@@ -296,6 +297,29 @@ export class OrchestratorService {
 
   // metodos para procesar audiencias a notificaciones desde monolegal
 
+  async createAudiencesWithNotifications(audienceDto: CreateAudienceDto) {
+    try {
+      const { toDelete, messages } = this.getFields(audienceDto);
+      const sanitizedDto = this.sanitizeAudienceDto(audienceDto, toDelete);
+
+      const createdAudience = await this.audienceService.create(
+        sanitizedDto,
+        false,
+      );
+      if (!createdAudience.is_valid) {
+        try {
+          await this.notificationService.create({
+            audience: createdAudience._id,
+            message: 'Faltantes ' + messages.join(', '),
+          });
+        } catch (notificationError) {}
+      }
+      return createdAudience;
+    } catch (error) {
+      return {};
+    }
+  }
+
   async bulkCreateAudiencesWithNotifications(
     audienceDtos: CreateAudienceDto[],
   ): Promise<BulkCreateResult> {
@@ -333,6 +357,20 @@ export class OrchestratorService {
       }
     }
     return result;
+  }
+
+  async createAudienceFromMonolegal(idProceso, anotacion) {
+    const { start, end } = await this.extractDate(anotacion);
+    const lawyer = await this.findAvailableLawyer(start, end);
+
+    const audienceDto = {
+      start: start,
+      end: end,
+      record: idProceso,
+      lawyer: lawyer,
+    };
+    const audienceCreated = this.createAudiencesWithNotifications(audienceDto);
+    return audienceCreated;
   }
 
   // metodos para obtener abogados disponibles
@@ -463,8 +501,8 @@ export class OrchestratorService {
       }
 
       return {
-        start: start.toISOString(),
-        end: end.toISOString(),
+        start: new Date(start.getTime() + 5 * 60 * 60 * 1000).toISOString(),
+        end: new Date(end.getTime() + 5 * 60 * 60 * 1000).toISOString(),
       };
     } catch {
       return { start: null, end: null };

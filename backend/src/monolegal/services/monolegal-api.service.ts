@@ -27,6 +27,7 @@ interface CambioDetalle {
   demandados: string;
   despacho: string;
   ultimaActuacion: string;
+  ultimaAnotacion: string;
   fechaUltimaActuacion: string;
   ultimoRegistro: string;
   etiqueta: string | null;
@@ -154,7 +155,7 @@ export class MonolegalApiService {
     const token = await this.login();
 
     try {
-      this.logger.log(`Obteniendo expediente ${idExpediente}`);
+      // this.logger.log(`Obteniendo expediente ${idExpediente}`);
 
       const response = await firstValueFrom(
         this.httpService.get<ExpedienteDetalle>(
