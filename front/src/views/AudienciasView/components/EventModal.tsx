@@ -34,7 +34,8 @@ import {
   mapEventoFormToAudienceCreate,
   mapEventoFormToAudienceUpdate,
 } from "@/modules/audiencias/data/adapters/audience.adapter";
-import { useAuth } from "@/utilities/helpers/auth/useAuth";
+import { DeleteConfirmationDialog } from "../../../components/modales/DeleteConfirmation";
+import { Trash2 } from "lucide-react";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
@@ -86,14 +87,15 @@ export function EventModal({
     fetchAudienceByInternalCode,
     createAudience,
     updateAudience,
+    deleteAudience,
   } = useAudience();
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
     defaultValues: DEFAULT_FORM_VALUES,
   });
-
-  const { role } = useAuth();
 
   useEffect(() => {
     if (open) {
@@ -130,6 +132,21 @@ export function EventModal({
     form.reset(syncedData);
   };
 
+  const handleDelete = async () => {
+    if (!idEvent) {
+      setError("Error recuperando el ID del evento");
+      return;
+    }
+
+    const result = await deleteAudience(idEvent);
+
+    if (result.success) {
+      form.reset(DEFAULT_FORM_VALUES);
+      setShowDeleteConfirm(false);
+      window.location.reload();
+      onClose();
+    }
+  };
   const create = async (values: EventoForm) => {
     if (!values.record_id) {
       setError(
@@ -184,200 +201,225 @@ export function EventModal({
   const errors = form.formState.errors;
 
   return (
-    <Dialog open={open} onOpenChange={closeModal}>
-      <DialogContent
-        className="sm:max-w-2xl"
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
-        <DialogHeader>
-          <DialogTitle>
-            {editing ? "Editar Evento" : "Crear Evento"}
-          </DialogTitle>
-          <DialogDescription>
-            Completa los campos para el evento.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={closeModal}>
+        <DialogContent
+          className="sm:max-w-2xl"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <DialogHeader>
+            <DialogTitle>
+              {editing ? "Editar Evento" : "Crear Evento"}
+            </DialogTitle>
+            <DialogDescription>
+              Completa los campos para el evento.
+            </DialogDescription>
+          </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <Label>Radicado</Label>
-              <Input disabled={true} {...form.register("title")} />
-              {errors.title && (
-                <p className="text-red-500 text-xs">{errors.title.message}</p>
-              )}
-            </div>
-            <div>
-              <Label>Código Interno</Label>
-              <Input disabled={editing} {...form.register("codigo_interno")} />
-            </div>
+          <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>Radicado</Label>
+                <Input disabled={true} {...form.register("title")} />
+                {errors.title && (
+                  <p className="text-red-500 text-xs">{errors.title.message}</p>
+                )}
+              </div>
+              <div>
+                <Label>Código Interno</Label>
+                <Input
+                  disabled={editing}
+                  {...form.register("codigo_interno")}
+                />
+              </div>
 
-            <div>
-              <Label>Abogado</Label>
-              {!isEditable ? (
-                <Select
-                  disabled={isEditable}
-                  value={form.watch("abogado_id")}
-                  onValueChange={(v) => form.setValue("abogado_id", v)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un abogado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(lawyersRecord).length > 0 ? (
-                      Object.entries(lawyersRecord).map(([name, id]) => (
-                        <SelectItem
-                          className="hover:bg-gray-200"
-                          key={id}
-                          value={id}
-                        >
-                          {name}
+              <div>
+                <Label>Abogado</Label>
+                {!isEditable ? (
+                  <Select
+                    disabled={isEditable}
+                    value={form.watch("abogado_id")}
+                    onValueChange={(v) => form.setValue("abogado_id", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona un abogado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(lawyersRecord).length > 0 ? (
+                        Object.entries(lawyersRecord).map(([name, id]) => (
+                          <SelectItem
+                            className="hover:bg-gray-200"
+                            key={id}
+                            value={id}
+                          >
+                            {name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-lawyers" disabled>
+                          No hay abogados disponibles
                         </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-lawyers" disabled>
-                        No hay abogados disponibles
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              ) : (
+                      )}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    disabled={true}
+                    value="Usted ha sido asignado"
+                    className="bg-gray-50 text-gray-700"
+                  />
+                )}
+                {errors.abogado_id && (
+                  <p className="text-red-500 text-xs">
+                    {errors.abogado_id.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>Demandante</Label>
+                <Input disabled={true} {...form.register("demandante")} />
+              </div>
+
+              <div>
+                <Label>Telefono Demandante</Label>
                 <Input
                   disabled={true}
-                  value="Usted ha sido asignado"
-                  className="bg-gray-50 text-gray-700"
+                  {...form.register("contacto_demandante")}
                 />
-              )}
-              {errors.abogado_id && (
-                <p className="text-red-500 text-xs">
-                  {errors.abogado_id.message}
-                </p>
-              )}
-            </div>
-          </div>
+              </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <Label>Demandante</Label>
-              <Input disabled={true} {...form.register("demandante")} />
+              <div>
+                <Label>Email Demandante</Label>
+                <Input disabled={true} {...form.register("email_demandante")} />
+              </div>
             </div>
 
-            <div>
-              <Label>Telefono Demandante</Label>
-              <Input
-                disabled={true}
-                {...form.register("contacto_demandante")}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Demandado</Label>
+                <Input disabled={true} {...form.register("demandado")} />
+              </div>
+              <div>
+                <Label>Juzgado</Label>
+                <Input disabled={true} {...form.register("juzgado")} />
+              </div>
             </div>
 
-            <div>
-              <Label>Email Demandante</Label>
-              <Input disabled={true} {...form.register("email_demandante")} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Demandado</Label>
-              <Input disabled={true} {...form.register("demandado")} />
-            </div>
-            <div>
-              <Label>Juzgado</Label>
-              <Input disabled={true} {...form.register("juzgado")} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Inicio</Label>
-              <Input
-                disabled={isEditable}
-                type="datetime-local"
-                {...form.register("start")}
-              />
-            </div>
-            <div>
-              <Label>Fin</Label>
-              <Input
-                disabled={isEditable}
-                type="datetime-local"
-                {...form.register("end")}
-              />
-            </div>
-          </div>
-
-          <div>
-            <Label>Link de Teams</Label>
-            <Input {...form.register("link_teams")} />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Monto Conciliado</Label>
-              <Input
-                disabled={blockAmount}
-                type="number"
-                {...form.register("monto_conciliado", {
-                  valueAsNumber: true,
-                })}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Inicio</Label>
+                <Input
+                  disabled={isEditable}
+                  type="datetime-local"
+                  {...form.register("start")}
+                />
+              </div>
+              <div>
+                <Label>Fin</Label>
+                <Input
+                  disabled={isEditable}
+                  type="datetime-local"
+                  {...form.register("end")}
+                />
+              </div>
             </div>
 
             <div>
-              <Label>Estado</Label>
-              <Select
-                value={form.watch("estado")}
-                onValueChange={(v) => form.setValue("estado", v as Estado)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {ESTADOS.map((est) => (
-                    <SelectItem
-                      className="hover:bg-gray-200"
-                      key={est}
-                      value={est}
+              <Label>Link de Teams</Label>
+              <Input {...form.register("link_teams")} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Monto Conciliado</Label>
+                <Input
+                  disabled={blockAmount}
+                  type="number"
+                  {...form.register("monto_conciliado", {
+                    valueAsNumber: true,
+                  })}
+                />
+              </div>
+
+              <div>
+                <Label>Estado</Label>
+                <Select
+                  value={form.watch("estado")}
+                  onValueChange={(v) => form.setValue("estado", v as Estado)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ESTADOS.map((est) => (
+                      <SelectItem
+                        className="hover:bg-gray-200"
+                        key={est}
+                        value={est}
+                      >
+                        {estadoLabels[est]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <div className="flex-1">
+                {!editing && (
+                  <Button
+                    type="button"
+                    className="bg-pink-600 hover:bg-pink-700 mr-auto"
+                    onClick={handleSync}
+                  >
+                    Sincronizar
+                  </Button>
+                )}
+                {editing &&
+                  !isEditable && ( // ← NUEVO BOTÓN
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="bg-red-600 hover:bg-red-700"
+                      onClick={() => setShowDeleteConfirm(true)}
                     >
-                      {estadoLabels[est]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Eliminar
+                    </Button>
+                  )}
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" type="button" onClick={closeModal}>
+                  Cancelar
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-pink-600 hover:bg-pink-700"
+                  disabled={isEditable}
+                >
+                  {editing ? "Actualizar" : "Crear"}
+                </Button>
+              </div>
+            </DialogFooter>
+          </form>
 
-          <DialogFooter>
-            {!editing && (
-              <Button
-                type="button"
-                className="bg-pink-600 hover:bg-pink-700 mr-auto"
-                onClick={handleSync}
-              >
-                Sincronizar
-              </Button>
-            )}
-            <div className="flex gap-2">
-              <Button variant="outline" type="button" onClick={closeModal}>
-                Cancelar
-              </Button>
-              <Button
-                type="submit"
-                className="bg-pink-600 hover:bg-pink-700"
-                disabled={isEditable}
-              >
-                {editing ? "Actualizar" : "Crear"}
-              </Button>
+          {error && (
+            <div className="rounded-md bg-red-100 border border-red-400 p-3 text-sm text-red-700">
+              {error}
             </div>
-          </DialogFooter>
-        </form>
+          )}
+        </DialogContent>
+      </Dialog>
 
-        {error && (
-          <div className="rounded-md bg-red-100 border border-red-400 p-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+      <DeleteConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onConfirm={handleDelete}
+      />
+    </>
   );
 }

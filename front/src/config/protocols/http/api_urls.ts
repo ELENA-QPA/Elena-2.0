@@ -100,6 +100,7 @@ export const apiUrls = {
 
   audiencias: {
     updateAudience: "/api/audiences/",
+    deleteAudience: "/api/audiences/",
   },
 
   notifications: {

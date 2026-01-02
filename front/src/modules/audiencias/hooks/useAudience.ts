@@ -103,6 +103,21 @@ export function useAudience() {
     }
   };
 
+  const deleteAudience = async (id: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.deleteAudience(id);
+      setError(null);
+      return { success: true };
+    } catch (err: any) {
+      setError(err.message || "Error al eliminar la audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     audiences,
     loading,
@@ -114,5 +129,6 @@ export function useAudience() {
     fetchAudienceByInternalCode,
     createAudience,
     updateAudience,
+    deleteAudience,
   };
 }

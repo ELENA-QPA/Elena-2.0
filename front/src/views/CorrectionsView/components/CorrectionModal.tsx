@@ -27,9 +27,11 @@ import {
   ChevronRight,
   CheckCircle2,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { useLawyers } from "@/modules/audiencias/hooks/useLawyers";
 import { useNotifications } from "@/modules/notifications/hooks/useNotifications";
+import { DeleteConfirmationDialog } from "@/components/modales/DeleteConfirmation";
 
 interface NotificationCorrectionModalProps {
   open: boolean;
@@ -82,12 +84,15 @@ export function NotificationCorrectionModal({
     fetchAudienceByInternalCode,
     fetchAudience,
     updateAudience,
+    deleteAudience,
   } = useAudience();
 
   const { lawyersRecord, loadLawyers } = useLawyers();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { deleteNotification } = useNotifications();
   const [isSynced, setIsSynced] = useState(false);
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
@@ -177,6 +182,34 @@ export function NotificationCorrectionModal({
     setError(null);
   };
 
+  const handleDelete = async () => {
+    if (!notification.audience_id) {
+      setError("Error recuperando el ID del evento");
+      return;
+    }
+
+    try {
+      const notificationResult = await deleteNotification(notification._id);
+
+      if (!notificationResult.success) {
+        setError("Error al eliminar la notificación");
+        return;
+      }
+
+      const audienceResult = await deleteAudience(notification.audience_id);
+
+      if (!audienceResult.success) {
+        setError("Error al eliminar la audiencia");
+        return;
+      }
+
+      form.reset(DEFAULT_FORM_VALUES);
+      setShowDeleteConfirm(false);
+    } catch (error: any) {
+      setError(error.message || "Error inesperado al eliminar");
+    }
+  };
+
   const validateForm = (): boolean => {
     const values = form.getValues();
     const requiredFields = ["record_id", "abogado_id", "start", "end"];
@@ -224,204 +257,224 @@ export function NotificationCorrectionModal({
   };
 
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
-      <header className="flex justify-between items-start mb-4">
-        <div>
-          <h1 className="text-xl font-semibold">Corregir Audiencia</h1>
-          <p className="text-sm text-gray-500">
-            {currentIndex + 1} de {totalNotifications}
-          </p>
-        </div>
+    <>
+      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
+        <header className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-xl font-semibold">Corregir Audiencia</h1>
+            <p className="text-sm text-gray-500">
+              {currentIndex + 1} de {totalNotifications}
+            </p>
+          </div>
 
-        <Button variant="outline" onClick={onClose}>
-          Cerrar
-        </Button>
-      </header>
+          <Button variant="outline" onClick={onClose}>
+            Cerrar
+          </Button>
+        </header>
 
-      <div className="flex items-start gap-2 p-3 mb-4 bg-yellow-50 border border-yellow-200 rounded-md">
-        <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
-        <span className="text-yellow-800">
-          {notification.message ||
-            "Esta audiencia necesita verificación y corrección"}
-        </span>
-      </div>
-
-      {showSuccessMessage && (
-        <div className="flex items-center gap-2 p-4 mb-4 bg-green-50 border border-green-200 rounded-md">
-          <CheckCircle2 className="h-5 w-5 text-green-600" />
-          <span className="text-green-800 font-medium">
-            Corrección exitosa!{" "}
-            {totalNotifications > 1
-              ? "Pasando a la siguiente..."
-              : "Redirigiendo..."}
+        <div className="flex items-start gap-2 p-3 mb-4 bg-yellow-50 border border-yellow-200 rounded-md">
+          <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+          <span className="text-yellow-800">
+            {notification.message ||
+              "Esta audiencia necesita verificación y corrección"}
           </span>
         </div>
-      )}
 
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label>Radicado</Label>
-            <Input disabled={true} {...form.register("title")} />
+        {showSuccessMessage && (
+          <div className="flex items-center gap-2 p-4 mb-4 bg-green-50 border border-green-200 rounded-md">
+            <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <span className="text-green-800 font-medium">
+              Corrección exitosa!{" "}
+              {totalNotifications > 1
+                ? "Pasando a la siguiente..."
+                : "Redirigiendo..."}
+            </span>
           </div>
-          <div>
-            <Label>Código Interno *</Label>
-            <Input {...form.register("codigo_interno")} />
+        )}
+
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>Radicado</Label>
+              <Input disabled={true} {...form.register("title")} />
+            </div>
+            <div>
+              <Label>Código Interno *</Label>
+              <Input {...form.register("codigo_interno")} />
+            </div>
+            <div>
+              <Label>Abogado *</Label>
+              <Select
+                value={form.watch("abogado_id")}
+                onValueChange={(v) => form.setValue("abogado_id", v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un abogado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(lawyersRecord).length > 0 ? (
+                    Object.entries(lawyersRecord).map(([name, id]) => (
+                      <SelectItem
+                        key={id}
+                        value={id}
+                        className="hover:bg-gray-200"
+                      >
+                        {name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-lawyers" disabled>
+                      No hay abogados disponibles
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>Demandante</Label>
+              <Input disabled={true} {...form.register("demandante")} />
+            </div>
+            <div>
+              <Label>Teléfono Demandante</Label>
+              <Input
+                disabled={true}
+                {...form.register("contacto_demandante")}
+              />
+            </div>
+            <div>
+              <Label>Email Demandante</Label>
+              <Input disabled={true} {...form.register("email_demandante")} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Demandado</Label>
+              <Input disabled={true} {...form.register("demandado")} />
+            </div>
+            <div>
+              <Label>Juzgado</Label>
+              <Input disabled={true} {...form.register("juzgado")} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Inicio *</Label>
+              <Input type="datetime-local" {...form.register("start")} />
+            </div>
+            <div>
+              <Label>Fin *</Label>
+              <Input type="datetime-local" {...form.register("end")} />
+            </div>
+          </div>
+
           <div>
-            <Label>Abogado *</Label>
-            <Select
-              value={form.watch("abogado_id")}
-              onValueChange={(v) => form.setValue("abogado_id", v)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un abogado" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(lawyersRecord).length > 0 ? (
-                  Object.entries(lawyersRecord).map(([name, id]) => (
+            <Label>Link de Teams</Label>
+            <Input {...form.register("link_teams")} />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Monto Conciliado</Label>
+              <Input
+                disabled={blockAmount}
+                type="number"
+                {...form.register("monto_conciliado", { valueAsNumber: true })}
+              />
+            </div>
+            <div>
+              <Label>Estado</Label>
+              <Select
+                value={form.watch("estado")}
+                onValueChange={(v) => form.setValue("estado", v as Estado)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un estado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ESTADOS.map((est) => (
                     <SelectItem
-                      key={id}
-                      value={id}
+                      key={est}
+                      value={est}
                       className="hover:bg-gray-200"
                     >
-                      {name}
+                      {estadoLabels[est]}
                     </SelectItem>
-                  ))
-                ) : (
-                  <SelectItem value="no-lawyers" disabled>
-                    No hay abogados disponibles
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label>Demandante</Label>
-            <Input disabled={true} {...form.register("demandante")} />
-          </div>
-          <div>
-            <Label>Teléfono Demandante</Label>
-            <Input disabled={true} {...form.register("contacto_demandante")} />
-          </div>
-          <div>
-            <Label>Email Demandante</Label>
-            <Input disabled={true} {...form.register("email_demandante")} />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Demandado</Label>
-            <Input disabled={true} {...form.register("demandado")} />
-          </div>
-          <div>
-            <Label>Juzgado</Label>
-            <Input disabled={true} {...form.register("juzgado")} />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Inicio *</Label>
-            <Input type="datetime-local" {...form.register("start")} />
-          </div>
-          <div>
-            <Label>Fin *</Label>
-            <Input type="datetime-local" {...form.register("end")} />
-          </div>
-        </div>
-
-        <div>
-          <Label>Link de Teams</Label>
-          <Input {...form.register("link_teams")} />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Monto Conciliado</Label>
-            <Input
-              disabled={blockAmount}
-              type="number"
-              {...form.register("monto_conciliado", { valueAsNumber: true })}
-            />
-          </div>
-          <div>
-            <Label>Estado</Label>
-            <Select
-              value={form.watch("estado")}
-              onValueChange={(v) => form.setValue("estado", v as Estado)}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 sm:justify-between">
+            <Button
+              type="button"
+              variant="destructive"
+              className="bg-red-600 hover:bg-red-700"
+              onClick={() => setShowDeleteConfirm(true)}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un estado" />
-              </SelectTrigger>
-              <SelectContent>
-                {ESTADOS.map((est) => (
-                  <SelectItem
-                    key={est}
-                    value={est}
-                    className="hover:bg-gray-200"
-                  >
-                    {estadoLabels[est]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Trash2 className="h-4 w-4 mr-2" />
+              Eliminar
+            </Button>
+
+            <Button
+              type="button"
+              className="bg-blue-600 hover:bg-blue-700 sm:mr-auto"
+              onClick={handleSync}
+              disabled={showSuccessMessage}
+            >
+              Sincronizar
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onPrevious}
+              disabled={currentIndex === 0 || showSuccessMessage}
+              className="flex-1 sm:flex-none"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Anterior
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onNext}
+              disabled={
+                currentIndex === totalNotifications - 1 || showSuccessMessage
+              }
+              className="flex-1 sm:flex-none"
+            >
+              Siguiente
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+
+            <Button
+              type="submit"
+              className="bg-pink-600 hover:bg-pink-700 flex-1 sm:flex-none"
+              disabled={showSuccessMessage}
+            >
+              Corregir
+            </Button>
           </div>
-        </div>
+        </form>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 sm:justify-between">
-          <Button
-            type="button"
-            className="bg-blue-600 hover:bg-blue-700 sm:mr-auto"
-            onClick={handleSync}
-            disabled={showSuccessMessage}
-          >
-            Sincronizar
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onPrevious}
-            disabled={currentIndex === 0 || showSuccessMessage}
-            className="flex-1 sm:flex-none"
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Anterior
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onNext}
-            disabled={
-              currentIndex === totalNotifications - 1 || showSuccessMessage
-            }
-            className="flex-1 sm:flex-none"
-          >
-            Siguiente
-            <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
-
-          <Button
-            type="submit"
-            className="bg-pink-600 hover:bg-pink-700 flex-1 sm:flex-none"
-            disabled={showSuccessMessage}
-          >
-            Corregir
-          </Button>
-        </div>
-      </form>
-
-      {error && (
-        <div className="rounded-md bg-red-100 border border-red-400 p-3 text-sm text-red-700 my-2">
-          {error}
-        </div>
-      )}
-    </div>
+        {error && (
+          <div className="rounded-md bg-red-100 border border-red-400 p-3 text-sm text-red-700 my-2">
+            {error}
+          </div>
+        )}
+      </div>
+      <DeleteConfirmationDialog
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onConfirm={handleDelete}
+      />
+    </>
   );
 }
