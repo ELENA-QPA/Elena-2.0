@@ -103,6 +103,27 @@ export function useAudience() {
     }
   };
 
+  const updateAudienceWithValidation = async (
+    id: string,
+    audienceData: AudienceUpdate
+  ) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.updateAudienceWithValidation(
+        id,
+        audienceData
+      );
+      setError(null);
+      return { success: true, data };
+    } catch (err: any) {
+      setError(err.message || "Error al actualizar la audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteAudience = async (id: string) => {
     setLoading(true);
     setError(null);
@@ -129,6 +150,7 @@ export function useAudience() {
     fetchAudienceByInternalCode,
     createAudience,
     updateAudience,
+    updateAudienceWithValidation,
     deleteAudience,
   };
 }

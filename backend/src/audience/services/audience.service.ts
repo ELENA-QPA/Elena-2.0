@@ -21,22 +21,6 @@ export class AudienceService {
     private readonly audienceModel: Model<Audience>,
   ) {}
   // Metodos auxilaires para updetear la bandera de recordatorios
-  async resetNotificationsOnValidation(audienceId: string): Promise<void> {
-    await this.audienceModel.updateOne(
-      { _id: audienceId },
-      {
-        $set: {
-          'notifications.oneMonth.sent': false,
-          'notifications.oneMonth.sentAt': null,
-          'notifications.fifteenDays.sent': false,
-          'notifications.fifteenDays.sentAt': null,
-          'notifications.oneDay.sent': false,
-          'notifications.oneDay.sentAt': null,
-        },
-      },
-    );
-  }
-
   async markNotificationAsSent(
     audienceId: string,
     type: 'oneMonth' | 'fifteenDays' | 'oneDay',
@@ -85,7 +69,7 @@ export class AudienceService {
 
     return invalidFields;
   }
-  private validateRequiredFields(dto: CreateAudienceDto): void {
+  private validateRequiredFields(dto): void {
     const invalid = this.getInvalidFields(dto);
 
     if (invalid.length > 0) {
@@ -95,7 +79,7 @@ export class AudienceService {
     }
   }
 
-  private isValid(dto: CreateAudienceDto): boolean {
+  private isValid(dto): boolean {
     return this.getInvalidFields(dto).length === 0;
   }
 
@@ -133,7 +117,7 @@ export class AudienceService {
     return response;
   }
 
-  async create(
+  async createAudience(
     createAudienceDto: CreateAudienceDto,
     strict: boolean,
   ): Promise<Audience> {
@@ -163,6 +147,15 @@ export class AudienceService {
       }
       throw new BadRequestException('error al crear audiencia ', error.message);
     }
+  }
+
+  async create(createAudienceDto: CreateAudienceDto): Promise<Audience> {
+    return this.createAudience(createAudienceDto, false);
+  }
+  async createWithValidation(
+    createAudienceDto: CreateAudienceDto,
+  ): Promise<Audience> {
+    return this.createAudience(createAudienceDto, true);
   }
 
   async findAll(queryDto: QueryAudienceDto): Promise<AudienceResponse[]> {
@@ -247,9 +240,10 @@ export class AudienceService {
     }
   }
 
-  async update(
+  async updateAudience(
     id: string,
     updateAudienceDto: UpdateAudienceDto,
+    strict: boolean,
   ): Promise<AudienceResponse> {
     try {
       if (!Types.ObjectId.isValid(id)) {
@@ -269,16 +263,8 @@ export class AudienceService {
         }
       }
 
-      if (updateAudienceDto.is_valid !== undefined) {
-        const existingAudience = await this.audienceModel.findById(id);
-
-        if (
-          existingAudience &&
-          !existingAudience.is_valid &&
-          updateAudienceDto.is_valid
-        ) {
-          await this.resetNotificationsOnValidation(id);
-        }
+      if (strict) {
+        this.validateRequiredFields(updateAudienceDto);
       }
 
       const updatedAudience = await this.audienceModel
@@ -308,6 +294,22 @@ export class AudienceService {
       }
       throw new BadRequestException('Error al actualizar la audiencia');
     }
+  }
+
+  async update(
+    id: string,
+    updateAudienceDto: UpdateAudienceDto,
+  ): Promise<AudienceResponse> {
+    return this.updateAudience(id, updateAudienceDto, false);
+  }
+
+  async updateWithValidation(
+    id: string,
+    updateAudienceDto: UpdateAudienceDto,
+  ): Promise<AudienceResponse> {
+    const is_valid = this.isValid(updateAudienceDto);
+    const dtoWithValidity = { ...updateAudienceDto, is_valid };
+    return this.updateAudience(id, dtoWithValidity, true);
   }
 
   async remove(id: string): Promise<{ message: string }> {

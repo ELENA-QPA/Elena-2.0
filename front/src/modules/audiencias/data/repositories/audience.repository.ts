@@ -33,6 +33,11 @@ export abstract class AudienceRepository {
     body: AudienceUpdate
   ): Promise<AudienceUpdate>;
 
+  abstract updateAudienceWithValidation(
+    id: string,
+    body: AudienceUpdate
+  ): Promise<AudienceUpdate>;
+
   abstract getAudienceById(
     AudienceId: string
   ): Promise<AudienceOrchestratorResponse>;
@@ -135,6 +140,24 @@ export class AudienceRepositoryImpl implements AudienceRepository {
   ): Promise<AudienceUpdate> {
     const response = await this.httpClient.request({
       url: `${apiUrls.audiencias.updateAudience}${id}`,
+      method: "put",
+      body: JSON.stringify(audience),
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return response.body;
+    }
+
+    throw new CustomError(response.body?.message || "Error updating audience");
+  }
+
+  async updateAudienceWithValidation(
+    id: string,
+    audience: AudienceUpdate
+  ): Promise<AudienceUpdate> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.audiencias.updateAudienceWithValidation}${id}`,
       method: "put",
       body: JSON.stringify(audience),
       isAuth: true,

@@ -83,7 +83,7 @@ export function NotificationCorrectionModal({
     setError,
     fetchAudienceByInternalCode,
     fetchAudience,
-    updateAudience,
+    updateAudienceWithValidation,
     deleteAudience,
   } = useAudience();
 
@@ -210,38 +210,40 @@ export function NotificationCorrectionModal({
     }
   };
 
-  const validateForm = (): boolean => {
-    const values = form.getValues();
-    const requiredFields = ["record_id", "abogado_id", "start", "end"];
+  // const validateForm = (): boolean => {
+  //   const values = form.getValues();
+  //   const requiredFields = ["record_id", "abogado_id", "start", "end"];
 
-    const missingFields = requiredFields.filter(
-      (field) => !values[field as keyof EventoForm]
-    );
+  //   const missingFields = requiredFields.filter(
+  //     (field) => !values[field as keyof EventoForm]
+  //   );
 
-    if (missingFields.length > 0) {
-      setError(`Campos requeridos faltantes: ${missingFields.join(", ")}`);
-      return false;
-    }
+  //   if (missingFields.length > 0) {
+  //     setError(`Campos requeridos faltantes: ${missingFields.join(", ")}`);
+  //     return false;
+  //   }
 
-    if (!isSynced) {
-      setError("Debes sincronizar los datos antes de guardar");
-      return false;
-    }
+  //   if (!isSynced) {
+  //     setError("Debes sincronizar los datos antes de guardar");
+  //     return false;
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   const handleSubmit = async (values: EventoForm) => {
     try {
-      if (!validateForm()) {
-        return;
-      }
+      // if (!validateForm()) {
+      //   return;
+      // }
 
       const audienceData = mapEventoFormToAudienceUpdate(values);
-      const result = await updateAudience(notification.audience_id, {
-        ...audienceData,
-        is_valid: true,
-      });
+      const result = await updateAudienceWithValidation(
+        notification.audience_id,
+        {
+          ...audienceData,
+        }
+      );
 
       if (result.success) {
         setShowSuccessMessage(true);

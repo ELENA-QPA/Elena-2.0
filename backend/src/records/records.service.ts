@@ -2191,4 +2191,13 @@ export class RecordsService {
       throw new BadRequestException('Error al obtener el código interno');
     }
   }
+
+  async exists(id: string): Promise<boolean> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return false;
+    }
+
+    const count = await this.recordModel.countDocuments({ _id: id }).exec();
+    return count > 0;
+  }
 }
