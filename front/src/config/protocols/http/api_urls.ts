@@ -1,3 +1,5 @@
+import { update } from "lodash";
+
 export const apiUrls = {
   auth: {
     login: "/api/auth/login",
@@ -101,6 +103,7 @@ export const apiUrls = {
   audiencias: {
     updateAudience: "/api/audiences/",
     deleteAudience: "/api/audiences/",
+    updateAudienceWithValidation: "/api/audiences/validation/",
   },
 
   notifications: {

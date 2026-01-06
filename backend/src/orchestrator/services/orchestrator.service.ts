@@ -141,7 +141,9 @@ export class OrchestratorService {
   }
 
   // metodos auxiliares para procesar audiencias con campos faltantes
-  private getFields(dto: CreateAudienceDto): FieldValidationResult {
+  private async getFields(
+    dto: CreateAudienceDto,
+  ): Promise<FieldValidationResult> {
     const toDelete: string[] = [];
     const messages: string[] = [];
 
@@ -150,6 +152,12 @@ export class OrchestratorService {
     } else if (!this.audienceService.isValidMongoId(dto.record)) {
       toDelete.push('record');
       messages.push(`record:(${dto.record})`);
+    } else {
+      const recordExists = await this.recordsService.exists(dto.record);
+      if (!recordExists) {
+        toDelete.push('record');
+        messages.push(`record: no encontrado`);
+      }
     }
 
     if (!dto.lawyer) {
@@ -297,13 +305,10 @@ export class OrchestratorService {
 
   async createAudiencesWithNotifications(audienceDto: CreateAudienceDto) {
     try {
-      const { toDelete, messages } = this.getFields(audienceDto);
+      const { toDelete, messages } = await this.getFields(audienceDto);
       const sanitizedDto = this.sanitizeAudienceDto(audienceDto, toDelete);
 
-      const createdAudience = await this.audienceService.create(
-        sanitizedDto,
-        false,
-      );
+      const createdAudience = await this.audienceService.create(sanitizedDto);
       if (!createdAudience.is_valid) {
         try {
           await this.notificationService.create({
@@ -329,13 +334,10 @@ export class OrchestratorService {
 
     for (const dto of audienceDtos) {
       try {
-        const { toDelete, messages } = this.getFields(dto);
+        const { toDelete, messages } = await this.getFields(dto);
         const sanitizedDto = this.sanitizeAudienceDto(dto, toDelete);
 
-        const createdAudience = await this.audienceService.create(
-          sanitizedDto,
-          false,
-        );
+        const createdAudience = await this.audienceService.create(sanitizedDto);
 
         result.success++;
 
