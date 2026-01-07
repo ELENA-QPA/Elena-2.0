@@ -13,17 +13,19 @@ import {
   AudiencePopulated,
   AudienceResponse,
 } from '../interfaces/audience.interfaces';
+import { UtilitiesService } from 'src/common/services/utilities.service';
 
 @Injectable()
 export class AudienceService {
   constructor(
     @InjectModel(Audience.name)
     private readonly audienceModel: Model<Audience>,
+    private readonly utilitiesService: UtilitiesService,
   ) {}
   // Metodos auxilaires para updetear la bandera de recordatorios
   async markNotificationAsSent(
     audienceId: string,
-    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay' | 'oneDayAfterCreation',
   ): Promise<void> {
     await this.audienceModel.updateOne(
       { _id: audienceId },
@@ -36,7 +38,7 @@ export class AudienceService {
     );
   }
 
-  //Metodos auxilaires para validar si una audiencia es valdia
+  //Metodos auxilaires para validar si una audiencia es vailda
 
   public isValidMongoId(value: any): boolean {
     return value && Types.ObjectId.isValid(value);
@@ -155,7 +157,23 @@ export class AudienceService {
   async createWithValidation(
     createAudienceDto: CreateAudienceDto,
   ): Promise<Audience> {
-    return this.createAudience(createAudienceDto, true);
+    const createdDate = new Date();
+    // createdDate.setDate(createdDate.getDate() - 1);
+    const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
+      createdDate,
+      1,
+    );
+
+    const dtoWithNotification = {
+      ...createAudienceDto,
+      notifications: {
+        oneDayAfterCreation: {
+          sent: false,
+          scheduledFor: scheduledNotificationDate,
+        },
+      },
+    };
+    return this.createAudience(dtoWithNotification, true);
   }
 
   async findAll(queryDto: QueryAudienceDto): Promise<AudienceResponse[]> {
@@ -190,6 +208,14 @@ export class AudienceService {
 
       if (queryDto.notificationOneDaySent !== undefined) {
         filter['notifications.oneDay.sent'] = queryDto.notificationOneDaySent;
+      }
+
+      if (queryDto.notificationOneDayAfter !== undefined) {
+        filter['notifications.oneDayAfterCreation.sent'] =
+          queryDto.notificationOneDayAfter;
+        filter['notifications.oneDayAfterCreation.scheduledFor'] = {
+          $lte: queryDto.notificationOneDayAfterDate,
+        };
       }
 
       const audiences = await this.audienceModel
@@ -308,8 +334,24 @@ export class AudienceService {
     updateAudienceDto: UpdateAudienceDto,
   ): Promise<AudienceResponse> {
     const is_valid = this.isValid(updateAudienceDto);
-    const dtoWithValidity = { ...updateAudienceDto, is_valid };
-    return this.updateAudience(id, dtoWithValidity, true);
+    const createdDate = new Date();
+    // createdDate.setDate(createdDate.getDate() - 1);
+    const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
+      createdDate,
+      1,
+    );
+
+    const dtoWithNotification = {
+      ...updateAudienceDto,
+      is_valid,
+      notifications: {
+        oneDayAfterCreation: {
+          sent: false,
+          scheduledFor: scheduledNotificationDate,
+        },
+      },
+    };
+    return this.updateAudience(id, dtoWithNotification, true);
   }
 
   async remove(id: string): Promise<{ message: string }> {

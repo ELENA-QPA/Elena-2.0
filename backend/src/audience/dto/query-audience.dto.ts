@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsBoolean,
   IsString,
+  IsDate,
 } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { EstadoAudiencia } from '../interfaces/audience.interfaces';
@@ -53,4 +54,13 @@ export class QueryAudienceDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
   notificationOneDaySent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  notificationOneDayAfter?: boolean;
+
+  @IsOptional()
+  @IsDate()
+  notificationOneDayAfterDate?: Date;
 }
