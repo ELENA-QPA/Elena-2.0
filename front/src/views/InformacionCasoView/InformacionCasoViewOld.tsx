@@ -1576,7 +1576,7 @@ export default function InformacionCasoFormViewOld() {
     if (caso) {
       console.log("[CASE_LOAD] Datos del caso:", {
         city: caso.city,
-        office: caso.despachoJudicial,
+        despachoJudicial: caso.despachoJudicial,
       });
     }
 
@@ -1783,23 +1783,16 @@ export default function InformacionCasoFormViewOld() {
       };
 
       const numeroRadicadoRaw =
-        (caso as any).radicado ||
-        caso.settled ||
-        (caso as any).numeroRadicado ||
-        "";
+        (caso as any).radicado || (caso as any).numeroRadicado || "";
       const jurisdiccionInferida =
         inferirJurisdiccionDeRadicado(numeroRadicadoRaw);
       const jurisdictionValue = caso.jurisdiction || jurisdiccionInferida || "";
       const processTypeValue = caso.processType || "";
 
-      const despachoJudicialValue =
-        caso.despachoJudicial || (caso as any).office || "";
+      const despachoJudicialValue = caso.despachoJudicial || "";
 
       const numeroRadicadoValue =
-        (caso as any).radicado ||
-        caso.settled ||
-        (caso as any).numeroRadicado ||
-        "";
+        (caso as any).radicado || (caso as any).numeroRadicado || "";
 
       // EJECUTAR EL RESET DEL FORMULARIO
       const resetData = {
@@ -2366,8 +2359,8 @@ export default function InformacionCasoFormViewOld() {
         personType: cleanData.personType,
         jurisdiction: cleanData.jurisdiction,
         processType: cleanData.processType,
-        office: cleanData.despachoJudicial,
-        settled: cleanData.numeroRadicado,
+        despachoJudicial: cleanData.despachoJudicial,
+        radicado: cleanData.numeroRadicado,
         country: cleanData.country || "COLOMBIA",
         location: cleanData.location,
         documents: documents,
@@ -2779,8 +2772,8 @@ export default function InformacionCasoFormViewOld() {
         personType: values.personType,
         jurisdiction: values.jurisdiction,
         processType: values.processType,
-        office: values.despachoJudicial,
-        settled: values.numeroRadicado,
+        despachoJudicial: values.despachoJudicial,
+        radicado: values.numeroRadicado,
         country: values.country || "COLOMBIA",
         location: values.location,
       };

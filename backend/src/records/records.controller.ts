@@ -54,7 +54,7 @@ import { CreatePaymentForRecordDto } from '../payment/dto/create-payment-for-rec
 import { DocumentService } from 'src/document/document.service';
 import { ByClientDto } from './dto/by-client-document.dto';
 import { ProceduralPartService } from 'src/procedural-part/procedural-part.service';
-import { ByInternalCodeDto } from './dto/by-internal-code.dto';
+import { ByEtiquetaDto } from './dto/by-internal-code.dto';
 import { FileLocalService } from 'src/common/services/file-local.service';
 
 @ApiTags('Casos')
@@ -725,7 +725,7 @@ export class RecordsController {
   getMaxInternalCodeByProcessType(
     @Body() getMaxInternalCodeDto: GetMaxInternalCodeDto,
   ) {
-    return this.recordsService.getMaxInternalCodeByProcessType(
+    return this.recordsService.getMaxEtiquetaByProcessType(
       getMaxInternalCodeDto.processType,
     );
   }
@@ -1374,10 +1374,8 @@ export class RecordsController {
   @ApiOperation({ summary: 'Obtener caso por internalCode' })
   @ApiKeyAuth()
   @Post('by-internal-code')
-  async getRecordDetailsByInternalCode(
-    @Body() internalCodeDto: ByInternalCodeDto,
-  ) {
-    return this.recordsService.getRecordDetailsByInternalCode(internalCodeDto);
+  async getRecordDetailsByInternalCode(@Body() internalCodeDto: ByEtiquetaDto) {
+    return this.recordsService.getRecordDetailsByEtiqueta(internalCodeDto);
   }
 
   @ApiOperation({

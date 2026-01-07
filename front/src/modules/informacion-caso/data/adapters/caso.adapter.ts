@@ -111,42 +111,41 @@ export function mapParameterApiToModel(api: any): Parameter {
   };
 }
 
-// Mapear caso de API a modelo 
+// Mapear caso de API a modelo
 export function mapCasoApiToModel(api: any): Caso {
-  if (!api || typeof api !== 'object' || !api._id) {
+  if (!api || typeof api !== "object" || !api._id) {
     // Si la respuesta no es válida, retorna un objeto vacío con la estructura de Caso
     return {
-      _id: '',
-      internalCode: '',
-      clientType: '',
-      department: '',
-      city: '',
-      personType: '',
-      jurisdiction: '',
-      processType: '',
-      office: '',
-      settled: '',
-      country: '',
-      location: '',
-      estado: '',
-      type: '',
+      _id: "",
+      clientType: "",
+      department: "",
+      city: "",
+      personType: "",
+      jurisdiction: "",
+      processType: "",
+      despachoJudicial: "",
+      radicado: "",
+      country: "",
+      location: "",
+      estado: "",
+      type: "",
       user: undefined,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: "",
+      updatedAt: "",
       documents: [],
       interveners: [],
       proceduralParts: [],
-      payments: [],      
+      payments: [],
     };
   }
-  
-  console.log('[ADAPTER][mapCasoApiToModel] API data:', { 
+
+  console.log("[ADAPTER][mapCasoApiToModel] API data:", {
     location: api.location,
     despachoJudicial: api.despachoJudicial,
     radicado: api.radicado,
-    _id: api._id 
+    _id: api._id,
   });
-  
+
   return {
     _id: api._id,
     clientType: api.clientType,
@@ -156,43 +155,50 @@ export function mapCasoApiToModel(api: any): Caso {
     responsible: api.responsible || api.user || undefined,
     jurisdiction: api.jurisdiction,
     processType: api.processType,
-    office: api.office,
-    settled: api.settled,
+    radicado: api.radicado,
     country: api.country,
     location: api.location || undefined,
     estado: api.estado,
-    type: api.type,   
-    internalCode: api.internalCode || '',
-    numeroRadicado: api.numeroRadicado || api.radicado || api.internalCode || '',
-    despachoJudicial: api.despachoJudicial || api.office || '',   
+    type: api.type,
+    numeroRadicado:
+      api.numeroRadicado || api.radicado || api.internalCode || "",
+    despachoJudicial: api.despachoJudicial || api.office || "",
     etiqueta: api.etiqueta || api.label || undefined,
     etapaProcesal: api.etapaProcesal,
     ultimaActuacion: api.ultimaActuacion,
     fechaUltimaActuacion: api.fechaUltimaActuacion,
     sincronizadoMonolegal: api.sincronizadoMonolegal,
-    fechaSincronizacion: api.fechaSincronizacion,    
+    fechaSincronizacion: api.fechaSincronizacion,
     idProcesoMonolegal: api.idProcesoMonolegal,
-    
-    user: api.user && typeof api.user === 'object' ? {
-      _id: api.user._id,
-      name: api.user.name,
-      lastname: api.user.lastname,
-      email: api.user.email,
-      phone: api.user.phone,
-    } : undefined,
-    
+
+    user:
+      api.user && typeof api.user === "object"
+        ? {
+            _id: api.user._id,
+            name: api.user.name,
+            lastname: api.user.lastname,
+            email: api.user.email,
+            phone: api.user.phone,
+          }
+        : undefined,
+
     createdAt: api.createdAt,
     updatedAt: api.updatedAt,
-    
+
     documents: api.documents?.map(mapDocumentApiToModel) || [],
     interveners: api.interveners?.map(mapIntervenerApiToModel) || [],
     proceduralParts: Array.isArray(api.proceduralParts)
       ? api.proceduralParts.map(mapProceduralPartApiToModel)
-      : Object.values(api.proceduralParts || {}).flat().map(mapProceduralPartApiToModel),
+      : Object.values(api.proceduralParts || {})
+          .flat()
+          .map(mapProceduralPartApiToModel),
     payments: api.payments?.map(mapPaymentApiToModel) || [],
-    
+
     // Mapear actuaciones si vienen en la respuesta
-    performances: api.performances?.map(mapPerformanceApiToModel) || api.actuaciones?.map(mapPerformanceApiToModel) || [],
+    performances:
+      api.performances?.map(mapPerformanceApiToModel) ||
+      api.actuaciones?.map(mapPerformanceApiToModel) ||
+      [],
   };
 }
 
@@ -235,17 +241,14 @@ export function mapCasosPaginatedResponse(api: any): CasosPaginatedResponse {
 export function mapCreateIntervenerResponse(
   api: any
 ): CreateIntervenerSuccessResponse {
-
- 
   let intervenerData = api?.intervener || api?.data || api?.body || api;
 
- 
   if (!intervenerData || !intervenerData._id) {
     console.warn(
       "[ADAPTER][mapCreateIntervenerResponse] No se encontró intervener válido, intentando extraer de api:",
       api
     );
-    
+
     if (api && typeof api === "object") {
       for (const [key, value] of Object.entries(api)) {
         if (value && typeof value === "object" && (value as any)._id) {
@@ -281,7 +284,7 @@ export function mapCreateProceduralPartResponse(
   api: any
 ): CreateProceduralPartSuccessResponse {
   let part = api?.proceduralPart || api?.data || api?.body || api;
- 
+
   if (part && typeof part === "object" && part._id) {
     return {
       message: api.message || "Parte procesal creada exitosamente",

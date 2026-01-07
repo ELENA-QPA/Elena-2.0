@@ -197,8 +197,8 @@ export class CasoRepositoryImpl implements CasoRepository {
       formData.append("personType", data.personType);
       formData.append("jurisdiction", data.jurisdiction);
       formData.append("processType", data.processType);
-      formData.append("office", data.office);
-      formData.append("settled", data.settled);
+      formData.append("despachoJudicial", data.despachoJudicial);
+      formData.append("radicado", data.radicado);
       formData.append("country", data.country);
       if (data.location) formData.append("location", data.location);
       // 'estado' no debe enviarse en la creación desde el frontend - lo maneja el backend

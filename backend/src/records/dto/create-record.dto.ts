@@ -1,16 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  IsArray,
-  IsBoolean,
   IsDate,
   IsEnum,
-  IsMongoId,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
@@ -87,16 +82,6 @@ export class CreateRecordDto {
   @IsString({ message: "El campo 'processType' debe ser un string" })
   @IsOptional()
   processType: string;
-
-  @ApiProperty({ description: 'Oficina' })
-  @IsString({ message: "El campo 'office' debe ser un string" })
-  @IsOptional()
-  office: string;
-
-  @ApiProperty({ description: 'Asentado' })
-  @IsString({ message: "El campo 'settled' debe ser un string" })
-  @IsOptional()
-  settled: string;
 
   @ApiProperty({ description: 'Ciudad' })
   @IsString({ message: "El campo 'city' debe ser un string" })

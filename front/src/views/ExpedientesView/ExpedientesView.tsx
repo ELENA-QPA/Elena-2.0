@@ -723,8 +723,7 @@ export default function ExpedientesView({
       filtered = filtered.filter((caso) => {
         if (isRadicadoSearch) {
           // Búsqueda exacta para radicados
-          const radicado =
-            caso.numeroRadicado || caso.radicado || caso.settled || "";
+          const radicado = caso.numeroRadicado || caso.radicado || "";
           return radicado === searchTerm.trim();
         }
 
@@ -751,10 +750,8 @@ export default function ExpedientesView({
     // 2. Filtro por CÓDIGO INTERNO
     if (internalCodeFilter.trim()) {
       const codeLower = internalCodeFilter.toLowerCase().trim();
-      filtered = filtered.filter(
-        (caso) =>
-          caso.internalCode?.toLowerCase().includes(codeLower) ||
-          caso.etiqueta?.toLowerCase().includes(codeLower)
+      filtered = filtered.filter((caso) =>
+        caso.etiqueta?.toLowerCase().includes(codeLower)
       );
     }
 
@@ -822,10 +819,10 @@ export default function ExpedientesView({
       filtered = filtered.filter((caso) => {
         // Si hay despachos específicos de la ciudad, comparar exacto
         if (hasDespachoOptions) {
-          return caso.office === jurisdictionFilter;
+          return caso.despachoJudicial === jurisdictionFilter;
         } else {
           // Si es búsqueda libre, usar includes
-          return caso.office
+          return caso.despachoJudicial
             ?.toLowerCase()
             .includes(jurisdictionFilter.toLowerCase());
         }
@@ -920,16 +917,16 @@ export default function ExpedientesView({
             valueA = extractEtiquetaNumber(a.etiqueta || "");
             valueB = extractEtiquetaNumber(b.etiqueta || "");
             break;
-          case "internalCode":
-            // Extraer TODOS los números del código (año + secuencial)
-            const extractFullNumber = (code: string) => {
-              if (!code) return 0;
-              const numbers = code.match(/\d+/g);
-              return numbers ? parseInt(numbers.join("")) : 0;
-            };
-            valueA = extractFullNumber(a.internalCode || "");
-            valueB = extractFullNumber(b.internalCode || "");
-            break;
+          // case "internalCode":
+          //   // Extraer TODOS los números del código (año + secuencial)
+          //   const extractFullNumber = (code: string) => {
+          //     if (!code) return 0;
+          //     const numbers = code.match(/\d+/g);
+          //     return numbers ? parseInt(numbers.join("")) : 0;
+          //   };
+          //   valueA = extractFullNumber(a.internalCode || "");
+          //   valueB = extractFullNumber(b.internalCode || "");
+          //   break;
           case "name":
             valueA = (a.proceduralParts?.[0]?.name || "zzz").toLowerCase();
             valueB = (b.proceduralParts?.[0]?.name || "zzz").toLowerCase();
@@ -1067,11 +1064,11 @@ export default function ExpedientesView({
     currentPageCasosLength: currentPageCasos.length,
     currentPageCasos: currentPageCasos.map((c) => ({
       id: c._id,
-      name: c.internalCode,
+      name: c.etiqueta,
     })),
     filteredCasosSample: filteredCasos
       .slice(0, 5)
-      .map((c) => ({ id: c._id, name: c.internalCode })),
+      .map((c) => ({ id: c._id, name: c.etiqueta })),
   });
 
   // Efecto para detectar automáticamente el final de los datos
@@ -1245,7 +1242,7 @@ export default function ExpedientesView({
         new Set(allLoadedCasos.map((caso) => caso.department))
       ),
       jurisdictions: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.office))
+        new Set(allLoadedCasos.map((caso) => caso.despachoJudicial))
       ),
       processTypes: Array.from(
         new Set(allLoadedCasos.map((caso) => caso.processType))
@@ -2002,9 +1999,7 @@ export default function ExpedientesView({
                       <h3 className="font-semibold text-gray-900 truncate text-sm">
                         {caso.proceduralParts![0]?.name || "Sin nombre"}
                       </h3>
-                      <p className="text-xs text-gray-600">
-                        #{caso.internalCode}
-                      </p>
+                      <p className="text-xs text-gray-600">#{caso.etiqueta}</p>
                     </div>
                     <div className="flex gap-1 ml-2">
                       <Link
@@ -2048,7 +2043,7 @@ export default function ExpedientesView({
                     <div>
                       <span className="text-gray-500">Radicado:</span>
                       <p className="font-medium truncate">
-                        {caso.settled || "N/A"}
+                        {caso.radicado || "N/A"}
                       </p>
                     </div>
                     <div>

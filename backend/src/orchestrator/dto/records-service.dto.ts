@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class InternalCodeDto {
-  @IsNotEmpty({ message: 'El código interno es requerido' })
-  @IsString({ message: 'El código interno debe ser una cadena de texto' })
-  internalCode: string;
+export class EtiquetaDto {
+  @IsNotEmpty({ message: 'La etiqueta es requerida' })
+  @IsString({ message: 'La etiqueta debe ser una cadena de texto' })
+  etiqueta: string;
 }
 
 export class IdRecordDto {

@@ -50,9 +50,9 @@ const DEFAULT_FORM_VALUES: EventoForm = {
   contacto_demandante: "",
   email_demandante: "",
   demandado: "",
-  juzgado: "",
+  despachoJudicial: "",
   abogado_id: "",
-  codigo_interno: "",
+  etiqueta: "",
   link_teams: "",
   estado: "Programada",
   start: "",
@@ -124,7 +124,7 @@ export function NotificationCorrectionModal({
         const audience = result.data.audience;
 
         form.reset({
-          title: result.data.record?.settled || "",
+          title: result.data.record?.radicado || "",
           demandante:
             result.data.record?.proceduralParts?.plaintiff?.name || "",
           contacto_demandante:
@@ -132,9 +132,9 @@ export function NotificationCorrectionModal({
           email_demandante:
             result.data.record?.proceduralParts?.plaintiff?.email || "",
           demandado: result.data.record?.proceduralParts?.defendant?.name || "",
-          juzgado: result.data.record?.office || "",
+          despachoJudicial: result.data.record?.despachoJudicial || "",
           abogado_id: audience.lawyer?._id || "",
-          codigo_interno: result.data.record?.internalCode || "",
+          etiqueta: result.data.record?.etiqueta || "",
           link_teams: audience.link || "",
           estado: audience.state,
           start: toDatetimeLocal(audience.start),
@@ -152,14 +152,14 @@ export function NotificationCorrectionModal({
   const blockAmount = estadoActual !== "Conciliada";
 
   const handleSync = async () => {
-    const internalCode = form.getValues("codigo_interno");
+    const etiqueta = form.getValues("etiqueta");
 
-    if (!internalCode) {
+    if (!etiqueta) {
       setError("Por favor ingresa un código interno");
       return;
     }
 
-    const result = await fetchAudienceByInternalCode(internalCode);
+    const result = await fetchAudienceByInternalCode(etiqueta);
 
     if (!result.success) {
       setError("No se encontró el registro con ese código interno");
@@ -301,8 +301,8 @@ export function NotificationCorrectionModal({
               <Input disabled={true} {...form.register("title")} />
             </div>
             <div>
-              <Label>Código Interno *</Label>
-              <Input {...form.register("codigo_interno")} />
+              <Label>Etiqueta *</Label>
+              <Input {...form.register("etiqueta")} />
             </div>
             <div>
               <Label>Abogado *</Label>
@@ -359,7 +359,7 @@ export function NotificationCorrectionModal({
             </div>
             <div>
               <Label>Juzgado</Label>
-              <Input disabled={true} {...form.register("juzgado")} />
+              <Input disabled={true} {...form.register("despachoJudicial")} />
             </div>
           </div>
 

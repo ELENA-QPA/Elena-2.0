@@ -61,9 +61,9 @@ const DEFAULT_FORM_VALUES: EventoForm = {
   contacto_demandante: "",
   email_demandante: "",
   demandado: "",
-  juzgado: "",
+  despachoJudicial: "",
   abogado_id: "",
-  codigo_interno: "",
+  etiqueta: "",
   link_teams: "",
   estado: "Programada",
   start: "",
@@ -84,7 +84,7 @@ export function EventModal({
   const {
     error,
     setError,
-    fetchAudienceByInternalCode,
+    fetchAudienceByInternalCode: fetchAudienceByEtiqueta,
     createAudience,
     updateAudience,
     deleteAudience,
@@ -108,13 +108,15 @@ export function EventModal({
   const blockAmount = estadoActual !== "Conciliada";
 
   const handleSync = async () => {
-    const internalCode = form.getValues("codigo_interno");
+    const etiqueta = form.getValues("etiqueta");
 
-    if (!internalCode) {
+    if (!etiqueta) {
       return;
     }
 
-    const result = await fetchAudienceByInternalCode(internalCode);
+    const result = await fetchAudienceByEtiqueta(etiqueta);
+
+    console.log("Resultado de la sincronización:", result);
 
     if (!result.success) {
       form.reset({
@@ -217,8 +219,8 @@ export function EventModal({
           </DialogHeader>
 
           <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div>
+            <div className="grid grid-cols-5 gap-4">
+              <div className="col-span-2">
                 <Label>Radicado</Label>
                 <Input disabled={true} {...form.register("title")} />
                 {errors.title && (
@@ -227,13 +229,10 @@ export function EventModal({
               </div>
               <div>
                 <Label>Código Interno</Label>
-                <Input
-                  disabled={editing}
-                  {...form.register("codigo_interno")}
-                />
+                <Input disabled={editing} {...form.register("etiqueta")} />
               </div>
 
-              <div>
+              <div className="col-span-2">
                 <Label>Abogado</Label>
                 {!isEditable ? (
                   <Select
@@ -280,7 +279,11 @@ export function EventModal({
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label>Demandante</Label>
-                <Input disabled={true} {...form.register("demandante")} />
+                <Input
+                  disabled={true}
+                  className="truncate"
+                  {...form.register("demandante")}
+                />
               </div>
 
               <div>
@@ -304,7 +307,11 @@ export function EventModal({
               </div>
               <div>
                 <Label>Juzgado</Label>
-                <Input disabled={true} {...form.register("juzgado")} />
+                <Input
+                  disabled={true}
+                  className="truncate"
+                  {...form.register("despachoJudicial")}
+                />
               </div>
             </div>
 

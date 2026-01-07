@@ -137,10 +137,33 @@ export class AudienceService {
         this.validateRequiredFields(createAudienceDto);
       }
       const is_valid = this.isValid(createAudienceDto);
-      const audience = new this.audienceModel({
-        ...createAudienceDto,
-        is_valid,
-      });
+
+      let audience;
+
+      if (is_valid) {
+        const createdDate = new Date();
+        const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
+          createdDate,
+          1,
+        );
+
+        audience = new this.audienceModel({
+          ...createAudienceDto,
+          is_valid,
+          notifications: {
+            oneDayAfterCreation: {
+              sent: false,
+              scheduledFor: scheduledNotificationDate,
+            },
+          },
+        });
+      } else {
+        audience = new this.audienceModel({
+          ...createAudienceDto,
+          is_valid,
+        });
+      }
+
       const savedAudience = await audience.save();
       return savedAudience;
     } catch (error) {
@@ -157,23 +180,7 @@ export class AudienceService {
   async createWithValidation(
     createAudienceDto: CreateAudienceDto,
   ): Promise<Audience> {
-    const createdDate = new Date();
-    // createdDate.setDate(createdDate.getDate() - 1);
-    const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
-      createdDate,
-      1,
-    );
-
-    const dtoWithNotification = {
-      ...createAudienceDto,
-      notifications: {
-        oneDayAfterCreation: {
-          sent: false,
-          scheduledFor: scheduledNotificationDate,
-        },
-      },
-    };
-    return this.createAudience(dtoWithNotification, true);
+    return this.createAudience(createAudienceDto, true);
   }
 
   async findAll(queryDto: QueryAudienceDto): Promise<AudienceResponse[]> {
