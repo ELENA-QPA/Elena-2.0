@@ -32,8 +32,9 @@ import { firstConsecutivePart } from '../common/constants/first-consecutive-part
 import { secondConsecutivePart } from '../common/constants/second-consecutive-part.constant';
 import { GetStatisticsDto } from './dto/get-statistics.dto';
 import { ByClientDto } from './dto/by-client-document.dto';
-import { ByInternalCodeDto } from './dto/by-internal-code.dto';
-import { getInternalCodeByIdDto } from './dto/get-internal-code.dto';
+import { ByEtiquetaDto } from './dto/by-internal-code.dto';
+import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
+import e from 'express';
 // import { Multer } from 'multer';
 
 @Injectable()
@@ -58,7 +59,7 @@ export class RecordsService {
    * @param documentType
    * @returns
    */
-  private async generateInternalCode(
+  private async generateEtiqueta(
     clientType: string,
     documentType: string,
   ): Promise<string> {
@@ -72,14 +73,13 @@ export class RecordsService {
         );
       }
 
-      const maxInternalCodeData = await this.getMaxInternalCodeByProcessType(
+      const maxEtiquetaData = await this.getMaxEtiquetaByProcessType(
         clientType,
       );
 
       let nextClientNumber = 1; // Número base inicial
-      if (maxInternalCodeData.maxInternalCode) {
-        const matches =
-          maxInternalCodeData.maxInternalCode.match(/^[A-Z](\d+)$/);
+      if (maxEtiquetaData.maxEtiqueta) {
+        const matches = maxEtiquetaData.maxEtiqueta.match(/^[A-Z](\d+)$/);
         if (matches) {
           nextClientNumber = parseInt(matches[1]) + 1;
         }
@@ -98,7 +98,7 @@ export class RecordsService {
   }
 
   private async generateDocumentConsecutive(
-    internalCode: string,
+    etiqueta: string,
     documentType: string,
   ): Promise<string> {
     try {
@@ -111,7 +111,7 @@ export class RecordsService {
       }
 
       // Obtener el siguiente número consecutivo para este tipo de documento específico
-      const documentPattern = `^${internalCode}-${secondPart}-QPA-`;
+      const documentPattern = `^${etiqueta}-${secondPart}-QPA-`;
 
       // Buscar directamente en la colección de documentos usando regex
       const DocumentModel = this.connection.model('Documento');
@@ -132,7 +132,7 @@ export class RecordsService {
       }
 
       const paddedNumber = nextDocumentNumber.toString().padStart(2, '0');
-      return `${internalCode}-${secondPart}-QPA-${paddedNumber}`;
+      return `${etiqueta}-${secondPart}-QPA-${paddedNumber}`;
     } catch (error) {
       console.error('Error al generar consecutivo del documento:', error);
       throw new InternalServerErrorException(
@@ -260,11 +260,11 @@ export class RecordsService {
         }
       }
 
-      // 2. Generar el internalCode básico automáticamente (ej: R430)
-      let internalCode: string;
+      // 2. Generar la etiqueta básico automáticamente (ej: R430)
+      let etiqueta: string;
       if (recordData.clientType && documents && documents.length > 0) {
         const firstDocument = documents[0];
-        internalCode = await this.generateInternalCode(
+        etiqueta = await this.generateEtiqueta(
           recordData.clientType,
           firstDocument.document,
         );
@@ -277,7 +277,7 @@ export class RecordsService {
       // 3. Crear el record principal
       const dataToInsert = {
         ...recordData,
-        internalCode,
+        etiqueta: etiqueta,
         user: user.id,
       };
 
@@ -288,7 +288,7 @@ export class RecordsService {
       if (documents && Array.isArray(documents) && documents.length > 0) {
         const firstDocument = documents[0];
         const documentConsecutive = await this.generateDocumentConsecutive(
-          internalCode,
+          etiqueta,
           firstDocument.document,
         );
 
@@ -355,7 +355,7 @@ export class RecordsService {
         success: true,
         message: 'Caso completo creado exitosamente',
         record: recordCreated,
-        internalCode,
+        etiqueta: etiqueta,
         documentsCount: documents?.length || 0,
         intervenersCount: interveners?.length || 0,
         proceduralPartsCount: proceduralParts?.length || 0,
@@ -419,17 +419,17 @@ export class RecordsService {
         );
       }
 
-      // Generar el internalCode básico automáticamente
-      let internalCode: string;
+      // Generar la etiqueta básica automáticamente
+      let etiqueta: string;
       const firstDocument = documents[0];
-      internalCode = await this.generateInternalCode(
+      etiqueta = await this.generateEtiqueta(
         recordData.clientType,
         firstDocument.document,
       );
 
       const dataToInsert = {
         ...recordData,
-        internalCode,
+        etiqueta: etiqueta,
         user: user.id,
       };
 
@@ -440,7 +440,7 @@ export class RecordsService {
       if (documents && Array.isArray(documents) && documents.length > 0) {
         const firstDocument = documents[0];
         const documentConsecutive = await this.generateDocumentConsecutive(
-          internalCode,
+          etiqueta,
           firstDocument.document,
         );
 
@@ -569,17 +569,17 @@ export class RecordsService {
           deletedAt: { $exists: false },
           // Aquí puedes agregar más filtros si tienes un campo específico para el tipo de documento
         })
-        .select('internalCode')
+        .select('etiqueta')
         .exec();
 
       let maxNumber = 0;
 
-      // Buscar en todos los internalCode el patrón del documento y extraer el número más alto
+      // Buscar en todos los etiqueta el patrón del documento y extraer el número más alto
       const regexPattern = new RegExp(`-${documentCode}-QPA-(\\d+)$`);
 
       for (const record of records) {
-        if (record.internalCode) {
-          const match = record.internalCode.match(regexPattern);
+        if (record.etiqueta) {
+          const match = record.etiqueta.match(regexPattern);
           if (match && match[1]) {
             const currentNumber = parseInt(match[1], 10);
             if (currentNumber > maxNumber) {
@@ -604,19 +604,17 @@ export class RecordsService {
 
   // -----------------------------------------------------
   /**
-   * Verifica si el código interno base ya existe en algún record
-   * @param internalCode El código interno base a verificar (ej: "R123")
+   * Verifica si la etiqueta base ya existe en algún record
+   * @param etiqueta La etiqueta base a verificar (ej: "R123")
    * @returns true si existe, false si no existe
    */
-  private async checkInternalCodeBaseExists(
-    internalCode: string,
-  ): Promise<boolean> {
+  private async checkEtiquetaBaseExists(etiqueta: string): Promise<boolean> {
     try {
-      // Buscar en todos los records si existe algún código que empiece con este código base
+      // Buscar en todos los records si existe algún código que empiece con esta etiqueta base
       // Esto incluye tanto "R123" como "R123-DDD-QPA-001"
       const existingRecord = await this.recordModel
         .findOne({
-          internalCode: new RegExp(`^${internalCode}(-|$)`),
+          etiqueta: new RegExp(`^${etiqueta}(-|$)`),
           // deletedAt: { $exists: false } // Solo considerar records no eliminados
         })
         .exec();
@@ -1157,30 +1155,30 @@ export class RecordsService {
   }
 
   // -----------------------------------------------------
-  async getMaxInternalCodeByProcessType(processType: string) {
+  async getMaxEtiquetaByProcessType(processType: string) {
     try {
-      // Buscar el record con el mayor internalCode básico para el processType especificado
-      // Solo códigos básicos como R430, R431, etc. (sin guiones)
+      // Buscar el record con la mayor etiqueta básica para el processType especificado
+      // Solo etiquetas básicas como R430, R431, etc. (sin guiones)
       const record = await this.recordModel
         .findOne({
           clientType: processType,
-          internalCode: { $regex: `^[A-Z]\\d+$` }, // Solo códigos básicos sin guiones
+          etiqueta: { $regex: `^[A-Z]\\d+$` }, // Solo etiquetas básicas sin guiones
         })
-        .sort({ internalCode: -1 })
-        .select('internalCode')
+        .sort({ etiqueta: -1 })
+        .select('etiqueta')
         .exec();
 
       if (!record) {
         return {
           message: `No se encontraron registros para el tipo de proceso: ${processType}`,
-          maxInternalCode: null,
+          maxEtiqueta: null,
           processType,
         };
       }
 
       return {
         message: `Mayor código interno encontrado para el tipo de proceso: ${processType}`,
-        maxInternalCode: record.internalCode,
+        maxEtiqueta: record.etiqueta,
         processType,
       };
     } catch (error) {
@@ -1216,7 +1214,7 @@ export class RecordsService {
       // Preparar datos para actualizar (solo campos básicos del record)
       const dataToUpdate: Partial<Record> = {};
 
-      // Solo incluir campos que no sean null/undefined (internalCode NO es editable)
+      // Solo incluir campos que no sean null/undefined (etiqueta NO es editable)
       // if (updateRecordDto.clientType !== undefined) dataToUpdate.clientType = updateRecordDto.clientType;
       if (updateRecordDto.department !== undefined)
         dataToUpdate.department = updateRecordDto.department;
@@ -1228,10 +1226,10 @@ export class RecordsService {
         dataToUpdate.location = updateRecordDto.location;
       if (updateRecordDto.processType !== undefined)
         dataToUpdate.processType = updateRecordDto.processType;
-      if (updateRecordDto.office !== undefined)
-        dataToUpdate.office = updateRecordDto.office;
-      if (updateRecordDto.settled !== undefined)
-        dataToUpdate.settled = updateRecordDto.settled;
+      if (updateRecordDto.despachoJudicial !== undefined)
+        dataToUpdate.despachoJudicial = updateRecordDto.despachoJudicial;
+      if (updateRecordDto.radicado !== undefined)
+        dataToUpdate.radicado = updateRecordDto.radicado;
       if (updateRecordDto.city !== undefined)
         dataToUpdate.city = updateRecordDto.city;
       if (updateRecordDto.country !== undefined)
@@ -1817,7 +1815,7 @@ export class RecordsService {
       {
         $group: {
           _id: {
-            office: '$office',
+            despachoJudicial: '$despachoJudicial',
             city: '$city',
             department: '$department',
           },
@@ -1827,17 +1825,17 @@ export class RecordsService {
       {
         $project: {
           _id: 0,
-          office: '$_id.office',
+          despachoJudicial: '$_id.despachoJudicial',
           city: '$_id.city',
           department: '$_id.department',
           count: 1,
         },
       },
-      { $sort: { department: 1, city: 1, office: 1 } },
+      { $sort: { department: 1, city: 1, despachoJudicial: 1 } },
     ]);
     // Mapear para asegurar que si falta department o city se devuelva null
     const result = aggregation.map((item) => ({
-      office: item.office,
+      despachoJudicial: item.despachoJudicial,
       city: item.city ?? null,
       department: item.department ?? null,
       count: item.count,
@@ -2000,22 +1998,22 @@ export class RecordsService {
     }
   }
   // -----------------------------------------------------
-  async getRecordDetailsByInternalCode(internalCodeDto: ByInternalCodeDto) {
+  async getRecordDetailsByEtiqueta(EtiquetaDto: ByEtiquetaDto) {
     try {
-      const { internalCode } = internalCodeDto;
-      // Buscar el record por internalCode
+      const { etiqueta } = EtiquetaDto;
+      // Buscar el record por etiqueta
       const record = await this.recordModel
         .findOne({
-          internalCode,
+          etiqueta: etiqueta,
           deletedAt: { $exists: false },
         })
         .select(
-          ' internalCode processType jurisdiction settled office clientType',
+          ' etiqueta processType jurisdiction radicado despachoJudicial clientType',
         );
 
       if (!record) {
         throw new NotFoundException(
-          `No se encontró el caso con código interno: ${internalCode}`,
+          `No se encontró el caso con código interno: ${etiqueta}`,
         );
       }
 
@@ -2093,8 +2091,8 @@ export class RecordsService {
       if (basicRecordsResult.active && basicRecordsResult.active.length > 0) {
         for (const activeRecord of basicRecordsResult.active) {
           try {
-            const detailsResult = await this.getRecordDetailsByInternalCode({
-              internalCode: activeRecord.internalCode,
+            const detailsResult = await this.getRecordDetailsByEtiqueta({
+              etiqueta: activeRecord.etiqueta,
             });
             activeRecordsWithDetails.push({
               ...detailsResult.record,
@@ -2103,12 +2101,12 @@ export class RecordsService {
             });
           } catch (error) {
             console.warn(
-              `Error obteniendo detalles del caso activo ${activeRecord.internalCode}:`,
+              `Error obteniendo detalles del caso activo ${activeRecord.etiqueta}:`,
               error.message,
             );
             // Si no se pueden obtener los detalles, incluir solo la información básica
             activeRecordsWithDetails.push({
-              internalCode: activeRecord.internalCode,
+              etiqueta: activeRecord.etiqueta,
               state: activeRecord.state,
               updatedAt: activeRecord.updatedAt,
               error: 'No se pudieron obtener los detalles completos',
@@ -2125,8 +2123,8 @@ export class RecordsService {
       ) {
         for (const finalizedRecord of basicRecordsResult.finalized) {
           try {
-            const detailsResult = await this.getRecordDetailsByInternalCode({
-              internalCode: finalizedRecord.internalCode,
+            const detailsResult = await this.getRecordDetailsByEtiqueta({
+              etiqueta: finalizedRecord.etiqueta,
             });
             finalizedRecordsWithDetails.push({
               ...detailsResult.record,
@@ -2135,12 +2133,12 @@ export class RecordsService {
             });
           } catch (error) {
             console.warn(
-              `Error obteniendo detalles del caso finalizado ${finalizedRecord.internalCode}:`,
+              `Error obteniendo detalles del caso finalizado ${finalizedRecord.etiqueta}:`,
               error.message,
             );
             // Si no se pueden obtener los detalles, incluir solo la información básica
             finalizedRecordsWithDetails.push({
-              internalCode: finalizedRecord.internalCode,
+              etiqueta: finalizedRecord.etiqueta,
               state: finalizedRecord.state,
               updatedAt: finalizedRecord.updatedAt,
               error: 'No se pudieron obtener los detalles completos',
@@ -2169,7 +2167,7 @@ export class RecordsService {
     }
   }
   // -----------------------------------------------------
-  async getInternalCodeById(body: getInternalCodeByIdDto) {
+  async getEtiquetaCodeById(body: getEtiquetaByIdDto) {
     try {
       const { id } = body;
 
@@ -2178,20 +2176,20 @@ export class RecordsService {
           _id: id,
           deletedAt: { $exists: false },
         })
-        .select('internalCode')
+        .select('etiqueta')
         .lean();
 
       if (!record) {
         throw new NotFoundException(`No se encontró el caso con id: ${id}`);
       }
       return {
-        internalCode: record.internalCode,
+        etiqueta: record.etiqueta,
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException('Error al obtener el código interno');
+      throw new BadRequestException('Error al obtener la etiqueta por id');
     }
   }
 

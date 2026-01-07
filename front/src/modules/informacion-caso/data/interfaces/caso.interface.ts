@@ -74,7 +74,6 @@ export interface User {
 // Caso principal
 export interface Caso {
   _id?: string;
-  internalCode?: string; // Puede no venir
   clientType: string;
   department?: string; // Puede no venir
   city?: string;
@@ -83,11 +82,9 @@ export interface Caso {
   // Campos de radicado - TODOS LOS POSIBLES NOMBRES
   numeroRadicado?: string;
   radicado?: string; // ← Este es el que usa tu backend
-  settled?: string; // ← Alternativo
 
   // Campos de despacho - TODOS LOS POSIBLES NOMBRES
   despachoJudicial?: string; // ← Este es el que usa tu backend
-  office?: string; // ← Alternativo
 
   personType?: string; // Puede no venir
   jurisdiction?: string; // Puede no venir
@@ -125,8 +122,8 @@ export interface CreateCasoBody {
   personType: string;
   jurisdiction: string;
   processType: string;
-  office: string;
-  settled: string;
+  despachoJudicial: string;
+  radicado: string;
   country: string;
   location?: string;
   documents: CreateDocumentData[];
@@ -146,8 +143,8 @@ export interface UpdateCasoBody {
   personType?: string;
   jurisdiction?: string;
   processType?: string;
-  office?: string;
-  settled?: string;
+  despachoJudicial?: string;
+  radicado?: string;
   city?: string;
   country?: string;
   ultimaAnotacion?: string;

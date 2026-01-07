@@ -33,9 +33,9 @@ export class RecordAdapter {
     const adaptedRecord: RecordAdapted = {
       _id: record._id,
       client: record.clientType,
-      internalCode: record.internalCode,
-      office: record.office,
-      settled: record.settled,
+      etiqueta: record.etiqueta,
+      despachoJudicial: record.despachoJudicial,
+      radicado: record.radicado,
       proceduralParts: {
         plaintiff,
         defendant,

@@ -6,7 +6,7 @@ import {
   IdAudienceDto,
   IdLawyerDto,
   IdRecordDto,
-  InternalCodeDto,
+  EtiquetaDto,
 } from '../dto/records-service.dto';
 import { AudienceService } from 'src/audience/services/audience.service';
 import { AudienceResponse } from 'src/audience/interfaces/audience.interfaces';
@@ -149,12 +149,10 @@ export class OrchestratorService {
   }
 
   // metodos para obetenr records
-  async getRecordByInternalCode(
-    dto: InternalCodeDto,
-  ): Promise<RecordAdaptedResponse> {
+  async getRecordByEtiqueta(dto: EtiquetaDto): Promise<RecordAdaptedResponse> {
     try {
       const recordResponse =
-        await this.recordsService.getRecordDetailsByInternalCode(dto);
+        await this.recordsService.getRecordDetailsByEtiqueta(dto);
 
       const adaptedResponse = this.recordAdapter.adapt(recordResponse);
 
@@ -164,9 +162,9 @@ export class OrchestratorService {
     }
   }
 
-  async getInternalCodeById(dto: IdRecordDto): Promise<InternalCodeDto> {
+  async getEtiquetaById(dto: IdRecordDto): Promise<EtiquetaDto> {
     try {
-      const result = await this.recordsService.getInternalCodeById(dto);
+      const result = await this.recordsService.getEtiquetaCodeById(dto);
       return result;
     } catch (error) {
       throw error;
@@ -175,11 +173,9 @@ export class OrchestratorService {
 
   async getRecordById(dto: IdRecordDto): Promise<RecordAdaptedResponse> {
     try {
-      const internalCodeDto: InternalCodeDto = await this.getInternalCodeById(
-        dto,
-      );
+      const EtiquetaDto: EtiquetaDto = await this.getEtiquetaById(dto);
 
-      const record = await this.getRecordByInternalCode(internalCodeDto);
+      const record = await this.getRecordByEtiqueta(EtiquetaDto);
 
       return record;
     } catch (error) {

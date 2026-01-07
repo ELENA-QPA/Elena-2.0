@@ -24,7 +24,7 @@ export abstract class AudienceRepository {
 
   abstract getAllByLawyer(lawyerId: string): Promise<Evento[]>;
 
-  abstract getRecordByInternalCode(internalCode: string): Promise<EventoForm>;
+  abstract getRecordByEtiqueta(etiqueta: string): Promise<EventoForm>;
 
   abstract createAudience(body: AudienceCreate): Promise<AudienceCreate>;
 
@@ -102,14 +102,14 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     );
   }
 
-  async getRecordByInternalCode(internalCode: string): Promise<EventoForm> {
+  async getRecordByEtiqueta(etiqueta: string): Promise<EventoForm> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getRecordByInternal,
       method: "post",
-      body: JSON.stringify({ internalCode: internalCode }),
+      body: JSON.stringify({ etiqueta: etiqueta }),
       isAuth: true,
     });
-
+    console.log("Response repository:", response.body);
     if (response.statusCode === HttpStatusCode.ok) {
       return mapRecordToEvent(response.body);
     }

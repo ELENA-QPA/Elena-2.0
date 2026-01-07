@@ -36,12 +36,6 @@ export class Record extends Document {
   processType: string;
 
   @Prop()
-  office: string;
-
-  @Prop()
-  settled: string;
-
-  @Prop()
   city?: string;
 
   @Prop({ default: 'Colombia' })

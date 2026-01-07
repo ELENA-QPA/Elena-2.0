@@ -195,7 +195,7 @@ export function CreateCasoForm() {
   const [processTypes, setProcessTypes] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
-    internalCode: "",
+    etiqueta: "",
     clientType: "",
     department: "",
     city: "",
@@ -206,7 +206,7 @@ export function CreateCasoForm() {
     country: "COLOMBIA",
     jurisdiction: "",
     processType: "",
-    office: "",
+    despachoJudicial: "",
     location: "",
   });
 
@@ -276,7 +276,7 @@ export function CreateCasoForm() {
   useEffect(() => {
     if (caso && (mode === "edit" || mode === "view")) {
       setFormData({
-        internalCode: caso.internalCode || caso.etiqueta || "",
+        etiqueta: caso.etiqueta || "",
         clientType: caso.clientType?.trim() || "",
         department: caso.department || "",
         city: caso.city || "",
@@ -294,7 +294,7 @@ export function CreateCasoForm() {
         country: caso.country || "COLOMBIA",
         jurisdiction: caso.jurisdiction || "",
         processType: caso.processType || "",
-        office: caso.despachoJudicial || "",
+        despachoJudicial: caso.despachoJudicial || "",
         location: caso.location || "",
       });
     }
@@ -319,7 +319,7 @@ export function CreateCasoForm() {
     try {
       // Validar campos obligatorios
       if (
-        !formData.internalCode ||
+        !formData.etiqueta ||
         !formData.clientType ||
         !formData.department ||
         !formData.city ||
@@ -330,11 +330,11 @@ export function CreateCasoForm() {
         !formData.country ||
         !formData.jurisdiction ||
         !formData.processType ||
-        !formData.office ||
+        !formData.despachoJudicial ||
         !formData.location
       ) {
         console.error("[CREATE_CASO_FORM] Faltan campos obligatorios:", {
-          internalCode: !!formData.internalCode,
+          etiqueta: !!formData.etiqueta,
           clientType: !!formData.clientType,
           department: !!formData.department,
           personType: !!formData.personType,
@@ -344,7 +344,7 @@ export function CreateCasoForm() {
           country: !!formData.country,
           jurisdiction: !!formData.jurisdiction,
           processType: !!formData.processType,
-          office: !!formData.office,
+          despachoJudicial: !!formData.despachoJudicial,
           location: !!formData.location,
         });
         toast.error("Por favor completa todos los campos obligatorios (*)");
@@ -354,7 +354,6 @@ export function CreateCasoForm() {
 
       // Obtener el usuario y token responsable
       let responsible = "Sistema";
-      let userToken = null;
 
       // Verificar token en cookies (usado por el HttpClient)
       const cookieToken = getCookie(CookiesKeysEnum.token);
@@ -400,12 +399,12 @@ export function CreateCasoForm() {
         department: formData.department,
         city: formData.city,
         numeroRadicado:
-          formData.numeroRadicado || formData.internalCode || undefined,
+          formData.numeroRadicado || formData.etiqueta || undefined,
         personType: formData.personType || "NATURAL",
         jurisdiction: formData.jurisdiction,
         processType: formData.processType,
-        office: formData.office,
-        settled: formData.numeroRadicado || "NO",
+        despachoJudicial: formData.despachoJudicial,
+        radicado: formData.numeroRadicado || "NO",
         country: formData.country || "COLOMBIA",
         location: formData.location,
         // estado: 'ACTIVO',
@@ -444,8 +443,9 @@ export function CreateCasoForm() {
           createdAt: new Date().toISOString(),
         }),
       };
-      
-      const response = await createCaso(casoData);     
+
+      console.log("[CREATE_CASO_FORM] Datos para crear caso:", casoData);
+      const response = await createCaso(casoData);
 
       if ("record" in response) {
         toast.success("Caso creado exitosamente", { position: "top-right" });
@@ -527,9 +527,9 @@ export function CreateCasoForm() {
                 <Label htmlFor="internalCode">Código Interno *</Label>
                 <Input
                   id="internalCode"
-                  value={formData.internalCode}
+                  value={formData.etiqueta}
                   onChange={(e) =>
-                    handleInputChange("internalCode", e.target.value)
+                    handleInputChange("etiqueta", e.target.value)
                   }
                   placeholder="Ej: EXP-2024-001"
                   required
@@ -759,11 +759,13 @@ export function CreateCasoForm() {
 
               {/* Oficina */}
               <div className="space-y-2">
-                <Label htmlFor="office">Oficina *</Label>
+                <Label htmlFor="despachoJudicial">Despacho Judicial *</Label>
                 <Input
-                  id="office"
-                  value={formData.office}
-                  onChange={(e) => handleInputChange("office", e.target.value)}
+                  id="despachoJudicial"
+                  value={formData.despachoJudicial}
+                  onChange={(e) =>
+                    handleInputChange("despachoJudicial", e.target.value)
+                  }
                   placeholder="Ej: Juzgado 1 Civil del Circuito de Bogotá"
                   required
                 />
