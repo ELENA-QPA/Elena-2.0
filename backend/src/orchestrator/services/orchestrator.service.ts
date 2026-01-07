@@ -25,6 +25,7 @@ import {
   EmailReminderData,
 } from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
+import { UtilitiesService } from 'src/common/services/utilities.service';
 
 @Injectable()
 export class OrchestratorService {
@@ -38,6 +39,7 @@ export class OrchestratorService {
     private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,
     private readonly recordAdapter: RecordAdapter,
+    private readonly utilitiesService: UtilitiesService,
   ) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -46,85 +48,7 @@ export class OrchestratorService {
     this.model = process.env.OPENAI_MODEL ?? 'gpt-5-nano';
   }
 
-  private readonly colombianHolidays2025: Date[] = [
-    new Date('2025-01-01'),
-    new Date('2025-01-06'),
-    new Date('2025-03-24'),
-    new Date('2025-04-17'),
-    new Date('2025-04-18'),
-    new Date('2025-05-01'),
-    new Date('2025-06-02'),
-    new Date('2025-06-23'),
-    new Date('2025-06-30'),
-    new Date('2025-07-07'),
-    new Date('2025-07-20'),
-    new Date('2025-08-07'),
-    new Date('2025-08-18'),
-    new Date('2025-10-13'),
-    new Date('2025-11-03'),
-    new Date('2025-11-17'),
-    new Date('2025-12-08'),
-    new Date('2025-12-25'),
-  ];
-
-  // Metodos auxilaires paar enviar recordatorios
-  private isBusinessDay(date: Date): boolean {
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) return false;
-
-    const dateStr = date.toISOString().split('T')[0];
-    return !this.colombianHolidays2025.some(
-      (holiday) => holiday.toISOString().split('T')[0] === dateStr,
-    );
-  }
-
-  private subtractBusinessDays(endDate: Date, businessDays: number): Date {
-    let currentDate = new Date(endDate);
-    let daysSubtracted = 0;
-
-    while (daysSubtracted < businessDays) {
-      currentDate.setDate(currentDate.getDate() - 1);
-
-      if (this.isBusinessDay(currentDate)) {
-        daysSubtracted++;
-      }
-    }
-
-    return currentDate;
-  }
-
-  private isExactlyNBusinessDaysBefore(
-    targetDate: Date,
-    businessDays: number,
-  ): boolean {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const notificationDate = this.subtractBusinessDays(
-      targetDate,
-      businessDays,
-    );
-    notificationDate.setHours(0, 0, 0, 0);
-
-    return today.getTime() === notificationDate.getTime();
-  }
-
-  private async enqueueReminder(
-    audienceData: AudienceOrchestratorResponse,
-    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
-  ): Promise<void> {
-    const { audience, record } = audienceData;
-    audienceData.audience = this.reminderService.buildAudienceContext(audience);
-
-    const emailData: EmailReminderData = {
-      to: record.proceduralParts.plaintiff.email,
-      subject: 'Notificación de audiencia',
-      template: './audience-notification',
-      context: audienceData,
-    };
-
-    await this.reminderService.sendEmail(emailData);
-
+  private async callReminder(record, audienceData) {
     const daptaData: DaptaData = {
       phone_number: `+57${record.proceduralParts.plaintiff.contact}` || '',
       plaintiff_name: record.proceduralParts.plaintiff.name || '',
@@ -136,6 +60,32 @@ export class OrchestratorService {
     };
 
     await this.reminderService.enqueueDaptaCall(daptaData);
+  }
+
+  private async emailReminder(record, audienceData) {
+    const emailData: EmailReminderData = {
+      to: record.proceduralParts.plaintiff.email,
+      subject: 'Notificación de audiencia',
+      template: './audience-notification',
+      context: audienceData,
+    };
+
+    await this.reminderService.sendEmail(emailData);
+  }
+
+  private async enqueueReminder(
+    audienceData: AudienceOrchestratorResponse,
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay' | 'oneDayAfterCreation',
+  ): Promise<void> {
+    const { audience, record } = audienceData;
+    audienceData.audience = this.reminderService.buildAudienceContext(audience);
+
+    if (type === 'oneDay') {
+      await this.callReminder(record, audienceData);
+      await this.emailReminder(record, audienceData);
+    } else {
+      await this.emailReminder(record, audienceData);
+    }
 
     await this.audienceService.markNotificationAsSent(audience._id, type);
   }
@@ -374,13 +324,6 @@ export class OrchestratorService {
   }
 
   // metodos para obtener abogados disponibles
-
-  private colombiaToUTC(dateString: string): Date {
-    const date = new Date(dateString);
-
-    return new Date(date.getTime() + 5 * 60 * 60 * 1000);
-  }
-
   private async checkLawyerAvailability(
     lawyerId: string,
     start: Date,
@@ -415,8 +358,8 @@ export class OrchestratorService {
 
     let lastCheckedId: string = lawyerIds[0];
 
-    const startDate = this.colombiaToUTC(start);
-    const endDate = this.colombiaToUTC(end);
+    const startDate = this.utilitiesService.colombiaToUTC(start);
+    const endDate = this.utilitiesService.colombiaToUTC(end);
 
     while (lawyerIds.length > 0) {
       const randomIndex = Math.floor(Math.random() * lawyerIds.length);
@@ -515,7 +458,7 @@ export class OrchestratorService {
   async processReminders(): Promise<void> {
     const today = new Date();
 
-    if (!this.isBusinessDay(today)) {
+    if (!this.utilitiesService.isBusinessDay(today)) {
       return;
     }
 
@@ -528,7 +471,9 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesOneMonth) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 20)
+        ) {
           await this.enqueueReminder(audienceData, 'oneMonth');
         }
       }
@@ -543,7 +488,9 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesFifteenDays) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 15)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 5)
+        ) {
           await this.enqueueReminder(audienceData, 'fifteenDays');
         }
       }
@@ -556,9 +503,25 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesOneDay) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 1)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 1)
+        ) {
           await this.enqueueReminder(audienceData, 'oneDay');
         }
+      }
+
+      const queryOneDayAfter = {
+        is_valid: 'true',
+        notificationOneDayAfter: 'false',
+        notificationOneDayAfterDate: today,
+      };
+
+      const audiencesOneDayAfter = await this.getFilteredAudiences(
+        queryOneDayAfter,
+      );
+
+      for (const audienceData of audiencesOneDayAfter) {
+        await this.enqueueReminder(audienceData, 'oneDayAfterCreation');
       }
     } catch (error) {}
   }

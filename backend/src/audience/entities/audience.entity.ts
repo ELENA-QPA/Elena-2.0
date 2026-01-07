@@ -40,23 +40,29 @@ export class Audience extends Document {
 
   @Prop()
   deletedAt?: Date;
-
   @Prop({
     type: {
       oneMonth: { sent: Boolean, sentAt: Date },
       fifteenDays: { sent: Boolean, sentAt: Date },
       oneDay: { sent: Boolean, sentAt: Date },
+      oneDayAfterCreation: { sent: Boolean, sentAt: Date, scheduledFor: Date },
     },
     default: {
       oneMonth: { sent: false, sentAt: null },
       fifteenDays: { sent: false, sentAt: null },
       oneDay: { sent: false, sentAt: null },
+      oneDayAfterCreation: { sent: false, sentAt: null, scheduledFor: null },
     },
   })
   notifications?: {
     oneMonth: { sent: boolean; sentAt?: Date };
     fifteenDays: { sent: boolean; sentAt?: Date };
     oneDay: { sent: boolean; sentAt?: Date };
+    oneDayAfterCreation: {
+      sent: boolean;
+      sentAt?: Date;
+      scheduledFor?: Date;
+    };
   };
 }
 

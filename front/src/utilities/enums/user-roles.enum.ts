@@ -1,21 +1,13 @@
 export enum UserRole {
   ADMINISTRADOR = "Administrador",
-  ABOGADO = "lawyer",
-  ASISTENTE_LEGAL = "Asistente Legal",
-  ANALISTA_LEGAL_I = "Analista legal I",
-  ANALISTA_LEGAL_II = "Analista legal II",
-  ANALISTA_LEGAL_III = "Analista legal III",
+  ASISTENTE_LEGAL = "lawyer",
 }
 
 export const USER_ROLES = Object.values(UserRole);
 
 export const USER_ROLE_LABELS = {
   [UserRole.ADMINISTRADOR]: "Administrador",
-  [UserRole.ABOGADO]: "Abogado",
   [UserRole.ASISTENTE_LEGAL]: "Asistente Legal",
-  [UserRole.ANALISTA_LEGAL_I]: "Analista Legal I",
-  [UserRole.ANALISTA_LEGAL_II]: "Analista Legal II",
-  [UserRole.ANALISTA_LEGAL_III]: "Analista Legal III",
 };
 
 // Función helper para validar roles
