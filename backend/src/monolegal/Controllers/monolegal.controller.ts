@@ -8,6 +8,7 @@ import {
   Body,
   Get,
   Param,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -182,6 +183,23 @@ export class MonolegalController {
     }
 
     return this.monolegalService.syncFromApi(user._id.toString(), fecha);
+  }
+
+  private readonly logger = new Logger(MonolegalController.name);
+  @Post('sync/history')
+  async syncHistoryWithMonolegal(@Body() body?: { fecha?: string }) {
+    let fecha: Date;
+
+    this.logger.log('Iniciando syncHistoryWithMonolegal');
+
+    if (body?.fecha) {
+      const [year, month, day] = body.fecha.split('-').map(Number);
+      fecha = new Date(year, month - 1, day, 12, 0, 0);
+    } else {
+      fecha = new Date();
+    }
+
+    return this.monolegalService.syncHistoryFromApi(fecha);
   }
 
   @Post('renormalize-juzgados')

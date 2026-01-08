@@ -8,10 +8,15 @@ import {
   PartType,
 } from '../../procedural-part/entities/procedural-part.entity';
 import { Performance } from '../../perfomance/entities/perfomance.entity';
-import { ProcessResult, SyncResponse } from '../dto/import-monolegal.dto';
+import {
+  MonolegalRecordData,
+  ProcessResult,
+  SyncResponse,
+} from '../dto/import-monolegal.dto';
 import { MonolegalApiService } from './monolegal-api.service';
 import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
 import { OrchestratorService } from 'src/orchestrator/services/orchestrator.service';
+import internal from 'stream';
 
 @Injectable()
 export class MonolegalService {
@@ -373,10 +378,18 @@ export class MonolegalService {
     }
   }
 
-  async syncFromApi(userId: string, fecha?: Date): Promise<SyncResponse> {
+  async syncFromApiAbstract(
+    isUpdating: boolean,
+    fecha?: Date,
+    userId?: string,
+  ): Promise<SyncResponse> {
     const fechaConsulta = fecha || new Date();
     const fechaFormateada =
       this.monolegalApiService.formatearFechaMonolegal(fechaConsulta);
+
+    this.logger.log(
+      `Iniciando sincronización con Monolegal para fecha: ${fechaFormateada}, isUpdating: ${isUpdating}`,
+    );
 
     try {
       const resumen = await this.monolegalApiService.getResumenCambios(
@@ -416,23 +429,13 @@ export class MonolegalService {
       let skipped = 0;
       let errors = 0;
 
-      let numAuds = 0;
-      let actuacionesAudiencia = [];
       for (const cambio of cambios) {
         try {
-          const result = await this.processApiChange(cambio, userId);
-          const contieneAud = this.contieneAudienciaOConciliacion(
-            cambio.ultimaActuacion,
-            cambio.ultimaAnotacion,
-          );
-          if (contieneAud) {
-            numAuds++;
-            this.logger.log(
-              'audiencia ' +
-                cambio.ultimaActuacion +
-                '  ' +
-                cambio.ultimaAnotacion,
-            );
+          let result;
+          if (isUpdating) {
+            result = await this.processApiChange(cambio, userId);
+          } else {
+            result = await this.getApiChange(cambio);
           }
           results.push(result);
 
@@ -461,8 +464,6 @@ export class MonolegalService {
         }
       }
 
-      this.logger.log('NUMERO DE AUDIENCIAS ' + numAuds);
-
       return {
         success: true,
         message: 'Sincronización completada',
@@ -481,6 +482,14 @@ export class MonolegalService {
         `Error al sincronizar con Monolegal: ${error.message}`,
       );
     }
+  }
+
+  async syncFromApi(userId: string, fecha?: Date): Promise<SyncResponse> {
+    return this.syncFromApiAbstract(true, fecha, userId);
+  }
+
+  async syncHistoryFromApi(fecha?: Date): Promise<SyncResponse> {
+    return this.syncFromApiAbstract(false, fecha);
   }
 
   private extractCityFromDespacho(despacho: string): string {
@@ -568,19 +577,8 @@ export class MonolegalService {
     return null;
   }
 
-  private async processApiChange(
-    cambio: any,
-    userId: string,
-  ): Promise<ProcessResult> {
+  private async prepareRecordData(cambio: any): Promise<MonolegalRecordData> {
     const radicado = cambio.numero?.trim();
-
-    if (!radicado) {
-      return {
-        radicado: 'Sin radicado',
-        status: 'skipped',
-        message: 'No tiene número de proceso',
-      };
-    }
 
     let ciudad = '';
     let ubicacion = '';
@@ -618,9 +616,6 @@ export class MonolegalService {
 
           if (ciudadExtraida) {
             ciudad = ciudadExtraida;
-            // this.logger.log(
-            //   `Ciudad extraída del despacho para ${radicado}: "${ciudad}"`,
-            // );
           }
         }
 
@@ -652,25 +647,12 @@ export class MonolegalService {
       ciudad,
     );
 
-    const record = await this.recordModel.findOne({ radicado: radicado });
-
-    let internalCode = record?.internalCode;
-
-    if (!internalCode) {
-      const year = new Date().getFullYear();
-      const count = await this.recordModel.countDocuments({
-        internalCode: { $regex: `^ML-${year}-` },
-      });
-      internalCode = `ML-${year}-${String(count + 1).padStart(4, '0')}`;
-    }
-
     const ultimaAnotacionTexto = cambio.ultimaAnotacion || '';
     const fechaExtraida =
       this.extractFechaFromUltimaAnotacion(ultimaAnotacionTexto);
 
     const recordData = {
       radicado: radicado,
-      internalCode,
       despachoJudicial: despachoNormalizado,
       city: ciudad,
       location: ubicacion,
@@ -681,7 +663,43 @@ export class MonolegalService {
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
       etiqueta: (cambio.etiqueta || '').replace(/\s+/g, ''),
+      internalCode: '',
     };
+    return recordData;
+  }
+
+  private async buildInternalCode(): Promise<string> {
+    const year = new Date().getFullYear();
+    const count = await this.recordModel.countDocuments({
+      internalCode: { $regex: `^ML-${year}-` },
+    });
+    return `ML-${year}-${String(count + 1).padStart(4, '0')}`;
+  }
+
+  private async processApiChange(
+    cambio: any,
+    userId: string,
+  ): Promise<ProcessResult> {
+    const radicado = cambio.numero?.trim();
+
+    if (!radicado) {
+      return {
+        radicado: 'Sin radicado',
+        status: 'skipped',
+        message: 'No tiene número de proceso',
+      };
+    }
+
+    const recordData = await this.prepareRecordData(cambio);
+    const record = await this.recordModel.findOne({ radicado: radicado });
+
+    let internalCode = record?.internalCode;
+
+    if (!internalCode) {
+      internalCode = await this.buildInternalCode();
+    }
+
+    recordData.internalCode = internalCode;
 
     if (record) {
       Object.assign(record, recordData);
@@ -694,7 +712,7 @@ export class MonolegalService {
         });
       }
 
-      const audience = await this.createAudience(
+      await this.createAudience(
         cambio.ultimaActuacion,
         cambio.ultimaAnotacion,
         record._id,
@@ -733,12 +751,54 @@ export class MonolegalService {
         });
       }
 
-      const audience = await this.createAudience(
+      await this.createAudience(
         cambio.ultimaActuacion,
         cambio.ultimaAnotacion,
         newRecord._id,
       );
 
+      return {
+        radicado,
+        status: 'created',
+        message: 'Registro creado desde API',
+      };
+    }
+  }
+
+  private async getApiChange(cambio: any): Promise<ProcessResult> {
+    const radicado = cambio.numero?.trim();
+
+    if (!radicado) {
+      return {
+        radicado: 'Sin radicado',
+        status: 'skipped',
+        message: 'No tiene número de proceso',
+      };
+    }
+
+    const recordData = await this.prepareRecordData(cambio);
+    const record = await this.recordModel.findOne({ radicado: radicado });
+
+    let internalCode = record?.internalCode;
+
+    if (!internalCode) {
+      internalCode = await this.buildInternalCode();
+    }
+
+    if (record) {
+      Object.assign(record, recordData);
+      return {
+        radicado,
+        status: 'updated',
+        message: 'Registro actualizado desde API',
+        details: {
+          despachoJudicial: recordData.despachoJudicial,
+          city: recordData.city,
+          ultimaActuacion: recordData.ultimaActuacion,
+          ultimaAnotacion: recordData.ultimaAnotacion,
+        },
+      };
+    } else {
       return {
         radicado,
         status: 'created',
