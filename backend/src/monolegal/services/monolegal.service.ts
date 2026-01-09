@@ -415,10 +415,6 @@ export class MonolegalService {
     const fechaFormateada =
       this.monolegalApiService.formatearFechaMonolegal(fechaConsulta);
 
-    this.logger.log(
-      `Iniciando sincronización con Monolegal para fecha: ${fechaFormateada}, isUpdating: ${isUpdating}`,
-    );
-
     try {
       const resumen = await this.monolegalApiService.getResumenCambios(
         fechaFormateada,
@@ -1093,7 +1089,6 @@ export class MonolegalService {
   }
 
   async getActuacionesProceso(idProceso: string): Promise<any[]> {
-    // this.logger.log('tryanedo actuaciones para ' + idProceso);
     return this.monolegalApiService.getActuacionesPorIdProceso(idProceso);
   }
 

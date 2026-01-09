@@ -1,12 +1,10 @@
 import { Process, Processor, OnQueueFailed } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { DaptaData } from '../interfaces/reminder.interface';
 import { ConfigService } from '@nestjs/config';
 
 @Processor('dapta-calls')
 export class DaptaProcessor {
-  private readonly logger = new Logger(DaptaProcessor.name);
   private readonly daptaEndpoint: string;
   private readonly daptaApiKey: string;
 
@@ -18,8 +16,6 @@ export class DaptaProcessor {
   @Process('make-call')
   async handleMakeCall(job: Job<DaptaData>) {
     const daptaData = job.data;
-
-    this.logger.log(`Iniciando llamada para ${daptaData.plaintiff_name}`);
 
     try {
       const response = await fetch(this.daptaEndpoint, {
@@ -46,10 +42,6 @@ export class DaptaProcessor {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      this.logger.error(
-        `Error en llamada para ${daptaData.plaintiff_name}: ${error.message}`,
-        error.stack,
-      );
       throw error;
     }
   }
@@ -57,10 +49,5 @@ export class DaptaProcessor {
   @OnQueueFailed()
   async handleFailedCall(job: Job<DaptaData>, error: Error) {
     const daptaData = job.data;
-
-    this.logger.error(
-      `Llamada falló definitivamente para ${daptaData.plaintiff_name} después de ${job.attemptsMade} intentos.`,
-      error.stack,
-    );
   }
 }

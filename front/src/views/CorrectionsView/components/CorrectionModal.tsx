@@ -210,33 +210,8 @@ export function NotificationCorrectionModal({
     }
   };
 
-  // const validateForm = (): boolean => {
-  //   const values = form.getValues();
-  //   const requiredFields = ["record_id", "abogado_id", "start", "end"];
-
-  //   const missingFields = requiredFields.filter(
-  //     (field) => !values[field as keyof EventoForm]
-  //   );
-
-  //   if (missingFields.length > 0) {
-  //     setError(`Campos requeridos faltantes: ${missingFields.join(", ")}`);
-  //     return false;
-  //   }
-
-  //   if (!isSynced) {
-  //     setError("Debes sincronizar los datos antes de guardar");
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
-
   const handleSubmit = async (values: EventoForm) => {
     try {
-      // if (!validateForm()) {
-      //   return;
-      // }
-
       const audienceData = mapEventoFormToAudienceUpdate(values);
       const result = await updateAudienceWithValidation(
         notification.audience_id,

@@ -116,8 +116,6 @@ export function EventModal({
 
     const result = await fetchAudienceByEtiqueta(etiqueta);
 
-    console.log("Resultado de la sincronización:", result);
-
     if (!result.success) {
       form.reset({
         ...DEFAULT_FORM_VALUES,

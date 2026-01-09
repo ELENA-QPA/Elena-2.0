@@ -1,5 +1,3 @@
-import { update } from "lodash";
-
 export const apiUrls = {
   auth: {
     login: "/api/auth/login",

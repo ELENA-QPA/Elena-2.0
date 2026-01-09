@@ -1,14 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { DaptaData, EmailReminderData } from '../interfaces/reminder.interface';
 import * as fs from 'fs';
 import * as Handlebars from 'handlebars';
-import { start } from 'repl';
 
 @Injectable()
 export class ReminderService {
-  private readonly logger = new Logger(ReminderService.name);
   constructor(
     @InjectQueue('reminders') private reminderQueue: Queue,
     @InjectQueue('dapta-calls') private daptaQueue: Queue,
@@ -43,7 +41,6 @@ export class ReminderService {
   }
 
   async enqueueDaptaCall(callData: DaptaData): Promise<void> {
-    this.logger.log('make-call ' + JSON.stringify(callData));
     await this.daptaQueue.add('make-call', callData, {
       attempts: 3,
       backoff: {
