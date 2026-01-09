@@ -34,7 +34,7 @@ export enum TipoEstado {
 }
 
 export enum ClientType {
-  RAPPI = 'Rappi',
+  RAPPI = 'Rappi SAS',
   UBBER = 'Uber',
   DIDI = 'Didi',
   OTRO = 'Otro',
