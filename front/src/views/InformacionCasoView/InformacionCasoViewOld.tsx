@@ -1297,15 +1297,7 @@ export default function InformacionCasoFormViewOld() {
   // Cargar datos del caso cuando estamos en modo view o edit (una sola vez)
   useEffect(() => {
     if (caseId && (mode === "view" || mode === "edit") && !caso) {
-      const loadCaso = async () => {
-        console.log("USE EFFECT - Cargando caso por ID:", caseId);
-
-        const caso = await getCasoById(caseId);
-
-        console.log("Caso cargado:", caso);
-      };
-
-      loadCaso();
+      getCasoById(caseId);
     }
   }, [caseId, mode, caso, getCasoById]);
 
@@ -1669,7 +1661,6 @@ export default function InformacionCasoFormViewOld() {
 
   // Efecto para actualizar el formulario cuando caso cambie
   useEffect(() => {
-    console.log("USE EFFECT - CASE CHANGE TRIGGERED", caso);
     console.log({
       hasCaso: !!caso,
       mode,
@@ -1688,7 +1679,7 @@ export default function InformacionCasoFormViewOld() {
     const incomingCaseId =
       (caso as any)._id || (caso as any).record?._id || null;
 
-    console.log("log USE EFFECT - CASE CHANGE:", {
+    console.log({
       incomingCaseId,
       loadedCaseId,
       shouldReset:
@@ -1798,8 +1789,6 @@ export default function InformacionCasoFormViewOld() {
         inferirJurisdiccionDeRadicado(numeroRadicadoRaw);
       const jurisdictionValue = caso.jurisdiction || jurisdiccionInferida || "";
       const processTypeValue = caso.processType || "lolo";
-
-      console.log("PROCESS TYPE VALUE INITIAL:", processTypeValue);
 
       const despachoJudicialValue = caso.despachoJudicial || "";
 
@@ -2058,8 +2047,6 @@ export default function InformacionCasoFormViewOld() {
 
   const onSubmit = async (data: CaseFormData) => {
     // Limpiar campos temporales antes de enviar - estos no deben ser parte del caso final
-
-    console.log("llamando onSubmit con datos:", data);
     const cleanData = {
       ...data,
       tempDemandante: undefined,
@@ -2789,8 +2776,6 @@ export default function InformacionCasoFormViewOld() {
       };
 
       const result = await updateCaso(caseId, body);
-
-      console.log("Resultado de updateCasi:", result);
 
       if ("record" in result) {
         toast.success("Información general actualizada exitosamente");
@@ -3756,11 +3741,6 @@ export default function InformacionCasoFormViewOld() {
             <Form {...form}>
               <form
                 onSubmit={(e) => {
-                  const formData = form.getValues();
-                  const formErrors = form.formState.errors;
-
-                  console.log("aqui llamando onSubmit tambien");
-
                   // Llamar al handler de envío de react-hook-form
                   return form.handleSubmit(onSubmit)(e);
                 }}
@@ -4608,8 +4588,6 @@ export default function InformacionCasoFormViewOld() {
                                   const demandante =
                                     form.getValues("tempDemandante");
 
-                                  console.log("Saving demandante:", demandante);
-
                                   // Validar campos requeridos usando el esquema Zod
                                   if (!demandante?.name?.trim()) {
                                     toast.error(
@@ -4643,10 +4621,6 @@ export default function InformacionCasoFormViewOld() {
                                   };
                                   // En modo creación, manejar creación y edición local
                                   if (isCreationMode) {
-                                    console.log(
-                                      "Creation mode - handling locally"
-                                    );
-
                                     if (
                                       editingDemandante &&
                                       editingDemandante._id?.startsWith("temp_")
@@ -4725,15 +4699,6 @@ export default function InformacionCasoFormViewOld() {
                                         "demandantePart",
                                         nuevosDemandantes
                                       );
-
-                                      console.log(
-                                        "nuevosDemandantes",
-                                        nuevosDemandantes
-                                      );
-                                      console.log(
-                                        "demandantes actuales",
-                                        demandantesActuales
-                                      );
                                       // Agregar al estado local para mostrar visualmente
                                       const nuevoItem: UnifiedPart = {
                                         _id: `temp_${Date.now()}`,
@@ -4771,9 +4736,6 @@ export default function InformacionCasoFormViewOld() {
                                     setEditingDemandante(null);
                                     return;
                                   }
-
-                                  console.log("Edit mode - using API");
-
                                   // En modo edición, usar la API normalmente
                                   const partToSave: any = {
                                     record: caseId || "",
@@ -4998,11 +4960,6 @@ export default function InformacionCasoFormViewOld() {
                                                   getDocumentNumber(d) !==
                                                     getDocumentNumber(demandado)
                                               );
-
-                                            console.log(
-                                              "demandadosForm",
-                                              demandadosForm
-                                            );
                                             form.setValue(
                                               "demandadoPart",
                                               updatedDemandados
@@ -7414,15 +7371,6 @@ export default function InformacionCasoFormViewOld() {
                         const isValid = await form.trigger();
                         const errors = form.formState.errors;
                         const values = form.getValues();
-
-                        console.log(
-                          "[INFORMACION_CASO_VIEW] data" +
-                            JSON.stringify(values, null, 2)
-                        );
-
-                        console.log(
-                          "[INFORMACION_CASO_VIEW] is valid " + isValid
-                        );
                         const printErrorsWithValues = (
                           errors: any,
                           path = ""

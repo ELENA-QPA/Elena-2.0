@@ -43,7 +43,6 @@ export function useCaso() {
     try {
       console.log("[USECASO][createCaso]: Iniciando creación de caso");
       // Si no se pasa token, dejar que el repository use las cookies automáticamente
-      console.log("[USECASO][createCaso] - Data:", data);
       const response = await casoRepository.createCaso(data, token);
       console.log("[USECASO][createCaso][Response]:", response);
 

@@ -444,7 +444,6 @@ export function CreateCasoForm() {
         }),
       };
 
-      console.log("[CREATE_CASO_FORM] Datos para crear caso:", casoData);
       const response = await createCaso(casoData);
 
       if ("record" in response) {
