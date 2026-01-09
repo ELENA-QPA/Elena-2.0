@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import internal from 'stream';
 
 export class ImportMonolegalDto {
   @ApiProperty({
@@ -59,8 +58,9 @@ export interface SyncResponse {
 
 export interface MonolegalRecordData {
   radicado: string;
-  despachoJudicial: string;
+  despachoJudicial: string;  
   city: string;
+  department: string; 
   location: string;
   idProcesoMonolegal: string;
   etapaProcesal: string;
@@ -71,4 +71,6 @@ export interface MonolegalRecordData {
   etiqueta: string;
   internalCode: string;
   fechaUltimaActuacion: Date;
+  processType: string;  
+  jurisdiction: string;  
 }

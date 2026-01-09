@@ -734,8 +734,9 @@ async function handleProcessDetails(
     await sendMessage(sock, jid, "Obteniendo detalles del proceso...");
 
     const legalApiService = LegalApiServiceFactory.create();
+    const etiqueta = (selectedProcess as any).etiqueta;
     const processDetailsResponse = await legalApiService.getProcessDetails(
-      selectedProcess.internalCode
+      selectedProcess.etiqueta
     );
     const processDetails = toProcessDetails(processDetailsResponse);
 

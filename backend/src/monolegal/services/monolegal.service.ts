@@ -282,7 +282,7 @@ export class MonolegalService {
             partType: PartType.demandada,
             name: 'Rappi SAS',
             documentType: 'Nit',
-            document: '900843898-9',
+            document: '900843898',
             email: 'notificacionesrappi@rappi.com',
             contact: '6017433711',
           });
@@ -742,10 +742,64 @@ export class MonolegalService {
         }
       }
     }
+
+    const isRappiClient = (cambio.demandados || '')
+      .toLowerCase()
+      .includes('rappi');
+
+    // Inferir departamento desde la ciudad
+    const inferirDepartamento = (city: string): string => {
+      const cityToDepartment: { [key: string]: string } = {
+        Medellín: 'Antioquia',
+        Medellin: 'Antioquia',
+        Bogotá: 'Bogotá D.C.',
+        Bogota: 'Bogotá D.C.',
+        'Bogotá D.C.': 'Bogotá D.C.',
+        Cali: 'Valle del Cauca',
+        Barranquilla: 'Atlántico',
+        Cartagena: 'Bolívar',
+        Bucaramanga: 'Santander',
+        Cúcuta: 'Norte de Santander',
+        Cucuta: 'Norte de Santander',
+        Pereira: 'Risaralda',
+        Manizales: 'Caldas',
+        'Santa Marta': 'Magdalena',
+        Ibagué: 'Tolima',
+        Ibague: 'Tolima',
+        Villavicencio: 'Meta',
+        Pasto: 'Nariño',
+        Montería: 'Córdoba',
+        Monteria: 'Córdoba',
+        Neiva: 'Huila',
+        Armenia: 'Quindío',
+        Popayán: 'Cauca',
+        Popayan: 'Cauca',
+        Sincelejo: 'Sucre',
+        Valledupar: 'Cesar',
+        Tunja: 'Boyacá',
+        Riohacha: 'La Guajira',
+        Quibdó: 'Chocó',
+        Florencia: 'Caquetá',
+        Yopal: 'Casanare',
+        Mocoa: 'Putumayo',
+      };
+
+      // Buscar coincidencia exacta o parcial
+      for (const [cityName, dept] of Object.entries(cityToDepartment)) {
+        if (city.toLowerCase().includes(cityName.toLowerCase())) {
+          return dept;
+        }
+      }
+      return '';
+    };
+
+    const departmentValue = inferirDepartamento(ciudad);
+
     const recordData = {
       radicado: radicado,
       despachoJudicial: despachoNormalizado,
       city: ciudad,
+      department: departmentValue,
       location: ubicacion,
       idProcesoMonolegal: idProcesoMonolegal,
       etapaProcesal: '',
@@ -756,6 +810,9 @@ export class MonolegalService {
       fechaSincronizacion: new Date(),
       etiqueta: (cambio.etiqueta || '').replace(/\s+/g, ''),
       internalCode: '',
+      // Campos específicos para Rappi
+      processType: isRappiClient ? 'Ordinario' : '',
+      jurisdiction: isRappiClient ? 'Laboral circuito' : '',
     };
     return recordData;
   }

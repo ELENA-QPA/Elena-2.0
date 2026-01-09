@@ -20,7 +20,7 @@ import { logger, createLogContext } from '../logger.service.js';
 
 export interface LegalApiService {
   getCasesByDocument(documentNumber: string): Promise<CasesResponse>;
-  getProcessDetails(internalCode: string): Promise<ProcessDetailsResponse>;
+  getProcessDetails(etiqueta: string): Promise<ProcessDetailsResponse>;
   getAllCasesWithDetails(documentNumber: string): Promise<TransformedDetailedCasesResponse>;
 }
 
@@ -71,13 +71,13 @@ export class QpAllianceLegalApiService implements LegalApiService {
   /**
    * Obtiene detalles de un proceso específico usando la API real
    */
-  async getProcessDetails(internalCode: string): Promise<ProcessDetailsResponse> {
+  async getProcessDetails(etiqueta: string): Promise<ProcessDetailsResponse> {
     const logContext = createLogContext({ from: 'API_SERVICE' }, 'QP_ALLIANCE_API', 'GET_PROCESS_DETAILS');
 
-    logger.info(`Consultando detalles del proceso: "${internalCode}"`, logContext);
+    logger.info(`Consultando detalles del proceso: "${etiqueta}"`, logContext);
 
     const request = {
-      internalCode: internalCode.trim()
+      etiqueta: etiqueta.trim()
     };
 
     try {
@@ -95,7 +95,7 @@ export class QpAllianceLegalApiService implements LegalApiService {
 
       // Verificar si es un error 404 específico
       if (error instanceof Error && error.message.includes('404')) {
-        throw new ProcessNotFoundError(internalCode);
+        throw new ProcessNotFoundError(etiqueta);
       }
 
       // Otros errores de conexión
@@ -342,7 +342,7 @@ export class MockLegalApiService implements LegalApiService {
   /**
    * Obtiene detalles de un proceso específico (mock)
    */
-  async getProcessDetails(internalCode: string): Promise<ProcessDetailsResponse> {
+  async getProcessDetails(etiqueta: string): Promise<ProcessDetailsResponse> {
     // Simular delay de API
     await new Promise(resolve => setTimeout(resolve, 300));
 
@@ -354,7 +354,7 @@ export class MockLegalApiService implements LegalApiService {
         internalCode: "U003",
         jurisdiction: "PENAL CIRCUITO",
         processType: "Proceso Ejecutivo",
-        settled: internalCode,
+        settled: etiqueta,
         proceduralParts: {
           plaintiffs: [
             { name: "Juan Pérez" },
