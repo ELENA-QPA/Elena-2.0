@@ -738,7 +738,7 @@ export default function ExpedientesView({
           caso.department,
           caso.city,
           caso.despachoJudicial,
-          caso.ultimaAnotacion,
+          caso.fechaUltimaActuacion,
           caso.processType,
         ]
           .filter(Boolean)
@@ -909,59 +909,109 @@ export default function ExpedientesView({
         let valueB: any;
 
         switch (sortColumn) {
+          case "etiqueta":
+          case "#":
+            // Extraer número de etiquetas como "R1161" -> 1161
+            const extractEtiquetaNumber = (etiqueta: string) => {
+              if (!etiqueta || etiqueta === "N/A") return -1; // N/A al final
+              const match = etiqueta.match(/\d+/);
+              return match ? parseInt(match[0]) : -1;
+            };
+            valueA = extractEtiquetaNumber(a.etiqueta || "");
+            valueB = extractEtiquetaNumber(b.etiqueta || "");
+            break;
           case "internalCode":
-            // Extraer número del código interno (ej: "ML-2025-0016" -> 16)
-            const numA = parseInt(a.internalCode?.replace(/\D/g, "") || "0");
-            const numB = parseInt(b.internalCode?.replace(/\D/g, "") || "0");
-            valueA = numA;
-            valueB = numB;
+            // Extraer TODOS los números del código (año + secuencial)
+            const extractFullNumber = (code: string) => {
+              if (!code) return 0;
+              const numbers = code.match(/\d+/g);
+              return numbers ? parseInt(numbers.join("")) : 0;
+            };
+            valueA = extractFullNumber(a.internalCode || "");
+            valueB = extractFullNumber(b.internalCode || "");
             break;
           case "name":
-            valueA = (a.proceduralParts?.[0]?.name || "").toLowerCase();
-            valueB = (b.proceduralParts?.[0]?.name || "").toLowerCase();
+            valueA = (a.proceduralParts?.[0]?.name || "zzz").toLowerCase();
+            valueB = (b.proceduralParts?.[0]?.name || "zzz").toLowerCase();
             break;
           case "radicado":
-            valueA = a.numeroRadicado || a.radicado || "";
-            valueB = b.numeroRadicado || b.radicado || "";
+            const radicadoA = a.numeroRadicado || a.radicado || "0";
+            const radicadoB = b.numeroRadicado || b.radicado || "0";
+            if (/^\d+$/.test(radicadoA) && /^\d+$/.test(radicadoB)) {
+              valueA = BigInt(radicadoA);
+              valueB = BigInt(radicadoB);
+            } else {
+              valueA = radicadoA.toLowerCase();
+              valueB = radicadoB.toLowerCase();
+            }
             break;
           case "despacho":
-            valueA = (a.despachoJudicial || "").toLowerCase();
-            valueB = (b.despachoJudicial || "").toLowerCase();
+            valueA = (a.despachoJudicial || "zzz").toLowerCase();
+            valueB = (b.despachoJudicial || "zzz").toLowerCase();
             break;
           case "city":
-            valueA = (a.city || "").toLowerCase();
-            valueB = (b.city || "").toLowerCase();
+            valueA = (a.city || "zzz").toLowerCase();
+            valueB = (b.city || "zzz").toLowerCase();
             break;
           case "clientType":
-            valueA = (a.clientType || "").toLowerCase();
-            valueB = (b.clientType || "").toLowerCase();
+            valueA = (a.clientType || "zzz").toLowerCase();
+            valueB = (b.clientType || "zzz").toLowerCase();
             break;
           case "type":
-            valueA = (a.type || "").toLowerCase();
-            valueB = (b.type || "").toLowerCase();
+            valueA = (a.type || "zzz").toLowerCase();
+            valueB = (b.type || "zzz").toLowerCase();
             break;
           case "estado":
-            valueA = (a.estado || "").toLowerCase();
-            valueB = (b.estado || "").toLowerCase();
+            valueA = (a.estado || "zzz").toLowerCase();
+            valueB = (b.estado || "zzz").toLowerCase();
             break;
-          case "updatedAt":
-            valueA = new Date(a.updatedAt || a.createdAt || 0).getTime();
-            valueB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+          case "fechaUltimaActuacion":
+            // Parsear fechas en múltiples formatos
+            const parseAnyDate = (dateValue: any): number => {
+              if (!dateValue || dateValue === "N/A") return 0;
+
+              // PRIMERO: Si es formato DD/MM/YYYY (verificar antes de ISO)
+              if (typeof dateValue === "string") {
+                const match = dateValue.match(
+                  /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+                );
+                if (match) {
+                  const day = parseInt(match[1]);
+                  const month = parseInt(match[2]) - 1; // Meses van de 0-11
+                  const year = parseInt(match[3]);
+                  return new Date(year, month, day).getTime();
+                }
+              }
+
+              // SEGUNDO: Si ya es Date o timestamp ISO
+              const isoDate = new Date(dateValue);
+              if (!isNaN(isoDate.getTime())) return isoDate.getTime();
+
+              return 0;
+            };
+
+            if (sortColumn === "fechaUltimaActuacion") {
+              valueA = parseAnyDate(a.fechaUltimaActuacion);
+              valueB = parseAnyDate(b.fechaUltimaActuacion);
+            } else {
+              valueA = parseAnyDate(a.updatedAt || a.createdAt);
+              valueB = parseAnyDate(b.updatedAt || b.createdAt);
+            }
             break;
           default:
             return 0;
         }
 
+        // Comparación mejorada que maneja BigInt y valores normales
+        if (typeof valueA === "bigint" && typeof valueB === "bigint") {
+          if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
+          if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
+          return 0;
+        }
+
         if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
         if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
         return 0;
-      });
-    } else {
-      // Ordenamiento por defecto: fecha más reciente
-      filtered.sort((a, b) => {
-        const fechaA = new Date(a.updatedAt || a.createdAt || 0);
-        const fechaB = new Date(b.updatedAt || b.createdAt || 0);
-        return fechaB.getTime() - fechaA.getTime();
       });
     }
 
@@ -1776,7 +1826,7 @@ export default function ExpedientesView({
                 <TableRow className="bg-pink-600 hover:bg-pink-600">
                   <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
-                    onClick={() => handleSort("internalCode")}
+                    onClick={() => handleSort("etiqueta")}
                   >
                     <div className="flex items-center gap-1">
                       #
@@ -1858,7 +1908,7 @@ export default function ExpedientesView({
                         ))}
                     </div>
                   </TableHead>
-                  <TableHead
+                  {/* <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
                     onClick={() => handleSort("type")}
                   >
@@ -1871,28 +1921,28 @@ export default function ExpedientesView({
                           <ChevronDown className="h-3 w-3" />
                         ))}
                     </div>
-                  </TableHead>
-                  <TableHead
+                  </TableHead> */}
+                  {/* <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
                     onClick={() => handleSort("estado")}
                   >
                     <div className="flex items-center gap-1">
                       Estado
-                      {sortColumn === "estado" &&
+                      {sortColumn === "estado" &&f
                         (sortDirection === "asc" ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
                           <ChevronDown className="h-3 w-3" />
                         ))}
                     </div>
-                  </TableHead>
+                  </TableHead> */}
                   <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
-                    onClick={() => handleSort("updatedAt")}
+                    onClick={() => handleSort("fechaUltimaActuacion")}
                   >
                     <div className="flex items-center gap-1">
                       Actualizado
-                      {sortColumn === "updatedAt" &&
+                      {sortColumn === "fechaUltimaActuacion" &&
                         (sortDirection === "asc" ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (

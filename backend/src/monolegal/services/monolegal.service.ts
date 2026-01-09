@@ -11,6 +11,7 @@ import { Performance } from '../../perfomance/entities/perfomance.entity';
 import { ProcessResult, SyncResponse } from '../dto/import-monolegal.dto';
 import { MonolegalApiService } from './monolegal-api.service';
 import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
+import { normalizeClientType } from '../constants/normalize-client-type';
 
 @Injectable()
 export class MonolegalService {
@@ -178,9 +179,12 @@ export class MonolegalService {
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
     };
-
     if (record) {
       Object.assign(record, recordData);
+
+      record.clientType = normalizeClientType(
+        record.clientType || row['Tipo Cliente'] || row['clientType'],
+      );
       await record.save();
 
       if (ultimaActuacion) {
@@ -199,7 +203,9 @@ export class MonolegalService {
       const newRecord = new this.recordModel({
         user: userId,
         ...recordData,
-        clientType: row['Tipo Cliente'] || row['clientType'] || 'Otro',
+        clientType: normalizeClientType(
+          row['Tipo Cliente'] || row['clientType'],
+        ),
         country: 'Colombia',
       });
 
@@ -241,6 +247,11 @@ export class MonolegalService {
         .map((d) => d.trim())
         .filter((d) => d.length > 0) || [];
 
+    const isRappi = (nombre: string): boolean => {
+      return nombre.toLowerCase().includes('rappi');
+    };
+
+    // Crear demandantes
     for (const nombre of demandantes) {
       if (nombre) {
         await this.proceduralPartModel.create({
@@ -255,24 +266,42 @@ export class MonolegalService {
       }
     }
 
+    // Crear demandados / Rappi
     for (const nombre of demandados) {
       if (nombre) {
-        await this.proceduralPartModel.create({
-          record: recordId,
-          partType: PartType.demandada,
-          name: nombre,
-          documentType: 'Por verificar',
-          document: 'Por verificar',
-          email: 'por-verificar@temp.com',
-          contact: 'Por verificar',
-        });
+        if (isRappi(nombre)) {
+          await this.proceduralPartModel.create({
+            record: recordId,
+            partType: PartType.demandada,
+            name: 'Rappi SAS',
+            documentType: 'Nit',
+            document: '900843898-9',
+            email: 'notificacionesrappi@rappi.com',
+            contact: '6017433711',
+          });
+        } else {
+          // Otros demandados
+          await this.proceduralPartModel.create({
+            record: recordId,
+            partType: PartType.demandada,
+            name: nombre,
+            documentType: 'Por verificar',
+            document: 'Por verificar',
+            email: 'por-verificar@temp.com',
+            contact: 'Por verificar',
+          });
+        }
       }
     }
   }
 
   private async createOrUpdatePerformance(
     recordId: any,
-    data: { ultimaActuacion: string; etapaProcesal: string },
+    data: {
+      ultimaActuacion: string;
+      etapaProcesal: string;
+      ultimaAnotacion?: string;
+    },
   ): Promise<void> {
     const actuacion = data.ultimaActuacion?.trim();
 
@@ -288,13 +317,12 @@ export class MonolegalService {
         record: recordId,
         performanceType: actuacion,
         responsible: 'Monolegal',
-        observation: `Sincronizado desde Monolegal - ${
-          data.etapaProcesal || 'Sin etapa'
-        }`,
+        observation:
+          data.ultimaAnotacion?.trim() ||
+          `Sincronizado desde Monolegal - ${data.etapaProcesal || 'Sin etapa'}`,
       });
     }
   }
-
   private parseDate(dateString: any): Date | undefined {
     if (dateString instanceof Date && !isNaN(dateString.getTime())) {
       return dateString;
@@ -533,14 +561,14 @@ export class MonolegalService {
   }
 
   private extractFechaFromUltimaAnotacion(
-    ultimaAnotacion: string,
+    fechaUltimaActuacion: string,
   ): string | null {
-    if (!ultimaAnotacion || typeof ultimaAnotacion !== 'string') {
+    if (!fechaUltimaActuacion || typeof fechaUltimaActuacion !== 'string') {
       return null;
     }
 
     const regex = /(\d{1,2}\/\d{1,2}\/\d{4})/;
-    const match = ultimaAnotacion.match(regex);
+    const match = fechaUltimaActuacion.match(regex);
 
     if (match && match[1]) {
       return match[1];
@@ -645,10 +673,65 @@ export class MonolegalService {
       internalCode = `ML-${year}-${String(count + 1).padStart(4, '0')}`;
     }
 
-    const ultimaAnotacionTexto = cambio.ultimaAnotacion || '';
-    const fechaExtraida =
-      this.extractFechaFromUltimaAnotacion(ultimaAnotacionTexto);
+    const fechaUltimaActuacionTexto = cambio.fechaUltimaActuacion || '';
+    let fechaExtraida = this.extractFechaFromUltimaAnotacion(
+      fechaUltimaActuacionTexto,
+    );
 
+    if (!fechaExtraida && cambio.ultimoRegistro) {
+      const ultimoRegistro = cambio.ultimoRegistro;
+
+      if (typeof ultimoRegistro === 'string' && ultimoRegistro.includes('T')) {
+        const date = new Date(ultimoRegistro);
+        if (!isNaN(date.getTime())) {
+          const day = String(date.getUTCDate()).padStart(2, '0');
+          const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+          const year = date.getUTCFullYear();
+          fechaExtraida = `${day}/${month}/${year}`;
+        }
+      }
+      // Si es formato DD/MM/YYYY
+      else if (
+        typeof ultimoRegistro === 'string' &&
+        /\d{1,2}\/\d{1,2}\/\d{4}/.test(ultimoRegistro)
+      ) {
+        const match = ultimoRegistro.match(/(\d{1,2}\/\d{1,2}\/\d{4})/);
+        if (match) {
+          fechaExtraida = match[1];
+        }
+      }
+      // Si es formato "16 Dec 2025" o "16 Dec 2025"
+      else if (typeof ultimoRegistro === 'string') {
+        const meses: { [key: string]: string } = {
+          jan: '01',
+          feb: '02',
+          mar: '03',
+          apr: '04',
+          may: '05',
+          jun: '06',
+          jul: '07',
+          aug: '08',
+          sep: '09',
+          oct: '10',
+          nov: '11',
+          dec: '12',
+        };
+
+        const match = ultimoRegistro.match(
+          /(\d{1,2})\s+([a-zA-Z]{3})\s+(\d{4})/,
+        );
+        if (match) {
+          const day = match[1].padStart(2, '0');
+          const monthStr = match[2].toLowerCase();
+          const year = match[3];
+          const month = meses[monthStr];
+
+          if (month) {
+            fechaExtraida = `${day}/${month}/${year}`;
+          }
+        }
+      }
+    }
     const recordData = {
       radicado: radicado,
       internalCode,
@@ -658,7 +741,8 @@ export class MonolegalService {
       idProcesoMonolegal: idProcesoMonolegal,
       etapaProcesal: '',
       ultimaActuacion: cambio.ultimaActuacion?.trim() || '',
-      ultimaAnotacion: fechaExtraida || ultimaAnotacionTexto,
+      ultimaAnotacion: cambio.ultimaAnotacion?.trim() || '',
+      fechaUltimaActuacion: fechaExtraida || fechaUltimaActuacionTexto,
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
       etiqueta: (cambio.etiqueta || '').replace(/\s+/g, ''),
@@ -666,12 +750,16 @@ export class MonolegalService {
 
     if (record) {
       Object.assign(record, recordData);
+      record.clientType = normalizeClientType(
+        record.clientType || cambio.demandados,
+      );
       await record.save();
 
       if (cambio.ultimaActuacion) {
         await this.createOrUpdatePerformance(record._id, {
           ultimaActuacion: cambio.ultimaActuacion,
           etapaProcesal: '',
+          ultimaAnotacion: cambio.ultimaAnotacion,
         });
       }
 
@@ -683,14 +771,14 @@ export class MonolegalService {
           despachoJudicial: recordData.despachoJudicial,
           city: recordData.city,
           ultimaActuacion: recordData.ultimaActuacion,
-          ultimaAnotacion: recordData.ultimaAnotacion,
+          fechaUltimaActuacion: recordData.fechaUltimaActuacion,
         },
       };
     } else {
       const newRecord = new this.recordModel({
         user: userId,
         ...recordData,
-        clientType: cambio.demandados || 'Otro',
+        clientType: normalizeClientType(cambio.demandados),
         country: 'Colombia',
       });
 
@@ -705,13 +793,14 @@ export class MonolegalService {
         await this.createOrUpdatePerformance(newRecord._id, {
           ultimaActuacion: cambio.ultimaActuacion,
           etapaProcesal: '',
+          ultimaAnotacion: cambio.ultimaAnotacion,
         });
       }
 
       return {
         radicado,
         status: 'created',
-        message: 'Registro creado desde API',
+        message: '',
       };
     }
   }
@@ -791,80 +880,113 @@ export class MonolegalService {
     }
   }
 
-  async updateAllUltimaAnotacion(): Promise<any> {
-    try {
-      const records = await this.recordModel.find({}).exec();
+  /**
+   * Sincroniza TODOS los expedientes desde una fecha inicial hasta hoy
+   * Itera por cada día y cada página
+   */
+  async syncAllFromApi(
+    userId: string,
+    fechaInicio?: string,
+  ): Promise<SyncResponse> {
+    const startDate = fechaInicio
+      ? new Date(fechaInicio)
+      : new Date('2024-01-01');
+    const endDate = new Date();
 
-      if (records.length === 0) {
-        return {
-          success: true,
-          message: 'No hay registros para actualizar',
-          summary: {
-            total: 0,
-            updated: 0,
-            skipped: 0,
-            errors: 0,
-          },
-        };
-      }
+    const results: ProcessResult[] = [];
+    let totalCreated = 0;
+    let totalUpdated = 0;
+    let totalSkipped = 0;
+    let totalErrors = 0;
+    let diasProcesados = 0;
+    let expedientesProcesados = 0;
 
-      let updated = 0;
-      let skipped = 0;
-      let errors = 0;
-      const details = [];
+    this.logger.log(
+      `[SYNC ALL] Iniciando sincronización desde ${
+        startDate.toISOString().split('T')[0]
+      } hasta ${endDate.toISOString().split('T')[0]}`,
+    );
 
-      for (const record of records) {
-        try {
-          const ultimaAnotacion = (record as any).ultimaAnotacion;
+    // Iterar por cada día
+    const currentDate = new Date(startDate);
 
-          if (!ultimaAnotacion || typeof ultimaAnotacion !== 'string') {
-            skipped++;
-            continue;
-          }
+    while (currentDate <= endDate) {
+      const fechaFormateada =
+        this.monolegalApiService.formatearFechaMonolegal(currentDate);
 
-          const fechaExtraida =
-            this.extractFechaFromUltimaAnotacion(ultimaAnotacion);
+      try {
+        // Primero verificar si hay cambios en ese día
+        const resumen = await this.monolegalApiService.getResumenCambios(
+          fechaFormateada,
+        );
 
-          if (fechaExtraida) {
-            if (fechaExtraida !== ultimaAnotacion) {
-              (record as any).ultimaAnotacion = fechaExtraida;
-              await record.save();
-              updated++;
+        if (resumen.tieneCambios) {
+          this.logger.log(
+            `[SYNC ALL] Procesando fecha ${fechaFormateada} - ${
+              resumen.estadisticas?.numeroExpedientes || '?'
+            } expedientes`,
+          );
 
-              details.push({
-                radicado: record.radicado,
-                ultimaAnotacion: fechaExtraida,
-                original: ultimaAnotacion,
+          // Obtener todos los cambios de ese día (todas las páginas)
+          const cambios = await this.monolegalApiService.getTodosCambios(
+            fechaFormateada,
+          );
+
+          for (const cambio of cambios) {
+            try {
+              const result = await this.processApiChange(cambio, userId);
+              results.push(result);
+              expedientesProcesados++;
+
+              if (result.status === 'created') totalCreated++;
+              else if (result.status === 'updated') totalUpdated++;
+              else if (result.status === 'skipped') totalSkipped++;
+              else if (result.status === 'error') totalErrors++;
+
+              // Log de progreso cada 50 expedientes
+              if (expedientesProcesados % 50 === 0) {
+                this.logger.log(
+                  `[SYNC ALL] Progreso: ${expedientesProcesados} expedientes procesados`,
+                );
+              }
+            } catch (error) {
+              totalErrors++;
+              results.push({
+                radicado: cambio.numero || 'Desconocido',
+                status: 'error',
+                message: error.message,
               });
-            } else {
-              skipped++;
             }
-          } else {
-            skipped++;
           }
-        } catch (error) {
-          errors++;
-          this.logger.error(`Error en ${record.radicado}: ${error.message}`);
         }
+      } catch (error) {
+        this.logger.error(
+          `[SYNC ALL] Error en fecha ${fechaFormateada}: ${error.message}`,
+        );
       }
 
-      return {
-        success: true,
-        message: 'Actualización de ultimaAnotacion completada',
-        summary: {
-          total: records.length,
-          updated: updated,
-          skipped: skipped,
-          errors: errors,
-        },
-        details: details.slice(0, 10),
-      };
-    } catch (error) {
-      this.logger.error(`Error en actualización: ${error.message}`);
-      throw new BadRequestException(
-        `Error al actualizar ultimaAnotacion: ${error.message}`,
-      );
+      diasProcesados++;
+
+      // Avanzar al siguiente día
+      currentDate.setDate(currentDate.getDate() + 1);
+
+      // Pausa para no sobrecargar la API (100ms entre días)
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
+
+    return {
+      success: true,
+      message: `Sincronización completa: ${diasProcesados} días procesados`,
+      summary: {
+        total: expedientesProcesados,
+        created: totalCreated,
+        updated: totalUpdated,
+        skipped: totalSkipped,
+        errors: totalErrors,
+      },
+      details: results.slice(0, 100),
+      updatedRecords: [],
+    };
   }
 
   async getActuacionesProceso(idProceso: string): Promise<any[]> {

@@ -32,7 +32,7 @@ export interface ProcessResult {
     city?: string;
     etapaProcesal?: string;
     ultimaActuacion?: string;
-    ultimaAnotacion?: Date;
+    fechaUltimaActuacion?: Date;
   };
 }
 

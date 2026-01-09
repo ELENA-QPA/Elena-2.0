@@ -100,7 +100,7 @@ export interface Caso {
   etiqueta?: string;
   etapaProcesal?: string;
   ultimaActuacion?: string;
-  ultimaAnotacion?: string;
+  fechaUltimaActuacion?: string;
   sincronizadoMonolegal?: boolean;
   fechaSincronizacion?: string;
   idProcesoMonolegal?: string;
@@ -134,7 +134,7 @@ export interface CreateCasoBody {
   proceduralParts: CreateProceduralPartData[];
   payments: CreatePaymentData[];
   files?: File[] | string[];
-  ultimaAnotacion?: string;
+  fechaUltimaActuacion?: string;
   filesMetadata?: string;
 }
 
@@ -150,7 +150,7 @@ export interface UpdateCasoBody {
   settled?: string;
   city?: string;
   country?: string;
-  ultimaAnotacion?: string;
+  fechaUltimaActuacion?: string;
   location?: string;
   type?: string;
 }

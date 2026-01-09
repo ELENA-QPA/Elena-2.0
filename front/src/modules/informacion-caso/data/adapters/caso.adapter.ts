@@ -168,7 +168,7 @@ export function mapCasoApiToModel(api: any): Caso {
     etiqueta: api.etiqueta || api.label || undefined,
     etapaProcesal: api.etapaProcesal,
     ultimaActuacion: api.ultimaActuacion,
-    ultimaAnotacion: api.ultimaAnotacion,
+    fechaUltimaActuacion: api.fechaUltimaActuacion,
     sincronizadoMonolegal: api.sincronizadoMonolegal,
     fechaSincronizacion: api.fechaSincronizacion,    
     idProcesoMonolegal: api.idProcesoMonolegal,

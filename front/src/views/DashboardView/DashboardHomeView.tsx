@@ -121,7 +121,7 @@ export default function DashboardHomeView() {
     className="inline-flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-700 transition-colors"
   >
     <Upload className="w-4 h-4" />
-    <span>Monolegal / Importar</span>
+    <span>Expedientes por Fecha</span>
   </Link>
 </div>
 

@@ -83,7 +83,7 @@ export const legalProcessConfirmationFlow = addKeyword<BaileysProvider, MemoryDB
             await showTypingIndicator(provider, ctx, 1000);
             
             logger.flowEnd('CONVERSATION_END', ctx.from);
-            await flowDynamic('¡Gracias por usar ELENA - WP Alliance! 👋');
+            await flowDynamic('¡Gracias por usar ELENA - QPAlliance! 👋');
             logger.botResponse('Despedida final', ctx.from, 'LEGAL_PROCESS_CONFIRMATION');
             return endFlow();
             

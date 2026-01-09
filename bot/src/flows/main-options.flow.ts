@@ -152,7 +152,7 @@ export const mainOptionsFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.ACTI
             await showTypingIndicator(provider, ctx, 1000);
             logger.flowEnd('CONVERSATION_END', ctx.from);
             await state.update({ currentFlow: 'IDLE' });
-            await flowDynamic('¡Gracias por usar ELENA - WP Alliance! 👋');
+            await flowDynamic('¡Gracias por usar ELENA - QPAlliance! 👋');
             logger.botResponse('Despedida final', ctx.from, 'MAIN_OPTIONS');
             return endFlow();
         }

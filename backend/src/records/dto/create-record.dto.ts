@@ -154,7 +154,7 @@ export class CreateRecordDto {
   })
   @Type(() => Date)
   @IsOptional()
-  fechaUltimaActuacion?: Date;
+  fechaUltimaActuacion?: string;
 
   // @ApiProperty({
   //     description: 'Estado del expediente',

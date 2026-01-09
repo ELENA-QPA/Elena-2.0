@@ -1,0 +1,8 @@
+ignoredBuiltDependencies:
+  - baileys
+  - esbuild
+  - protobufjs
+  - sharp
+
+onlyBuiltDependencies:
+  - '@whiskeysockets/baileys'

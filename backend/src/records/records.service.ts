@@ -140,7 +140,7 @@ export class RecordsService {
       );
     }
   }
-  // // -----------------------------------------------------
+
   async findAll(paginationDto: PaginationDto) {
     try {
       const { limit = 10, offset = 0 } = paginationDto;
@@ -156,7 +156,6 @@ export class RecordsService {
       this.handleExceptions(error);
     }
   }
-  // -----------------------------------------------------
 
   async getMyRecords(user: IUser, paginationDto: PaginationDto): Promise<any> {
     try {
@@ -164,7 +163,6 @@ export class RecordsService {
       // Buscar solo los records creados por el usuario actual
       const baseQuery: { [key: string]: any } = {
         deletedAt: { $exists: false },
-        // user: user.id
       };
 
       // Obtener el total para paginación
@@ -177,7 +175,6 @@ export class RecordsService {
         .skip(offset)
         .sort({ createdAt: -1 })
         .select('-__v')
-        // .populate('user')
         .exec();
 
       // Para cada record, obtener relaciones igual que findById
@@ -344,7 +341,7 @@ export class RecordsService {
         await this.paymentService.createMany(
           paymentsWithRecord,
           recordCreated._id as unknown as ObjectId,
-          null, // session = null
+          null,
         );
         console.log(
           `Created ${payments.length} payments with their payment values`,
@@ -459,13 +456,13 @@ export class RecordsService {
             [documentWithUrl],
             recordCreated._id as unknown as ObjectId,
             [processedFiles[0]?.url],
-            null, // session = null
+            null,
           );
         } else {
           createdDocuments = await this.documentService.createMany(
             [documentToCreate],
             recordCreated._id as unknown as ObjectId,
-            null, // session = null
+            null,
           );
         }
       }
@@ -523,7 +520,7 @@ export class RecordsService {
           createdPayments = await this.paymentService.createMany(
             paymentsWithRecord,
             recordCreated._id as unknown as ObjectId,
-            null, // session = null
+            null,
           );
         }
       }
@@ -2010,7 +2007,7 @@ export class RecordsService {
           deletedAt: { $exists: false },
         })
         .select(
-          ' internalCode processType jurisdiction settled office clientType',
+          'internalCode processType jurisdiction settled office clientType etiqueta radicado despachoJudicial city department ultimaActuacion fechaUltimaActuacion location country',
         );
 
       if (!record) {

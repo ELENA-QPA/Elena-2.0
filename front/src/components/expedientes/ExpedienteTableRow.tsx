@@ -92,7 +92,7 @@ const ExpedienteTableRow = memo(
         </TableCell>
 
         {/* Activo */}
-        <TableCell className="bg-white">
+        {/* <TableCell className="bg-white">
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
               caso.type === "ACTIVO"
@@ -104,10 +104,10 @@ const ExpedienteTableRow = memo(
           >
             {caso.type || "N/A"}
           </span>
-        </TableCell>
+        </TableCell> */}
 
         {/* Estado */}
-        <TableCell className="bg-white">
+        {/* <TableCell className="bg-white">
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
               caso.estado === "ADMITE"
@@ -123,22 +123,22 @@ const ExpedienteTableRow = memo(
           >
             {caso.estado || "N/A"}
           </span>
-        </TableCell>
+        </TableCell> */}
 
         {/* Actualizado */}
         <TableCell className="bg-white">
           <div className="flex flex-col gap-1">
             <span className="font-medium">
-              {caso.ultimaAnotacion
+              {caso.fechaUltimaActuacion
                 ? (() => {
                     if (
-                      typeof caso.ultimaAnotacion === "string" &&
-                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(caso.ultimaAnotacion)
+                      typeof caso.fechaUltimaActuacion === "string" &&
+                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(caso.fechaUltimaActuacion)
                     ) {
-                      return caso.ultimaAnotacion;
+                      return caso.fechaUltimaActuacion;
                     }
 
-                    const date = new Date(caso.ultimaAnotacion);
+                    const date = new Date(caso.fechaUltimaActuacion);
                     if (!isNaN(date.getTime())) {
                       const year = date.getUTCFullYear();
                       const month = String(date.getUTCMonth() + 1).padStart(

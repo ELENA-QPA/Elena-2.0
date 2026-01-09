@@ -1,4 +1,4 @@
-# 🧪 Guía de Testing Manual - Bot ELENA WP Alliance
+# 🧪 Guía de Testing Manual - Bot ELENA QPAlliance
 
 Esta guía está diseñada para testers que van a probar el bot a través de WhatsApp.
 
@@ -19,7 +19,7 @@ Esta guía está diseñada para testers que van a probar el bot a través de Wha
 #### Caso Exitoso
 ```
 Tester: hola
-Bot: 👋 ¡Hola! Bienvenido/a a ELENA – WP Alliance, tu asistente legal virtual.
+Bot: 👋 ¡Hola! Bienvenido/a a ELENA – QPAlliance, tu asistente legal virtual.
      Antes de continuar, cuéntame:
      1️⃣ ¿Tienes actualmente un proceso con nosotros?
      2️⃣ ¿Quieres iniciar un proceso con nosotros?
@@ -308,4 +308,4 @@ Bot: 👌 Claro, con mucho gusto. En breve uno de nuestros asesores legales se p
 
 ---
 
-**Proyecto**: ELENA - WP Alliance Legal Bot
+**Proyecto**: ELENA - QPAlliance Legal Bot

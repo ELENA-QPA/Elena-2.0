@@ -1,150 +1,202 @@
-/**
- * Adaptadores para transformar datos de API a modelos de dominio
- */
+import {
+  CasesResponse,
+  ProcessDetailsResponse,
+  ClientProcesses,
+  ProcessDetails,
+  ProcessSummary,
+} from "../../interfaces/legal.js";
 
-import { 
-  CasesResponse, 
-  ProcessDetailsResponse, 
-  ClientProcesses, 
-  ProcessDetails, 
-  ProcessSummary 
-} from '../../interfaces/legal.js';
+//Transforma la respuesta de la API de casos a modelo de dominio
 
-/**
- * Transforma la respuesta de la API de casos a modelo de dominio
- */
-export function toClientProcesses(documentNumber: string, response: CasesResponse): ClientProcesses {
-  const activeProcesses: ProcessSummary[] = response.active.map(process => ({
+export function toClientProcesses(
+  documentNumber: string,
+  response: CasesResponse
+): ClientProcesses {
+  const activeProcesses: ProcessSummary[] = response.active.map((process) => ({
     internalCode: process.internalCode,
-    status: process.state, // Usar el estado real de la API
-    lastUpdate: new Date(process.updatedAt).toLocaleDateString('es-CO'), // Convertir fecha ISO a formato local
-    responsible: 'Por asignar', // Se asignará cuando se consulten los detalles
-    nextMilestone: 'En proceso'
+    status: process.state,
+    lastUpdate: new Date(process.updatedAt).toLocaleDateString("es-CO"),
+    responsible: "Por asignar",
+    nextMilestone: "En proceso",
+    etiqueta: (process as any).etiqueta || undefined,
+    radicado: (process as any).radicado || undefined,
+    despachoJudicial: (process as any).despachoJudicial || undefined,
+    city: (process as any).city || undefined,
+    ultimaActuacion: (process as any).ultimaActuacion || undefined,
+    fechaUltimaActuacion: (process as any).fechaUltimaActuacion || undefined,
   }));
 
-  const finalizedProcesses: ProcessSummary[] = response.finalized.map(process => ({
-    internalCode: process.internalCode,
-    status: process.state, // Usar el estado real de la API
-    lastUpdate: new Date(process.updatedAt).toLocaleDateString('es-CO'), // Convertir fecha ISO a formato local
-    responsible: 'Finalizado'
-  }));
+  const finalizedProcesses: ProcessSummary[] = response.finalized.map(
+    (process) => ({
+      internalCode: process.internalCode,
+      status: process.state,
+      lastUpdate: new Date(process.updatedAt).toLocaleDateString("es-CO"),
+      responsible: "Finalizado",
+      etiqueta: (process as any).etiqueta || undefined,
+      radicado: (process as any).radicado || undefined,
+      despachoJudicial: (process as any).despachoJudicial || undefined,
+      city: (process as any).city || undefined,
+      ultimaActuacion: (process as any).ultimaActuacion || undefined,
+      fechaUltimaActuacion: (process as any).fechaUltimaActuacion || undefined,
+    })
+  );
 
   return {
     documentNumber,
     activeProcesses,
     finalizedProcesses,
     totalActive: response.totalActive,
-    totalFinalized: response.totalFinalized
+    totalFinalized: response.totalFinalized,
   };
 }
 
-/**
- * Transforma la respuesta de detalles de proceso a modelo de dominio
- */
-export function toProcessDetails(response: ProcessDetailsResponse): ProcessDetails {
+//Transforma la respuesta de detalles de proceso a modelo de dominio
+
+export function toProcessDetails(
+  response: ProcessDetailsResponse
+): ProcessDetails {
   const record = response.record;
-  
-  // Obtener la última actuación ordenando por updatedAt
-  const lastPerformance = record.performances && record.performances.length > 0 
-    ? record.performances
-        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
-    : null;
-  
-  // El estado es el performanceType de la última actuación
-  const status = lastPerformance?.performanceType || 'Sin información';
-  
-  // Obtener el próximo hito basado en la observación de la última actuación
-  const nextMilestone = lastPerformance?.observation || 'Sin información disponible';
-  
-  // Extraer nombre del cliente del primer demandante
-  const clientName = record.proceduralParts?.plaintiffs && record.proceduralParts.plaintiffs.length > 0
-    ? record.proceduralParts.plaintiffs[0].name
-    : 'Cliente no especificado';
+
+  const lastPerformance =
+    record.performances && record.performances.length > 0
+      ? record.performances.sort(
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        )[0]
+      : null;
+
+  const status = lastPerformance?.performanceType || "Sin información";
+  const nextMilestone =
+    lastPerformance?.observation || "Sin información disponible";
+
+  const clientName =
+    record.proceduralParts?.plaintiffs &&
+    record.proceduralParts.plaintiffs.length > 0
+      ? record.proceduralParts.plaintiffs[0].name
+      : "Cliente no especificado";
 
   return {
     id: record._id,
     internalCode: record.internalCode,
     clientName,
-    jurisdiction: record.jurisdiction || 'No especificada',
-    processType: record.processType || 'No especificado',
+    jurisdiction: record.jurisdiction || "No especificada",
+    processType: record.processType || "No especificado",
     settled: record.settled,
     status,
-    responsible: lastPerformance?.responsible || 'No asignado',
+    responsible: lastPerformance?.responsible || "No asignado",
     nextMilestone,
-    plaintiffs: record.proceduralParts?.plaintiffs?.map(p => p.name) || [],
-    defendants: record.proceduralParts?.defendants?.map(d => d.name) || [],
-    performances: record.performances?.map(perf => ({
-      id: perf._id,
-      type: perf.performanceType,
-      responsible: perf.responsible,
-      observation: perf.observation,
-      createdAt: perf.createdAt,
-      updatedAt: perf.updatedAt
-    })) || []
+    plaintiffs: record.proceduralParts?.plaintiffs?.map((p) => p.name) || [],
+    defendants: record.proceduralParts?.defendants?.map((d) => d.name) || [],
+    performances:
+      record.performances?.map((perf) => ({
+        id: perf._id,
+        type: perf.performanceType,
+        responsible: perf.responsible,
+        observation: perf.observation,
+        createdAt: perf.createdAt,
+        updatedAt: perf.updatedAt,
+      })) || [],
+    etiqueta: (record as any).etiqueta || "",
+    radicado: (record as any).radicado || "",
+    despachoJudicial: (record as any).despachoJudicial || "",
+    city: (record as any).city || "",
+    ultimaActuacion: (record as any).ultimaActuacion || "",
+    fechaUltimaActuacion: (record as any).fechaUltimaActuacion || "",
   };
 }
 
-/**
- * Formatea la lista de procesos para mostrar al usuario
- */
-export function formatProcessList(processes: ProcessSummary[], type: 'active' | 'finalized'): string {
-  const typeLabel = type === 'active' ? 'activos' : 'finalizados';
-  const emoji = type === 'active' ? '📂' : '📋';
-  
-  let message = `${emoji} Procesos ${typeLabel}:\n\n`;
-  
+//Formatea la lista de procesos para mostrar al usuario
+
+export function formatProcessList(
+  processes: ProcessSummary[],
+  type: "active" | "finalized"
+): string {
+  const typeLabel = type === "active" ? "activos" : "finalizados";
+  //const emoji = type === "active" ? "📂" : "📋";
+
+  //let message = `${emoji} *Procesos ${typeLabel}:* \n\n`;
+  let message = `*Procesos ${typeLabel}:* \n\n`;
+
   processes.forEach((process, index) => {
-    message += `${index + 1}. Proceso #${process.internalCode}\n`;
-    message += `   • Estado: ${process.status}\n`;
-    if (process.lastUpdate) {
-      message += `   • Última actualización: ${process.lastUpdate}\n`;
+    // Usar etiqueta si existe, sino usar internalCode
+    const processId = (process as any).etiqueta || '';
+
+    message += `*${index + 1}. Proceso:* #${processId}\n`;
+
+    // Mostrar última actuación si existe
+    if ((process as any).ultimaActuacion) {
+      message += `   *• Última actuación:* ${(process as any).ultimaActuacion}\n`;
     }
+
+    // Usar fechaUltimaActuacion si existe, sino usar lastUpdate
+    const fechaActualizacion =
+      (process as any).fechaUltimaActuacion || '';
+    if (fechaActualizacion) {
+      message += `   *• Fecha última actuación:* ${fechaActualizacion}\n`;
+    }
+
     if (index < processes.length - 1) {
-      message += '\n';
+      message += "\n";
     }
-  });  
+  });
   return message;
 }
 
-/**
- * Formatea los detalles de proceso para mostrar al usuario
- */
+//Formatea los detalles de proceso para mostrar al usuario
+
 export function formatProcessDetails(process: ProcessDetails): string {
-  let message = `📄 #${process.internalCode}\n`;
-  message += `• Estado: ${process.status}\n`;
-  message += `• Responsable: ${process.responsible}\n`;
-  message += `• Próximo hito: ${process.nextMilestone}\n`;
-  message += `• Jurisdicción: ${process.jurisdiction}\n`;
-  message += `• Tipo: ${process.processType}\n`;
-  
+
+  const radicado = (process as any).radicado;
+  const etiqueta = (process as any).etiqueta;
+
+  let message = radicado
+    ? ` *Proceso #${etiqueta || process.internalCode}*\n\n`
+    : ` *Radicado:* ${radicado}\n\n`;
+
+  // Mostrar el número de radicado
+  if (etiqueta && radicado) {
+    message += ` *Radicado:* #${radicado}\n`;
+  }
+
+  // Despacho Judicial
+  if ((process as any).despachoJudicial) {
+    message += ` *Despacho:* ${(process as any).despachoJudicial}\n`;
+  }
+
+  // Ciudad
+  if ((process as any).city) {
+    message += ` *Ciudad:* ${(process as any).city}\n`;
+  }
+
+  // Última actuación
+  if ((process as any).ultimaActuacion) {
+    message += ` *Última actuación:* ${(process as any).ultimaActuacion}\n`;
+  }
+
+  // Última actuación (fecha)
+  if ((process as any).fechaUltimaActuacion) {
+    message += ` *Fecha última actuación:* ${(process as any).fechaUltimaActuacion}\n`;
+  }
+
+  // Demandantes
   if (process.plaintiffs.length > 0) {
-    message += `• Demandantes: ${process.plaintiffs.join(', ')}\n`;
+    message += ` *Demandante${
+      process.plaintiffs.length > 1 ? "s" : ""
+    }:* ${process.plaintiffs.join(", ")}\n`;
   }
-  
+
+  // Demandados
   if (process.defendants.length > 0) {
-    message += `• Demandados: ${process.defendants.join(', ')}\n`;
+    message += ` *Demandado${
+      process.defendants.length > 1 ? "s" : ""
+    }:* ${process.defendants.join(", ")}\n`;
   }
-  
-  // Información adicional útil
-  if (process.settled && process.settled !== 'NO') {
-    message += `• Estado del proceso: ${process.settled}\n`;
-  }
-  
-  // Mostrar fecha de última actualización si está disponible
-  if (process.performances && process.performances.length > 0) {
-    const lastPerformance = process.performances
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0];
-    
-    if (lastPerformance) {
-      const lastUpdateDate = new Date(lastPerformance.updatedAt).toLocaleDateString('es-CO');
-      message += `• Última actualización: ${lastUpdateDate}\n`;
-    }
-  }
-  
-  // Mostrar número total de actuaciones
-  if (process.performances && process.performances.length > 0) {
-    message += `• Total de actuaciones: ${process.performances.length}\n`;
-  }  
+
+  // Total de actuaciones
+  // if (process.performances && process.performances.length > 0) {
+  //   message += `\n *Total de actuaciones:* ${process.performances.length}`;
+  // }
+
   return message;
 }
 
@@ -153,11 +205,10 @@ export function formatProcessDetails(process: ProcessDetails): string {
  */
 export function toAllProcessDetails(allCasesResponse: any): ProcessDetails[] {
   const allProcesses: ProcessDetails[] = [];
-  
+
   // Procesar casos activos
   if (allCasesResponse.active) {
     for (const caseData of allCasesResponse.active) {
-      // Crear un ProcessDetailsResponse temporal para usar el adapter existente
       const tempResponse: ProcessDetailsResponse = {
         message: allCasesResponse.message,
         record: {
@@ -167,10 +218,12 @@ export function toAllProcessDetails(allCasesResponse: any): ProcessDetails[] {
           processType: caseData.processType,
           settled: caseData.settled,
           proceduralParts: caseData.proceduralParts,
-          performances: caseData.performances
-        }
+          performances: caseData.performances,
+          // Pasar campos adicionales
+          ...caseData,
+        },
       };
-      
+
       const processDetails = toProcessDetails(tempResponse);
       allProcesses.push(processDetails);
     }
@@ -179,7 +232,6 @@ export function toAllProcessDetails(allCasesResponse: any): ProcessDetails[] {
   // Procesar casos finalizados
   if (allCasesResponse.finalized) {
     for (const caseData of allCasesResponse.finalized) {
-      // Crear un ProcessDetailsResponse temporal para usar el adapter existente
       const tempResponse: ProcessDetailsResponse = {
         message: allCasesResponse.message,
         record: {
@@ -189,10 +241,11 @@ export function toAllProcessDetails(allCasesResponse: any): ProcessDetails[] {
           processType: caseData.processType,
           settled: caseData.settled,
           proceduralParts: caseData.proceduralParts,
-          performances: caseData.performances
-        }
+          performances: caseData.performances,
+          ...caseData,
+        },
       };
-      
+
       const processDetails = toProcessDetails(tempResponse);
       allProcesses.push(processDetails);
     }

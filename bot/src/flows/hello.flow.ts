@@ -30,7 +30,7 @@ export const helloFlow = addKeyword(EVENTS.WELCOME)
     await showTypingIndicator(provider, ctx, 1200);
 
     const message = generateOptionsMessage(
-      '👋 ¡Hola! Bienvenido/a a ELENA – WP Alliance, tu asistente legal virtual.\n\nAntes de continuar, cuéntame:',
+      '👋 ¡Hola! Bienvenido/a a ELENA – QPAlliance, tu asistente legal virtual.\n\nAntes de continuar, cuéntame:',
       HELLO_OPTIONS
     );
     
@@ -87,7 +87,7 @@ export const helloFlow = addKeyword(EVENTS.WELCOME)
     await showTypingIndicator(provider, ctx, 2000);
 
     // Mostrar mensaje de autorización de datos personales
-    await flowDynamic('Antes de continuar, queremos contarte que de conformidad con la Ley 1581 de 2012 y demás normas aplicables en Colombia, los datos personales que suministres a través de este canal serán recolectados, almacenados y tratados por WP Alliance, con la finalidad de prestar asesoría jurídica, gestionar procesos legales, enviarte notificaciones sobre el estado de tus trámites y facilitar la comunicación contigo. Tus datos serán manejados de manera confidencial y segura, y no serán compartidos con terceros sin tu autorización expresa, salvo en los casos previstos por la ley. Como titular de la información, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos en cualquier momento.\n\n¿Aceptas el tratamiento de tus datos personales conforme a nuestra política de privacidad?\n👉 Responde:\n1️⃣ Sí, acepto\n2️⃣ No acepto');
+    await flowDynamic('Antes de continuar, queremos contarte que de conformidad con la Ley 1581 de 2012 y demás normas aplicables en Colombia, los datos personales que suministres a través de este canal serán recolectados, almacenados y tratados por QPAlliance, con la finalidad de prestar asesoría jurídica, gestionar procesos legales, enviarte notificaciones sobre el estado de tus trámites y facilitar la comunicación contigo. Tus datos serán manejados de manera confidencial y segura, y no serán compartidos con terceros sin tu autorización expresa, salvo en los casos previstos por la ley. Como titular de la información, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos en cualquier momento.\n\n¿Aceptas el tratamiento de tus datos personales conforme a nuestra política de privacidad?\n👉 Responde:\n1️⃣ Sí, acepto\n2️⃣ No acepto');
   })
   .addAction({ capture: true }, async (ctx, { flowDynamic, state, gotoFlow, fallBack, endFlow, provider }) => {
     const userInput = ctx.body.trim();

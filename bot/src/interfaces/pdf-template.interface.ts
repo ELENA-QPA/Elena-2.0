@@ -18,9 +18,14 @@ export interface PdfTemplateData {
 
 export interface ProcessData {
   // Información del proceso
-  internalCode: string; // Número interno único de cada proceso
-  processType: string;
-  jurisdiction: string;
+  etiqueta: string; // Etiqueta 
+  radicado: string; // Radicado de 23 dígitos
+  despachoJudicial: string; // Juzgado
+  city: string; // Ciudad
+  ultimaActuacion: string; // Última actuación
+  fechaUltimaActuacion: string; // Fecha última actuación
+  //processType: string;
+  //jurisdiction: string;
   
   // Partes procesales
   plaintiffs: PlaintiffData[];

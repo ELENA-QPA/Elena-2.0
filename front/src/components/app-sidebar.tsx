@@ -64,7 +64,7 @@ const mainItems = [
         icon: FileText,
       },
       {
-        title: "Monolegal / Importar",
+        title: "Expedientes por Fecha",
         href: "/dashboard/monolegal/importar",
         icon: Upload,
       },

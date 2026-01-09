@@ -12,17 +12,18 @@
   },
   "keywords": [],
   "dependencies": {
-    "@builderbot-plugins/openai-assistants": "^0.0.2",
-    "@builderbot/bot": "1.2.9",
-    "@builderbot/provider-baileys": "1.2.9",
+    "@hapi/boom": "^10.0.1",
     "@types/handlebars": "^4.1.0",
+    "@whiskeysockets/baileys": "7.0.0-rc.9",
     "dotenv": "^16.4.5",
     "handlebars": "^4.7.8",
-    "puppeteer-core": "^24.11.2"
+    "puppeteer-core": "^24.11.2",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@types/multer": "^1.4.11",
     "@types/node": "^20.11.30",
+    "@types/qrcode": "^1.5.6",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.52.0",

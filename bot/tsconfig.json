@@ -5,6 +5,8 @@
     "declaration": false,
     "declarationMap": false,
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "types": ["node"],
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
