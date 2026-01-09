@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { OrchestratorService } from '../services/orchestrator.service';
 import {
-  InternalCodeDto,
+  EtiquetaDto,
   IdRecordDto,
   IdLawyerDto,
   IdAudienceDto,
@@ -33,17 +33,17 @@ export class OrchestratorController {
   @Post('record')
   @HttpCode(HttpStatus.OK)
   async getRecord(@Body() body: IdRecordDto): Promise<RecordAdaptedResponse> {
-    const internalCodeDto: InternalCodeDto =
-      await this.orchestratorService.getInternalCodeById(body);
-    return this.orchestratorService.getRecordByInternalCode(internalCodeDto);
+    const internalCodeDto: EtiquetaDto =
+      await this.orchestratorService.getEtiquetaById(body);
+    return this.orchestratorService.getRecordByEtiqueta(internalCodeDto);
   }
 
   @Post('record/internalCode')
   @HttpCode(HttpStatus.OK)
   async getRecordByInternalCode(
-    @Body() body: InternalCodeDto,
+    @Body() body: EtiquetaDto,
   ): Promise<RecordAdaptedResponse> {
-    return this.orchestratorService.getRecordByInternalCode(body);
+    return this.orchestratorService.getRecordByEtiqueta(body);
   }
 
   @Auth(ValidRoles.admin)
@@ -68,6 +68,14 @@ export class OrchestratorController {
   async bulkCreateAudiences(@Body() body) {
     return await this.orchestratorService.bulkCreateAudiencesWithNotifications(
       body.audiences,
+    );
+  }
+
+  @Post('singlebulk')
+  @HttpCode(HttpStatus.CREATED)
+  async CreateAudiences(@Body() body) {
+    return await this.orchestratorService.createAudiencesWithNotifications(
+      body,
     );
   }
 

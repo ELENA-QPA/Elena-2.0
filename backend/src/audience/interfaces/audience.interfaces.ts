@@ -20,6 +20,10 @@ export interface AudienceBase {
     fifteenDays: { sent: boolean; sentAt?: Date };
     oneDay: { sent: boolean; sentAt?: Date };
   };
+  month?: string;
+  day?: string;
+  start_time?: string;
+  year?: string;
 }
 
 export interface Lawyer {

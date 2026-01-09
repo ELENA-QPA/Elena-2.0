@@ -24,7 +24,7 @@ export abstract class AudienceRepository {
 
   abstract getAllByLawyer(lawyerId: string): Promise<Evento[]>;
 
-  abstract getRecordByInternalCode(internalCode: string): Promise<EventoForm>;
+  abstract getRecordByEtiqueta(etiqueta: string): Promise<EventoForm>;
 
   abstract createAudience(body: AudienceCreate): Promise<AudienceCreate>;
 
@@ -33,9 +33,16 @@ export abstract class AudienceRepository {
     body: AudienceUpdate
   ): Promise<AudienceUpdate>;
 
+  abstract updateAudienceWithValidation(
+    id: string,
+    body: AudienceUpdate
+  ): Promise<AudienceUpdate>;
+
   abstract getAudienceById(
     AudienceId: string
   ): Promise<AudienceOrchestratorResponse>;
+
+  abstract deleteAudience(AudienceId: string): Promise<void>;
 }
 
 @injectable()
@@ -95,14 +102,14 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     );
   }
 
-  async getRecordByInternalCode(internalCode: string): Promise<EventoForm> {
+  async getRecordByEtiqueta(etiqueta: string): Promise<EventoForm> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getRecordByInternal,
       method: "post",
-      body: JSON.stringify({ internalCode: internalCode }),
+      body: JSON.stringify({ etiqueta: etiqueta }),
       isAuth: true,
     });
-
+    console.log("Response repository:", response.body);
     if (response.statusCode === HttpStatusCode.ok) {
       return mapRecordToEvent(response.body);
     }
@@ -140,6 +147,38 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
     if (response.statusCode === HttpStatusCode.ok) {
       return response.body;
+    }
+
+    throw new CustomError(response.body?.message || "Error updating audience");
+  }
+
+  async updateAudienceWithValidation(
+    id: string,
+    audience: AudienceUpdate
+  ): Promise<AudienceUpdate> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.audiencias.updateAudienceWithValidation}${id}`,
+      method: "put",
+      body: JSON.stringify(audience),
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return response.body;
+    }
+
+    throw new CustomError(response.body?.message || "Error updating audience");
+  }
+
+  async deleteAudience(id: string): Promise<void> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.audiencias.deleteAudience}${id}`,
+      method: "delete",
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return;
     }
 
     throw new CustomError(response.body?.message || "Error updating audience");

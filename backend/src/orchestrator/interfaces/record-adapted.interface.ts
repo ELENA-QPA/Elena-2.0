@@ -11,9 +11,9 @@ export interface ProceduralPartsAdapted {
 
 export interface RecordAdapted {
   _id: string;
-  internalCode: string;
-  office: string;
-  settled: string;
+  etiqueta: string;
+  despachoJudicial: string;
+  radicado: string;
   proceduralParts: ProceduralPartsAdapted;
   client: string;
 }
@@ -22,6 +22,6 @@ export interface RecordAdaptedResponse {
   record: RecordAdapted;
 }
 
-export interface InternalCodeInterface {
-  internalCode: string;
+export interface EtiquetaInterface {
+  etiqueta: string;
 }

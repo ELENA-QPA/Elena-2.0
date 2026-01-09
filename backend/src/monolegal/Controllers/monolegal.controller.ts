@@ -184,6 +184,20 @@ export class MonolegalController {
     return this.monolegalService.syncFromApi(user._id.toString(), fecha);
   }
 
+  @Post('sync/history')
+  async syncHistoryWithMonolegal(@Body() body?: { fecha?: string }) {
+    let fecha: Date;
+
+    if (body?.fecha) {
+      const [year, month, day] = body.fecha.split('-').map(Number);
+      fecha = new Date(year, month - 1, day, 12, 0, 0);
+    } else {
+      fecha = new Date();
+    }
+
+    return this.monolegalService.syncHistoryFromApi(fecha);
+  }
+
   @Post('renormalize-juzgados')
   @ApiOperation({
     summary: 'Re-normalizar todos los juzgados existentes',

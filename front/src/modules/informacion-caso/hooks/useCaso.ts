@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+
 import container from "@/lib/di/container";
 import { CasoRepository } from "../data/repositories/caso.repository";
 import {
@@ -10,7 +11,7 @@ import {
   CreateProceduralPartBody,
   CreatePaymentBody,
   CreateParameterBody,
-  SearchParametersBody, 
+  SearchParametersBody,
   CreateCasoSuccessResponse,
   GetCasoSuccessResponse,
   CasosPaginatedResponse,
@@ -18,7 +19,7 @@ import {
   CreateIntervenerSuccessResponse,
   CreateProceduralPartSuccessResponse,
   CreatePaymentSuccessResponse,
-  CreateParameterSuccessResponse,  
+  CreateParameterSuccessResponse,
   ParametersPaginatedResponse,
   FileUploadResponse,
   MultipleFileUploadResponse,
@@ -77,22 +78,12 @@ export function useCaso() {
     setLoading(true);
     setError(null);
     try {
-      console.log("[USECASO][getAllCasos]: Iniciando carga de casos", {
-        limit,
-        offset,
-      });
       const response = await casoRepository.getAllCasos(limit, offset);
-      console.log("[USECASO][getAllCasos][Response]:", response);
 
       if ("records" in response) {
-        console.log(
-          "[USECASO][getAllCasos][Success]: Casos cargados exitosamente",
-          { count: response.records.length }
-        );
         setCasos(response.records);
         return response;
       } else {
-        console.error("[USECASO][getAllCasos][Error]:", response);
         const errorMsg = Array.isArray(response.message)
           ? response.message.join(", ")
           : response.message;
@@ -100,7 +91,6 @@ export function useCaso() {
         return response;
       }
     } catch (err: any) {
-      console.error("[USECASO][getAllCasos][Catch Error]:", err);
       const errorMsg = err.message || "Error inesperado al cargar casos";
       setError(errorMsg);
       return {
@@ -120,21 +110,12 @@ export function useCaso() {
     setLoading(true);
     setError(null);
     try {
-      console.log("[USECASO][getCasoById]: Iniciando carga de caso", {
-        id,
-        token,
-      });
       const response = await casoRepository.getCasoById(id, token);
-      console.log("[USECASO][getCasoById][Response]:", response);
 
       if ("record" in response) {
-        console.log(
-          "[USECASO][getCasoById][Success]: Caso cargado exitosamente"
-        );
         setCaso(response.record);
         return response;
       } else {
-        console.error("[USECASO][getCasoById][Error]:", response);
         const errorMsg = Array.isArray(response.message)
           ? response.message.join(", ")
           : response.message;
@@ -142,7 +123,6 @@ export function useCaso() {
         return response;
       }
     } catch (err: any) {
-      console.error("[USECASO][getCasoById][Catch Error]:", err);
       const errorMsg = err.message || "Error inesperado al cargar caso";
       setError(errorMsg);
       return {
@@ -160,9 +140,7 @@ export function useCaso() {
     setLoading(true);
     setError(null);
     try {
-      console.log("[USECASO][createPerformance]:", data);
       const response = await casoRepository.createPerformance(data);
-      console.log("[USECASO][createPerformance][Response]:", response);
       if ("performance" in response) {
         // actualizar estado local
         setCaso((prev) => {
@@ -180,7 +158,6 @@ export function useCaso() {
         return response;
       }
     } catch (err: any) {
-      console.error("[USECASO][createPerformance][Error]:", err);
       const errorMsg = err.message || "Error inesperado al crear actuación";
       setError(errorMsg);
       return { statusCode: 500, message: errorMsg, error: "Unknown" };

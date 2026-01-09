@@ -100,6 +100,8 @@ export const apiUrls = {
 
   audiencias: {
     updateAudience: "/api/audiences/",
+    deleteAudience: "/api/audiences/",
+    updateAudienceWithValidation: "/api/audiences/validation/",
   },
 
   notifications: {

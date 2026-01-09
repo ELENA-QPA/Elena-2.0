@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RecordsService } from 'src/records/records.service';
 import { RecordAdapter } from '../adapters/record.adapter';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
@@ -6,7 +6,7 @@ import {
   IdAudienceDto,
   IdLawyerDto,
   IdRecordDto,
-  InternalCodeDto,
+  EtiquetaDto,
 } from '../dto/records-service.dto';
 import { AudienceService } from 'src/audience/services/audience.service';
 import { AudienceResponse } from 'src/audience/interfaces/audience.interfaces';
@@ -20,8 +20,12 @@ import { NotificationService } from 'src/notifications/services/notification.ser
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { ReminderService } from 'src/reminder/services/reminder.services';
-import { EmailReminderData } from 'src/reminder/interfaces/reminder.interface';
+import {
+  DaptaData,
+  EmailReminderData,
+} from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
+import { UtilitiesService } from 'src/common/services/utilities.service';
 
 @Injectable()
 export class OrchestratorService {
@@ -35,6 +39,7 @@ export class OrchestratorService {
     private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,
     private readonly recordAdapter: RecordAdapter,
+    private readonly utilitiesService: UtilitiesService,
   ) {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -43,76 +48,21 @@ export class OrchestratorService {
     this.model = process.env.OPENAI_MODEL ?? 'gpt-5-nano';
   }
 
-  private readonly colombianHolidays2025: Date[] = [
-    new Date('2025-01-01'),
-    new Date('2025-01-06'),
-    new Date('2025-03-24'),
-    new Date('2025-04-17'),
-    new Date('2025-04-18'),
-    new Date('2025-05-01'),
-    new Date('2025-06-02'),
-    new Date('2025-06-23'),
-    new Date('2025-06-30'),
-    new Date('2025-07-07'),
-    new Date('2025-07-20'),
-    new Date('2025-08-07'),
-    new Date('2025-08-18'),
-    new Date('2025-10-13'),
-    new Date('2025-11-03'),
-    new Date('2025-11-17'),
-    new Date('2025-12-08'),
-    new Date('2025-12-25'),
-  ];
+  private async callReminder(record, audienceData) {
+    const daptaData: DaptaData = {
+      phone_number: `+57${record.proceduralParts.plaintiff.contact}` || '',
+      plaintiff_name: record.proceduralParts.plaintiff.name || '',
+      defendant_name: record.proceduralParts.defendant.name || '',
+      audience_day: audienceData.audience.day || '',
+      audience_month: audienceData.audience.month || '',
+      audience_year: audienceData.audience.year || '',
+      audience_start_time: audienceData.audience.start_time || '',
+    };
 
-  // Metodos auxilaires paar enviar recordatorios
-  private isBusinessDay(date: Date): boolean {
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) return false;
-
-    const dateStr = date.toISOString().split('T')[0];
-    return !this.colombianHolidays2025.some(
-      (holiday) => holiday.toISOString().split('T')[0] === dateStr,
-    );
+    await this.reminderService.enqueueDaptaCall(daptaData);
   }
 
-  private subtractBusinessDays(endDate: Date, businessDays: number): Date {
-    let currentDate = new Date(endDate);
-    let daysSubtracted = 0;
-
-    while (daysSubtracted < businessDays) {
-      currentDate.setDate(currentDate.getDate() - 1);
-
-      if (this.isBusinessDay(currentDate)) {
-        daysSubtracted++;
-      }
-    }
-
-    return currentDate;
-  }
-
-  private isExactlyNBusinessDaysBefore(
-    targetDate: Date,
-    businessDays: number,
-  ): boolean {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const notificationDate = this.subtractBusinessDays(
-      targetDate,
-      businessDays,
-    );
-    notificationDate.setHours(0, 0, 0, 0);
-
-    return today.getTime() === notificationDate.getTime();
-  }
-
-  private async enqueueReminder(
-    audienceData: AudienceOrchestratorResponse,
-    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
-  ): Promise<void> {
-    const { audience, record } = audienceData;
-    audienceData.audience = this.reminderService.buildAudienceContext(audience);
-
+  private async emailReminder(record, audienceData) {
     const emailData: EmailReminderData = {
       to: record.proceduralParts.plaintiff.email,
       subject: 'Notificación de audiencia',
@@ -121,12 +71,29 @@ export class OrchestratorService {
     };
 
     await this.reminderService.sendEmail(emailData);
+  }
+
+  private async enqueueReminder(
+    audienceData: AudienceOrchestratorResponse,
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay' | 'oneDayAfterCreation',
+  ): Promise<void> {
+    const { audience, record } = audienceData;
+    audienceData.audience = this.reminderService.buildAudienceContext(audience);
+
+    if (type === 'oneDay') {
+      await this.callReminder(record, audienceData);
+      await this.emailReminder(record, audienceData);
+    } else {
+      await this.emailReminder(record, audienceData);
+    }
 
     await this.audienceService.markNotificationAsSent(audience._id, type);
   }
 
   // metodos auxiliares para procesar audiencias con campos faltantes
-  private getFields(dto: CreateAudienceDto): FieldValidationResult {
+  private async getFields(
+    dto: CreateAudienceDto,
+  ): Promise<FieldValidationResult> {
     const toDelete: string[] = [];
     const messages: string[] = [];
 
@@ -135,6 +102,12 @@ export class OrchestratorService {
     } else if (!this.audienceService.isValidMongoId(dto.record)) {
       toDelete.push('record');
       messages.push(`record:(${dto.record})`);
+    } else {
+      const recordExists = await this.recordsService.exists(dto.record);
+      if (!recordExists) {
+        toDelete.push('record');
+        messages.push(`record: no encontrado`);
+      }
     }
 
     if (!dto.lawyer) {
@@ -176,12 +149,10 @@ export class OrchestratorService {
   }
 
   // metodos para obetenr records
-  async getRecordByInternalCode(
-    dto: InternalCodeDto,
-  ): Promise<RecordAdaptedResponse> {
+  async getRecordByEtiqueta(dto: EtiquetaDto): Promise<RecordAdaptedResponse> {
     try {
       const recordResponse =
-        await this.recordsService.getRecordDetailsByInternalCode(dto);
+        await this.recordsService.getRecordDetailsByEtiqueta(dto);
 
       const adaptedResponse = this.recordAdapter.adapt(recordResponse);
 
@@ -191,9 +162,9 @@ export class OrchestratorService {
     }
   }
 
-  async getInternalCodeById(dto: IdRecordDto): Promise<InternalCodeDto> {
+  async getEtiquetaById(dto: IdRecordDto): Promise<EtiquetaDto> {
     try {
-      const result = await this.recordsService.getInternalCodeById(dto);
+      const result = await this.recordsService.getEtiquetaCodeById(dto);
       return result;
     } catch (error) {
       throw error;
@@ -202,11 +173,9 @@ export class OrchestratorService {
 
   async getRecordById(dto: IdRecordDto): Promise<RecordAdaptedResponse> {
     try {
-      const internalCodeDto: InternalCodeDto = await this.getInternalCodeById(
-        dto,
-      );
+      const EtiquetaDto: EtiquetaDto = await this.getEtiquetaById(dto);
 
-      const record = await this.getRecordByInternalCode(internalCodeDto);
+      const record = await this.getRecordByEtiqueta(EtiquetaDto);
 
       return record;
     } catch (error) {
@@ -235,7 +204,6 @@ export class OrchestratorService {
       const audiencesResponse = await Promise.all(
         audiences.map((audience) => this.buildAudienceResponce(audience)),
       );
-
       return audiencesResponse;
     } catch (error) {
       throw error;
@@ -281,6 +249,26 @@ export class OrchestratorService {
 
   // metodos para procesar audiencias a notificaciones desde monolegal
 
+  async createAudiencesWithNotifications(audienceDto: CreateAudienceDto) {
+    try {
+      const { toDelete, messages } = await this.getFields(audienceDto);
+      const sanitizedDto = this.sanitizeAudienceDto(audienceDto, toDelete);
+
+      const createdAudience = await this.audienceService.create(sanitizedDto);
+      if (!createdAudience.is_valid) {
+        try {
+          await this.notificationService.create({
+            audience: createdAudience._id,
+            message: 'Faltantes ' + messages.join(', '),
+          });
+        } catch (notificationError) {}
+      }
+      return createdAudience;
+    } catch (error) {
+      return {};
+    }
+  }
+
   async bulkCreateAudiencesWithNotifications(
     audienceDtos: CreateAudienceDto[],
   ): Promise<BulkCreateResult> {
@@ -292,13 +280,10 @@ export class OrchestratorService {
 
     for (const dto of audienceDtos) {
       try {
-        const { toDelete, messages } = this.getFields(dto);
+        const { toDelete, messages } = await this.getFields(dto);
         const sanitizedDto = this.sanitizeAudienceDto(dto, toDelete);
 
-        const createdAudience = await this.audienceService.create(
-          sanitizedDto,
-          false,
-        );
+        const createdAudience = await this.audienceService.create(sanitizedDto);
 
         result.success++;
 
@@ -320,14 +305,21 @@ export class OrchestratorService {
     return result;
   }
 
-  // metodos para obtener abogados disponibles
+  async createAudienceFromMonolegal(idProceso, anotacion) {
+    const { start, end } = await this.extractDate(anotacion);
+    const lawyer = await this.findAvailableLawyer(start, end);
 
-  private colombiaToUTC(dateString: string): Date {
-    const date = new Date(dateString);
-
-    return new Date(date.getTime() + 5 * 60 * 60 * 1000);
+    const audienceDto = {
+      start: start,
+      end: end,
+      record: idProceso,
+      lawyer: lawyer,
+    };
+    const audienceCreated = this.createAudiencesWithNotifications(audienceDto);
+    return audienceCreated;
   }
 
+  // metodos para obtener abogados disponibles
   private async checkLawyerAvailability(
     lawyerId: string,
     start: Date,
@@ -362,8 +354,8 @@ export class OrchestratorService {
 
     let lastCheckedId: string = lawyerIds[0];
 
-    const startDate = this.colombiaToUTC(start);
-    const endDate = this.colombiaToUTC(end);
+    const startDate = this.utilitiesService.colombiaToUTC(start);
+    const endDate = this.utilitiesService.colombiaToUTC(end);
 
     while (lawyerIds.length > 0) {
       const randomIndex = Math.floor(Math.random() * lawyerIds.length);
@@ -448,8 +440,8 @@ export class OrchestratorService {
       }
 
       return {
-        start: start.toISOString(),
-        end: end.toISOString(),
+        start: new Date(start.getTime() + 5 * 60 * 60 * 1000).toISOString(),
+        end: new Date(end.getTime() + 5 * 60 * 60 * 1000).toISOString(),
       };
     } catch {
       return { start: null, end: null };
@@ -462,7 +454,7 @@ export class OrchestratorService {
   async processReminders(): Promise<void> {
     const today = new Date();
 
-    if (!this.isBusinessDay(today)) {
+    if (!this.utilitiesService.isBusinessDay(today)) {
       return;
     }
 
@@ -475,7 +467,9 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesOneMonth) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 22)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 20)
+        ) {
           await this.enqueueReminder(audienceData, 'oneMonth');
         }
       }
@@ -490,7 +484,9 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesFifteenDays) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 15)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 5)
+        ) {
           await this.enqueueReminder(audienceData, 'fifteenDays');
         }
       }
@@ -503,15 +499,31 @@ export class OrchestratorService {
 
       for (const audienceData of audiencesOneDay) {
         const audienceStart = new Date(audienceData.audience.start);
-        if (this.isExactlyNBusinessDaysBefore(audienceStart, 1)) {
+        if (
+          this.utilitiesService.isExactlyNBusinessDaysBefore(audienceStart, 1)
+        ) {
           await this.enqueueReminder(audienceData, 'oneDay');
         }
+      }
+
+      const queryOneDayAfter = {
+        is_valid: 'true',
+        notificationOneDayAfter: 'false',
+        notificationOneDayAfterDate: today,
+      };
+
+      const audiencesOneDayAfter = await this.getFilteredAudiences(
+        queryOneDayAfter,
+      );
+
+      for (const audienceData of audiencesOneDayAfter) {
+        await this.enqueueReminder(audienceData, 'oneDayAfterCreation');
       }
     } catch (error) {}
   }
 
   async getQueueStats() {
-    return this.reminderService.getQueueStats();
+    return this.reminderService.getEmailQueueStats();
   }
 
   async cleanQueue() {

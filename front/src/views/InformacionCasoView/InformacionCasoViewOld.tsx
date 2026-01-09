@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { get, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -77,7 +77,7 @@ const validateDocumentNumber = (
   documentType: string,
   documentNumber: string
 ) => {
-  if (!documentNumber) return true; 
+  if (!documentNumber) return true;
 
   // Tipos que requieren solo números
   const numericTypes = [
@@ -545,7 +545,7 @@ const ubicacionesExpediente = [
   "Unificada",
   "Rama",
   "Tyba",
-  "EstadosElectronicos",  
+  "EstadosElectronicos",
 ];
 
 const jurisdictions = [
@@ -665,8 +665,8 @@ interface ProcessAction {
 // Documento borrador (solo nombre y tipo) para mostrar en tabla con estado opaco
 type DraftDoc = {
   id: string;
-  category: string; 
-  document: string; 
+  category: string;
+  document: string;
   consecutive?: string;
   responsible?: string;
   responsibleType?: string;
@@ -676,8 +676,8 @@ type DraftDoc = {
 export default function InformacionCasoFormViewOld() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const caseId = searchParams.get("id"); 
-  const mode = searchParams.get("mode") || "create"; 
+  const caseId = searchParams.get("id");
+  const mode = searchParams.get("mode") || "create";
 
   // Helper para generar fecha actual en formato ISO (YYYY-MM-DD) en horario local
   const getCurrentDate = () => {
@@ -805,7 +805,7 @@ export default function InformacionCasoFormViewOld() {
         console.log(
           "[toISO8601ForPayments] YYYY-MM-DD converted to ISO:",
           result
-        );        
+        );
         return result;
       }
 
@@ -815,15 +815,15 @@ export default function InformacionCasoFormViewOld() {
         const formattedDate = `${year}-${month
           .toString()
           .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
-        const result = `${formattedDate}T00:00:00.000Z`;       
-     
+        const result = `${formattedDate}T00:00:00.000Z`;
+
         return result;
       }
 
       // Para cualquier otro formato, intentar extraer YYYY-MM-DD sin usar la hora
       const maybe = dateString.split("T")[0];
       if (/^\d{4}-\d{2}-\d{2}$/.test(maybe)) {
-        const result = `${maybe}T00:00:00.000Z`;        
+        const result = `${maybe}T00:00:00.000Z`;
         return result;
       }
       console.warn(
@@ -984,7 +984,7 @@ export default function InformacionCasoFormViewOld() {
       size: string;
       progress: number;
       id: string;
-      file: File; 
+      file: File;
     }[]
   >([]);
 
@@ -1543,7 +1543,7 @@ export default function InformacionCasoFormViewOld() {
           setShowManualDespacho(false);
 
           const currentDespacho = form.getValues("despachoJudicial");
-          if (currentDespacho && despachosForCity.includes(currentDespacho)) {           
+          if (currentDespacho && despachosForCity.includes(currentDespacho)) {
           } else {
             form.setValue("despachoJudicial", "");
             setManualDespacho("");
@@ -1553,7 +1553,7 @@ export default function InformacionCasoFormViewOld() {
           setShowManualDespacho(true);
 
           const currentDespacho = form.getValues("despachoJudicial");
-          if (currentDespacho) {            
+          if (currentDespacho) {
             setManualDespacho(currentDespacho);
           }
         }
@@ -1577,12 +1577,12 @@ export default function InformacionCasoFormViewOld() {
     if (caso) {
       console.log("[CASE_LOAD] Datos del caso:", {
         city: caso.city,
-        office: caso.despachoJudicial,
+        despachoJudicial: caso.despachoJudicial,
       });
     }
 
     // Solo procesar durante la carga inicial del caso en modo EDIT, no en modo CREATE
-    if (!caso || caseInitialLoadCompleted) {      
+    if (!caso || caseInitialLoadCompleted) {
       return;
     }
 
@@ -1603,7 +1603,7 @@ export default function InformacionCasoFormViewOld() {
             currentDespacho
           );
         } else {
-          // Despacho no está en la lista o no hay despacho, usar input manual          
+          // Despacho no está en la lista o no hay despacho, usar input manual
           setAvailableDespachos([]);
           setShowManualDespacho(true);
           if (currentDespacho) {
@@ -1650,7 +1650,7 @@ export default function InformacionCasoFormViewOld() {
           if (caseDespacho) {
             setManualDespacho(caseDespacho);
             // También establecer el valor en el formulario
-            form.setValue("despachoJudicial", caseDespacho);            
+            form.setValue("despachoJudicial", caseDespacho);
           }
         }
       }
@@ -1706,7 +1706,7 @@ export default function InformacionCasoFormViewOld() {
         if (rawValue) return "Otro"; // Si tiene valor pero no coincide, usar "Otro"
         return "";
       })();
-      const internalCodeValue = caso.etiqueta || caso.internalCode || "";     
+      const internalCodeValue = caso.etiqueta || "";
 
       // Función para capitalizar nombres (ej: "ANTIOQUIA" -> "Antioquia")
       const capitalizeName = (name: string) => {
@@ -1784,23 +1784,16 @@ export default function InformacionCasoFormViewOld() {
       };
 
       const numeroRadicadoRaw =
-        (caso as any).radicado ||
-        caso.settled ||
-        (caso as any).numeroRadicado ||
-        "";
+        (caso as any).radicado || (caso as any).numeroRadicado || "";
       const jurisdiccionInferida =
         inferirJurisdiccionDeRadicado(numeroRadicadoRaw);
       const jurisdictionValue = caso.jurisdiction || jurisdiccionInferida || "";
-      const processTypeValue = caso.processType || "";
+      const processTypeValue = caso.processType || "lolo";
 
-      const despachoJudicialValue =
-        caso.despachoJudicial || (caso as any).office || "";
+      const despachoJudicialValue = caso.despachoJudicial || "";
 
       const numeroRadicadoValue =
-        (caso as any).radicado ||
-        caso.settled ||
-        (caso as any).numeroRadicado ||
-        "";
+        (caso as any).radicado || (caso as any).numeroRadicado || "";
 
       // EJECUTAR EL RESET DEL FORMULARIO
       const resetData = {
@@ -1913,7 +1906,7 @@ export default function InformacionCasoFormViewOld() {
         const selectedDept = departments.find(
           (dept) => dept.nombre === departmentValue
         );
-        if (selectedDept) {          
+        if (selectedDept) {
           setAvailableCities(selectedDept.municipios);
         }
       }
@@ -1927,6 +1920,11 @@ export default function InformacionCasoFormViewOld() {
           shouldDirty: false,
         });
         form.setValue("despachoJudicial", resetData.despachoJudicial, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+
+        form.setValue("processType", resetData.processType, {
           shouldValidate: false,
           shouldDirty: false,
         });
@@ -1947,7 +1945,7 @@ export default function InformacionCasoFormViewOld() {
       setTimeout(() => {
         calculateTotalAmount();
         // Marcar carga inicial como completada DESPUÉS de que todo esté establecido
-        setCaseInitialLoadCompleted(true);        
+        setCaseInitialLoadCompleted(true);
       }, 100);
     } else {
       console.log(
@@ -1997,18 +1995,18 @@ export default function InformacionCasoFormViewOld() {
       // En otros modos, ocultar formularios inicialmente
       setShowDemandanteForm(false);
       setShowDemandadoForm(false);
-      setShowIntervinienteForm(false);      
+      setShowIntervinienteForm(false);
       setShowDocumentForm(false);
     }
   }, [isCreateMode, form]);
 
   //Recalcular automáticamente el total cuando cambie el caso o sus pagos
   useEffect(() => {
-    if (caso && caso.payments) {      
+    if (caso && caso.payments) {
       setTimeout(() => calculateTotalAmount(), 100);
     }
   }, [caso, caso?.payments, calculateTotalAmount]);
-  
+
   const watchedPayments = form.watch("payments");
   const watchedSuccessPremium = form.watch("includeSuccessPremium");
   const watchedSuccessPremiumPrice = form.watch("successPremiumPrice");
@@ -2091,13 +2089,12 @@ export default function InformacionCasoFormViewOld() {
       return;
     }
 
-    if (isCreatingCase) {      
+    if (isCreatingCase) {
       return;
     }
 
     // Si estamos en modo edición, usar updateCaso en lugar de createCaso
-    if (isEditMode && caseId) {     
-
+    if (isEditMode && caseId) {
       // Prevenir doble actualización
       if (isCreatingCase) {
         console.log(
@@ -2106,7 +2103,7 @@ export default function InformacionCasoFormViewOld() {
         return;
       }
 
-      setIsCreatingCase(true); 
+      setIsCreatingCase(true);
 
       try {
         await saveInformacionGeneral();
@@ -2133,7 +2130,7 @@ export default function InformacionCasoFormViewOld() {
 
     try {
       // Definir responsible para uso en documentos de fallback
-      let responsible = "Sistema";      
+      let responsible = "Sistema";
 
       const baseParts = [] as Array<{
         partType: string;
@@ -2195,7 +2192,7 @@ export default function InformacionCasoFormViewOld() {
           email: i.electronicAddress || "",
           contact: i.contact || "Sin contacto", // Valor por defecto
         }));
-    
+
       // Si hay datos en el formulario de documentos sin guardar, agregarlos automáticamente
       if (
         documentForm.categoria &&
@@ -2206,7 +2203,7 @@ export default function InformacionCasoFormViewOld() {
         const autoSavedDocument = {
           category: documentForm.categoria,
           documentType: documentForm.documentType || "Escrito",
-          document: documentForm.documentType, 
+          document: documentForm.documentType,
           subdocument: normalizeSubdocument(documentForm.subdocumento),
           settledDate: documentForm.fechaRadicacion || getCurrentDate(),
           consecutive:
@@ -2359,14 +2356,14 @@ export default function InformacionCasoFormViewOld() {
         personType: cleanData.personType,
         jurisdiction: cleanData.jurisdiction,
         processType: cleanData.processType,
-        office: cleanData.despachoJudicial,
-        settled: cleanData.numeroRadicado,
+        despachoJudicial: cleanData.despachoJudicial,
+        radicado: cleanData.numeroRadicado,
         country: cleanData.country || "COLOMBIA",
-        location: cleanData.location,     
-        documents: documents, 
-        interveners: interveners, 
-        proceduralParts: proceduralParts, 
-        payments: payments, 
+        location: cleanData.location,
+        documents: documents,
+        interveners: interveners,
+        proceduralParts: proceduralParts,
+        payments: payments,
         // Archivos físicos
         files: uploadedFiles.map((f) => f.file),
         // Metadata adicional de archivos
@@ -2433,8 +2430,7 @@ export default function InformacionCasoFormViewOld() {
   };
 
   const saveIntervinienteToAPI = async (intervinienteData: any) => {
-    if (caseId) {   
-
+    if (caseId) {
       // Temporalmente simular éxito
       const result = { success: true, interviniente: intervinienteData };
 
@@ -2593,7 +2589,7 @@ export default function InformacionCasoFormViewOld() {
               : result.message || "Error al actualizar documento";
             toast.error(errorMsg);
             console.error("[UPDATE_DOCUMENT] Error:", result);
-            return; 
+            return;
           }
         } else {
           // Crear documento nuevo usando la API del repositorio
@@ -2614,7 +2610,7 @@ export default function InformacionCasoFormViewOld() {
             responsibleType: documentForm.tipoResponsable || "Sistema",
             responsible: documentForm.responsable || "Sistema",
             observations: documentForm.observaciones || "",
-            file: uploadedFiles.length > 0 ? uploadedFiles[0].file : "", 
+            file: uploadedFiles.length > 0 ? uploadedFiles[0].file : "",
           };
 
           const result = await createDocument(payload);
@@ -2711,7 +2707,7 @@ export default function InformacionCasoFormViewOld() {
     setEditingDocument(doc);
     setDocumentForm({
       categoria: doc.category || "",
-      documentType: doc.document || "", 
+      documentType: doc.document || "",
       subdocumento: doc.subdocument || "",
       fechaRadicacion: doc.settledDate ? sanitizeDate(doc.settledDate) : "",
       consecutivo: doc.consecutive || "",
@@ -2773,8 +2769,8 @@ export default function InformacionCasoFormViewOld() {
         personType: values.personType,
         jurisdiction: values.jurisdiction,
         processType: values.processType,
-        office: values.despachoJudicial,
-        settled: values.numeroRadicado,
+        despachoJudicial: values.despachoJudicial,
+        radicado: values.numeroRadicado,
         country: values.country || "COLOMBIA",
         location: values.location,
       };
@@ -2998,12 +2994,12 @@ export default function InformacionCasoFormViewOld() {
       let errors: string[] = [];
 
       for (const [index, iv] of intervinientes.entries()) {
-        try {        
+        try {
           // Mapear campos debido a inconsistencia entre tipos FormData y API
           const intervenerType =
             (iv as any).intervenerType || iv.interventionType;
           const document = (iv as any).document || iv.documentNumber;
-          const email = (iv as any).email || iv.electronicAddress;          
+          const email = (iv as any).email || iv.electronicAddress;
 
           // Validar campos requeridos usando los campos mapeados
           if (
@@ -3035,11 +3031,11 @@ export default function InformacionCasoFormViewOld() {
             record: caseId,
             intervenerType: intervenerType,
             name: iv.name,
-            documentType: iv.documentType?.trim() || "CC", 
-            document: document, 
-            email: email || "", 
+            documentType: iv.documentType?.trim() || "CC",
+            document: document,
+            email: email || "",
             contact: iv.contact || "",
-          };          
+          };
 
           if ((iv as any)._id) {
             // Actualizar existente
@@ -3073,8 +3069,8 @@ export default function InformacionCasoFormViewOld() {
               );
             }
           } else {
-            // Crear nuevo            
-            const res = await createIntervener(payload);            
+            // Crear nuevo
+            const res = await createIntervener(payload);
             if ("intervener" in res && res.intervener) {
               createdCount++;
               console.log(
@@ -3120,7 +3116,7 @@ export default function InformacionCasoFormViewOld() {
 
         toast.success(successMsg.join(" y "));
 
-        // Refrescar caso para obtener la información actualizada        
+        // Refrescar caso para obtener la información actualizada
         await getCasoById(caseId);
       } else if (errors.length === 0) {
         toast.info("No hay intervinientes para procesar");
@@ -3135,7 +3131,7 @@ export default function InformacionCasoFormViewOld() {
   const savePayments = async () => {
     try {
       const values = form.getValues();
-      const payments = values.payments || [];      
+      const payments = values.payments || [];
 
       if (!caseId) {
         toast.warning("Guarda el caso antes de agregar pagos");
@@ -3153,8 +3149,7 @@ export default function InformacionCasoFormViewOld() {
 
       // Procesar cada payment individualmente
       for (const [index, p] of payments.entries()) {
-        try {        
-
+        try {
           // Validar campos requeridos
           if (!p.value || p.value <= 0) {
             errors.push(`Pago ${index + 1}: el valor debe ser mayor a 0`);
@@ -3185,14 +3180,14 @@ export default function InformacionCasoFormViewOld() {
                 paymentDate: toISO8601ForPayments(p.paymentDate),
               } as PaymentValue,
             ],
-          } as CreatePaymentBody;                               
+          } as CreatePaymentBody;
 
           if ((p as any)._id) {
-            // Actualizar existente            
-            const updateRes = await updatePayment((p as any)._id, payload);           
+            // Actualizar existente
+            const updateRes = await updatePayment((p as any)._id, payload);
 
             if ("record" in updateRes) {
-              updatedCount++;              
+              updatedCount++;
             } else {
               const msg = Array.isArray((updateRes as any).message)
                 ? (updateRes as any).message.join(", ")
@@ -3204,11 +3199,11 @@ export default function InformacionCasoFormViewOld() {
               );
             }
           } else {
-            // Crear nuevo            
-            const res = await createPayment(payload);            
+            // Crear nuevo
+            const res = await createPayment(payload);
 
             if ("payment" in res && res.payment) {
-              createdCount++;              
+              createdCount++;
             } else {
               const msg = Array.isArray((res as any).message)
                 ? (res as any).message.join(", ")
@@ -3248,7 +3243,7 @@ export default function InformacionCasoFormViewOld() {
 
         toast.success(successMsg.join(" y "));
 
-        // Refrescar caso para obtener la información actualizada        
+        // Refrescar caso para obtener la información actualizada
         await getCasoById(caseId);
       } else if (errors.length === 0) {
         toast.info("No hay pagos para procesar");
@@ -3294,8 +3289,7 @@ export default function InformacionCasoFormViewOld() {
       }
 
       // En modo creación, agregar al array y mostrar
-      if (isCreationMode) {        
-
+      if (isCreationMode) {
         // Datos del pago
         const nuevoPago = {
           value: tempPago.value,
@@ -3359,10 +3353,10 @@ export default function InformacionCasoFormViewOld() {
             paymentDate: toISO8601ForPayments(tempPago.paymentDate),
           } as PaymentValue,
         ],
-      } as CreatePaymentBody;      
+      } as CreatePaymentBody;
 
       // Crear el pago
-      const res = await createPayment(payload);      
+      const res = await createPayment(payload);
 
       if ("payment" in res && res.payment) {
         toast.success("Pago creado exitosamente");
@@ -3394,8 +3388,7 @@ export default function InformacionCasoFormViewOld() {
 
   // Guardar todos los documentos: createDocument para docs locales, refresh caso
   const saveDocuments = async () => {
-    try {    
-
+    try {
       if (!caseId) {
         toast.warning("Guarda el caso antes de agregar documentos");
         return;
@@ -3411,8 +3404,7 @@ export default function InformacionCasoFormViewOld() {
 
       // Subir documentos locales (localDocuments) usando createDocument
       for (const [index, doc] of localDocuments.entries()) {
-        try {         
-
+        try {
           // Validar campos requeridos
           if (!doc.category?.trim() || !doc.document?.trim()) {
             errors.push(
@@ -3435,13 +3427,13 @@ export default function InformacionCasoFormViewOld() {
               `DOC-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
             responsibleType: doc.responsibleType?.trim() || "Sistema",
             responsible: doc.responsible?.trim() || "Sistema",
-            observations: doc.observations?.trim() || "",            
-          } as any;          
+            observations: doc.observations?.trim() || "",
+          } as any;
 
           const result = await createDocument(payload);
 
           if ("document" in result) {
-            createdCount++;            
+            createdCount++;
           } else {
             const msg = Array.isArray((result as any).message)
               ? (result as any).message.join(", ")
@@ -3477,7 +3469,7 @@ export default function InformacionCasoFormViewOld() {
         // Limpiar documentos locales después del éxito
         setLocalDocuments([]);
 
-        // Refrescar caso para obtener la información actualizada        
+        // Refrescar caso para obtener la información actualizada
         await getCasoById(caseId);
       } else if (errors.length === 0) {
         toast.info("No hay documentos para procesar");
@@ -3626,7 +3618,7 @@ export default function InformacionCasoFormViewOld() {
                       : "Información detallada del expediente"}
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">                  
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">
                   {isViewMode && (
                     <Button
                       className="elena-button-primary w-full sm:w-auto text-xs sm:text-sm"
@@ -3639,7 +3631,7 @@ export default function InformacionCasoFormViewOld() {
                       <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                       Editar
                     </Button>
-                  )}                  
+                  )}
                 </div>
               </div>
             </div>
@@ -3748,10 +3740,7 @@ export default function InformacionCasoFormViewOld() {
 
             <Form {...form}>
               <form
-                onSubmit={(e) => {                  
-                  const formData = form.getValues();
-                  const formErrors = form.formState.errors;               
-
+                onSubmit={(e) => {
                   // Llamar al handler de envío de react-hook-form
                   return form.handleSubmit(onSubmit)(e);
                 }}
@@ -3838,7 +3827,7 @@ export default function InformacionCasoFormViewOld() {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {(() => {                                  
+                                {(() => {
                                   return departments.map((dept, index) => (
                                     <SelectItem
                                       key={`dept-${dept.codigo}-${index}`}
@@ -3875,7 +3864,7 @@ export default function InformacionCasoFormViewOld() {
                               </FormControl>
                               <SelectContent>
                                 {(() => {
-                                  const currentCityValue = field.value;                                  
+                                  const currentCityValue = field.value;
                                   // Filtrar ciudades duplicadas y crear keys únicas
                                   const uniqueCities = availableCities.filter(
                                     (city, index, self) =>
@@ -3883,7 +3872,7 @@ export default function InformacionCasoFormViewOld() {
                                       self.findIndex(
                                         (c) => c.nombre === city.nombre
                                       )
-                                  );                                 
+                                  );
                                   return uniqueCities.map((city, index) => (
                                     <SelectItem
                                       key={`city-${city.codigo}-${city.nombre}-${index}`}
@@ -3960,7 +3949,7 @@ export default function InformacionCasoFormViewOld() {
                       <FormField
                         control={form.control}
                         name="location"
-                        render={({ field }) => {                         
+                        render={({ field }) => {
                           return (
                             <FormItem>
                               <FormLabel className="text-gray-700 font-medium">
@@ -4024,7 +4013,7 @@ export default function InformacionCasoFormViewOld() {
                             <FormMessage />
                           </FormItem>
                         )}
-                      />                      
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
@@ -4034,7 +4023,7 @@ export default function InformacionCasoFormViewOld() {
                         render={({ field }) => {
                           const currentJurisdiction =
                             form.watch("jurisdiction");
-                          const currentProcessType = field.value;                          
+                          const currentProcessType = field.value;
 
                           let availableProcessTypes = currentJurisdiction
                             ? getProcessTypesByJurisdiction(currentJurisdiction)
@@ -4044,7 +4033,7 @@ export default function InformacionCasoFormViewOld() {
                           if (
                             currentProcessType &&
                             !availableProcessTypes.includes(currentProcessType)
-                          ) {                           
+                          ) {
                             availableProcessTypes = [
                               currentProcessType,
                               ...availableProcessTypes,
@@ -4057,7 +4046,7 @@ export default function InformacionCasoFormViewOld() {
                                 Tipo de proceso
                               </FormLabel>
                               <Select
-                                value={field.value || ""} 
+                                value={field.value || ""}
                                 onValueChange={field.onChange}
                                 disabled={isViewMode || !currentJurisdiction}
                               >
@@ -4107,7 +4096,7 @@ export default function InformacionCasoFormViewOld() {
                             <FormLabel className="text-gray-700 font-medium">
                               Despacho judicial
                             </FormLabel>
-                            {(() => {                             
+                            {(() => {
                               return null;
                             })()}
                             {showManualDespacho ? (
@@ -4137,7 +4126,7 @@ export default function InformacionCasoFormViewOld() {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {(() => {                                   
+                                  {(() => {
                                     return availableDespachos.map(
                                       (despacho) => (
                                         <SelectItem
@@ -4326,7 +4315,7 @@ export default function InformacionCasoFormViewOld() {
                                           )
                                         ) {
                                           if (isCreationMode) {
-                                            // En modo creación, eliminar solo del estado local                                            
+                                            // En modo creación, eliminar solo del estado local
                                             setDemandantes((prev) =>
                                               prev.filter(
                                                 (d) => d._id !== demandante._id
@@ -4358,7 +4347,7 @@ export default function InformacionCasoFormViewOld() {
                                             !demandante._id.startsWith("temp_")
                                           ) {
                                             // En modo edición y con ID real, usar API
-                                            try {                                              
+                                            try {
                                               await deleteProceduralPart(
                                                 demandante._id
                                               );
@@ -4620,27 +4609,22 @@ export default function InformacionCasoFormViewOld() {
                                     );
                                     return;
                                   }
-
+                                  // Datos del demandante
+                                  const demandanteData = {
+                                    name: demandante.name,
+                                    documentType: demandante.documentType || "",
+                                    documentNumber:
+                                      demandante.documentNumber || "",
+                                    electronicAddress:
+                                      demandante.electronicAddress || "",
+                                    contact: demandante.contact || "",
+                                  };
                                   // En modo creación, manejar creación y edición local
-                                  if (isCreationMode) {                                   
-
-                                    // Datos del demandante
-                                    const demandanteData = {
-                                      name: demandante.name,
-                                      documentType:
-                                        demandante.documentType || "",
-                                      documentNumber:
-                                        demandante.documentNumber || "",
-                                      electronicAddress:
-                                        demandante.electronicAddress || "",
-                                      contact: demandante.contact || "",
-                                    };
-
+                                  if (isCreationMode) {
                                     if (
                                       editingDemandante &&
                                       editingDemandante._id?.startsWith("temp_")
-                                    ) {                                      
-                                     
+                                    ) {
                                       // Actualizar en el array de demandantes del formulario
                                       const demandantesActuales =
                                         form.getValues("demandantePart") || [];
@@ -4698,8 +4682,7 @@ export default function InformacionCasoFormViewOld() {
                                       toast.success(
                                         "Demandante actualizado en el formulario"
                                       );
-                                    } else {                                     
-                                      
+                                    } else {
                                       // Agregar al array de demandantes en el formulario
                                       const demandantesActuales =
                                         form.getValues("demandantePart");
@@ -4716,7 +4699,6 @@ export default function InformacionCasoFormViewOld() {
                                         "demandantePart",
                                         nuevosDemandantes
                                       );
-
                                       // Agregar al estado local para mostrar visualmente
                                       const nuevoItem: UnifiedPart = {
                                         _id: `temp_${Date.now()}`,
@@ -4754,7 +4736,6 @@ export default function InformacionCasoFormViewOld() {
                                     setEditingDemandante(null);
                                     return;
                                   }
-
                                   // En modo edición, usar la API normalmente
                                   const partToSave: any = {
                                     record: caseId || "",
@@ -4770,6 +4751,30 @@ export default function InformacionCasoFormViewOld() {
                                     editingDemandante &&
                                     editingDemandante._id
                                   ) {
+                                    const demandantesActuales =
+                                      form.getValues("demandantePart") || [];
+                                    const demandantesArray = Array.isArray(
+                                      demandantesActuales
+                                    )
+                                      ? demandantesActuales
+                                      : [];
+                                    const updatedArray = demandantesArray.map(
+                                      (d: any) => {
+                                        // Buscar por name y documentNumber ya que son únicos
+                                        if (
+                                          d.name === editingDemandante.name &&
+                                          getDocumentNumber(d) ===
+                                            getDocumentNumber(editingDemandante)
+                                        ) {
+                                          return demandanteData;
+                                        }
+                                        return d;
+                                      }
+                                    );
+                                    form.setValue(
+                                      "demandantePart",
+                                      updatedArray
+                                    );
                                     // Actualizar existente
                                     await updateProceduralPart(
                                       editingDemandante._id,
@@ -4938,7 +4943,7 @@ export default function InformacionCasoFormViewOld() {
                                             "¿Estás seguro de eliminar este demandado?"
                                           )
                                         ) {
-                                          if (isCreationMode) {                                            
+                                          if (isCreationMode) {
                                             setDemandadas((prev) =>
                                               prev.filter(
                                                 (d) => d._id !== demandado._id
@@ -4967,7 +4972,7 @@ export default function InformacionCasoFormViewOld() {
                                             !demandado._id.startsWith("temp_")
                                           ) {
                                             // En modo edición y con ID real, usar API
-                                            try {                                              
+                                            try {
                                               await deleteProceduralPart(
                                                 demandado._id
                                               );
@@ -5228,27 +5233,24 @@ export default function InformacionCasoFormViewOld() {
                                     );
                                     return;
                                   }
-
+                                  const nuevoDemandado = {
+                                    name: demandado.name,
+                                    documentType:
+                                      demandado.documentType?.trim() || "CC",
+                                    documentNumber:
+                                      demandado.documentNumber || "",
+                                    electronicAddress:
+                                      demandado.electronicAddress || "",
+                                    contact: demandado.contact || "",
+                                  };
                                   // En modo creación, manejar creación y edición local
-                                  if (isCreationMode) {                                    
-
+                                  if (isCreationMode) {
                                     // Datos del demandado
-                                    const nuevoDemandado = {
-                                      name: demandado.name,
-                                      documentType:
-                                        demandado.documentType?.trim() || "CC",
-                                      documentNumber:
-                                        demandado.documentNumber || "",
-                                      electronicAddress:
-                                        demandado.electronicAddress || "",
-                                      contact: demandado.contact || "",
-                                    };
 
                                     if (
                                       editingDemandado &&
                                       editingDemandado._id?.startsWith("temp_")
-                                    ) {                                      
-
+                                    ) {
                                       // Actualizar en el array de demandados del formulario
                                       const demandadosActuales =
                                         form.getValues("demandadoPart") || [];
@@ -5302,8 +5304,7 @@ export default function InformacionCasoFormViewOld() {
                                       toast.success(
                                         "Demandado actualizado en el formulario"
                                       );
-                                    } else {                                    
-                                      
+                                    } else {
                                       // Agregar al array de demandados en el formulario
                                       const demandadosActuales =
                                         form.getValues("demandadoPart");
@@ -5374,6 +5375,31 @@ export default function InformacionCasoFormViewOld() {
                                     editingDemandado &&
                                     editingDemandado._id
                                   ) {
+                                    // Actualizar en el array de demandados del formulario
+                                    const demandadosActuales =
+                                      form.getValues("demandadoPart") || [];
+                                    const demandadosArray = Array.isArray(
+                                      demandadosActuales
+                                    )
+                                      ? demandadosActuales
+                                      : [];
+                                    const updatedArray = demandadosArray.map(
+                                      (d: any) => {
+                                        // Buscar por name y documentNumber ya que son únicos
+                                        if (
+                                          d.name === editingDemandado.name &&
+                                          getDocumentNumber(d) ===
+                                            getDocumentNumber(editingDemandado)
+                                        ) {
+                                          return nuevoDemandado;
+                                        }
+                                        return d;
+                                      }
+                                    );
+                                    form.setValue(
+                                      "demandadoPart",
+                                      updatedArray
+                                    );
                                     // Actualizar existente
                                     await updateProceduralPart(
                                       editingDemandado._id,
@@ -5537,7 +5563,7 @@ export default function InformacionCasoFormViewOld() {
                                             "¿Estás seguro de eliminar este interviniente?"
                                           )
                                         ) {
-                                          if (isCreationMode) {                                            
+                                          if (isCreationMode) {
                                             setIntervinientesLocales(
                                               (prev: any[]) =>
                                                 prev.filter(
@@ -5572,7 +5598,7 @@ export default function InformacionCasoFormViewOld() {
                                             )
                                           ) {
                                             // En modo edición y con ID real, usar API
-                                            try {                                              
+                                            try {
                                               await deleteIntervener(
                                                 interviniente._id
                                               );
@@ -5893,10 +5919,9 @@ export default function InformacionCasoFormViewOld() {
                                       );
                                       return;
                                     }
-                                    
-                                    // En modo creación, manejar creación y edición local
-                                    if (isCreationMode) {                                      
 
+                                    // En modo creación, manejar creación y edición local
+                                    if (isCreationMode) {
                                       // Datos del interviniente
                                       const nuevoInterviniente = {
                                         name: interviniente.name,
@@ -5917,8 +5942,7 @@ export default function InformacionCasoFormViewOld() {
                                         editingInterviniente._id?.startsWith(
                                           "temp_"
                                         )
-                                      ) {                                       
-
+                                      ) {
                                         // Actualizar en el array de intervinientes del formulario
                                         const intervinientesActuales =
                                           form.getValues("intervinientes") ||
@@ -5974,8 +5998,7 @@ export default function InformacionCasoFormViewOld() {
                                         toast.success(
                                           "Interviniente actualizado en el formulario"
                                         );
-                                      } else {                                        
-
+                                      } else {
                                         // Agregar al array de intervinientes en el formulario
                                         const intervinientesActuales =
                                           form.getValues("intervinientes");
@@ -6079,7 +6102,7 @@ export default function InformacionCasoFormViewOld() {
                                             }
                                             return false;
                                           }
-                                        );                                     
+                                        );
 
                                       // Crear el objeto actualizado
                                       const intervinienteActualizado = {
@@ -6117,8 +6140,8 @@ export default function InformacionCasoFormViewOld() {
                                           "intervinientes",
                                           nuevosIntervinientes
                                         );
-                                      }                                      
-                                    } else {                                   
+                                      }
+                                    } else {
                                       const nuevoInterviniente = {
                                         name: interviniente.name,
                                         documentType:
@@ -6148,7 +6171,7 @@ export default function InformacionCasoFormViewOld() {
                                       form.setValue(
                                         "intervinientes",
                                         nuevosIntervinientes
-                                      );                                      
+                                      );
                                     }
 
                                     // Ahora guardar usando la función normal
@@ -6288,7 +6311,7 @@ export default function InformacionCasoFormViewOld() {
                               title="Descargar documento"
                             >
                               <Download className="w-4 h-4" />
-                            </Button>                            
+                            </Button>
                             {!isViewMode && (
                               <>
                                 <Button
@@ -6401,7 +6424,7 @@ export default function InformacionCasoFormViewOld() {
                         </Button>
                       )}
                     </div>
-                    
+
                     {/* Formulario de agregar documentos - inline toggled (solo en create/edit) */}
                     {!isViewMode && showDocumentForm && (
                       <div className="border border-gray-200 rounded-lg p-6 bg-gray-50 space-y-6">
@@ -6717,7 +6740,7 @@ export default function InformacionCasoFormViewOld() {
                             }}
                           >
                             Cancelar
-                          </Button>                          
+                          </Button>
                           {!isCreateMode && (
                             <Button
                               type="button"
@@ -7342,24 +7365,32 @@ export default function InformacionCasoFormViewOld() {
                       onClick={async (e) => {
                         console.log(
                           "[INFORMACION_CASO_VIEW] Botón submit clickeado!"
-                        );                       
+                        );
 
                         // Forzar validación del formulario antes de proceder
                         const isValid = await form.trigger();
                         const errors = form.formState.errors;
-                        const values = form.getValues();                        
+                        const values = form.getValues();
+                        const printErrorsWithValues = (
+                          errors: any,
+                          path = ""
+                        ) => {
+                          Object.entries(errors).forEach(
+                            ([key, value]: any) => {
+                              const currentPath = path ? `${path}.${key}` : key;
 
-                        if (!isValid) {                          
-                          // Mostrar errores específicos
-                          Object.keys(errors).forEach((key) => {
-                            const error = errors[key as keyof typeof errors];
-                            if (error?.message) {
-                              toast.error(`${key}: ${error.message}`);
+                              if (value?.message) {
+                                toast.error(`${currentPath}: ${value.message}`);
+                              } else if (typeof value === "object") {
+                                printErrorsWithValues(value, currentPath);
+                              }
                             }
-                          });
-                          e.preventDefault();
-                          return false;
-                        }                        
+                          );
+                        };
+
+                        if (!isValid) {
+                          printErrorsWithValues(errors);
+                        }
                       }}
                     >
                       {isCaseLoading || isCreatingCase ? (
@@ -7377,7 +7408,7 @@ export default function InformacionCasoFormViewOld() {
                         </div>
                       ) : isEditMode ? (
                         "Actualizar datos"
-                      ) : isViewMode ? null : ( 
+                      ) : isViewMode ? null : (
                         "Crear expediente"
                       )}
                     </Button>
@@ -7817,7 +7848,7 @@ export default function InformacionCasoFormViewOld() {
                           toast.error("Selecciona un estado de actuación");
                           return;
                         }
-                        
+
                         const currentState = caso?.estado;
                         if (currentState === estadoActuacion) {
                           toast.error(
@@ -7947,7 +7978,7 @@ export default function InformacionCasoFormViewOld() {
                       // Ordenar por fecha de creación (más reciente primero)
                       const dateA = new Date(a.createdAt || 0).getTime();
                       const dateB = new Date(b.createdAt || 0).getTime();
-                      return dateB - dateA; 
+                      return dateB - dateA;
                     })
                     .map((p) => (
                       <div
@@ -8306,7 +8337,7 @@ export default function InformacionCasoFormViewOld() {
                             toast.error("Completa todos los campos requeridos");
                             return;
                           }
-                         
+
                           const currentState = caso?.estado;
                           if (currentState === estadoActuacion) {
                             toast.error(
@@ -8317,7 +8348,7 @@ export default function InformacionCasoFormViewOld() {
 
                           const payload = {
                             record: caseId,
-                            performanceType: estadoActuacion, 
+                            performanceType: estadoActuacion,
                             responsible: responsableActuacion,
                             observation: relatedDoc
                               ? `${observacionesActuacion} | Documento relacionado: ${relatedDoc}`

@@ -8,6 +8,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { NotificationModule } from 'src/notifications/notifications.module';
 import { ReminderModule } from 'src/reminder/reminder.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
   imports: [
@@ -16,8 +17,10 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     NotificationModule,
     ReminderModule,
+    CommonModule,
   ],
   controllers: [OrchestratorController],
   providers: [OrchestratorService, RecordAdapter],
+  exports: [OrchestratorService],
 })
 export class OrchestratorModule {}

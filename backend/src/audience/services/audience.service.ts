@@ -13,34 +13,19 @@ import {
   AudiencePopulated,
   AudienceResponse,
 } from '../interfaces/audience.interfaces';
+import { UtilitiesService } from 'src/common/services/utilities.service';
 
 @Injectable()
 export class AudienceService {
   constructor(
     @InjectModel(Audience.name)
     private readonly audienceModel: Model<Audience>,
+    private readonly utilitiesService: UtilitiesService,
   ) {}
-
   // Metodos auxilaires para updetear la bandera de recordatorios
-  async resetNotificationsOnValidation(audienceId: string): Promise<void> {
-    await this.audienceModel.updateOne(
-      { _id: audienceId },
-      {
-        $set: {
-          'notifications.oneMonth.sent': false,
-          'notifications.oneMonth.sentAt': null,
-          'notifications.fifteenDays.sent': false,
-          'notifications.fifteenDays.sentAt': null,
-          'notifications.oneDay.sent': false,
-          'notifications.oneDay.sentAt': null,
-        },
-      },
-    );
-  }
-
   async markNotificationAsSent(
     audienceId: string,
-    type: 'oneMonth' | 'fifteenDays' | 'oneDay',
+    type: 'oneMonth' | 'fifteenDays' | 'oneDay' | 'oneDayAfterCreation',
   ): Promise<void> {
     await this.audienceModel.updateOne(
       { _id: audienceId },
@@ -53,7 +38,7 @@ export class AudienceService {
     );
   }
 
-  //Metodos auxilaires para validar si una audiencia es valdia
+  //Metodos auxilaires para validar si una audiencia es vailda
 
   public isValidMongoId(value: any): boolean {
     return value && Types.ObjectId.isValid(value);
@@ -86,7 +71,7 @@ export class AudienceService {
 
     return invalidFields;
   }
-  private validateRequiredFields(dto: CreateAudienceDto): void {
+  private validateRequiredFields(dto): void {
     const invalid = this.getInvalidFields(dto);
 
     if (invalid.length > 0) {
@@ -96,7 +81,7 @@ export class AudienceService {
     }
   }
 
-  private isValid(dto: CreateAudienceDto): boolean {
+  private isValid(dto): boolean {
     return this.getInvalidFields(dto).length === 0;
   }
 
@@ -131,11 +116,10 @@ export class AudienceService {
     if (audience.end) {
       response.audience.end = audience.end;
     }
-
     return response;
   }
 
-  async create(
+  async createAudience(
     createAudienceDto: CreateAudienceDto,
     strict: boolean,
   ): Promise<Audience> {
@@ -153,10 +137,33 @@ export class AudienceService {
         this.validateRequiredFields(createAudienceDto);
       }
       const is_valid = this.isValid(createAudienceDto);
-      const audience = new this.audienceModel({
-        ...createAudienceDto,
-        is_valid,
-      });
+
+      let audience;
+
+      if (is_valid) {
+        const createdDate = new Date();
+        const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
+          createdDate,
+          1,
+        );
+
+        audience = new this.audienceModel({
+          ...createAudienceDto,
+          is_valid,
+          notifications: {
+            oneDayAfterCreation: {
+              sent: false,
+              scheduledFor: scheduledNotificationDate,
+            },
+          },
+        });
+      } else {
+        audience = new this.audienceModel({
+          ...createAudienceDto,
+          is_valid,
+        });
+      }
+
       const savedAudience = await audience.save();
       return savedAudience;
     } catch (error) {
@@ -165,6 +172,15 @@ export class AudienceService {
       }
       throw new BadRequestException('error al crear audiencia ', error.message);
     }
+  }
+
+  async create(createAudienceDto: CreateAudienceDto): Promise<Audience> {
+    return this.createAudience(createAudienceDto, false);
+  }
+  async createWithValidation(
+    createAudienceDto: CreateAudienceDto,
+  ): Promise<Audience> {
+    return this.createAudience(createAudienceDto, true);
   }
 
   async findAll(queryDto: QueryAudienceDto): Promise<AudienceResponse[]> {
@@ -199,6 +215,14 @@ export class AudienceService {
 
       if (queryDto.notificationOneDaySent !== undefined) {
         filter['notifications.oneDay.sent'] = queryDto.notificationOneDaySent;
+      }
+
+      if (queryDto.notificationOneDayAfter !== undefined) {
+        filter['notifications.oneDayAfterCreation.sent'] =
+          queryDto.notificationOneDayAfter;
+        filter['notifications.oneDayAfterCreation.scheduledFor'] = {
+          $lte: queryDto.notificationOneDayAfterDate,
+        };
       }
 
       const audiences = await this.audienceModel
@@ -249,9 +273,10 @@ export class AudienceService {
     }
   }
 
-  async update(
+  async updateAudience(
     id: string,
     updateAudienceDto: UpdateAudienceDto,
+    strict: boolean,
   ): Promise<AudienceResponse> {
     try {
       if (!Types.ObjectId.isValid(id)) {
@@ -271,16 +296,8 @@ export class AudienceService {
         }
       }
 
-      if (updateAudienceDto.is_valid !== undefined) {
-        const existingAudience = await this.audienceModel.findById(id);
-
-        if (
-          existingAudience &&
-          !existingAudience.is_valid &&
-          updateAudienceDto.is_valid
-        ) {
-          await this.resetNotificationsOnValidation(id);
-        }
+      if (strict) {
+        this.validateRequiredFields(updateAudienceDto);
       }
 
       const updatedAudience = await this.audienceModel
@@ -310,6 +327,38 @@ export class AudienceService {
       }
       throw new BadRequestException('Error al actualizar la audiencia');
     }
+  }
+
+  async update(
+    id: string,
+    updateAudienceDto: UpdateAudienceDto,
+  ): Promise<AudienceResponse> {
+    return this.updateAudience(id, updateAudienceDto, false);
+  }
+
+  async updateWithValidation(
+    id: string,
+    updateAudienceDto: UpdateAudienceDto,
+  ): Promise<AudienceResponse> {
+    const is_valid = this.isValid(updateAudienceDto);
+    const createdDate = new Date();
+    // createdDate.setDate(createdDate.getDate() - 1);
+    const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
+      createdDate,
+      1,
+    );
+
+    const dtoWithNotification = {
+      ...updateAudienceDto,
+      is_valid,
+      notifications: {
+        oneDayAfterCreation: {
+          sent: false,
+          scheduledFor: scheduledNotificationDate,
+        },
+      },
+    };
+    return this.updateAudience(id, dtoWithNotification, true);
   }
 
   async remove(id: string): Promise<{ message: string }> {

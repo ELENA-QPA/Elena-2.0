@@ -56,13 +56,11 @@ export function useAudience() {
     }
   };
 
-  const fetchAudienceByInternalCode = async (internalCode: string) => {
+  const fetchAudienceByEtiqueta = async (etiqueta: string) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await audienceRepository.getRecordByInternalCode(
-        internalCode
-      );
+      const data = await audienceRepository.getRecordByEtiqueta(etiqueta);
       setError(null);
       return { success: true, data };
     } catch (err: any) {
@@ -103,6 +101,42 @@ export function useAudience() {
     }
   };
 
+  const updateAudienceWithValidation = async (
+    id: string,
+    audienceData: AudienceUpdate
+  ) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.updateAudienceWithValidation(
+        id,
+        audienceData
+      );
+      setError(null);
+      return { success: true, data };
+    } catch (err: any) {
+      setError(err.message || "Error al actualizar la audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteAudience = async (id: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await audienceRepository.deleteAudience(id);
+      setError(null);
+      return { success: true };
+    } catch (err: any) {
+      setError(err.message || "Error al eliminar la audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     audiences,
     loading,
@@ -111,8 +145,10 @@ export function useAudience() {
     fetchAllAudiences,
     fetchAudience,
     fetchAudiencesByLawyer,
-    fetchAudienceByInternalCode,
+    fetchAudienceByInternalCode: fetchAudienceByEtiqueta,
     createAudience,
     updateAudience,
+    updateAudienceWithValidation,
+    deleteAudience,
   };
 }

@@ -11,9 +11,9 @@ export const ESTADOS = [
 ] as const;
 
 export const LegendColors: Record<string, string> = {
-  Rappi: "bg-orange-600",
-  Didi: "bg-blue-600",
-  Uber: "bg-gray-900",
+  "RAPPI S.A.S.": "bg-orange-600",
+  // Didi: "bg-blue-600",
+  // Uber: "bg-gray-900",
   Otro: "bg-green-600",
 };
 
@@ -24,11 +24,11 @@ export interface Evento {
   contacto_demandante: string;
   email_demandante: string;
   demandado: string;
-  juzgado: string;
+  despachoJudicial: string;
   start: Date;
   end: Date;
   link_teams: string;
-  codigo_interno: string;
+  etiqueta: string;
   estado: Estado;
   monto_conciliado?: number;
   abogado_id: string;
@@ -76,9 +76,9 @@ export interface ProceduralParts {
 
 export interface RecordAudience {
   _id: string;
-  internalCode: string;
-  office: string;
-  settled: string;
+  etiqueta: string;
+  despachoJudicial: string;
+  radicado: string;
   proceduralParts: ProceduralParts;
 }
 
@@ -97,13 +97,13 @@ export const eventoSchema = z.object({
   contacto_demandante: z.string().optional(),
   email_demandante: z.string().email().optional().or(z.literal("")),
   demandado: z.string().optional(),
-  juzgado: z.string().optional(),
+  despachoJudicial: z.string().optional(),
   abogado_id: z.string(),
   record_id: z.string(),
   start: z.string(),
   end: z.string(),
   link_teams: z.string().url().optional().or(z.literal("")),
-  codigo_interno: z.string().optional(),
+  etiqueta: z.string().optional(),
   estado: z.enum(ESTADOS),
   monto_conciliado: z.number().optional(),
 });

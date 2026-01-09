@@ -301,7 +301,7 @@ export default function MonolegalImportPage() {
       }
 
       const response = await axios.post<ImportResponse>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/monolegal/sync`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/monolegal/sync/history`,
         { fecha: selectedDate },
         {
           headers: {
@@ -388,10 +388,12 @@ export default function MonolegalImportPage() {
   return (
     <div className="container mx-auto p-6 max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Importar desde Monolegal</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          Historial de sincronizaciones de Monolegal
+        </h1>
       </div>
 
-      <Card className="mb-6 border-blue-200 bg-blue-50">
+      {/* <Card className="mb-6 border-blue-200 bg-blue-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <RefreshCw className="w-5 h-5" />
@@ -423,16 +425,16 @@ export default function MonolegalImportPage() {
             )}
           </Button>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <Card className="mb-6 border-purple-200 bg-purple-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
-            Sincronizar por Fecha Específica
+            Actuaciones de una fecha específica
           </CardTitle>
           <CardDescription>
-            Selecciona una fecha para sincronizar los cambios de ese día desde
+            Selecciona una fecha para visualizar los cambios de ese día desde
             Monolegal
           </CardDescription>
         </CardHeader>
@@ -443,7 +445,7 @@ export default function MonolegalImportPage() {
                 htmlFor="sync-date"
                 className="text-sm font-medium mb-2 block"
               >
-                Fecha a sincronizar
+                Fecha a visualizar
               </Label>
               <Input
                 id="sync-date"
