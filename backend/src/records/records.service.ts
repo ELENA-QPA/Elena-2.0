@@ -35,6 +35,9 @@ import { ByClientDto } from './dto/by-client-document.dto';
 import { ByEtiquetaDto } from './dto/by-internal-code.dto';
 import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
 import e from 'express';
+import { ByEtiquetaDto } from './dto/by-internal-code.dto';
+import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
+import e from 'express';
 // import { Multer } from 'multer';
 
 @Injectable()

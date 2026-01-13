@@ -671,18 +671,6 @@ export class MonolegalService {
       ciudad,
     );
 
-    const record = await this.recordModel.findOne({ radicado: radicado });
-
-    let internalCode = record?.internalCode;
-
-    if (!internalCode) {
-      const year = new Date().getFullYear();
-      const count = await this.recordModel.countDocuments({
-        internalCode: { $regex: `^ML-${year}-` },
-      });
-      internalCode = `ML-${year}-${String(count + 1).padStart(4, '0')}`;
-    }
-
     const fechaUltimaActuacionTexto = cambio.fechaUltimaActuacion || '';
     let fechaExtraida = this.extractFechaFromUltimaAnotacion(
       fechaUltimaActuacionTexto,
