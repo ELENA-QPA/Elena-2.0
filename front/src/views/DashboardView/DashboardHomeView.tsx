@@ -131,7 +131,7 @@ export default function DashboardHomeView() {
                   className="inline-flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-700 transition-colors"
                 >
                   <History className="w-4 h-4" />
-                  <span>Historial de sincronización</span>
+                  <span>Historial de sincronizaciones</span>
                 </Link>
               </div>
             </div>
