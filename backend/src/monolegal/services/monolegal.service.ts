@@ -667,10 +667,6 @@ export class MonolegalService {
 
           if (fuenteUnificada) {
             idProcesoMonolegal = fuenteUnificada.idProceso;
-          } else {
-            this.logger.warn(
-              `No hay fuente Unificada en ultimosCambiosEnFuentes para ${radicado}`,
-            );
           }
         }
 
@@ -843,6 +839,12 @@ export class MonolegalService {
       );
       await record.save();
 
+      if (record.radicado === '68001310500220240034900') {
+        this.logger.log(
+          `Ultimos cambios: ${JSON.stringify(cambio.ultimosCambiosEnFuentes)}`,
+        );
+      }
+
       if (
         cambio.ultimosCambiosEnFuentes &&
         cambio.ultimosCambiosEnFuentes.length > 0
@@ -853,11 +855,11 @@ export class MonolegalService {
         );
       }
 
-      // await this.createAudience(
-      //   cambio.ultimaActuacion,
-      //   cambio.ultimaAnotacion,
-      //   record._id,
-      // );
+      await this.createAudience(
+        cambio.ultimaActuacion,
+        cambio.ultimaAnotacion,
+        record._id,
+      );
 
       return {
         radicado,
@@ -879,6 +881,11 @@ export class MonolegalService {
       });
 
       await newRecord.save();
+      if (record.radicado === '68001310500220240034900') {
+        this.logger.log(
+          `Ultimos cambios: ${JSON.stringify(cambio.ultimosCambiosEnFuentes)}`,
+        );
+      }
 
       await this.createProceduralParts(newRecord._id, {
         demandantes: cambio.demandantes || '',
@@ -895,11 +902,11 @@ export class MonolegalService {
         );
       }
 
-      // await this.createAudience(
-      //   cambio.ultimaActuacion,
-      //   cambio.ultimaAnotacion,
-      //   newRecord._id,
-      // );
+      await this.createAudience(
+        cambio.ultimaActuacion,
+        cambio.ultimaAnotacion,
+        newRecord._id,
+      );
 
       return {
         radicado,
