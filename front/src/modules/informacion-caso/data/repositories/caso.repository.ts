@@ -170,6 +170,8 @@ export abstract class CasoRepository {
     radicado: string,
     token?: string
   ): Promise<any[]>;
+
+  abstract getActuaciones(radicado: string, token?: string): Promise<any[]>;
 }
 
 @injectable()
@@ -1397,6 +1399,31 @@ export class CasoRepositoryImpl implements CasoRepository {
         "[MONOLEGAL][getActuacionesMonolegal][Catch Error]:",
         error
       );
+      return [];
+    }
+  }
+
+  async getActuaciones(radicado: string, token?: string): Promise<any[]> {
+    try {
+      const axiosRequest = await this.httpClient.request({
+        url: apiUrls.performance.getAll.replace(
+          ":recordId",
+          encodeURIComponent(radicado)
+        ),
+        method: "get",
+        isAuth: true,
+        token,
+      });
+
+      console.log("[CASO][getActuaciones][Response]:", axiosRequest.statusCode);
+      if (axiosRequest.statusCode === HttpStatusCode.ok) {
+        console.log("[CASO][getActuaciones][Success]:", axiosRequest);
+        const actuaciones = axiosRequest.body.data || [];
+        return actuaciones;
+      } else {
+        return [];
+      }
+    } catch (error: any) {
       return [];
     }
   }

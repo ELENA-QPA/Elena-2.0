@@ -71,6 +71,7 @@ export const apiUrls = {
   performance: {
     create: "/api/perfomance/create",
     delete: "/api/perfomance",
+    getAll: "/api/perfomance/:recordId/ordered",
   },
   // Estadísticas
   statistics: {

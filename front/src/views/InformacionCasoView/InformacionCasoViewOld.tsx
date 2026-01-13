@@ -59,6 +59,7 @@ import {
   Clock,
   CreditCard,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
 import {
   Form,
@@ -71,6 +72,7 @@ import {
 import { z } from "zod";
 import loading from "@/app/dashboard/informacion-caso/loading";
 import error from "next/error";
+import { ca } from "date-fns/locale";
 
 // Función para validar documento según el tipo
 const validateDocumentNumber = (
@@ -542,7 +544,7 @@ const ubicacionesExpediente = [
   "Rama",
   "Siugj",
   "PublicacionesProcesales",
-  "Samai",  
+  "Samai",
   "Tyba",
   "EstadosElectronicos",
 ];
@@ -929,7 +931,7 @@ export default function InformacionCasoFormViewOld() {
     updateIntervener,
     createPerformance,
     deletePerformance,
-    getActuacionesMonolegal,
+    getActuaciones,
   } = useCaso();
 
   // Los documentos ahora vienen de caso.documents de la API
@@ -1240,7 +1242,7 @@ export default function InformacionCasoFormViewOld() {
   const [showPagoForm, setShowPagoForm] = useState(false);
 
   const [actuacionesMonolegal, setActuacionesMonolegal] = useState<any[]>([]);
-  const [loadingActuaciones, setLoadingActuaciones] = useState(false);
+  const [loadingActuaciones, setLoadingActuaciones] = useState(true);
 
   // Verificar autenticación y rol del usuario
   useEffect(() => {
@@ -1303,11 +1305,11 @@ export default function InformacionCasoFormViewOld() {
   // Efecto para cargar actuaciones de Monolegal
   useEffect(() => {
     const cargarActuaciones = async () => {
-      const idProceso = (caso as any)?.idProcesoMonolegal;
-      if (caso && idProceso) {
+      if (caso) {
         setLoadingActuaciones(true);
         try {
-          const actuaciones = await getActuacionesMonolegal(idProceso);
+          console.log("actuaciones para " + caso._id);
+          const actuaciones = await getActuaciones(caso?._id || "");
           setActuacionesMonolegal(actuaciones);
         } catch (error) {
           console.error("[ACTUACIONES_MONOLEGAL] Error:", error);
@@ -1318,7 +1320,7 @@ export default function InformacionCasoFormViewOld() {
     };
 
     cargarActuaciones();
-  }, [caso, getActuacionesMonolegal]);
+  }, [caso]);
 
   // Efecto para actualizar ciudades disponibles cuando cambie el departamento
   useEffect(() => {
@@ -7456,92 +7458,96 @@ export default function InformacionCasoFormViewOld() {
             <div className="border-b border-gray-300 mb-4"></div>
 
             {/* Indicador de carga */}
-            {loadingActuaciones && (
-              <div className="text-xs text-gray-500 mb-3 text-center">
-                Cargando actuaciones...
-              </div>
-            )}
 
-            {/* Indicador de orden cronológico */}
-            {actuacionesMonolegal.length > 0 && !loadingActuaciones && (
+            {loadingActuaciones ? (
               <div className="text-xs text-gray-500 mb-3 text-center">
-                Ordenadas cronológicamente (más reciente primero) -{" "}
-                {actuacionesMonolegal.length} actuaciones
+                <Loader2 className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4" />
+                <p className="text-gray-600">Cargando actuaciones... </p>
               </div>
-            )}
+            ) : (
+              <>
+                {/* Indicador de orden cronológico */}
+                {actuacionesMonolegal.length > 0 && (
+                  <div className="text-xs text-gray-500 mb-3 text-center">
+                    Ordenadas cronológicamente (más reciente primero) -{" "}
+                    {actuacionesMonolegal.length} actuaciones
+                  </div>
+                )}
 
-            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-              {/* Mostrar actuaciones de Monolegal */}
-              {actuacionesMonolegal.length > 0 ? (
-                actuacionesMonolegal.map((p: any) => (
-                  <div
-                    key={p._id || (p as any).id}
-                    className="bg-white rounded-lg p-4 shadow-sm"
-                  >
-                    <div className="space-y-1 sm:space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="text-pink-600 font-medium text-base">
-                          {p.textoActuacion || p.performanceType || "Actuación"}{" "}
-                          -{" "}
-                          <span className="text-gray-600">
-                            {p.fechaDeActuacion
-                              ? formatToDisplay(p.fechaDeActuacion)
-                              : ""}
-                          </span>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-gray-600 hover:text-gray-900 p-1 h-auto"
-                            onClick={() => {
-                              setSelectedPerformance(p);
-                              setShowPerformanceDetailModal(true);
-                            }}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-600 hover:text-red-700 p-1 h-auto"
-                            onClick={async () => {
-                              if (!p._id && !(p as any).id) return;
-                              const id = p._id || (p as any).id;
-                              if (!caseId) return;
-                              if (!window.confirm("¿Eliminar actuación?"))
-                                return;
-                              try {
-                                await deletePerformance(id);
-                                toast.success("Actuación eliminada");
-                                await getCasoById(caseId);
-                              } catch (err) {
-                                console.error(
-                                  "Error eliminando actuación:",
-                                  err
-                                );
-                                toast.error("No se pudo eliminar actuación");
-                              }
-                            }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                  {/* Mostrar actuaciones de Monolegal */}
+                  {actuacionesMonolegal.length > 0 ? (
+                    actuacionesMonolegal.map((p: any) => (
+                      <div
+                        key={p._id || (p as any).id}
+                        className="bg-white rounded-lg p-4 shadow-sm"
+                      >
+                        <div className="space-y-1 sm:space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="text-pink-600 font-medium text-base">
+                              {p.textoActuacion ||
+                                p.performanceType ||
+                                "Actuación"}{" "}
+                              -{" "}
+                              <span className="text-gray-600">
+                                {p.fecha ? formatToDisplay(p.fecha) : ""}
+                              </span>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-gray-600 hover:text-gray-900 p-1 h-auto"
+                                onClick={() => {
+                                  setSelectedPerformance(p);
+                                  setShowPerformanceDetailModal(true);
+                                }}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 p-1 h-auto"
+                                onClick={async () => {
+                                  if (!p._id && !(p as any).id) return;
+                                  const id = p._id || (p as any).id;
+                                  if (!caseId) return;
+                                  if (!window.confirm("¿Eliminar actuación?"))
+                                    return;
+                                  try {
+                                    await deletePerformance(id);
+                                    toast.success("Actuación eliminada");
+                                    await getCasoById(caseId);
+                                  } catch (err) {
+                                    console.error(
+                                      "Error eliminando actuación:",
+                                      err
+                                    );
+                                    toast.error(
+                                      "No se pudo eliminar actuación"
+                                    );
+                                  }
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 line-clamp-3">
+                            {p.observation || "Sin anotación"}
+                          </p>
                         </div>
                       </div>
-                      {/* <p className="text-sm text-gray-700">{p.responsible}</p>
-                        <p className="text-sm text-gray-600">{p.observation}</p> */}
-                      <p className="text-sm text-gray-600 line-clamp-3">
-                        {p.anotacion || "Sin anotación"}
-                      </p>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-500 text-center">
+                      No hay actuaciones registradas
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-sm text-gray-500">
-                  No hay actuaciones registradas
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
 
             {/* Botón Agregar Actuación */}
             {!showPerformanceForm && (
@@ -8454,15 +8460,22 @@ export default function InformacionCasoFormViewOld() {
               {/* Fechas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
+                  <Label className="text-gray-700 font-medium">Fuente</Label>
+                  <div className="p-3 bg-gray-50 rounded-lg border">
+                    <span className="text-gray-900">
+                      {(selectedPerformance as any).fuente || "No especificado"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
                   <Label className="text-gray-700 font-medium">
                     Fecha de Actuación
                   </Label>
                   <div className="p-3 bg-gray-50 rounded-lg border">
                     <span className="text-gray-900">
-                      {(selectedPerformance as any).fechaDeActuacion
-                        ? formatToDisplay(
-                            (selectedPerformance as any).fechaDeActuacion
-                          )
+                      {(selectedPerformance as any).fecha
+                        ? formatToDisplay((selectedPerformance as any).fecha)
                         : selectedPerformance.createdAt
                         ? formatToDisplay(selectedPerformance.createdAt)
                         : "No especificada"}

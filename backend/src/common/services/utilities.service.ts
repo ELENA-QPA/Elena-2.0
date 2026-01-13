@@ -87,4 +87,46 @@ export class UtilitiesService {
 
     return new Date(date.getTime() + 5 * 60 * 60 * 1000);
   }
+
+  getValidDate(date?: string): Date {
+    if (!date) return new Date();
+
+    const normalized = date.trim();
+
+    return (
+      this.parseISOFormat(normalized) ??
+      this.parseUSFormat(normalized) ??
+      this.parseTextFormat(normalized) ??
+      new Date()
+    );
+  }
+
+  private parseISOFormat(date: string): Date | null {
+    const isoRegex = /^\d{4}-\d{2}-\d{2}/;
+    if (!isoRegex.test(date)) return null;
+
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  private parseUSFormat(date: string): Date | null {
+    const usRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/;
+    const match = date.match(usRegex);
+    if (!match) return null;
+
+    const month = parseInt(match[1], 10) - 1;
+    const day = parseInt(match[2], 10);
+    const year = parseInt(match[3], 10);
+
+    const parsedDate = new Date(year, month, day);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  private parseTextFormat(date: string): Date | null {
+    const textRegex = /^\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/;
+    if (!textRegex.test(date)) return null;
+
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
 }

@@ -1,7 +1,14 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreatePerfomanceDto, PerformanceType } from './dto/create-perfomance.dto';
+import {
+  CreatePerfomanceDto,
+  PerformanceType,
+} from './dto/create-perfomance.dto';
 import { UpdatePerfomanceDto } from './dto/update-perfomance.dto';
 import { Performance } from './entities/perfomance.entity';
 import { PerformanceStateService } from './services/performance-state.service';
@@ -10,7 +17,6 @@ import { RecordStateTypeService } from './services/record-state-type.service';
 
 @Injectable()
 export class PerfomanceService {
-
   constructor(
     @InjectModel(Performance.name)
     private perfomanceModel: Model<Performance>,
@@ -18,8 +24,8 @@ export class PerfomanceService {
     private recordModel: Model<any>,
     private performanceStateService: PerformanceStateService,
     private performanceAuditService: PerformanceAuditService,
-    private recordStateTypeService: RecordStateTypeService
-  ) { }
+    private recordStateTypeService: RecordStateTypeService,
+  ) {}
 
   async create(createPerfomanceDto: CreatePerfomanceDto): Promise<any> {
     try {
@@ -64,27 +70,33 @@ export class PerfomanceService {
       }
 
       // Crear la nueva actuación
-      const createdPerfomance = await this.perfomanceModel.create(perfomanceData);
+      const createdPerfomance = await this.perfomanceModel.create(
+        perfomanceData,
+      );
       // const savedPerformance = await createdPerfomance.save() as Performance;
 
       // Actualizar el estado del expediente si se especificó un nuevo estado
       if (newState) {
         // Determinar el tipo de estado basado en el nuevo estado
-        const newStateType = this.recordStateTypeService.getTipoEstadoFromEstado(newState);
+        const newStateType =
+          this.recordStateTypeService.getTipoEstadoFromEstado(newState);
 
         const updateResult = await this.recordModel.findByIdAndUpdate(
           createPerfomanceDto.record,
           {
             estado: newState,
             type: newStateType,
-            updatedAt: new Date()
+            updatedAt: new Date(),
           },
-          { new: true }
+          { new: true },
         );
       }
       return createdPerfomance;
     } catch (error) {
-      if (error instanceof BadRequestException || error instanceof NotFoundException) {
+      if (
+        error instanceof BadRequestException ||
+        error instanceof NotFoundException
+      ) {
         throw error;
       }
 
@@ -94,11 +106,13 @@ export class PerfomanceService {
           createPerfomanceDto.record,
           [], // No tenemos los estados actuales aquí debido al error
           createPerfomanceDto.performanceType,
-          createPerfomanceDto.responsible
+          createPerfomanceDto.responsible,
         );
       }
 
-      throw new BadRequestException('Error al crear la actuación: ' + error.message);
+      throw new BadRequestException(
+        'Error al crear la actuación: ' + error.message,
+      );
     }
   }
 
@@ -109,7 +123,10 @@ export class PerfomanceService {
    * @param session Sesión de la transacción (opcional)
    * @returns Performance creado
    */
-  async createWithoutValidation(createPerfomanceDto: CreatePerfomanceDto, session?: any): Promise<any> {
+  async createWithoutValidation(
+    createPerfomanceDto: CreatePerfomanceDto,
+    session?: any,
+  ): Promise<any> {
     try {
       // Crear la nueva actuación sin validar el record
       const createdPerfomance = new this.perfomanceModel(createPerfomanceDto);
@@ -121,7 +138,9 @@ export class PerfomanceService {
 
       return savedPerformance;
     } catch (error) {
-      throw new BadRequestException('Error al crear la actuación: ' + error.message);
+      throw new BadRequestException(
+        'Error al crear la actuación: ' + error.message,
+      );
     }
   }
 
@@ -129,16 +148,26 @@ export class PerfomanceService {
   async findByRecord(recordId: string) {
     return await this.perfomanceModel.find({
       record: recordId,
-      deletedAt: { $exists: false }
+      deletedAt: { $exists: false },
     });
   }
+  async findByRecordOrderedByDate(recordId: string) {
+    return await this.perfomanceModel
+      .find({
+        record: recordId,
+        deletedAt: { $exists: false },
+      })
+      .sort({ fecha: -1 });
+  }
+
   // -----------------------------------------------------
-  async update(id: string, updatePerfomanceDto: UpdatePerfomanceDto): Promise<any> {
-    const updatedPerfomance = await this.perfomanceModel.findByIdAndUpdate(
-      id,
-      updatePerfomanceDto,
-      { new: true }
-    ).populate('record');
+  async update(
+    id: string,
+    updatePerfomanceDto: UpdatePerfomanceDto,
+  ): Promise<any> {
+    const updatedPerfomance = await this.perfomanceModel
+      .findByIdAndUpdate(id, updatePerfomanceDto, { new: true })
+      .populate('record');
 
     if (!updatedPerfomance) {
       throw new NotFoundException(`Performance record with ID ${id} not found`);
@@ -149,11 +178,9 @@ export class PerfomanceService {
 
   async remove(id: string): Promise<void> {
     const deletedAt = new Date();
-    const result = await this.perfomanceModel.findByIdAndUpdate(
-      id,
-      { deletedAt },
-      { new: true }
-    ).exec();
+    const result = await this.perfomanceModel
+      .findByIdAndUpdate(id, { deletedAt }, { new: true })
+      .exec();
     if (!result) {
       throw new NotFoundException(`Performance record with ID ${id} not found`);
     }
@@ -170,9 +197,9 @@ export class PerfomanceService {
           averageValue: { $avg: '$value' },
           totalRecords: { $sum: 1 },
           maxValue: { $max: '$value' },
-          minValue: { $min: '$value' }
-        }
-      }
+          minValue: { $min: '$value' },
+        },
+      },
     ]);
   }
 
@@ -186,8 +213,8 @@ export class PerfomanceService {
   async getCurrentStates(recordId: string): Promise<PerformanceType[]> {
     const performances = await this.findByRecord(recordId);
     return performances
-      .map(p => p.performanceType as PerformanceType)
-      .filter(state => state); // Filtrar estados nulos o undefined
+      .map((p) => p.performanceType as PerformanceType)
+      .filter((state) => state); // Filtrar estados nulos o undefined
   }
 
   /**
@@ -206,9 +233,15 @@ export class PerfomanceService {
    * @param newState Nuevo estado a validar
    * @returns boolean indicando si es válida la transición
    */
-  async canTransitionToState(recordId: string, newState: PerformanceType): Promise<boolean> {
+  async canTransitionToState(
+    recordId: string,
+    newState: PerformanceType,
+  ): Promise<boolean> {
     const currentStates = await this.getCurrentStates(recordId);
-    return this.performanceStateService.isValidTransition(currentStates, newState);
+    return this.performanceStateService.isValidTransition(
+      currentStates,
+      newState,
+    );
   }
 
   /**
@@ -222,14 +255,18 @@ export class PerfomanceService {
       .sort({ createdAt: 1 })
       .exec();
 
-    return performances.map(performance => ({
+    return performances.map((performance) => ({
       id: performance._id,
       state: performance.performanceType,
       responsible: performance.responsible,
       observation: performance.observation,
       createdAt: performance.createdAt,
-      description: this.performanceStateService.getTransitionDescription(performance.performanceType as PerformanceType),
-      isFinalState: this.performanceStateService.isFinalState(performance.performanceType as PerformanceType)
+      description: this.performanceStateService.getTransitionDescription(
+        performance.performanceType as PerformanceType,
+      ),
+      isFinalState: this.performanceStateService.isFinalState(
+        performance.performanceType as PerformanceType,
+      ),
     }));
   }
 
@@ -240,7 +277,7 @@ export class PerfomanceService {
    */
   async getCurrentMainState(recordId: string): Promise<PerformanceType | null> {
     const record = await this.recordModel.findById(recordId).exec();
-    return record ? record.estado as PerformanceType : null;
+    return record ? (record.estado as PerformanceType) : null;
   }
 
   /**
@@ -251,13 +288,19 @@ export class PerfomanceService {
   async getRecordCurrentState(recordId: string): Promise<any> {
     const record = await this.recordModel.findById(recordId).exec();
     if (!record) {
-      throw new NotFoundException(`Expediente con ID ${recordId} no encontrado`);
+      throw new NotFoundException(
+        `Expediente con ID ${recordId} no encontrado`,
+      );
     }
 
     const currentState = record.estado as PerformanceType;
     const currentType = record.type;
-    const isFinalState = currentState ? this.performanceStateService.isFinalState(currentState) : false;
-    const validNextStates = currentState ? this.performanceStateService.getValidNextStates([currentState]) : [];
+    const isFinalState = currentState
+      ? this.performanceStateService.isFinalState(currentState)
+      : false;
+    const validNextStates = currentState
+      ? this.performanceStateService.getValidNextStates([currentState])
+      : [];
     const isActive = currentType === 'ACTIVO';
 
     return {
@@ -268,7 +311,9 @@ export class PerfomanceService {
       isFinalState,
       validNextStates,
       lastUpdated: record.updatedAt || record.createdAt,
-      stateDescription: currentState ? this.performanceStateService.getTransitionDescription(currentState) : null
+      stateDescription: currentState
+        ? this.performanceStateService.getTransitionDescription(currentState)
+        : null,
     };
   }
 
@@ -298,12 +343,12 @@ export class PerfomanceService {
         $group: {
           _id: '$performanceType',
           count: { $sum: 1 },
-          lastUpdated: { $max: '$createdAt' }
-        }
+          lastUpdated: { $max: '$createdAt' },
+        },
       },
       {
-        $sort: { count: -1 }
-      }
+        $sort: { count: -1 },
+      },
     ]);
   }
 
@@ -319,8 +364,18 @@ export class PerfomanceService {
 
     // Nombres de los meses en español
     const nombresMeses = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
 
     // Agregación para obtener las demandas radicadas por mes
@@ -330,37 +385,40 @@ export class PerfomanceService {
           performanceType: 'RADICADO',
           createdAt: {
             $gte: startOfYear,
-            $lte: endOfYear
-          }
-        }
+            $lte: endOfYear,
+          },
+        },
       },
       {
         $group: {
           _id: {
             mes: { $month: '$createdAt' },
-            año: { $year: '$createdAt' }
+            año: { $year: '$createdAt' },
           },
-          cantidadRadicadas: { $sum: 1 }
-        }
+          cantidadRadicadas: { $sum: 1 },
+        },
       },
       {
-        $sort: { '_id.mes': 1 }
-      }
+        $sort: { '_id.mes': 1 },
+      },
     ]);
 
     // Calcular el total de demandas radicadas en el año
-    const total = metrics.reduce((totalAcc, item) => totalAcc + item.cantidadRadicadas, 0);
+    const total = metrics.reduce(
+      (totalAcc, item) => totalAcc + item.cantidadRadicadas,
+      0,
+    );
 
     // Crear array con todos los meses del año (incluso si no hay datos)
     const metric = [];
     for (let mes = 1; mes <= 12; mes++) {
-      const monthData = metrics.find(item => item._id.mes === mes);
+      const monthData = metrics.find((item) => item._id.mes === mes);
       const count = monthData ? monthData.cantidadRadicadas : 0;
 
       metric.push({
         month: mes,
         monthName: nombresMeses[mes - 1],
-        count
+        count,
       });
     }
 
@@ -370,11 +428,11 @@ export class PerfomanceService {
       metric,
       resumen: {
         mesMayorActividad: metric.reduce((max, mes) =>
-          mes.count > max.count ? mes : max
+          mes.count > max.count ? mes : max,
         ),
-        promedioPorMes: Math.round(total / 12 * 100) / 100,
-        mesesSinActividad: metric.filter(mes => mes.count === 0).length
-      }
+        promedioPorMes: Math.round((total / 12) * 100) / 100,
+        mesesSinActividad: metric.filter((mes) => mes.count === 0).length,
+      },
     };
   }
 

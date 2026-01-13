@@ -72,3 +72,13 @@ export interface MonolegalRecordData {
   internalCode: string;
   fechaUltimaActuacion: Date;
 }
+
+export interface UltimoCambioFuente {
+  fuente: string;
+  ultimaActuacion: string;
+  ultimaAnotacion: string;
+  ultimoTermino: string;
+  ultimoRegistro: string;
+  idProceso: null;
+  estado: number;
+}

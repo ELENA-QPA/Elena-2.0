@@ -18,6 +18,7 @@ import { AuthModule } from '../auth/auth.module';
 import * as https from 'https';
 import { ConfigModule } from '@nestjs/config';
 import { OrchestratorModule } from 'src/orchestrator/orchestrator.module';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { OrchestratorModule } from 'src/orchestrator/orchestrator.module';
     ]),
     AuthModule,
     OrchestratorModule,
+    CommonModule,
   ],
   controllers: [MonolegalController],
   providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService],

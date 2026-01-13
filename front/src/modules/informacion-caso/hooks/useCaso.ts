@@ -883,6 +883,20 @@ export function useCaso() {
     [casoRepository]
   );
 
+  const getActuaciones = async (radicado: string): Promise<any[]> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await casoRepository.getActuaciones(radicado);
+      console.log("[USECASO][getActuaciones]:", response);
+      return response;
+    } catch (err: any) {
+      setError(err.message || "Error al obtener actuaciones");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     caso,
     casos,
@@ -915,5 +929,6 @@ export function useCaso() {
     createPerformance,
     deletePerformance,
     getActuacionesMonolegal,
+    getActuaciones,
   };
 }

@@ -12,12 +12,14 @@ import {
   MonolegalRecordData,
   ProcessResult,
   SyncResponse,
+  UltimoCambioFuente,
 } from '../dto/import-monolegal.dto';
 import { MonolegalApiService } from './monolegal-api.service';
 import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
 import { normalizeClientType } from '../constants/normalize-client-type';
 import { OrchestratorService } from 'src/orchestrator/services/orchestrator.service';
 import internal from 'stream';
+import { UtilitiesService } from 'src/common/services/utilities.service';
 
 @Injectable()
 export class MonolegalService {
@@ -31,6 +33,7 @@ export class MonolegalService {
     private readonly monolegalApiService: MonolegalApiService,
     private readonly juzgadoNormalizer: JuzgadoNormalizerService,
     private readonly orchestratorService: OrchestratorService,
+    private readonly utilitiesService: UtilitiesService,
   ) {}
 
   async importFromExcel(
@@ -195,7 +198,7 @@ export class MonolegalService {
       await record.save();
 
       if (ultimaActuacion) {
-        await this.createOrUpdatePerformance(record._id, {
+        await this.createPerformance(record._id, {
           ultimaActuacion,
           etapaProcesal,
         });
@@ -224,7 +227,7 @@ export class MonolegalService {
       });
 
       if (ultimaActuacion) {
-        await this.createOrUpdatePerformance(newRecord._id, {
+        await this.createPerformance(newRecord._id, {
           ultimaActuacion,
           etapaProcesal,
         });
@@ -302,12 +305,48 @@ export class MonolegalService {
     }
   }
 
-  private async createOrUpdatePerformance(
+  private isValidPerformance(value?: string): boolean {
+    if (!value) return false;
+
+    const normalized = value.trim().toLowerCase();
+
+    return (
+      normalized !== '' &&
+      normalized !== 'sin cambios' &&
+      normalized !== 'no activa'
+    );
+  }
+
+  private async processUltimosCambiosPerformances(
+    record_id: any,
+    ultimosCambiosEnFuentes: UltimoCambioFuente[],
+  ): Promise<void> {
+    for (const cambio of ultimosCambiosEnFuentes) {
+      const { ultimaActuacion, ultimaAnotacion, fuente, ultimoRegistro } =
+        cambio;
+      if (
+        this.isValidPerformance(ultimaActuacion) ||
+        this.isValidPerformance(ultimaAnotacion)
+      ) {
+        await this.createPerformance(record_id, {
+          ultimaActuacion: ultimaActuacion.trim(),
+          etapaProcesal: '',
+          ultimaAnotacion: ultimaAnotacion.trim(),
+          fuente,
+          date: ultimoRegistro,
+        });
+      }
+    }
+  }
+
+  private async createPerformance(
     recordId: any,
     data: {
       ultimaActuacion: string;
       etapaProcesal: string;
       ultimaAnotacion?: string;
+      fuente?: string;
+      date?: string;
     },
   ): Promise<void> {
     const actuacion = data.ultimaActuacion?.trim();
@@ -320,10 +359,14 @@ export class MonolegalService {
     });
 
     if (!existingPerformance) {
+      const validDate = this.utilitiesService.getValidDate(data.date);
+
       await this.performanceModel.create({
         record: recordId,
         performanceType: actuacion,
         responsible: 'Monolegal',
+        fuente: data.fuente || 'Monolegal',
+        fecha: validDate,
         observation:
           data.ultimaAnotacion?.trim() ||
           `Sincronizado desde Monolegal - ${data.etapaProcesal || 'Sin etapa'}`,
@@ -800,19 +843,21 @@ export class MonolegalService {
       );
       await record.save();
 
-      if (cambio.ultimaActuacion) {
-        await this.createOrUpdatePerformance(record._id, {
-          ultimaActuacion: cambio.ultimaActuacion,
-          etapaProcesal: '',
-          ultimaAnotacion: cambio.ultimaAnotacion,
-        });
+      if (
+        cambio.ultimosCambiosEnFuentes &&
+        cambio.ultimosCambiosEnFuentes.length > 0
+      ) {
+        await this.processUltimosCambiosPerformances(
+          record._id,
+          cambio.ultimosCambiosEnFuentes,
+        );
       }
 
-      await this.createAudience(
-        cambio.ultimaActuacion,
-        cambio.ultimaAnotacion,
-        record._id,
-      );
+      // await this.createAudience(
+      //   cambio.ultimaActuacion,
+      //   cambio.ultimaAnotacion,
+      //   record._id,
+      // );
 
       return {
         radicado,
@@ -840,19 +885,21 @@ export class MonolegalService {
         demandados: cambio.demandados || '',
       });
 
-      if (cambio.ultimaActuacion) {
-        await this.createOrUpdatePerformance(newRecord._id, {
-          ultimaActuacion: cambio.ultimaActuacion,
-          etapaProcesal: '',
-          ultimaAnotacion: cambio.ultimaAnotacion,
-        });
+      if (
+        cambio.ultimosCambiosEnFuentes &&
+        cambio.ultimosCambiosEnFuentes.length > 0
+      ) {
+        await this.processUltimosCambiosPerformances(
+          newRecord._id,
+          cambio.ultimosCambiosEnFuentes,
+        );
       }
 
-      await this.createAudience(
-        cambio.ultimaActuacion,
-        cambio.ultimaAnotacion,
-        newRecord._id,
-      );
+      // await this.createAudience(
+      //   cambio.ultimaActuacion,
+      //   cambio.ultimaAnotacion,
+      //   newRecord._id,
+      // );
 
       return {
         radicado,
