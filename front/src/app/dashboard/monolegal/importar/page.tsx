@@ -34,8 +34,7 @@ interface ImportResult {
     despachoJudicial: string;
     city: string;
     ultimaActuacion: string;
-    fechaUltimaActuacion?: Date;
-    ultimaAnotacion?: Date | string;
+    fechaUltimaActuacion?: Date | string;   
   };
 }
 

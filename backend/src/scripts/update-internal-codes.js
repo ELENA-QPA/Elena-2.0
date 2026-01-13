@@ -7,6 +7,7 @@ const MONGO_URI = process.env.MONGODB_CNN;
 // Mapeo de clientType a inicial
 const clientTypeToInitial = {
     'Rappi': 'R',
+    'Rappi SAS': 'R',
     'Uber': 'U',
     'Didi': 'D',
     'Otro': 'O'

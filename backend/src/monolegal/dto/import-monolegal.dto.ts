@@ -33,7 +33,8 @@ export interface ProcessResult {
     city?: string;
     etapaProcesal?: string;
     ultimaActuacion?: string;
-    ultimaAnotacion?: Date;
+    ultimaAnotacion?: string;
+    fechaUltimaActuacion?: Date;
   };
 }
 
@@ -60,13 +61,17 @@ export interface MonolegalRecordData {
   radicado: string;
   despachoJudicial: string;
   city: string;
+  department: string;
   location: string;
   idProcesoMonolegal: string;
   etapaProcesal: string;
   ultimaActuacion: string;
-  ultimaAnotacion: Date | null;
+  ultimaAnotacion: string;
   sincronizadoMonolegal: boolean;
   fechaSincronizacion: Date;
   etiqueta: string;
   internalCode: string;
+  fechaUltimaActuacion: Date;
+  processType: string;
+  jurisdiction: string;
 }

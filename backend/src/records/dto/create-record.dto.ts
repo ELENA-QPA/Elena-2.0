@@ -34,7 +34,7 @@ export enum TipoEstado {
 }
 
 export enum ClientType {
-  RAPPI = 'Rappi',
+  RAPPI = 'Rappi SAS',
   UBBER = 'Uber',
   DIDI = 'Didi',
   OTRO = 'Otro',
@@ -139,7 +139,7 @@ export class CreateRecordDto {
   })
   @Type(() => Date)
   @IsOptional()
-  fechaUltimaActuacion?: Date;
+  fechaUltimaActuacion?: string;
 
   // @ApiProperty({
   //     description: 'Estado del expediente',

@@ -1,4 +1,4 @@
-# Bot ELENA - WP Alliance
+# Bot ELENA - QPAlliance
 
 Bot de consulta de procesos legales desarrollado con BuilderBot para WhatsApp, integrado con la API real de QP Alliance.
 
@@ -23,7 +23,7 @@ ELENA es un bot inteligente que permite a los clientes consultar sus procesos le
 
 ```
 Cliente: Hola
-ELENA: 👋 ¡Hola! Bienvenido/a a ELENA – WP Alliance, tu asistente legal virtual.
+ELENA: 👋 ¡Hola! Bienvenido/a a ELENA – QPAlliance, tu asistente legal virtual.
        Antes de continuar, cuéntame:
        1️⃣ ¿Tienes actualmente un proceso con nosotros?
        2️⃣ ¿Quieres iniciar un proceso con nosotros?
@@ -93,7 +93,7 @@ ELENA: 📄 Generando el reporte personalizado...
        2️⃣ No, terminar
 
 Cliente: 2
-ELENA: ¡Gracias por usar ELENA - WP Alliance! 👋
+ELENA: ¡Gracias por usar ELENA - QPAlliance! 👋
 ```
 
 ## 🏗️ Arquitectura Técnica

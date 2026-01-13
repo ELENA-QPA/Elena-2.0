@@ -33,14 +33,7 @@ export class MonolegalController {
   @ApiOperation({
     summary: 'Importar procesos desde Excel de Monolegal',
     description: `
-      Importa y sincroniza procesos judiciales desde el archivo Excel exportado por Monolegal.
-      
-      **Funcionalidad:**
-      - Si el radicado existe: Actualiza la información
-      - Si el radicado NO existe: Crea un nuevo registro
-      - Sincroniza demandantes, demandados y última actuación
-      
-      **Frecuencia recomendada:** Martes y Jueves
+      Importa y sincroniza procesos judiciales desde el archivo Excel exportado por Monolegal.    
     `,
   })
   @ApiBearerAuth()
@@ -101,15 +94,7 @@ export class MonolegalController {
   @Post('sync')
   @ApiOperation({
     summary: 'Sincronizar procesos desde API de Monolegal',
-    description: `
-    Sincroniza procesos judiciales directamente desde la API de Monolegal.
-    
-    **Funcionalidad:**
-    - Obtiene cambios del día actual (o fecha específica)
-    - Si el radicado existe: Actualiza la información
-    - Si el radicado NO existe: Crea un nuevo registro
-    - Sincroniza demandantes, demandados y última actuación  
-    `,
+    description: `Sincroniza procesos judiciales directamente desde la API de Monolegal.`,
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -198,39 +183,52 @@ export class MonolegalController {
     return this.monolegalService.syncHistoryFromApi(fecha);
   }
 
-  @Post('renormalize-juzgados')
+  @Post('sync-all')
   @ApiOperation({
-    summary: 'Re-normalizar todos los juzgados existentes',
-  })
-  async renormalizeJuzgados() {
-    return this.monolegalService.renormalizeAllJuzgados();
-  }
-
-  @Post('update-ultima-anotacion')
-  @ApiOperation({
-    summary: 'Actualizar campo ultimaAnotacion en todos los registros',
-    description: `
-    Actualiza el campo ultimaAnotacion de todos los registros existentes.
-  `,
+    summary: 'Sincronizar TODOS los procesos desde Monolegal',
+    description: `Sincroniza TODOS los procesos judiciales desde la API de Monolegal.`,
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'Actualización completada exitosamente',
-    example: {
-      success: true,
-      message: 'Actualización de ultimaAnotacion completada',
-      summary: {
-        total: 150,
-        updated: 145,
-        skipped: 5,
-        errors: 0,
+  @ApiBody({
+    description:
+      'Fecha inicial opcional (formato YYYY-MM-DD). Por defecto: 2024-01-01',
+    required: false,
+    schema: {
+      type: 'object',
+      properties: {
+        fechaInicio: {
+          type: 'string',
+          format: 'date',
+          example: '2024-01-01',
+          description: 'Fecha inicial en formato YYYY-MM-DD (opcional)',
+        },
       },
     },
   })
-  async updateUltimaAnotacion() {
-    return this.monolegalService.updateAllUltimaAnotacion();
+  @ApiResponse({
+    status: 201,
+    description: 'Sincronización completa exitosa',
+    example: {
+      success: true,
+      message: 'Sincronización completa: 365 días procesados',
+      summary: {
+        total: 850,
+        created: 800,
+        updated: 45,
+        skipped: 3,
+        errors: 2,
+      },
+    },
+  })
+  async syncAllWithMonolegal(
+    @GetUser() user: IUser,
+    @Body() body?: { fechaInicio?: string },
+  ) {
+    return this.monolegalService.syncAllFromApi(
+      user._id.toString(),
+      body?.fechaInicio,
+    );
   }
 
   @Get('actuaciones/:idProceso')

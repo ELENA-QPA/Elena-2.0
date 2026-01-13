@@ -78,7 +78,10 @@ export class Record extends Document {
   fechaSincronizacion: Date;
 
   @Prop()
-  ultimaAnotacion?: string;
+  fechaUltimaActuacion?: string;
+
+  @Prop()
+  ultimaAnotacion: string;
 
   @Prop()
   idProcesoMonolegal?: string;

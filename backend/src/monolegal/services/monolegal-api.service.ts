@@ -28,6 +28,7 @@ interface CambioDetalle {
   despacho: string;
   ultimaActuacion: string;
   ultimaAnotacion: string;
+  fechaUltimaActuacion: string;
   ultimoRegistro: string;
   etiqueta: string | null;
   fuentesConCambios: string;
@@ -396,7 +397,6 @@ export class MonolegalApiService {
         return dateB - dateA;
       });
 
-      //this.logger.log(`Actuaciones obtenidas: ${actuaciones.length}`);
       return actuaciones;
     } catch (error) {
       this.logger.error(
@@ -453,8 +453,6 @@ export class MonolegalApiService {
     await this.login();
 
     try {
-      //this.logger.log(`Obteniendo actuaciones para idProceso: ${idProceso}`);
-
       const response = await firstValueFrom(
         this.httpService.get<any[]>(
           `https://unificada.monolegal.co/backend/api/procesos/${idProceso}/Actuaciones`,
@@ -476,7 +474,6 @@ export class MonolegalApiService {
         return dateB - dateA;
       });
 
-      // this.logger.log(`Actuaciones obtenidas: ${actuaciones.length}`);
       return actuaciones;
     } catch (error) {
       this.logger.error('Error obteniendo actuaciones:', error.message);

@@ -538,12 +538,11 @@ const documentTypes = [
   { value: "TTP", label: "TTP" },
 ];
 const ubicacionesExpediente = [
-  "Siugj",
-  "BUSQUEDA DE CONSULTA NACIONAL",
-  "SAMAI",
-  "SIC",
   "Unificada",
   "Rama",
+  "Siugj",
+  "PublicacionesProcesales",
+  "Samai",  
   "Tyba",
   "EstadosElectronicos",
 ];
@@ -571,7 +570,7 @@ const despachoJudicial = [
 ];
 
 // Los departamentos y ciudades se cargarán dinámicamente desde divipola.json
-const clientTypes = ["Rappi", "Uber", "Didi", "Beat", "Ifood", "Otro"];
+const clientTypes = ["Rappi SAS", "Uber", "Didi", "Beat", "Ifood", "Otro"];
 
 const interventionTypes = [
   "Tercero Interviniente",
@@ -1698,7 +1697,7 @@ export default function InformacionCasoFormViewOld() {
 
       const clientTypeValue = (() => {
         const rawValue = caso.clientType?.trim().toUpperCase() || "";
-        if (rawValue.includes("RAPPI")) return "Rappi";
+        if (rawValue.includes("RAPPI")) return "Rappi SAS";
         if (rawValue.includes("UBER")) return "Uber";
         if (rawValue.includes("DIDI")) return "Didi";
         if (rawValue.includes("BEAT")) return "Beat";
@@ -2044,6 +2043,15 @@ export default function InformacionCasoFormViewOld() {
       }
     }
   }, [caso, caso?.processType, mode, form]);
+
+  // Efecto para mostrar caso Ordinario cuando el tipo cliente es Rappi
+  const clientType = form.watch("clientType");
+
+  useEffect(() => {
+    if (clientType?.toLowerCase().includes("rappi")) {
+      form.setValue("processType", "Ordinario");
+    }
+  }, [clientType, form]);
 
   const onSubmit = async (data: CaseFormData) => {
     // Limpiar campos temporales antes de enviar - estos no deben ser parte del caso final
@@ -8462,7 +8470,7 @@ export default function InformacionCasoFormViewOld() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label className="text-gray-700 font-medium">
                     Fecha de Creación en Monolegal
                   </Label>
@@ -8475,7 +8483,7 @@ export default function InformacionCasoFormViewOld() {
                         : "No especificada"}
                     </span>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Anotación / Observaciones */}
@@ -8491,7 +8499,7 @@ export default function InformacionCasoFormViewOld() {
               </div>
 
               {/* Términos (si existen) */}
-              {((selectedPerformance as any).fechaIniciaTermino ||
+              {/* {((selectedPerformance as any).fechaIniciaTermino ||
                 (selectedPerformance as any).fechaFinalizaTermino) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -8524,7 +8532,7 @@ export default function InformacionCasoFormViewOld() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Estado de la Actuación */}
               <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">

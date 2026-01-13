@@ -11,7 +11,7 @@ export const ESTADOS = [
 ] as const;
 
 export const LegendColors: Record<string, string> = {
-  "RAPPI S.A.S.": "bg-orange-600",
+  "Rappi SAS": "bg-orange-600",
   // Didi: "bg-blue-600",
   // Uber: "bg-gray-900",
   Otro: "bg-green-600",

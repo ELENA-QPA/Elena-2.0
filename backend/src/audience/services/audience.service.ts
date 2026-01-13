@@ -142,6 +142,7 @@ export class AudienceService {
 
       if (is_valid) {
         const createdDate = new Date();
+        // createdDate.setDate(createdDate.getDate() - 1);
         const scheduledNotificationDate = this.utilitiesService.addBusinessDays(
           createdDate,
           1,
@@ -151,6 +152,9 @@ export class AudienceService {
           ...createAudienceDto,
           is_valid,
           notifications: {
+            oneMonth: { sent: false, sentAt: null },
+            fifteenDays: { sent: false, sentAt: null },
+            oneDay: { sent: false, sentAt: null },
             oneDayAfterCreation: {
               sent: false,
               scheduledFor: scheduledNotificationDate,
@@ -352,6 +356,9 @@ export class AudienceService {
       ...updateAudienceDto,
       is_valid,
       notifications: {
+        oneMonth: { sent: false, sentAt: null },
+        fifteenDays: { sent: false, sentAt: null },
+        oneDay: { sent: false, sentAt: null },
         oneDayAfterCreation: {
           sent: false,
           scheduledFor: scheduledNotificationDate,

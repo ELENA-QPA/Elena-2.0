@@ -168,7 +168,8 @@ export const legalPdfSummaryFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.
                 // Si solo hay procesos activos, esa será la opción 1
                 // Si solo hay finalizados, esa será la opción 1
                 // Si hay ambos, activos será 1 y finalizados será 2
-                let optionToSelect = '1'; // Por defecto, seleccionar la primera opción disponible
+                // eslint-disable-next-line no-case-declarations
+                const optionToSelect = '1'; // Por defecto, seleccionar la primera opción disponible
                 
                 // Actualizar estado y simular respuesta para que legalProcessSelectionFlow la procese
                 await state.update({ 

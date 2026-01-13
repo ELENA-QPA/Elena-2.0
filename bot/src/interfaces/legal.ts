@@ -1,16 +1,16 @@
 /**
- * Interfaces para el bot legal ELENA - WP Alliance
+ * Interfaces para el bot legal ELENA - QPAlliance
  */
 
 // Respuesta de la API de casos
 export interface CasesResponse {
   message: string;
-  active: Array<{ 
+  active: Array<{
     internalCode: string;
     state: string;
     updatedAt: string;
   }>;
-  finalized: Array<{ 
+  finalized: Array<{
     internalCode: string;
     state: string;
     updatedAt: string;
@@ -65,13 +65,19 @@ export interface ProcessSummary {
   lastUpdate: string;
   responsible?: string;
   nextMilestone?: string;
+  etiqueta?: string;
+  radicado?: string;
+  despachoJudicial?: string;
+  city?: string;
+  ultimaActuacion?: string;
+  fechaUltimaActuacion?: string; 
 }
 
 // Detalles de proceso
 export interface ProcessDetails {
   id: string;
   internalCode: string;
-  clientName: string; // Nombre del cliente (primer demandante)
+  clientName: string; 
   jurisdiction: string;
   processType: string;
   settled: string;
@@ -81,6 +87,12 @@ export interface ProcessDetails {
   plaintiffs: string[];
   defendants: string[];
   performances: ProcessPerformance[];
+  etiqueta?: string;
+  radicado?: string;
+  despachoJudicial?: string;
+  city?: string;
+  ultimaActuacion?: string;
+  fechaUltimaActuacion?: string;
 }
 
 // Actuación de proceso
@@ -120,7 +132,7 @@ export interface TransformedDetailedCasesResponse {
 export interface LegalBotState {
   currentDocument?: string;
   currentProcesses?: ClientProcesses;
-  selectedProcessType?: 'active' | 'finalized';
+  selectedProcessType?: "active" | "finalized";
   selectedProcess?: ProcessDetails;
   currentFlow?: string;
 }
