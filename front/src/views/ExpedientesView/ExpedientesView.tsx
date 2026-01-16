@@ -48,6 +48,12 @@ import { getCookie } from "cookies-next";
 import { CookiesKeysEnum } from "@/utilities/enums";
 import { Caso } from "@/modules/informacion-caso/data/interfaces/caso.interface";
 import { toast } from "sonner";
+import { Check } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface ExpedientesViewProps {
   initialCasos?: Caso[];
@@ -140,9 +146,56 @@ export default function ExpedientesView({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [allLoadedCasos, setAllLoadedCasos] = useState<Caso[]>(initialCasos); // Todos los casos cargados
   const [hasMoreToLoad, setHasMoreToLoad] = useState(true);
+  const [lastSyncDate, setLastSyncDate] = useState<Date | null>(null);
 
   // Estados para manejo de errores
   const [localError, setLocalError] = useState<string | null>(initialError);
+
+  const [syncSummary, setSyncSummary] = useState<{
+    total: number;
+    created: number;
+    updated: number;
+    skipped: number;
+    errors: number;
+  } | null>(null);
+
+  // Cargar la última sincronización al montar el componente
+  useEffect(() => {
+    fetchLastSyncDate();
+    const interval = setInterval(fetchLastSyncDate, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchLastSyncDate = async () => {
+    try {
+      const token = getCookie(CookiesKeysEnum.token);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/monolegal/last-sync`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("[SYNC] Error:", response.status);
+        return;
+      }
+
+      const data = await response.json();     
+
+      if (data.lastSync) {
+        setLastSyncDate(new Date(data.lastSync));
+      }
+
+      if (data.summary) {
+        setSyncSummary(data.summary);
+      }
+    } catch (error) {
+      console.error("Error al obtener última sincronización:", error);
+    }
+  };
 
   // Cargar datos de divipola.json y despacho_judicial.json
   useEffect(() => {
@@ -607,6 +660,8 @@ export default function ExpedientesView({
       if (response.ok && data.success) {
         console.log("[SYNC][Monolegal] Sincronización exitosa:", data);
         setSyncResults(data);
+ 
+        setLastSyncDate(new Date());
 
         toast.success(
           `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`
@@ -667,7 +722,7 @@ export default function ExpedientesView({
     }
 
     console.log("[EXPEDIENTES][Loading Data]: Iniciando carga de expedientes");
-    loadMoreFromServer(1000);
+    loadMoreFromServer(2000);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect separado para manejar cambios en los datos después de cargas
@@ -1293,6 +1348,31 @@ export default function ExpedientesView({
     dateTo,
   ]);
 
+  const formatSyncDate = (date: Date | null) => {
+    if (!date) return "Nunca";
+
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+
+    if (minutes < 1) return "Hace un momento";
+    if (minutes < 60) return `Hace ${minutes} min`;
+    if (hours < 24 && date.getDate() === now.getDate()) {
+      return date.toLocaleTimeString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
+    return date.toLocaleDateString("es-CO", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   if (authStatus === "checking") {
     return (
       <div className="p-6">
@@ -1438,24 +1518,138 @@ export default function ExpedientesView({
             <span className="xs:hidden">Nuevo</span>
           </Button>
         </Link> */}
+
         <div className="flex gap-2 flex-shrink-0">
-          {/* Botón Sincronizar Monolegal */}
-          <Button
-            onClick={handleSyncMonolegal}
-            disabled={isSyncing}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm"
-            title="Sincronizar con Monolegal"
-          >
-            <RefreshCw
-              className={`h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ${
-                isSyncing ? "animate-spin" : ""
-              }`}
-            />
-            <span className="hidden sm:inline">
-              {isSyncing ? "Sincronizando..." : "Sincronizar"}
-            </span>
-            <span className="sm:hidden">Sync</span>
-          </Button>
+          {/* Estado de sincronización - Botón Popover */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={`
+          rounded-lg text-xs sm:text-sm h-9 sm:h-9 px-3
+          ${
+            lastSyncDate
+              ? "border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+              : "border-gray-300 text-gray-500 hover:bg-gray-50"
+          }
+        `}
+                title="Ver estado de sincronización"
+              >
+                <RefreshCw
+                  className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                    lastSyncDate ? "text-emerald-500" : "text-gray-400"
+                  }`}
+                />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-72 p-4" align="end">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  {lastSyncDate ? (
+                    <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                      <Check className="h-4 w-4 text-emerald-600" />
+                    </div>
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <RefreshCw className="h-4 w-4 text-gray-400" />
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-sm">
+                      {lastSyncDate
+                        ? "Sincronización exitosa"
+                        : "Sin sincronizar"}
+                    </p>
+                    {lastSyncDate && (
+                      <p className="text-xs text-gray-500">
+                        {formatSyncDate(lastSyncDate)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {lastSyncDate && (
+                  <>
+                    <div className="text-xs text-gray-600 space-y-1.5 pt-3 border-t">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Fecha:</span>
+                        <span className="font-medium">
+                          {lastSyncDate.toLocaleDateString("es-CO", {
+                            weekday: "short",
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Hora:</span>
+                        <span className="font-medium">
+                          {lastSyncDate.toLocaleTimeString("es-CO", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {syncSummary && (
+                      <div className="pt-3 border-t">
+                        <p className="text-xs font-medium text-gray-700 mb-2">
+                          Resumen:
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          {syncSummary.created > 0 && (
+                            <div className="flex items-center gap-1.5 text-emerald-600">
+                              <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                              <span>{syncSummary.created} creados</span>
+                            </div>
+                          )}
+                          {syncSummary.updated > 0 && (
+                            <div className="flex items-center gap-1.5 text-blue-600">
+                              <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                              <span>{syncSummary.updated} actualizados</span>
+                            </div>
+                          )}
+                          {syncSummary.skipped > 0 && (
+                            <div className="flex items-center gap-1.5 text-yellow-600">
+                              <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                              <span>{syncSummary.skipped} omitidos</span>
+                            </div>
+                          )}
+                          {syncSummary.errors > 0 && (
+                            <div className="flex items-center gap-1.5 text-red-600">
+                              <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                              <span>{syncSummary.errors} errores</span>
+                            </div>
+                          )}
+                          {syncSummary.created === 0 &&
+                            syncSummary.updated === 0 &&
+                            syncSummary.skipped === 0 &&
+                            syncSummary.errors === 0 && (
+                              <div className="col-span-2 text-gray-500">
+                                Sin cambios en esta sincronización
+                              </div>
+                            )}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Total procesados: {syncSummary.total}
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {!lastSyncDate && (
+                  <p className="text-xs text-gray-500 pt-3 border-t">
+                    La sincronización automática se ejecuta diariamente a las
+                    6:00 AM.
+                  </p>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
 
           {/* Botón Nuevo Expediente */}
           <Link href="/dashboard/informacion-caso?mode=create">

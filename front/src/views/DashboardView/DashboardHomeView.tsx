@@ -12,20 +12,31 @@ import {
   CalendarDays,
   Scale,
   History,
+  FolderOpen,
+  ClipboardList,
+  ChevronRight,
+  X,
 } from "lucide-react";
 import { getUserCookiesClient } from "@/utilities/helpers/handleUserCookies/getUserCookieClient";
 import { UserRole } from "@/utilities/enums/user-roles.enum";
 import { useEffect, useState } from "react";
+import { IUser } from "@/data/interfaces/user.interface";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function DashboardHomeView() {
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+  const [isLitigiosOpen, setIsLitigiosOpen] = useState(false);
 
   useEffect(() => {
-    // Obtener el rol del usuario desde las cookies
     const user = getUserCookiesClient();
-
-    // El user en localStorage tiene "rol" (array) no "role" (string)
-    let userRoleFromStorage = null;
 
     if (user) {
       console.log("[DASHBOARD] User fields check:", {
@@ -42,22 +53,20 @@ export default function DashboardHomeView() {
         roleValue: user.role,
       });
 
+      setCurrentUser(user as IUser);
+
+      let userRoleFromStorage = null;
+
       if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
-        userRoleFromStorage = user.roles[0]; // Tomar el primer rol del array
+        userRoleFromStorage = user.roles[0];
         console.log("[DASHBOARD] User roles from array:", userRoleFromStorage);
-      }
-      // Fallback: verificar si tiene el campo "rol" como array
-      else if (user.rol && Array.isArray(user.rol) && user.rol.length > 0) {
-        userRoleFromStorage = user.rol[0]; // Tomar el primer rol del array
+      } else if (user.rol && Array.isArray(user.rol) && user.rol.length > 0) {
+        userRoleFromStorage = user.rol[0];
         console.log("[DASHBOARD] User rol from array:", userRoleFromStorage);
-      }
-      // Fallback: verificar si tiene "role" como string
-      else if (user.role) {
+      } else if (user.role) {
         userRoleFromStorage = user.role;
         console.log("[DASHBOARD] User role from string:", userRoleFromStorage);
-      }
-      // Fallback adicional: verificar si "rol" es string
-      else if (user.rol && typeof user.rol === "string") {
+      } else if (user.rol && typeof user.rol === "string") {
         userRoleFromStorage = user.rol;
         console.log("[DASHBOARD] User rol from string:", userRoleFromStorage);
       }
@@ -73,10 +82,8 @@ export default function DashboardHomeView() {
     }
   }, []);
 
-  // Función para verificar si el usuario es administrador
   const isAdmin = userRole === UserRole.ADMINISTRADOR;
 
-  // Debug: Verificar la comparación
   console.log("[DASHBOARD] Role comparison:", {
     userRole,
     expectedRole: UserRole.ADMINISTRADOR,
@@ -84,10 +91,36 @@ export default function DashboardHomeView() {
     comparison: `"${userRole}" === "${UserRole.ADMINISTRADOR}"`,
   });
 
+  const litigiosOptions = [
+    {
+      title: 'Gestión de Expedientes',
+      description: 'Gestiona y consulta expedientes judiciales',
+      icon: FolderOpen,
+      href: '/dashboard/expedientes',
+      color: 'from-pink-500 to-pink-600',
+      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
+    },
+    {
+      title: 'Audiencias',
+      description: 'Programa y administra audiencias',
+      icon: CalendarDays,
+      href: '/dashboard/audiencias',
+      color: 'from-pink-500 to-pink-600',
+      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
+    }, 
+    {
+      title: 'Historial Sincronización',
+      description: 'Revisa el historial de sincronizaciones',
+      icon: History,
+      href: '/dashboard/monolegal/importar',
+      color: 'from-pink-500 to-pink-600',
+      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
+    }
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Usar el componente AppBar unificado */}
-      <AppBar />
+      <AppBar user={currentUser} />
 
       <main className="flex-1 flex flex-col items-center justify-center py-12 px-4 mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
@@ -108,34 +141,73 @@ export default function DashboardHomeView() {
               </div>
             </div>
 
-            {/* Opciones dentro de la card */}
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/dashboard/expedientes"
-                className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Gestión Expedientes</span>
-              </Link>
-
-              <Link
-                href="/dashboard/audiencias"
-                className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
-              >
-                <CalendarDays className="w-4 h-4" />
-                <span>Audiencias</span>
-              </Link>
-              <div className="inline-block whitespace-nowrap">
-                <Link
-                  href="/dashboard/monolegal/importar"
-                  className="inline-flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-700 transition-colors"
-                >
-                  <History className="w-4 h-4" />
-                  <span>Historial de sincronización</span>
-                </Link>
-              </div>
-            </div>
+            {/* Botón Ingresar */}
+            <Button
+              onClick={() => setIsLitigiosOpen(true)}
+              className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-6 text-base"
+            >
+              Ingresar 
+              
+            </Button>
           </div>
+
+          {/* Modal de Litigios */}
+          <Dialog open={isLitigiosOpen} onOpenChange={setIsLitigiosOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-pink-100 flex items-center justify-center">
+                    <Scale className="h-6 w-6 text-pink-600" />
+                  </div>
+                  Unidad de Litigios
+                </DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Selecciona el módulo al que deseas acceder
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                {litigiosOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <Link
+                      key={option.title}
+                      href={option.href}
+                      className="group"
+                      onClick={() => setIsLitigiosOpen(false)}
+                    >
+                      <div className={`
+                        bg-gradient-to-br ${option.color} ${option.hoverColor}
+                        rounded-xl p-6 text-white shadow-lg 
+                        transform transition-all duration-200 
+                        hover:scale-105 hover:shadow-2xl
+                        cursor-pointer
+                      `}>
+                        <div className="flex flex-col items-start space-y-3">
+                          <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                            <Icon className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg mb-1">
+                              {option.title}
+                            </h3>
+                            <p className="text-sm text-white/90 leading-snug">
+                              {option.description}
+                            </p>
+                          </div>
+                          <div className="flex items-center text-sm font-medium mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            Acceder
+                            <ChevronRight className="ml-1 h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>              
+            </DialogContent>
+          </Dialog>
+
           {/* Tarjeta Estadísticas y métricas */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
             <div className="flex items-center justify-between w-full mb-6">
@@ -154,32 +226,11 @@ export default function DashboardHomeView() {
             </div>
             <Link
               href="/dashboard/estadisticas"
-              className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              className="bg-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
             >
               Ingresar
             </Link>
           </div>
-
-          {/* Tarjeta Audiencias*/}
-          {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
-            <div className="flex items-center justify-between w-full mb-6">
-              <div className="flex flex-col">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Audiencias</h2>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Consulta y gestiona las audiencias programadas.
-                </p>
-              </div>
-              <div className="w-16 h-16 rounded-full border-2 border-pink-200 bg-pink-50 flex items-center justify-center flex-shrink-0 ml-4">
-                <CalendarDays className="w-8 h-8 text-pink-600" />
-              </div>
-            </div>
-            <Link 
-              href="/dashboard/audiencias" 
-              className="bg-gray-900  text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
-            >
-              Ingresar
-            </Link>
-          </div> */}
 
           {/* Tarjeta Configuración */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
@@ -223,7 +274,7 @@ export default function DashboardHomeView() {
               </div>
               <Link
                 href="/dashboard/equipo"
-                className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                className="bg-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
               >
                 Ingresar
               </Link>
@@ -232,7 +283,6 @@ export default function DashboardHomeView() {
         </div>
       </main>
 
-      {/* Usar el componente Footer unificado */}
       <Footer />
     </div>
   );

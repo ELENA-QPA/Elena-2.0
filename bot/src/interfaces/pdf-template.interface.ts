@@ -33,6 +33,16 @@ export interface ProcessData {
   
   // Actuaciones
   performances: PerformanceData[];
+
+  // Actuaciones de Monolegal (en tiempo real, sin guardar)
+  actuacionesMonolegal?: ActuacionMonolegal[];
+}
+
+// Interface para las actuaciones de Monolegal
+export interface ActuacionMonolegal {
+  fecha: string;
+  actuacion: string;
+  anotacion?: string; 
 }
 
 export interface PlaintiffData {

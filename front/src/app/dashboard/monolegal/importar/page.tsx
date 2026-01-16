@@ -261,7 +261,7 @@ export default function MonolegalImportPage() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al sincronizar con Monolegal. Por favor intenta nuevamente."
+          "Error al sincronizar. Por favor intenta nuevamente."
       );
 
       Swal.fire({
@@ -340,7 +340,7 @@ export default function MonolegalImportPage() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al sincronizar con Monolegal. Por favor intenta nuevamente."
+          "Error al sincronizar. Por favor intenta nuevamente."
       );
 
       Swal.fire({
@@ -388,44 +388,10 @@ export default function MonolegalImportPage() {
     <div className="container mx-auto p-6 max-w-5xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">
-          Historial de sincronizaciones de Monolegal
+          Historial de sincronizaciones
         </h1>
       </div>
-
-      {/* <Card className="mb-6 border-blue-200 bg-blue-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <RefreshCw className="w-5 h-5" />
-            Sincronizar desde API
-          </CardTitle>
-          <CardDescription>
-            Sincroniza automáticamente los expedientes del día de hoy
-            directamente desde Monolegal.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button
-            onClick={handleSyncFromApi}
-            disabled={loading}
-            className="w-full"
-            size="lg"
-            variant="default"
-          >
-            {loading && loadingType === "today" ? (
-              <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Sincronizando desde API...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="w-5 h-5 mr-2" />
-                Sincronizar ahora
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card> */}
-
+     
       <Card className="mb-6 border-purple-200 bg-purple-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -433,8 +399,7 @@ export default function MonolegalImportPage() {
             Actuaciones de una fecha específica
           </CardTitle>
           <CardDescription>
-            Selecciona una fecha para visualizar los cambios de ese día desde
-            Monolegal
+            Selecciona una fecha para visualizar los cambios de ese día
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -471,7 +436,7 @@ export default function MonolegalImportPage() {
                 ) : (
                   <>
                     <Calendar className="w-5 h-5 mr-2" />
-                    Sincronizar fecha
+                    Consultar por fecha
                   </>
                 )}
               </Button>
@@ -584,35 +549,24 @@ export default function MonolegalImportPage() {
         </Card>
       )}
 
-      {!summary && !loading && (
+      {/* {!summary && !loading && (
         <Card>
           <CardHeader>
             <CardTitle>Instrucciones</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-gray-600">
-            <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded mb-4">
-              <p className="font-semibold text-blue-900 mb-2">
-                Método recomendado: Sincronización automática
-              </p>
-              <p className="text-blue-800">
-                Usa el botón de &quot;Sincronizar ahora&quot; para obtener los
-                cambios del día de hoy directamente desde Monolegal.
-              </p>
-            </div>
-
+          <CardContent className="space-y-3 text-sm text-gray-600">           
             <div className="p-4 bg-purple-50 border-l-4 border-purple-500 rounded mb-4">
               <p className="font-semibold text-purple-900 mb-2">
                 Sincronización por fecha
               </p>
               <p className="text-purple-800">
-                Si necesitas sincronizar cambios de un día específico (por
-                ejemplo, si no se sincronizó algún día), usa el selector de
+                Si necesitas consultar los cambios de un día específico, usa el selector de
                 fecha.
               </p>
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
     </div>
   );
 }

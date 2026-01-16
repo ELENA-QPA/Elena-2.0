@@ -103,7 +103,7 @@ async function sendTyping(
     await delay(duration);
     await sock.sendPresenceUpdate("paused", jid);
   } catch (error) {
-    console.warn("⚠️ Error mostrando typing:", error);
+    console.warn("Error mostrando typing:", error);
   }
 }
 
@@ -145,7 +145,7 @@ async function handleMessage(
     msg.message.conversation || msg.message.extendedTextMessage?.text || "";
   const userName = msg.pushName || "";
 
-  if (!text) return;  
+  if (!text) return;
 
   const state = getState(userId);
   const input = text.trim().toLowerCase();
@@ -502,18 +502,19 @@ async function handleDocumentNumber(
       active: activeRecords.map((r) => ({
         internalCode: r.internalCode,
         state: r.state || r.performances?.[0]?.performanceType || "En proceso",
-        updatedAt: r.updatedAt,        
+        updatedAt: r.updatedAt,
         etiqueta: (r as any).etiqueta,
         radicado: (r as any).radicado,
         despachoJudicial: (r as any).despachoJudicial,
         ultimaActuacion: (r as any).ultimaActuacion,
         city: (r as any).city,
         fechaUltimaActuacion: (r as any).fechaUltimaActuacion,
+        idProcesoMonolegal: (r as any).idProcesoMonolegal,
       })),
       finalized: finalizedRecords.map((r) => ({
         internalCode: r.internalCode,
         state: r.state || "Finalizado",
-        updatedAt: r.updatedAt,        
+        updatedAt: r.updatedAt,
         etiqueta: (r as any).etiqueta,
         radicado: (r as any).radicado,
         despachoJudicial: (r as any).despachoJudicial,
@@ -740,13 +741,21 @@ async function handleProcessDetails(
     );
     const processDetails = toProcessDetails(processDetailsResponse);
 
-    
     (processDetails as any).etiqueta = (selectedProcess as any).etiqueta;
     (processDetails as any).radicado = (selectedProcess as any).radicado;
-    (processDetails as any).despachoJudicial = (selectedProcess as any).despachoJudicial;
+    (processDetails as any).despachoJudicial = (
+      selectedProcess as any
+    ).despachoJudicial;
     (processDetails as any).city = (selectedProcess as any).city;
-    (processDetails as any).ultimaActuacion = (selectedProcess as any).ultimaActuacion;
-    (processDetails as any).fechaUltimaActuacion = (selectedProcess as any).fechaUltimaActuacion;
+    (processDetails as any).ultimaActuacion = (
+      selectedProcess as any
+    ).ultimaActuacion;
+    (processDetails as any).fechaUltimaActuacion = (
+      selectedProcess as any
+    ).fechaUltimaActuacion;
+    (processDetails as any).idProcesoMonolegal = (
+      processDetailsResponse.record as any
+    )?.idProcesoMonolegal;
 
     updateState(userId, {
       selectedProcess: processDetails,
@@ -909,13 +918,61 @@ async function handlePdfConfirmation(
     await sendTyping(sock, jid, 1200);
     await sendMessage(sock, jid, "📄 Generando el reporte personalizado...");
 
+    // try {
+    //   const pdfResult = await pdfGeneratorService.generateProcessReport(
+    //     state.selectedProcess,
+    //     state.clientName || "Cliente"
+    //   );
+
+    //   const processId =
+    //     (state.selectedProcess as any).etiqueta ||
+    //     state.selectedProcess.internalCode;
+
+    //   await sendTyping(sock, jid, 1000);
+    //   await sendMediaMessage(
+    //     sock,
+    //     jid,
+    //     `📄 Aquí tienes el reporte personalizado del proceso #${processId}:`,
+    //     pdfResult.url
+    //   );
+    //   setTimeout(() => pdfGeneratorService.deletePdf(pdfResult.filename), 5000);
+    // } catch (error) {
+    //   console.error("Error generando PDF:", error);
+    //   await sendMessage(
+    //     sock,
+    //     jid,
+    //     "❌ Lo siento, hubo un error generando el reporte."
+    //   );
+    // }
+
     try {
+      const legalApiService = LegalApiServiceFactory.create();
+
+      let actuaciones: any[] = [];
+      const idProcesoMonolegal = (state.selectedProcess as any)
+        .idProcesoMonolegal;
+
+      if (idProcesoMonolegal) {
+        try {
+          actuaciones = await legalApiService.getActuaciones(
+            idProcesoMonolegal
+          );
+        } catch (error) {
+          console.warn("No se pudieron obtener actuaciones:", error);
+        }
+      }
+
+      // Pasar las actuaciones al generador de PDF
+      const processWithActuaciones = {
+        ...state.selectedProcess,
+        actuacionesMonolegal: actuaciones, // ← Las actuaciones van aquí
+      };
+
       const pdfResult = await pdfGeneratorService.generateProcessReport(
-        state.selectedProcess,
+        processWithActuaciones,
         state.clientName || "Cliente"
       );
 
-      // ✅ FIX: Usar etiqueta si existe, sino usar internalCode
       const processId =
         (state.selectedProcess as any).etiqueta ||
         state.selectedProcess.internalCode;
@@ -1182,7 +1239,7 @@ async function handleMainOptions(
     await handleWelcome(sock, jid, "");
   } else if (selectedOption.includes("Finalizar")) {
     await sendTyping(sock, jid, 1000);
-    await sendMessage(sock, jid, "¡Gracias por usar ELENA - WP Alliance! 👋");
+    await sendMessage(sock, jid, "¡Gracias por usar ELENA - QPAlliance! 👋");
     resetState(userId);
   }
 }
@@ -1257,16 +1314,14 @@ function startHttpServer(port: number): void {
     res.end("Not found");
   });
 
-  server.listen(port, () => {
-  });
+  server.listen(port, () => {});
 }
 
 // ============================================
 // INICIO DEL BOT
 // ============================================
 
-async function startBot(): Promise<void> { 
-
+async function startBot(): Promise<void> {
   const sessionDir = join(process.cwd(), "bot_sessions");
   if (!existsSync(sessionDir)) mkdirSync(sessionDir, { recursive: true });
 
@@ -1287,25 +1342,24 @@ async function startBot(): Promise<void> {
   sock.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {      
+    if (qr) {
       const qrTerminal = await QRCode.toString(qr, {
         type: "terminal",
         small: true,
       });
-      
-      await QRCode.toFile(join(process.cwd(), "qr.png"), qr);      
+
+      await QRCode.toFile(join(process.cwd(), "qr.png"), qr);
     }
-    
+
     if (connection === "close") {
-      const reason = (lastDisconnect?.error as Boom)?.output?.statusCode;      
+      const reason = (lastDisconnect?.error as Boom)?.output?.statusCode;
 
       if (reason !== DisconnectReason.loggedOut) {
-        console.log("🔄 Reconectando en 3 segundos...");
         await delay(3000);
         startBot();
       } else {
         console.log(
-          "⚠️ Sesión cerrada. Elimina la carpeta bot_sessions y reinicia."
+          "Sesión cerrada. Elimina la carpeta bot_sessions y reinicia."
         );
       }
     }

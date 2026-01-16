@@ -8,6 +8,7 @@ import {
   Body,
   Get,
   Param,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -23,11 +24,22 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { GetUser } from '../../auth/decorators';
 import { IUser } from '../../records/interfaces/user.interface';
 import { ImportMonolegalDto } from '../dto/import-monolegal.dto';
+import { CustomExcelImportService } from '../services/custom-excel-import.service';
+import { User } from 'src/auth/entities/user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Record } from 'src/records/entities/record.entity';
+import { Model } from 'mongoose';
+import { MonolegalCronService } from '../services/monolegal-cron.service';
 
 @ApiTags('Monolegal')
 @Controller('monolegal')
 export class MonolegalController {
-  constructor(private readonly monolegalService: MonolegalService) {}
+  constructor(
+    private readonly monolegalService: MonolegalService,
+    private readonly customExcelImportService: CustomExcelImportService,
+    private readonly monolegalCronService: MonolegalCronService,
+    @InjectModel(Record.name) private recordModel: Model<Record>,
+  ) {}
 
   @Post('import')
   @ApiOperation({
@@ -244,5 +256,48 @@ export class MonolegalController {
   })
   async getActuaciones(@Param('idProceso') idProceso: string) {
     return this.monolegalService.getActuacionesProceso(idProceso);
+  }
+
+  @Post('import-custom-excel')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async importCustomExcel(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req,
+  ) {
+    const userId = req.user._id;
+    return this.customExcelImportService.importFromExcel(file, userId);
+  }
+
+  @Get('last-sync')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async getLastSync() {
+    return this.monolegalCronService.getLastSync();
+  }
+
+  @Post('sync/force')
+  @ApiOperation({
+    summary: 'Forzar sincronización manual',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async forceSyncWithMonolegal(@GetUser() user: IUser) {
+    return this.monolegalCronService.ejecutarSincronizacionManual(
+      user._id.toString(),
+    );
   }
 }
