@@ -1,64 +1,66 @@
-export enum UserRole {
+export enum UserRoleBase {
   ADMINISTRADOR = "Administrador",
-  ASISTENTE_LEGAL = "lawyer",
+  LAWYER = "lawyer",
+}
+export enum UserRole {
+  ADMINISTRATOR = "administrator",
+  LEGAL_ASSISTANT = "legal_assistant",
+  LEGAL_ANALYST_II = "legal_analyst_ii",
 }
 
 export const isValidUserRole = (role: string): role is UserRole => {
   return Object.values(UserRole).includes(role as UserRole);
 };
 
-export enum UserRoleComposite {
-  ANALISTA_SENIOR = "analista_senior",
-}
-
 export const USER_ROLES = Object.values(UserRole);
-export const USER_ROLES_COMPOSITE = Object.values(UserRoleComposite);
 
-export const COMPOSITE_ROLE_MAPPING: Record<UserRoleComposite, UserRole[]> = {
-  [UserRoleComposite.ANALISTA_SENIOR]: [
-    UserRole.ADMINISTRADOR,
-    UserRole.ASISTENTE_LEGAL,
+export const ROLE_TO_BASE_MAPPING: Record<UserRole, string[]> = {
+  [UserRole.ADMINISTRATOR]: [UserRoleBase.ADMINISTRADOR],
+  [UserRole.LEGAL_ASSISTANT]: [UserRoleBase.LAWYER],
+  [UserRole.LEGAL_ANALYST_II]: [
+    UserRoleBase.LAWYER,
+    UserRoleBase.ADMINISTRADOR,
   ],
 };
 
-export const USER_ROLE_LABELS = {
-  [UserRole.ADMINISTRADOR]: "Administrador",
-  [UserRole.ASISTENTE_LEGAL]: "Asistente Legal",
-  [UserRoleComposite.ANALISTA_SENIOR]: "Analista Senior",
+export const USER_ROLE_LABELS: Record<UserRole, string> = {
+  [UserRole.ADMINISTRATOR]: "Administrator",
+  [UserRole.LEGAL_ASSISTANT]: "Legal Assistant",
+  [UserRole.LEGAL_ANALYST_II]: "Legal Analyst II",
 };
 
-export const ALL_SELECTABLE_ROLES = [...USER_ROLES, ...USER_ROLES_COMPOSITE];
+export const ALL_SELECTABLE_ROLES = USER_ROLES;
 
 export const getUserRoleLabel = (role: string): string => {
-  return USER_ROLE_LABELS[role as UserRole | UserRoleComposite] || role;
+  return USER_ROLE_LABELS[role as UserRole] || role;
 };
 
 export const getRolesArray = (selectedRole: string): string[] => {
-  const role = selectedRole as UserRole | UserRoleComposite;
-
-  if (role in COMPOSITE_ROLE_MAPPING) {
-    return COMPOSITE_ROLE_MAPPING[role as UserRoleComposite];
+  if (selectedRole in ROLE_TO_BASE_MAPPING) {
+    return ROLE_TO_BASE_MAPPING[selectedRole as UserRole];
   }
-
-  return [role];
+  return [selectedRole];
 };
-
 export const getSelectableRoleFromArray = (roles: string[]): string => {
   if (!roles || roles.length === 0) return "";
 
-  if (roles.length === 1) return roles[0];
-
+  // Buscar coincidencia exacta en el mapeo
   const rolesSet = new Set(roles);
 
-  // Verificar "Analista Senior" (Administrador + lawyer)
-  const analistaSeniorRoles = new Set(["Administrador", "lawyer"]);
-  if (
-    rolesSet.size === analistaSeniorRoles.size &&
-    [...rolesSet].every((role) => analistaSeniorRoles.has(role))
-  ) {
-    return "analista_senior";
+  for (const [selectableRole, baseRoles] of Object.entries(
+    ROLE_TO_BASE_MAPPING
+  )) {
+    const baseSet = new Set(baseRoles);
+
+    // Verificar si los sets son idénticos
+    if (
+      rolesSet.size === baseSet.size &&
+      [...rolesSet].every((role) => baseSet.has(role))
+    ) {
+      return selectableRole;
+    }
   }
 
-  // Si no coincide con ningún rol compuesto conocido, devolver el primero
+  // Si no hay coincidencia exacta, devolver el primer rol
   return roles[0];
 };

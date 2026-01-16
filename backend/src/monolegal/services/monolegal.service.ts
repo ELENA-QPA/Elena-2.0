@@ -624,10 +624,6 @@ export class MonolegalService {
 
           if (fuenteUnificada) {
             idProcesoMonolegal = fuenteUnificada.idProceso;
-          } else {
-            this.logger.warn(
-              `No hay fuente Unificada en ultimosCambiosEnFuentes para ${radicado}`,
-            );
           }
         }
 

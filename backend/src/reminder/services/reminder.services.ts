@@ -13,6 +13,9 @@ export class ReminderService {
   ) {}
 
   async sendEmail(emailData: EmailReminderData): Promise<void> {
+    if (emailData.to === 'por-verificar@temp.com') {
+      return;
+    }
     await this.reminderQueue.add('send-email', emailData, {
       attempts: 3,
       backoff: {
