@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SyncLog, SyncLogSchema } from './entities/sync-log.entity';
 import { HttpModule } from '@nestjs/axios';
 import { MonolegalController } from './controllers/monolegal.controller';
 import { MonolegalService } from './services/monolegal.service';
@@ -18,9 +19,13 @@ import { AuthModule } from '../auth/auth.module';
 import * as https from 'https';
 import { ConfigModule } from '@nestjs/config';
 import { OrchestratorModule } from 'src/orchestrator/orchestrator.module';
+import { CustomExcelImportService } from './services/custom-excel-import.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { MonolegalCronService } from './services/monolegal-cron.service';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     HttpModule.register({
       timeout: 30000,
       maxRedirects: 5,
@@ -33,12 +38,13 @@ import { OrchestratorModule } from 'src/orchestrator/orchestrator.module';
       { name: Record.name, schema: RecordSchema },
       { name: ProceduralPart.name, schema: ProceduralPartSchema },
       { name: Performance.name, schema: PerfomanceSchema },
+      { name: SyncLog.name, schema: SyncLogSchema },
     ]),
     AuthModule,
     OrchestratorModule,
   ],
   controllers: [MonolegalController],
-  providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService],
-  exports: [MonolegalService, MonolegalApiService],
+  providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService, CustomExcelImportService, MonolegalCronService,],
+  exports: [MonolegalService, MonolegalApiService, MonolegalCronService],
 })
 export class MonolegalModule {}

@@ -53,11 +53,9 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
         "[APPBAR][DEBUG] Intentando navegar a /dashboard/configuracion"
       );
 
-      // Primero intentar con router.push nativo
       router.push("/dashboard/configuracion");
       console.log("[APPBAR][DEBUG] Comando router.push ejecutado");
 
-      // Fallback con window.location si router.push no funciona
       setTimeout(() => {
         if (window.location.pathname !== "/dashboard/configuracion") {
           console.log(
@@ -68,7 +66,6 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
       }, 100);
     } catch (error) {
       console.error("[APPBAR][ERROR] Error en navegación:", error);
-      // Fallback directo en caso de error
       window.location.href = "/dashboard/configuracion";
     }
   };
@@ -78,7 +75,6 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
     try {
       router.push("/dashboard/configuracion");
 
-      // Fallback con window.location si router.push no funciona
       setTimeout(() => {
         if (window.location.pathname !== "/dashboard/configuracion") {
           console.log(
@@ -103,7 +99,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
     >
       {/* Left side - Menu toggle and Logo */}
       <div className="flex items-center gap-1 sm:gap-2 md:gap-4 min-w-0 flex-1">
-        {/* Sidebar toggle button - visible en desktop y móvil */}
+        {/* Sidebar toggle button */}
         {hasSidebarProvider && (
           <SidebarTrigger className="flex-shrink-0 bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-600 hover:border-slate-500 shadow-lg hover:shadow-xl h-8 w-8 rounded-md" />
         )}
@@ -123,11 +119,15 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
 
       {/* Right side - Icons and user menu */}
       <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4 flex-shrink-0">
-        {/* Phone icon */}
-        {/* <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
-          <Phone className="h-5 w-5" />
-        </Button> */}
+        {/* Greeting (hidden on small screens) */}
+        {user?.name && (
+          <p className="hidden md:block text-gray-700 font-medium text-sm xl:text-base mr-2">
+            ¡Hola, <span className="text-pink-600 font-semibold">{user.name}</span>!
+          </p>
+        )}
+        
         {isAdmin && <NotificationBell />}
+        
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -140,6 +140,12 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            {/* Mostrar nombre en el menú en pantallas pequeñas */}
+            {user?.name && (
+              <div className="lg:hidden px-2 py-1.5 text-sm font-medium text-gray-700 border-b">
+                ¡Hola, {user.name}!
+              </div>
+            )}
             <DropdownMenuItem onClick={handlePerfilClick}>
               Mi Perfil
             </DropdownMenuItem>

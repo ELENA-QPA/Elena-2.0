@@ -35,9 +35,7 @@ import { ByClientDto } from './dto/by-client-document.dto';
 import { ByEtiquetaDto } from './dto/by-internal-code.dto';
 import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
 import e from 'express';
-import { ByEtiquetaDto } from './dto/by-internal-code.dto';
-import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
-import e from 'express';
+
 // import { Multer } from 'multer';
 
 @Injectable()
@@ -2008,7 +2006,7 @@ export class RecordsService {
           deletedAt: { $exists: false },
         })
         .select(
-          'internalCode processType jurisdiction settled office clientType etiqueta radicado despachoJudicial city department ultimaActuacion fechaUltimaActuacion location country',
+          'internalCode processType jurisdiction settled office clientType etiqueta radicado despachoJudicial city department ultimaActuacion fechaUltimaActuacion location country idProcesoMonolegal',
         );
 
       if (!record) {

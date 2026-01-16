@@ -179,6 +179,7 @@ export class PdfGeneratorService {
         observation: perf.observation,
         updatedAt: perf.updatedAt,
       })),
+      actuacionesMonolegal: (data as any).actuacionesMonolegal || [],
     }));
 
     // Para compatibilidad, usar el primer proceso

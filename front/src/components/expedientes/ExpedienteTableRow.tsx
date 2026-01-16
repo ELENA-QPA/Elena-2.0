@@ -32,7 +32,7 @@ const ExpedienteTableRow = memo(
     };
 
     return (
-      <TableRow key={caso.internalCode} className="bg-white hover:bg-gray-50">
+      <TableRow key={caso.etiqueta} className="bg-white hover:bg-gray-50">
         {/* # - Código Interno y Etiqueta */}
         <TableCell className="font-medium bg-white">
           <div className="flex flex-col gap-1">
@@ -60,10 +60,14 @@ const ExpedienteTableRow = memo(
           <span
             className="truncate block"
             title={
-              caso.radicado || caso.numeroRadicado || caso.settled || "N/A"
+              caso.radicado && caso.radicado.trim() !== ""
+                ? caso.radicado
+                : ""
             }
           >
-            {caso.radicado || caso.numeroRadicado || caso.settled || "N/A"}
+            {caso.radicado && caso.radicado.trim() !== ""
+              ? caso.radicado
+              : ""}
           </span>
         </TableCell>
 
@@ -71,9 +75,9 @@ const ExpedienteTableRow = memo(
         <TableCell className="bg-white max-w-[200px]">
           <span
             className="truncate block"
-            title={caso.despachoJudicial || caso.office || "N/A"}
+            title={caso.despachoJudicial || "N/A"}
           >
-            {caso.despachoJudicial || caso.office || "N/A"}
+            {caso.despachoJudicial || "N/A"}
           </span>
         </TableCell>
 
@@ -133,7 +137,9 @@ const ExpedienteTableRow = memo(
                 ? (() => {
                     if (
                       typeof caso.fechaUltimaActuacion === "string" &&
-                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(caso.fechaUltimaActuacion)
+                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(
+                        caso.fechaUltimaActuacion
+                      )
                     ) {
                       return caso.fechaUltimaActuacion;
                     }
