@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { AppBar } from "@/components/appbar";
 import { Footer } from "@/components/footer";
 import {
-  FileText,
   BarChart3,
   Settings,
   Users,
@@ -13,12 +11,10 @@ import {
   Scale,
   History,
   FolderOpen,
-  ClipboardList,
   ChevronRight,
-  X,
 } from "lucide-react";
 import { getUserCookiesClient } from "@/utilities/helpers/handleUserCookies/getUserCookieClient";
-import { UserRole } from "@/utilities/enums/user-roles.enum";
+import { UserRoleBase } from "@/utilities/enums/user-roles.enum";
 import { useEffect, useState } from "react";
 import { IUser } from "@/data/interfaces/user.interface";
 import { Button } from "@/components/ui/button";
@@ -82,40 +78,40 @@ export default function DashboardHomeView() {
     }
   }, []);
 
-  const isAdmin = userRole === UserRole.ADMINISTRADOR;
+  const isAdmin = userRole === UserRoleBase.ADMINISTRADOR;
 
   console.log("[DASHBOARD] Role comparison:", {
     userRole,
-    expectedRole: UserRole.ADMINISTRADOR,
+    expectedRole: UserRoleBase.ADMINISTRADOR,
     isAdmin,
-    comparison: `"${userRole}" === "${UserRole.ADMINISTRADOR}"`,
+    comparison: `"${userRole}" === "${UserRoleBase.ADMINISTRADOR}"`,
   });
 
   const litigiosOptions = [
     {
-      title: 'Gestión de Expedientes',
-      description: 'Gestiona y consulta expedientes judiciales',
+      title: "Gestión de Expedientes",
+      description: "Gestiona y consulta expedientes judiciales",
       icon: FolderOpen,
-      href: '/dashboard/expedientes',
-      color: 'from-pink-500 to-pink-600',
-      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
+      href: "/dashboard/expedientes",
+      color: "from-pink-500 to-pink-600",
+      hoverColor: "hover:from-pink-600 hover:to-pink-700",
     },
     {
-      title: 'Audiencias',
-      description: 'Programa y administra audiencias',
+      title: "Audiencias",
+      description: "Programa y administra audiencias",
       icon: CalendarDays,
-      href: '/dashboard/audiencias',
-      color: 'from-pink-500 to-pink-600',
-      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
-    }, 
+      href: "/dashboard/audiencias",
+      color: "from-pink-500 to-pink-600",
+      hoverColor: "hover:from-pink-600 hover:to-pink-700",
+    },
     {
-      title: 'Historial Sincronización',
-      description: 'Revisa el historial de sincronizaciones',
+      title: "Historial Sincronización",
+      description: "Revisa el historial de sincronizaciones",
       icon: History,
-      href: '/dashboard/monolegal/importar',
-      color: 'from-pink-500 to-pink-600',
-      hoverColor: 'hover:from-pink-600 hover:to-pink-700'
-    }
+      href: "/dashboard/monolegal/importar",
+      color: "from-pink-500 to-pink-600",
+      hoverColor: "hover:from-pink-600 hover:to-pink-700",
+    },
   ];
 
   return (
@@ -146,8 +142,7 @@ export default function DashboardHomeView() {
               onClick={() => setIsLitigiosOpen(true)}
               className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-6 text-base"
             >
-              Ingresar 
-              
+              Ingresar
             </Button>
           </div>
 
@@ -176,13 +171,15 @@ export default function DashboardHomeView() {
                       className="group"
                       onClick={() => setIsLitigiosOpen(false)}
                     >
-                      <div className={`
+                      <div
+                        className={`
                         bg-gradient-to-br ${option.color} ${option.hoverColor}
                         rounded-xl p-6 text-white shadow-lg 
                         transform transition-all duration-200 
                         hover:scale-105 hover:shadow-2xl
                         cursor-pointer
-                      `}>
+                      `}
+                      >
                         <div className="flex flex-col items-start space-y-3">
                           <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
                             <Icon className="h-6 w-6" />
@@ -204,7 +201,7 @@ export default function DashboardHomeView() {
                     </Link>
                   );
                 })}
-              </div>              
+              </div>
             </DialogContent>
           </Dialog>
 

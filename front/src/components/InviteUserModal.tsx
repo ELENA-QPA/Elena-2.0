@@ -29,8 +29,6 @@ import container from "@/lib/di/container";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   ALL_SELECTABLE_ROLES,
-  USER_ROLES,
-  UserRole,
   getRolesArray,
   getUserRoleLabel,
 } from "@/utilities/enums";

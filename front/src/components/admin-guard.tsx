@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
-import { UserRole } from '@/utilities/enums/user-roles.enum';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { UserRoleBase } from "@/utilities/enums/user-roles.enum";
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -19,30 +19,35 @@ export function AdminGuard({ children }: AdminGuardProps) {
       try {
         // Obtener el usuario de las cookies
         const userCookie = document.cookie
-          .split('; ')
-          .find(row => row.startsWith('user='))
-          ?.split('=')[1];
+          .split("; ")
+          .find((row) => row.startsWith("user="))
+          ?.split("=")[1];
 
         if (!userCookie) {
-          router.push('/login');
+          router.push("/login");
           return;
         }
 
         // Decodificar el usuario
         const userData = JSON.parse(atob(userCookie));
-        const role = Array.isArray(userData.rol) ? userData.rol[0] : userData.rol || userData.role;
+        const role = Array.isArray(userData.rol)
+          ? userData.rol[0]
+          : userData.rol || userData.role;
 
-        console.log('[AdminGuard][Role Check]:', { role, isAdmin: role === UserRole.ADMINISTRADOR });
+        console.log("[AdminGuard][Role Check]:", {
+          role,
+          isAdmin: role === UserRoleBase.ADMINISTRADOR,
+        });
 
-        if (role !== UserRole.ADMINISTRADOR) {
-          router.push('/no-autorizado');
+        if (role !== UserRoleBase.ADMINISTRADOR) {
+          router.push("/no-autorizado");
           return;
         }
 
         setIsAuthorized(true);
       } catch (error) {
-        console.error('[AdminGuard][Error]:', error);
-        router.push('/login');
+        console.error("[AdminGuard][Error]:", error);
+        router.push("/login");
       } finally {
         setIsLoading(false);
       }
@@ -56,7 +61,9 @@ export function AdminGuard({ children }: AdminGuardProps) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-pink-600 mx-auto mb-4" />
-          <p className="text-gray-600">Verificando permisos de administrador...</p>
+          <p className="text-gray-600">
+            Verificando permisos de administrador...
+          </p>
         </div>
       </div>
     );
