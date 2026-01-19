@@ -35,9 +35,10 @@ jobs:
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build and Push Docker Image
+        working-directory: backend
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE_URL }}:latest -f Dockerfile.prod .
-          docker push ${{ env.DOCKER_IMAGE_URL }}:latest
+          docker build -t $DOCKER_IMAGE_URL:latest .
+          docker push $DOCKER_IMAGE_URL:latest
 
       - name: Deploy to Cloud Run
         run: |
