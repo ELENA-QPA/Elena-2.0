@@ -50,6 +50,8 @@ jobs:
           SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
           MONOLEGAL_EMAIL: ${{ secrets.MONOLEGAL_EMAIL }}
           MONOLEGAL_PASSWORD: ${{ secrets.MONOLEGAL_PASSWORD }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -72,7 +74,8 @@ jobs:
           ENV_VARS="${ENV_VARS},DAPTA_ENDPOINT=${DAPTA_ENDPOINT}"
           ENV_VARS="${ENV_VARS},DAPTA_API_KEY=${DAPTA_API_KEY}"
           ENV_VARS="${ENV_VARS},MONGODB_URI=${MONGODB_URI}"
-          echo SERVICE_NAME $SERVICE_NAME
+          ENV_VARS="${ENV_VARS},REDIS_PORT=${REDIS_PORT}"
+          ENV_VARS="${ENV_VARS},REDIS_HOST=${REDIS_HOST}"
           gcloud run deploy $SERVICE_NAME \
             --image ${{ env.DOCKER_IMAGE_URL }}:latest \
             --platform managed \
