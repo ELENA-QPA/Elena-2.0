@@ -42,7 +42,39 @@ jobs:
           docker push $DOCKER_IMAGE_URL:latest
 
       - name: Deploy to Cloud Run
+        env:
+          PORT: ${{ secrets.PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MONOLEGAL_EMAIL: ${{ secrets.MONOLEGAL_EMAIL }}
+          MONOLEGAL_PASSWORD: ${{ secrets.MONOLEGAL_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          DAPTA_ENDPOINT: ${{ secrets.DAPTA_ENDPOINT }}
+          DAPTA_API_KEY: ${{ secrets.DAPTA_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
+
+          ENV_VARS="${ENV_VARS}, PORT=${PORT}"
+          ENV_VARS="${ENV_VARS},JWT_SECRET=${JWT_SECRET}"
+          ENV_VARS="${ENV_VARS},JWT_EXPIRATION=${JWT_EXPIRATION}"
+          ENV_VARS="${ENV_VARS},SMTP_HOST=${SMTP_HOST}"
+          ENV_VARS="${ENV_VARS},SMTP_PORT=${SMTP_PORT}"
+          ENV_VARS="${ENV_VARS},SMTP_SECURE=${SMTP_SECURE}"
+          ENV_VARS="${ENV_VARS},SMTP_USER=${SMTP_USER}"
+          ENV_VARS="${ENV_VARS},SMTP_PASS=${SMTP_PASS}"
+          ENV_VARS="${ENV_VARS},MONOLEGAL_EMAIL=${MONOLEGAL_EMAIL}"
+          ENV_VARS="${ENV_VARS},MONOLEGAL_PASSWORD=${MONOLEGAL_PASSWORD}"
+          ENV_VARS="${ENV_VARS},OPENAI_API_KEY=${OPENAI_API_KEY}"
+          ENV_VARS="${ENV_VARS},OPENAI_MODEL=${OPENAI_MODEL}"
+          ENV_VARS="${ENV_VARS},DAPTA_ENDPOINT=${DAPTA_ENDPOINT}"
+          ENV_VARS="${ENV_VARS},DAPTA_API_KEY=${DAPTA_API_KEY}"
+          ENV_VARS="${ENV_VARS},MONGODB_URI=${MONGODB_URI}"
           echo SERVICE_NAME $SERVICE_NAME
           gcloud run deploy $SERVICE_NAME \
             --image ${{ env.DOCKER_IMAGE_URL }}:latest \
