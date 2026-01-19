@@ -58,8 +58,6 @@ jobs:
           DAPTA_API_KEY: ${{ secrets.DAPTA_API_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
-
-          ENV_VARS="PORT=8080"
           ENV_VARS="${ENV_VARS},JWT_SECRET=${JWT_SECRET}"
           ENV_VARS="${ENV_VARS},JWT_EXPIRATION=${JWT_EXPIRATION}"
           ENV_VARS="${ENV_VARS},SMTP_HOST=${SMTP_HOST}"
