@@ -43,7 +43,6 @@ jobs:
 
       - name: Deploy to Cloud Run
         env:
-          PORT: ${{ secrets.PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -60,7 +59,7 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
 
-          ENV_VARS="${ENV_VARS}, PORT=${PORT}"
+          ENV_VARS="PORT=8080"
           ENV_VARS="${ENV_VARS},JWT_SECRET=${JWT_SECRET}"
           ENV_VARS="${ENV_VARS},JWT_EXPIRATION=${JWT_EXPIRATION}"
           ENV_VARS="${ENV_VARS},SMTP_HOST=${SMTP_HOST}"
@@ -81,4 +80,5 @@ jobs:
             --platform managed \
             --region us-east1 \
             --allow-unauthenticated \
-            --service-account $CLOUD_RUN_SA
+            --service-account $CLOUD_RUN_SA \
+            --set-env-vars "${ENV_VARS}"
