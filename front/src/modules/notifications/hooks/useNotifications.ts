@@ -7,14 +7,15 @@ import { apiUrls } from "@/config/protocols/http/api_urls";
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<NotificationResponse[]>(
-    []
+    [],
   );
   const [count, setCount] = useState(0);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketInstance = io(apiUrls.notifications.websocket, {
+    const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const socketInstance = io(`${base}${apiUrls.notifications.websocket}`, {
       transports: ["websocket"],
     });
 
@@ -31,7 +32,7 @@ export const useNotifications = () => {
       (notification: NotificationResponse) => {
         setNotifications((prev) => [notification, ...prev]);
         setCount((prev) => prev + 1);
-      }
+      },
     );
 
     socketInstance.on("notificationDeleted", (notificationId: string) => {
@@ -52,7 +53,8 @@ export const useNotifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(apiUrls.notifications.getAll);
+        const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const response = await fetch(`${base}${apiUrls.notifications.getAll}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -69,9 +71,13 @@ export const useNotifications = () => {
 
   const deleteNotification = async (id: string) => {
     try {
-      const response = await fetch(`${apiUrls.notifications.delete}/${id}`, {
-        method: "DELETE",
-      });
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(
+        `${base}${apiUrls.notifications.delete}/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`Error al eliminar notificación: ${response.status}`);

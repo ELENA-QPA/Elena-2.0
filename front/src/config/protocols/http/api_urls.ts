@@ -105,9 +105,9 @@ export const apiUrls = {
   },
 
   notifications: {
-    getAll: "http://localhost:4000/api/notifications",
-    delete: "http://localhost:4000/api/notifications",
-    websocket: "http://localhost:4000/notifications",
+    getAll: "/api/notifications",
+    delete: "/api/notifications",
+    websocket: "/notifications",
   },
   // Monolegal
   monolegal: {
