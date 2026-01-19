@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SyncLog, SyncLogSchema } from './entities/sync-log.entity';
 import { HttpModule } from '@nestjs/axios';
-import { MonolegalController } from './controllers/monolegal.controller';
+import { MonolegalController } from './Controllers/monolegal.controller';
 import { MonolegalService } from './services/monolegal.service';
 import { MonolegalApiService } from './services/monolegal-api.service';
 import { JuzgadoNormalizerService } from './services/juzgado-normalizer.service';
@@ -44,7 +44,13 @@ import { MonolegalCronService } from './services/monolegal-cron.service';
     OrchestratorModule,
   ],
   controllers: [MonolegalController],
-  providers: [MonolegalService, MonolegalApiService, JuzgadoNormalizerService, CustomExcelImportService, MonolegalCronService,],
+  providers: [
+    MonolegalService,
+    MonolegalApiService,
+    JuzgadoNormalizerService,
+    CustomExcelImportService,
+    MonolegalCronService,
+  ],
   exports: [MonolegalService, MonolegalApiService, MonolegalCronService],
 })
 export class MonolegalModule {}
