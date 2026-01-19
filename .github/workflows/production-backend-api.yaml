@@ -3,7 +3,7 @@ name: Deploy to Cloud Run
 env:
   SERVICE_NAME: backend-api
   PROJECT_ID: encoded-pointer-484522-d6
-  DOCKER_IMAGE_URL: us-east1-docker.pkg.dev/encoded-pointer-484522-d6/backend-api
+  DOCKER_IMAGE_URL: us-east1-docker.pkg.dev/encoded-pointer-484522-d6/backend-api/backend-api
 
 on:
   push:
