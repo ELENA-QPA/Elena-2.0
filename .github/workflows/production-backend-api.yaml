@@ -1,0 +1,85 @@
+name: Deploy to Cloud Run
+
+env:
+  SERVICE_NAME: backend-api
+  PROJECT_ID: encoded-pointer-484522-d6
+  DOCKER_IMAGE_URL: us-east1-docker.pkg.dev/encoded-pointer-484522-d6/backend-api/backend-api
+  CLOUD_RUN_SA: backend-api@encoded-pointer-484522-d6.iam.gserviceaccount.com
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dockerize-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Google Cloud Auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GCP_BACKEND_API }}"
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        working-directory: backend
+        run: |
+          docker build -t $DOCKER_IMAGE_URL:latest .
+          docker push $DOCKER_IMAGE_URL:latest
+
+      - name: Deploy to Cloud Run
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          MONOLEGAL_EMAIL: ${{ secrets.MONOLEGAL_EMAIL }}
+          MONOLEGAL_PASSWORD: ${{ secrets.MONOLEGAL_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          DAPTA_ENDPOINT: ${{ secrets.DAPTA_ENDPOINT }}
+          DAPTA_API_KEY: ${{ secrets.DAPTA_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          ENV_VARS="JWT_SECRET=${JWT_SECRET}"
+          ENV_VARS="${ENV_VARS},JWT_EXPIRATION=${JWT_EXPIRATION}"
+          ENV_VARS="${ENV_VARS},SMTP_HOST=${SMTP_HOST}"
+          ENV_VARS="${ENV_VARS},SMTP_PORT=${SMTP_PORT}"
+          ENV_VARS="${ENV_VARS},SMTP_SECURE=${SMTP_SECURE}"
+          ENV_VARS="${ENV_VARS},SMTP_USER=${SMTP_USER}"
+          ENV_VARS="${ENV_VARS},SMTP_PASS=${SMTP_PASS}"
+          ENV_VARS="${ENV_VARS},MONOLEGAL_EMAIL=${MONOLEGAL_EMAIL}"
+          ENV_VARS="${ENV_VARS},MONOLEGAL_PASSWORD=${MONOLEGAL_PASSWORD}"
+          ENV_VARS="${ENV_VARS},OPENAI_API_KEY=${OPENAI_API_KEY}"
+          ENV_VARS="${ENV_VARS},OPENAI_MODEL=${OPENAI_MODEL}"
+          ENV_VARS="${ENV_VARS},DAPTA_ENDPOINT=${DAPTA_ENDPOINT}"
+          ENV_VARS="${ENV_VARS},DAPTA_API_KEY=${DAPTA_API_KEY}"
+          ENV_VARS="${ENV_VARS},MONGODB_URI=${MONGODB_URI}"
+          ENV_VARS="${ENV_VARS},REDIS_PORT=${REDIS_PORT}"
+          ENV_VARS="${ENV_VARS},REDIS_HOST=${REDIS_HOST}"
+          gcloud run deploy $SERVICE_NAME \
+            --image ${{ env.DOCKER_IMAGE_URL }}:latest \
+            --platform managed \
+            --region us-east1 \
+            --allow-unauthenticated \
+            --service-account $CLOUD_RUN_SA \
+            --set-env-vars "${ENV_VARS}"
