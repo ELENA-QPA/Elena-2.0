@@ -47,3 +47,8 @@ lerna-debug.log*
 # Backup de base de datos
 backup/
 mongo/
+backup-production/
+
+# MongoDB
+*.bson
+*.metadata.json
