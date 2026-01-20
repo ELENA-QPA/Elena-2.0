@@ -61,6 +61,16 @@ export class ProceduralPartService {
       .sort({ createdAt: 1 });
   }
 
+  async findByRecords(recordIds: string[]): Promise<any[]> {
+    return await this.proceduralPartModel
+      .find({
+        record: { $in: recordIds },
+        deletedAt: { $exists: false },
+      })
+      .lean()
+      .exec();
+  }
+
   async findOne(id: string) {
     const proceduralPart = await this.proceduralPartModel
       .findById(id)

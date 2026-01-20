@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateIntervenerDto } from './dto/create-intervener.dto';
@@ -10,7 +14,7 @@ export class IntervenerService {
   constructor(
     @InjectModel(Intervener.name)
     private readonly intervenerModel: Model<Intervener>,
-  ) { }
+  ) {}
 
   async create(createIntervenerDto: CreateIntervenerDto) {
     try {
@@ -24,25 +28,42 @@ export class IntervenerService {
   async createMany(createIntervenerDtos: CreateIntervenerDto[], session?: any) {
     try {
       const options = session ? { session } : {};
-      return await this.intervenerModel.insertMany(createIntervenerDtos, options);
+      return await this.intervenerModel.insertMany(
+        createIntervenerDtos,
+        options,
+      );
     } catch (error) {
       throw new BadRequestException('Error al crear los intervinientes');
     }
   }
 
   async findAll() {
-    return await this.intervenerModel.find({ deletedAt: { $exists: false } }).populate('record');
+    return await this.intervenerModel
+      .find({ deletedAt: { $exists: false } })
+      .populate('record');
   }
 
   async findByRecord(recordId: string) {
     return await this.intervenerModel.find({
       record: recordId,
-      deletedAt: { $exists: false }
+      deletedAt: { $exists: false },
     });
   }
 
+  async findByRecords(recordIds: string[]) {
+    return await this.intervenerModel
+      .find({
+        record: { $in: recordIds },
+        deletedAt: { $exists: false },
+      })
+      .lean()
+      .exec();
+  }
+
   async findOne(id: string) {
-    const intervener = await this.intervenerModel.findById(id).populate('record');
+    const intervener = await this.intervenerModel
+      .findById(id)
+      .populate('record');
     if (!intervener || intervener.deletedAt) {
       throw new NotFoundException('Interviniente no encontrado');
     }
@@ -54,7 +75,7 @@ export class IntervenerService {
       const intervener = await this.intervenerModel.findByIdAndUpdate(
         id,
         updateIntervenerDto,
-        { new: true }
+        { new: true },
       );
       if (!intervener || intervener.deletedAt) {
         throw new NotFoundException('Interviniente no encontrado');
@@ -69,7 +90,7 @@ export class IntervenerService {
     const intervener = await this.intervenerModel.findByIdAndUpdate(
       id,
       { deletedAt: new Date() },
-      { new: true }
+      { new: true },
     );
     if (!intervener) {
       throw new NotFoundException('Interviniente no encontrado');

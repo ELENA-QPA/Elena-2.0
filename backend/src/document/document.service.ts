@@ -136,6 +136,16 @@ export class DocumentService {
       deletedAt: { $exists: false },
     });
   }
+
+  async findByRecords(recordIds: string[]) {
+    return await this.documentModel
+      .find({
+        record: { $in: recordIds },
+        deletedAt: { $exists: false },
+      })
+      .lean()
+      .exec();
+  }
   // -----------------------------------------------------
   async findOne(id: string) {
     const document = await this.documentModel.findById(id).populate('record');
