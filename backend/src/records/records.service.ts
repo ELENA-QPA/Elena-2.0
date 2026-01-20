@@ -156,6 +156,23 @@ export class RecordsService {
     }
   }
 
+  private groupByRecordId(items: any[]) {
+    return items.reduce((acc, item) => {
+      const recordId =
+        item.record?._id?.toString() || item.record?.toString() || item.record;
+
+      if (!recordId) {
+        return acc;
+      }
+
+      const key = recordId.toString();
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(item);
+      return acc;
+    }, {});
+  }
   async getMyRecords(user: IUser, paginationDto: PaginationDto): Promise<any> {
     try {
       const { limit = 10, offset = 0 } = paginationDto;
@@ -174,38 +191,50 @@ export class RecordsService {
         .skip(offset)
         .sort({ createdAt: -1 })
         .select('-__v')
+        .lean()
         .exec();
 
-      // Para cada record, obtener relaciones igual que findById
-      const recordsWithRelations = await Promise.all(
-        (records || []).map(async (record: any) => {
-          const id = record._id?.toString?.() || record.id;
-          const [
-            documents,
-            interveners,
-            proceduralParts,
-            payments,
-            performances,
-          ] = await Promise.all([
-            this.documentService.findByRecord(id),
-            this.intervenerService.findByRecord(id),
-            this.proceduralPartService.findByRecord(id),
-            this.paymentService.findByRecord(id),
-            this.perfomanceService.findByRecord(id),
-          ]);
-          return {
-            ...record.toObject(),
-            documents: documents || [],
-            interveners: interveners || [],
-            proceduralParts: proceduralParts || [],
-            payments: payments || [],
-            performances: performances || [],
-          };
-        }),
-      );
+      if (!records.length) {
+        return {
+          records: [],
+          count: total,
+        };
+      }
+      const recordIds = records.map((r) => r._id.toString());
+      const [
+        allDocuments,
+        allInterveners,
+        allProceduralParts,
+        // allPayments,
+        allPerformances,
+      ] = await Promise.all([
+        this.documentService.findByRecords(recordIds), // Método plural
+        this.intervenerService.findByRecords(recordIds),
+        this.proceduralPartService.findByRecords(recordIds),
+        // this.paymentService.findByRecords(recordIds),
+        this.perfomanceService.findByRecords(recordIds),
+      ]);
+
+      // Agrupar resultados por recordId para acceso O(1)
+      const documentsMap = this.groupByRecordId(allDocuments);
+      const intervenersMap = this.groupByRecordId(allInterveners);
+      const proceduralPartsMap = this.groupByRecordId(allProceduralParts);
+      // const paymentsMap = this.groupByRecordId(allPayments);
+      const performancesMap = this.groupByRecordId(allPerformances);
+
+      const recordsWithRelations = records.map((record) => {
+        const id = record._id.toString();
+        return {
+          ...record,
+          documents: documentsMap[id] || [],
+          interveners: intervenersMap[id] || [],
+          proceduralParts: proceduralPartsMap[id] || [],
+          // payments: paymentsMap[id] || [],
+          performances: performancesMap[id] || [],
+        };
+      });
 
       return {
-        message: 'Expedientes obtenidos exitosamente',
         records: recordsWithRelations,
         count: total,
       };
