@@ -538,36 +538,9 @@ export class RecordsController {
     @Query() paginationDto: PaginationDto,
   ): Promise<any> {
     const result = await this.recordsService.getMyRecords(user, paginationDto);
-    const recordsWithRelations = await Promise.all(
-      (result.records || []).map(async (record: any) => {
-        const id = record._id?.toString?.() || record.id;
-        const [
-          documents,
-          interveners,
-          proceduralParts,
-          payments,
-          performances,
-        ] = await Promise.all([
-          this.recordsService['documentService'].findByRecord(id),
-          this.recordsService['intervenerService'].findByRecord(id),
-          this.recordsService['proceduralPartService'].findByRecord(id),
-          this.recordsService['paymentService'].findByRecord(id),
-          this.recordsService['perfomanceService'].findByRecord(id),
-        ]);
-        return {
-          ...record,
-          documents: documents || [],
-          interveners: interveners || [],
-          proceduralParts: proceduralParts || [],
-          payments: payments || [],
-          performances: performances || [],
-        };
-      }),
-    );
     return {
       message: 'Expedientes obtenidos exitosamente',
-      records: recordsWithRelations,
-      count: result.count,
+      ...result,
     };
   }
 
