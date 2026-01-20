@@ -255,7 +255,7 @@ export class MonolegalService {
         .filter((d) => d.length > 0) || [];
 
     const isRappi = (nombre: string): boolean => {
-      return nombre.toLowerCase().includes('rappi');
+      return (nombre || '').toLowerCase().includes('rappi');
     };
 
     // Crear demandantes
@@ -1138,7 +1138,7 @@ export class MonolegalService {
     texto2: string,
   ): boolean {
     const normalizarTexto = (texto: string): string => {
-      return texto
+      return (texto || '')
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
@@ -1158,8 +1158,8 @@ export class MonolegalService {
 
   private async createAudience(actuacion, anotacion, idRecord) {
     const isAudienceActuacion = this.contieneAudienciaOConciliacion(
-      actuacion,
-      anotacion,
+      actuacion || '',
+      anotacion || '',
     );
     if (isAudienceActuacion) {
       const audience = this.orchestratorService.createAudienceFromMonolegal(

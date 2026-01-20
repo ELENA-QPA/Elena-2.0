@@ -15,18 +15,18 @@ const CLIENT_TYPE_MAPPINGS: Record<string, string> = {
   beat: 'Beat',
 };
 
-export function normalizeClientType(
-  clientType: string | undefined | null,
-): string {
-  if (!clientType) return '';
+export function normalizeClientType(clientType: string | null | undefined): string {
+  if (!clientType) {
+    return '';
+  }
+  
+  const normalized = clientType.toLowerCase().trim();
 
-  const cleaned = clientType.trim().toLowerCase().replace(/\s+/g, ' ');
-
-  if (CLIENT_TYPE_MAPPINGS[cleaned]) {
-    return CLIENT_TYPE_MAPPINGS[cleaned];
+  if (CLIENT_TYPE_MAPPINGS[normalized]) {
+    return CLIENT_TYPE_MAPPINGS[normalized];
   }
 
-  if (cleaned.includes('rappi') || cleaned.includes('rappy')) {
+  if (normalized.includes('rappi') || normalized.includes('rappy')) {
     return 'Rappi SAS';
   }
 
