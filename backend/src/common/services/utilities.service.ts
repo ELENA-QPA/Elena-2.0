@@ -1,8 +1,9 @@
 // src/common/utils/business-days.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class UtilitiesService {
+  private readonly logger = new Logger(UtilitiesService.name);
   private readonly colombianHolidays2025: Date[] = [
     new Date('2025-01-01'),
 
@@ -83,7 +84,12 @@ export class UtilitiesService {
   }
 
   colombiaToUTC(dateString: string): Date {
+    this.logger.log(`date string: ${dateString}`);
     const date = new Date(dateString);
+    this.logger.log(`local date: ${date}`);
+    this.logger.log(
+      `utc date: ${new Date(date.getTime() + 5 * 60 * 60 * 1000)}`,
+    );
 
     return new Date(date.getTime() + 5 * 60 * 60 * 1000);
   }
