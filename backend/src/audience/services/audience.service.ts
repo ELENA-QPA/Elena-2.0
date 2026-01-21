@@ -125,8 +125,10 @@ export class AudienceService {
   ): Promise<Audience> {
     try {
       if (strict) {
-        const start = new Date(createAudienceDto.start);
-        const end = new Date(createAudienceDto.end);
+        const start = this.utilitiesService.colombiaToUTC(
+          createAudienceDto.start,
+        );
+        const end = this.utilitiesService.colombiaToUTC(createAudienceDto.end);
 
         if (end <= start) {
           throw new BadRequestException(
@@ -290,8 +292,10 @@ export class AudienceService {
       }
 
       if (updateAudienceDto.start && updateAudienceDto.end) {
-        const start = new Date(updateAudienceDto.start);
-        const end = new Date(updateAudienceDto.end);
+        const start = this.utilitiesService.colombiaToUTC(
+          updateAudienceDto.start,
+        );
+        const end = this.utilitiesService.colombiaToUTC(updateAudienceDto.end);
 
         if (end <= start) {
           throw new BadRequestException(

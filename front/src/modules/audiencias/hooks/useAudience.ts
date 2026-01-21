@@ -103,14 +103,14 @@ export function useAudience() {
 
   const updateAudienceWithValidation = async (
     id: string,
-    audienceData: AudienceUpdate
+    audienceData: AudienceUpdate,
   ) => {
     setLoading(true);
     setError(null);
     try {
       const data = await audienceRepository.updateAudienceWithValidation(
         id,
-        audienceData
+        audienceData,
       );
       setError(null);
       return { success: true, data };
