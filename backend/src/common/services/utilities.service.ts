@@ -84,13 +84,7 @@ export class UtilitiesService {
   }
 
   colombiaToUTC(dateString: string): Date {
-    this.logger.log(`date string: ${dateString}`);
     const date = new Date(dateString);
-    this.logger.log(`local date: ${date}`);
-    this.logger.log(
-      `utc date: ${new Date(date.getTime() + 5 * 60 * 60 * 1000)}`,
-    );
-
     return new Date(date.getTime() + 5 * 60 * 60 * 1000);
   }
 }

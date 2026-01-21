@@ -124,12 +124,11 @@ export class AudienceService {
     strict: boolean,
   ): Promise<Audience> {
     try {
+      const start = this.utilitiesService.colombiaToUTC(
+        createAudienceDto.start,
+      );
+      const end = this.utilitiesService.colombiaToUTC(createAudienceDto.end);
       if (strict) {
-        const start = this.utilitiesService.colombiaToUTC(
-          createAudienceDto.start,
-        );
-        const end = this.utilitiesService.colombiaToUTC(createAudienceDto.end);
-
         if (end <= start) {
           throw new BadRequestException(
             'La fecha de fin debe ser posterior a la fecha de inicio',
@@ -152,6 +151,8 @@ export class AudienceService {
 
         audience = new this.audienceModel({
           ...createAudienceDto,
+          start,
+          end,
           is_valid,
           notifications: {
             oneMonth: { sent: false, sentAt: null },
@@ -290,18 +291,20 @@ export class AudienceService {
           `El id proporcionado no es un ObjectId válido: ${id}`,
         );
       }
+      const start = this.utilitiesService.colombiaToUTC(
+        updateAudienceDto.start,
+      );
+      const end = this.utilitiesService.colombiaToUTC(updateAudienceDto.end);
 
       if (updateAudienceDto.start && updateAudienceDto.end) {
-        const start = this.utilitiesService.colombiaToUTC(
-          updateAudienceDto.start,
-        );
-        const end = this.utilitiesService.colombiaToUTC(updateAudienceDto.end);
-
         if (end <= start) {
           throw new BadRequestException(
             'La fecha de fin debe ser posterior a la fecha de inicio',
           );
         }
+
+        updateAudienceDto.start = start.toISOString();
+        updateAudienceDto.end = end.toISOString();
       }
 
       if (strict) {
