@@ -26,6 +26,7 @@ import {
 } from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
 import { UtilitiesService } from 'src/common/services/utilities.service';
+import { Cron } from '@nestjs/schedule/dist/decorators/cron.decorator';
 
 @Injectable()
 export class OrchestratorService {
@@ -450,7 +451,10 @@ export class OrchestratorService {
 
   //Metodos para emviar reocrdatorios de audiencias
 
-  // @Cron('0 8 * * 1-5') // Descomentar para activar en producción
+  @Cron('0 18 * * *', {
+    name: 'processReminders',
+    timeZone: 'America/Bogota',
+  })
   async processReminders(): Promise<void> {
     const today = new Date();
 
