@@ -12,6 +12,7 @@ import { Documento } from './entities/document.entity';
 import { secondConsecutivePart } from '../common/constants/second-consecutive-part.constant';
 import { GetStatisticsDto } from 'src/records/dto/get-statistics.dto';
 import { FileService } from 'src/common/services/file.service';
+import { json } from 'stream/consumers';
 
 @Injectable()
 export class DocumentService {
@@ -384,13 +385,13 @@ export class DocumentService {
       // Obtener el record para obtener el internalCode
       const RecordModel = this.connection.model('Record');
       const record = await RecordModel.findById(recordId)
-        .select('internalCode')
+        .select('etiqueta')
         .exec();
 
       if (!record) {
         throw new BadRequestException('Record no encontrado');
       }
-      const internalCode = record.internalCode;
+      const internalCode = record.etiqueta;
       // Obtener el código del documento de la constante
       const secondPart = secondConsecutivePart[documentType];
       if (!secondPart) {
