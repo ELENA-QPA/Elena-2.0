@@ -6,6 +6,6 @@ import { UtilitiesService } from './services/utilities.service';
 @Module({
   controllers: [FileUploadController],
   providers: [FileService, UtilitiesService],
-  exports: [FileService, UtilitiesService], // ← Exporta ambos
+  exports: [FileService, UtilitiesService],
 })
 export class CommonModule {}

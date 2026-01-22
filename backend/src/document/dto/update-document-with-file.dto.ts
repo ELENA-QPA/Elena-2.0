@@ -71,9 +71,4 @@ export class UpdateDocumentWithFileDto {
     required: false,
   })
   file?: any;
-
-  @ApiProperty({ description: 'consecutivo mayor', required: false })
-  @IsOptional()
-  @IsNumber()
-  consecutiveNumber?: number;
 }
