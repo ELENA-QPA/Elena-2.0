@@ -9,9 +9,9 @@ import { Model, ObjectId, Connection } from 'mongoose';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { Documento } from './entities/document.entity';
-import { FileLocalService } from 'src/common/services/file-local.service';
 import { secondConsecutivePart } from '../common/constants/second-consecutive-part.constant';
 import { GetStatisticsDto } from 'src/records/dto/get-statistics.dto';
+import { FileService } from 'src/common/services/file.service';
 
 @Injectable()
 export class DocumentService {
@@ -21,7 +21,7 @@ export class DocumentService {
     private readonly documentModel: Model<Documento>,
     @InjectConnection()
     private readonly connection: Connection,
-    private readonly fileService: FileLocalService,
+    private readonly fileService: FileService,
   ) {}
   // -----------------------------------------------------
   async create(createDocumentDto: CreateDocumentDto, recordId: ObjectId) {

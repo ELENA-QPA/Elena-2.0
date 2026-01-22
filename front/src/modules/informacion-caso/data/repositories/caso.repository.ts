@@ -57,118 +57,118 @@ export abstract class CasoRepository {
   // Casos
   abstract createCaso(
     data: CreateCasoBody,
-    token?: string
+    token?: string,
   ): Promise<CreateCasoSuccessResponse | ErrorResponse>;
   abstract getAllCasos(
     limit?: number,
     offset?: number,
-    token?: string
+    token?: string,
   ): Promise<CasosPaginatedResponse | ErrorResponse>;
   abstract getCasoById(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<GetCasoSuccessResponse | ErrorResponse>;
   // Actualiza solamente la información general del caso
   abstract updateCaso(
     id: string,
     data: UpdateCasoBody,
-    token?: string
+    token?: string,
   ): Promise<GetCasoSuccessResponse | ErrorResponse>;
   // Elimina el caso y todas sus relaciones
   abstract deleteCaso(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<{ message: string } | ErrorResponse>;
 
   // Documentos
   abstract createDocument(
     data: CreateDocumentBody,
-    token?: string
+    token?: string,
   ): Promise<CreateDocumentSuccessResponse | ErrorResponse>;
   abstract updateDocument(
     id: string,
     data: UpdateDocumentBody,
-    token?: string
+    token?: string,
   ): Promise<any>;
   abstract deleteDocument(id: string, token?: string): Promise<any>;
 
   // Intervinientes
   abstract createIntervener(
     data: CreateIntervenerBody,
-    token?: string
+    token?: string,
   ): Promise<CreateIntervenerSuccessResponse | ErrorResponse>;
   abstract updateIntervener(
     id: string,
     data: CreateIntervenerBody,
-    token?: string
+    token?: string,
   ): Promise<any>;
   abstract deleteIntervener(id: string, token?: string): Promise<any>;
 
   // Partes Procesales
   abstract createProceduralPart(
     data: CreateProceduralPartBody,
-    token?: string
+    token?: string,
   ): Promise<CreateProceduralPartSuccessResponse | ErrorResponse>;
   abstract updateProceduralPart(
     id: string,
     data: CreateProceduralPartBody,
-    token?: string
+    token?: string,
   ): Promise<any>;
   abstract deleteProceduralPart(id: string, token?: string): Promise<any>;
 
   // Pagos
   abstract createPayment(
     data: CreatePaymentBody,
-    token?: string
+    token?: string,
   ): Promise<CreatePaymentSuccessResponse | ErrorResponse>;
   abstract updatePayment(
     id: string,
     data: CreatePaymentBody,
-    token?: string
+    token?: string,
   ): Promise<any>;
   abstract deletePayment(id: string, token?: string): Promise<any>;
 
   // Parámetros
   abstract createParameter(
     data: CreateParameterBody,
-    token?: string
+    token?: string,
   ): Promise<CreateParameterSuccessResponse | ErrorResponse>;
   abstract searchParameters(
     data: SearchParametersBody,
     limit?: number,
     offset?: number,
-    token?: string
+    token?: string,
   ): Promise<ParametersPaginatedResponse | ErrorResponse>;
   abstract deleteParameter(id: string, token?: string): Promise<any>;
 
   // Archivos
   abstract uploadSingleFile(
     file: File,
-    token?: string
+    token?: string,
   ): Promise<FileUploadResponse | ErrorResponse>;
   abstract uploadMultipleFiles(
     files: File[],
-    token?: string
+    token?: string,
   ): Promise<MultipleFileUploadResponse | ErrorResponse>;
   abstract deleteFile(s3Key: string, token?: string): Promise<any>;
   abstract getFileInfo(
-    token?: string
+    token?: string,
   ): Promise<FileInfoResponse | ErrorResponse>;
 
   // Actuaciones / Performances
   abstract createPerformance(
     data: CreatePerformanceBody,
-    token?: string
+    token?: string,
   ): Promise<CreatePerformanceSuccessResponse | ErrorResponse>;
   abstract deletePerformance(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<DeletePerformanceSuccessResponse | ErrorResponse>;
 
   // Actuaciones de Monolegal
   abstract getActuacionesMonolegal(
     radicado: string,
-    token?: string
+    token?: string,
   ): Promise<any[]>;
 }
 
@@ -179,7 +179,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Casos
   async createCaso(
     data: CreateCasoBody,
-    token?: string
+    token?: string,
   ): Promise<CreateCasoSuccessResponse | ErrorResponse> {
     try {
       // Crear FormData para envío multipart
@@ -261,7 +261,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async getAllCasos(
     limit: number = 10,
     offset: number = 0,
-    token?: string
+    token?: string,
   ): Promise<CasosPaginatedResponse | ErrorResponse> {
     try {
       const axiosRequest = await this.httpClient.request({
@@ -302,7 +302,7 @@ export class CasoRepositoryImpl implements CasoRepository {
 
   async getCasoById(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<GetCasoSuccessResponse | ErrorResponse> {
     try {
       console.log("[CASOS][getCasoById][Request]:", { id });
@@ -345,7 +345,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async updateCaso(
     id: string,
     data: UpdateCasoBody,
-    token?: string
+    token?: string,
   ): Promise<GetCasoSuccessResponse | ErrorResponse> {
     try {
       const axiosRequest = await this.httpClient.request({
@@ -383,7 +383,7 @@ export class CasoRepositoryImpl implements CasoRepository {
 
   async deleteCaso(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<{ message: string } | ErrorResponse> {
     try {
       const axiosRequest = await this.httpClient.request({
@@ -421,9 +421,10 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Documentos
   async createDocument(
     data: CreateDocumentBody,
-    token?: string
+    token?: string,
   ): Promise<CreateDocumentSuccessResponse | ErrorResponse> {
     try {
+      console.log("[DOCUMENT][llamando create document]");
       const formData = new FormData();
       formData.append("recordId", data.recordId);
       formData.append("category", data.category);
@@ -470,7 +471,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[DOCUMENT][createDocument][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -487,7 +488,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async updateDocument(
     id: string,
     data: UpdateDocumentBody,
-    token?: string
+    token?: string,
   ): Promise<any> {
     try {
       const axiosRequest = await this.httpClient.request({
@@ -503,7 +504,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al actualizar documento"
+          axiosRequest.body?.message || "Error al actualizar documento",
         );
         throw error;
       }
@@ -531,7 +532,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar documento"
+          axiosRequest.body?.message || "Error al eliminar documento",
         );
         console.log("[DOCUMENT][deleteDocument][Error]:", error);
         throw error;
@@ -545,7 +546,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Intervinientes
   async createIntervener(
     data: CreateIntervenerBody,
-    token?: string
+    token?: string,
   ): Promise<CreateIntervenerSuccessResponse | ErrorResponse> {
     try {
       const axiosRequest = await this.httpClient.request({
@@ -563,17 +564,17 @@ export class CasoRepositoryImpl implements CasoRepository {
           const response = mapCreateIntervenerResponse(axiosRequest.body);
           console.log(
             "[INTERVENER][createIntervener][Mapped Response]:",
-            response
+            response,
           );
           return response;
         } catch (mappingError: any) {
           console.error(
             "[INTERVENER][createIntervener][Mapping Error]:",
-            mappingError
+            mappingError,
           );
           console.error(
             "[INTERVENER][createIntervener][Raw Response Body]:",
-            axiosRequest.body
+            axiosRequest.body,
           );
           const errorResponse = {
             statusCode: 500,
@@ -590,7 +591,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[INTERVENER][createIntervener][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -604,7 +605,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[INTERVENER][createIntervener][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -613,7 +614,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async updateIntervener(
     id: string,
     data: CreateIntervenerBody,
-    token?: string
+    token?: string,
   ): Promise<any> {
     try {
       console.log("[INTERVENER][updateIntervener][Request]:", { id, data });
@@ -631,12 +632,12 @@ export class CasoRepositoryImpl implements CasoRepository {
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         console.log(
           "[INTERVENER][updateIntervener][Success]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al actualizar interviniente"
+          axiosRequest.body?.message || "Error al actualizar interviniente",
         );
         console.log("[INTERVENER][updateIntervener][Error]:", error);
         throw error;
@@ -663,12 +664,12 @@ export class CasoRepositoryImpl implements CasoRepository {
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         console.log(
           "[INTERVENER][deleteIntervener][Success]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar interviniente"
+          axiosRequest.body?.message || "Error al eliminar interviniente",
         );
         console.log("[INTERVENER][deleteIntervener][Error]:", error);
         throw error;
@@ -682,7 +683,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Partes Procesales
   async createProceduralPart(
     data: CreateProceduralPartBody,
-    token?: string
+    token?: string,
   ): Promise<CreateProceduralPartSuccessResponse | ErrorResponse> {
     try {
       console.log("[PROCEDURAL_PART][createProceduralPart][Request]:", data);
@@ -697,14 +698,14 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       console.log(
         "[PROCEDURAL_PART][createProceduralPart][Response]:",
-        axiosRequest
+        axiosRequest,
       );
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapCreateProceduralPartResponse(axiosRequest.body);
         console.log(
           "[PROCEDURAL_PART][createProceduralPart][Mapped Response]:",
-          response
+          response,
         );
         return response;
       } else {
@@ -715,7 +716,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[PROCEDURAL_PART][createProceduralPart][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -729,7 +730,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[PROCEDURAL_PART][createProceduralPart][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -738,7 +739,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async updateProceduralPart(
     id: string,
     data: CreateProceduralPartBody,
-    token?: string
+    token?: string,
   ): Promise<any> {
     try {
       console.log("[PROCEDURAL_PART][updateProceduralPart][Request]:", {
@@ -756,18 +757,18 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       console.log(
         "[PROCEDURAL_PART][updateProceduralPart][Response]:",
-        axiosRequest
+        axiosRequest,
       );
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         console.log(
           "[PROCEDURAL_PART][updateProceduralPart][Success]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al actualizar parte procesal"
+          axiosRequest.body?.message || "Error al actualizar parte procesal",
         );
         console.log("[PROCEDURAL_PART][updateProceduralPart][Error]:", error);
         throw error;
@@ -775,7 +776,7 @@ export class CasoRepositoryImpl implements CasoRepository {
     } catch (error) {
       console.error(
         "[PROCEDURAL_PART][updateProceduralPart][Catch Error]:",
-        error
+        error,
       );
       throw error;
     }
@@ -794,18 +795,18 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       console.log(
         "[PROCEDURAL_PART][deleteProceduralPart][Response]:",
-        axiosRequest
+        axiosRequest,
       );
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         console.log(
           "[PROCEDURAL_PART][deleteProceduralPart][Success]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar parte procesal"
+          axiosRequest.body?.message || "Error al eliminar parte procesal",
         );
         console.log("[PROCEDURAL_PART][deleteProceduralPart][Error]:", error);
         throw error;
@@ -813,7 +814,7 @@ export class CasoRepositoryImpl implements CasoRepository {
     } catch (error) {
       console.error(
         "[PROCEDURAL_PART][deleteProceduralPart][Catch Error]:",
-        error
+        error,
       );
       throw error;
     }
@@ -822,7 +823,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Pagos
   async createPayment(
     data: CreatePaymentBody,
-    token?: string
+    token?: string,
   ): Promise<CreatePaymentSuccessResponse | ErrorResponse> {
     try {
       console.log("[PAYMENT][createPayment][Request]:", data);
@@ -860,7 +861,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[PAYMENT][createPayment][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -869,7 +870,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   async updatePayment(
     id: string,
     data: CreatePaymentBody,
-    token?: string
+    token?: string,
   ): Promise<any> {
     try {
       console.log("[PAYMENT][updatePayment][Request]:", { id, data });
@@ -889,7 +890,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al actualizar pago"
+          axiosRequest.body?.message || "Error al actualizar pago",
         );
         console.log("[PAYMENT][updatePayment][Error]:", error);
         throw error;
@@ -918,7 +919,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar pago"
+          axiosRequest.body?.message || "Error al eliminar pago",
         );
         console.log("[PAYMENT][deletePayment][Error]:", error);
         throw error;
@@ -932,7 +933,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Parámetros
   async createParameter(
     data: CreateParameterBody,
-    token?: string
+    token?: string,
   ): Promise<CreateParameterSuccessResponse | ErrorResponse> {
     try {
       console.log("[PARAMETER][createParameter][Request]:", data);
@@ -959,7 +960,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[PARAMETER][createParameter][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -973,7 +974,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[PARAMETER][createParameter][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -983,7 +984,7 @@ export class CasoRepositoryImpl implements CasoRepository {
     data: SearchParametersBody,
     limit: number = 10,
     offset: number = 0,
-    token?: string
+    token?: string,
   ): Promise<ParametersPaginatedResponse | ErrorResponse> {
     try {
       console.log("[PARAMETER][searchParameters][Request]:", {
@@ -1006,7 +1007,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         const response = mapParametersPaginatedResponse(axiosRequest.body);
         console.log(
           "[PARAMETER][searchParameters][Mapped Response]:",
-          response
+          response,
         );
         return response;
       } else {
@@ -1017,7 +1018,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[PARAMETER][searchParameters][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -1031,7 +1032,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[PARAMETER][searchParameters][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -1053,12 +1054,12 @@ export class CasoRepositoryImpl implements CasoRepository {
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
         console.log(
           "[PARAMETER][deleteParameter][Success]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar parámetro"
+          axiosRequest.body?.message || "Error al eliminar parámetro",
         );
         console.log("[PARAMETER][deleteParameter][Error]:", error);
         throw error;
@@ -1072,7 +1073,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Archivos
   async uploadSingleFile(
     file: File,
-    token?: string
+    token?: string,
   ): Promise<FileUploadResponse | ErrorResponse> {
     try {
       console.log("[FILE_UPLOAD][uploadSingleFile][Request]:", {
@@ -1099,7 +1100,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         const response = mapFileUploadResponse(axiosRequest.body);
         console.log(
           "[FILE_UPLOAD][uploadSingleFile][Mapped Response]:",
-          response
+          response,
         );
         return response;
       } else {
@@ -1110,7 +1111,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[FILE_UPLOAD][uploadSingleFile][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -1124,7 +1125,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[FILE_UPLOAD][uploadSingleFile][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -1132,7 +1133,7 @@ export class CasoRepositoryImpl implements CasoRepository {
 
   async uploadMultipleFiles(
     files: File[],
-    token?: string
+    token?: string,
   ): Promise<MultipleFileUploadResponse | ErrorResponse> {
     try {
       console.log("[FILE_UPLOAD][uploadMultipleFiles][Request]:", {
@@ -1156,14 +1157,14 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       console.log(
         "[FILE_UPLOAD][uploadMultipleFiles][Response]:",
-        axiosRequest
+        axiosRequest,
       );
 
       if (axiosRequest.statusCode === HttpStatusCode.created) {
         const response = mapMultipleFileUploadResponse(axiosRequest.body);
         console.log(
           "[FILE_UPLOAD][uploadMultipleFiles][Mapped Response]:",
-          response
+          response,
         );
         return response;
       } else {
@@ -1174,7 +1175,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[FILE_UPLOAD][uploadMultipleFiles][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -1188,7 +1189,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[FILE_UPLOAD][uploadMultipleFiles][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -1212,7 +1213,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         return axiosRequest.body;
       } else {
         const error = new CustomError(
-          axiosRequest.body?.message || "Error al eliminar archivo"
+          axiosRequest.body?.message || "Error al eliminar archivo",
         );
         console.log("[FILE_UPLOAD][deleteFile][Error]:", error);
         throw error;
@@ -1250,7 +1251,7 @@ export class CasoRepositoryImpl implements CasoRepository {
         };
         console.log(
           "[FILE_UPLOAD][getFileInfo][Error Response]:",
-          errorResponse
+          errorResponse,
         );
         return errorResponse;
       }
@@ -1264,7 +1265,7 @@ export class CasoRepositoryImpl implements CasoRepository {
       };
       console.log(
         "[FILE_UPLOAD][getFileInfo][Catch Error Response]:",
-        errorResponse
+        errorResponse,
       );
       return errorResponse;
     }
@@ -1273,7 +1274,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Actuaciones / Performances
   async createPerformance(
     data: CreatePerformanceBody,
-    token?: string
+    token?: string,
   ): Promise<CreatePerformanceSuccessResponse | ErrorResponse> {
     try {
       console.log("[PERFORMANCE][createPerformance][Request]:", data);
@@ -1319,7 +1320,7 @@ export class CasoRepositoryImpl implements CasoRepository {
 
   async deletePerformance(
     id: string,
-    token?: string
+    token?: string,
   ): Promise<DeletePerformanceSuccessResponse | ErrorResponse> {
     try {
       console.log("[PERFORMANCE][deletePerformance][Request]:", { id });
@@ -1358,7 +1359,7 @@ export class CasoRepositoryImpl implements CasoRepository {
   // Actuaciones de Monolegal
   async getActuacionesMonolegal(
     radicado: string,
-    token?: string
+    token?: string,
   ): Promise<any[]> {
     try {
       console.log("[MONOLEGAL][getActuacionesMonolegal][Request]:", {
@@ -1374,7 +1375,7 @@ export class CasoRepositoryImpl implements CasoRepository {
 
       console.log(
         "[MONOLEGAL][getActuacionesMonolegal][Response]:",
-        axiosRequest
+        axiosRequest,
       );
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
@@ -1382,20 +1383,20 @@ export class CasoRepositoryImpl implements CasoRepository {
         console.log(
           "[MONOLEGAL][getActuacionesMonolegal][Success]:",
           actuaciones.length,
-          "actuaciones"
+          "actuaciones",
         );
         return actuaciones;
       } else {
         console.error(
           "[MONOLEGAL][getActuacionesMonolegal][Error]:",
-          axiosRequest.body
+          axiosRequest.body,
         );
         return [];
       }
     } catch (error: any) {
       console.error(
         "[MONOLEGAL][getActuacionesMonolegal][Catch Error]:",
-        error
+        error,
       );
       return [];
     }
