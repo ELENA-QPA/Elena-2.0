@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model, ObjectId, Connection } from 'mongoose';
@@ -36,10 +37,12 @@ export class DocumentService {
       if (error.code === 11000) {
         throw new BadRequestException('El consecutivo ya existe');
       }
+      this.logger.error('Error al crear el documento:', error);
       throw new BadRequestException('Error al crear el documento');
     }
   }
   // -----------------------------------------------------
+  private readonly logger = new Logger(FileService.name);
   async createWithFile(
     createDocumentDto: CreateDocumentDto,
     recordId: ObjectId,
@@ -72,6 +75,7 @@ export class DocumentService {
       if (error.code === 11000) {
         throw new BadRequestException('El consecutivo ya existe');
       }
+      this.logger.error('Error al crear el documento con archivo:', error);
       throw new BadRequestException('Error al crear el documento');
     }
   }

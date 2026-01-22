@@ -1,5 +1,5 @@
 import { Storage } from '@google-cloud/storage';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { memoryStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
@@ -118,7 +118,7 @@ export class FileService {
 
       const uploadPromises = files.map(async (file) => {
         const fileExtension = extname(file.originalname);
-        const fileName = `documents/${uuid()}${fileExtension}`;
+        const fileName = `${uuid()}${fileExtension}`;
 
         const blob = bucket.file(fileName);
 
@@ -134,6 +134,8 @@ export class FileService {
           blobStream.on('finish', () => resolve(true));
           blobStream.end(file.buffer);
         });
+
+        await blob.makePublic();
 
         const publicUrl = `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
 
@@ -175,6 +177,7 @@ export class FileService {
       blobStream.end(file.buffer);
     });
 
+    await blob.makePublic();
     const publicUrl = `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
     return publicUrl;
   }
@@ -199,14 +202,19 @@ export class FileService {
         blobStream.end(file.buffer);
       });
 
+      await blob.makePublic();
+
       return `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
     });
 
     return await Promise.all(uploadPromises);
   }
 
+  private readonly logger = new Logger(FileService.name);
+
   async deleteFile(url: string): Promise<void> {
     try {
+      this.logger.log(`Deleting file from URL: ${url}`);
       const fileName = url.split(`${this.bucketName}/`)[1];
 
       if (!fileName) {
@@ -214,49 +222,13 @@ export class FileService {
       }
 
       const bucket = this.storage.bucket(this.bucketName);
+      this.logger.log(
+        `Attempting to delete file: ${fileName} from bucket: ${this.bucketName}`,
+      );
       await bucket.file(fileName).delete();
     } catch (error) {
       console.error('Error deleting file:', error);
       throw error;
     }
-  }
-
-  async getSignedUrl(
-    fileName: string,
-    expiresInMinutes: number = 60,
-  ): Promise<string> {
-    try {
-      const bucket = this.storage.bucket(this.bucketName);
-      const file = bucket.file(fileName);
-
-      const [exists] = await file.exists();
-      if (!exists) {
-        throw new BadRequestException('El archivo no existe');
-      }
-
-      const [url] = await file.getSignedUrl({
-        version: 'v4',
-        action: 'read',
-        expires: Date.now() + expiresInMinutes * 60 * 1000,
-      });
-
-      return url;
-    } catch (error) {
-      console.error('Error generating signed URL:', error);
-      throw new BadRequestException(
-        `Error al generar URL de descarga: ${error.message}`,
-      );
-    }
-  }
-  async getMultipleSignedUrls(
-    fileNames: string[],
-    expiresInMinutes: number = 60,
-  ): Promise<Array<{ fileName: string; signedUrl: string }>> {
-    const urlPromises = fileNames.map(async (fileName) => {
-      const signedUrl = await this.getSignedUrl(fileName, expiresInMinutes);
-      return { fileName, signedUrl };
-    });
-
-    return await Promise.all(urlPromises);
   }
 }
