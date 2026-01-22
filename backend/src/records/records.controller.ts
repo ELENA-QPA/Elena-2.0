@@ -55,7 +55,7 @@ import { DocumentService } from 'src/document/document.service';
 import { ByClientDto } from './dto/by-client-document.dto';
 import { ProceduralPartService } from 'src/procedural-part/procedural-part.service';
 import { ByEtiquetaDto } from './dto/by-internal-code.dto';
-import { FileLocalService } from 'src/common/services/file-local.service';
+import { FileService } from 'src/common/services/file.service';
 
 @ApiTags('Casos')
 @Controller('records')
@@ -269,7 +269,7 @@ export class RecordsController {
       },
     },
   })
-  @UseInterceptors(FilesInterceptor('files', 10, FileLocalService.multerConfig))
+  @UseInterceptors(FilesInterceptor('files', 10, FileService.multerConfig))
   async createCompleteWithFiles(
     @GetUser() user: IUser,
     @Body() body: any,

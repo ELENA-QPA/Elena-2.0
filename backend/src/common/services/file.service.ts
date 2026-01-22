@@ -1,5 +1,5 @@
 import { Storage } from '@google-cloud/storage';
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { memoryStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
@@ -157,9 +157,7 @@ export class FileService {
     }
   }
 
-  private readonly logger = new Logger(FileService.name);
   async uploadOneFile(file: any): Promise<string> {
-    this.logger.log('Uploading file to GCP Cloud Storage...');
     const bucket = this.storage.bucket(this.bucketName);
     const fileName = `${Date.now()}-${file.originalname}`;
     const blob = bucket.file(fileName);
@@ -221,5 +219,44 @@ export class FileService {
       console.error('Error deleting file:', error);
       throw error;
     }
+  }
+
+  async getSignedUrl(
+    fileName: string,
+    expiresInMinutes: number = 60,
+  ): Promise<string> {
+    try {
+      const bucket = this.storage.bucket(this.bucketName);
+      const file = bucket.file(fileName);
+
+      const [exists] = await file.exists();
+      if (!exists) {
+        throw new BadRequestException('El archivo no existe');
+      }
+
+      const [url] = await file.getSignedUrl({
+        version: 'v4',
+        action: 'read',
+        expires: Date.now() + expiresInMinutes * 60 * 1000,
+      });
+
+      return url;
+    } catch (error) {
+      console.error('Error generating signed URL:', error);
+      throw new BadRequestException(
+        `Error al generar URL de descarga: ${error.message}`,
+      );
+    }
+  }
+  async getMultipleSignedUrls(
+    fileNames: string[],
+    expiresInMinutes: number = 60,
+  ): Promise<Array<{ fileName: string; signedUrl: string }>> {
+    const urlPromises = fileNames.map(async (fileName) => {
+      const signedUrl = await this.getSignedUrl(fileName, expiresInMinutes);
+      return { fileName, signedUrl };
+    });
+
+    return await Promise.all(urlPromises);
   }
 }
