@@ -76,11 +76,14 @@ export class DocumentController {
   @UseGuards(JwtAuthGuard)
   @ApiParam({ name: 'id', description: 'ID del documento' })
   @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file', FileService.multerConfig))
   update(
     @Param('id') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
+    @UploadedFile() file?: any,
   ) {
-    return this.documentService.update(id, updateDocumentDto);
+    return this.documentService.update(id, updateDocumentDto, file);
   }
   // -----------------------------------------------------
   @ApiOperation({ summary: 'Subir archivo a un documento existente' })

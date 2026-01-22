@@ -491,13 +491,29 @@ export class CasoRepositoryImpl implements CasoRepository {
     token?: string,
   ): Promise<any> {
     try {
+      const formData = new FormData();
+
+      if (data.category) formData.append("category", data.category);
+      if (data.documentType) formData.append("documentType", data.documentType);
+      if (data.document) formData.append("document", data.document);
+      if (data.subdocument) formData.append("subdocument", data.subdocument);
+      if (data.settledDate) formData.append("settledDate", data.settledDate);
+      if (data.responsibleType)
+        formData.append("responsibleType", data.responsibleType);
+      if (data.responsible) formData.append("responsible", data.responsible);
+      if (data.observations) formData.append("observations", data.observations);
+
+      if ((data as any).file instanceof File) {
+        formData.append("file", (data as any).file);
+      }
+
       const axiosRequest = await this.httpClient.request({
         url: `${apiUrls.document.update}/${id}`,
         method: "patch",
-        body: JSON.stringify(data),
+        body: formData,
         isAuth: true,
         token,
-        isMultipart: false,
+        isMultipart: true,
       });
 
       if (axiosRequest.statusCode === HttpStatusCode.ok) {
