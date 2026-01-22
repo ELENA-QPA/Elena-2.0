@@ -9,9 +9,9 @@ import { Model, ObjectId, Connection } from 'mongoose';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { Documento } from './entities/document.entity';
-import { FileLocalService } from 'src/common/services/file-local.service';
 import { secondConsecutivePart } from '../common/constants/second-consecutive-part.constant';
 import { GetStatisticsDto } from 'src/records/dto/get-statistics.dto';
+import { FileService } from 'src/common/services/file.service';
 
 @Injectable()
 export class DocumentService {
@@ -21,7 +21,7 @@ export class DocumentService {
     private readonly documentModel: Model<Documento>,
     @InjectConnection()
     private readonly connection: Connection,
-    private readonly fileService: FileLocalService,
+    private readonly fileService: FileService,
   ) {}
   // -----------------------------------------------------
   async create(createDocumentDto: CreateDocumentDto, recordId: ObjectId) {
@@ -39,7 +39,7 @@ export class DocumentService {
       throw new BadRequestException('Error al crear el documento');
     }
   }
-  // -----------------------------------------------------
+
   async createWithFile(
     createDocumentDto: CreateDocumentDto,
     recordId: ObjectId,
@@ -52,10 +52,11 @@ export class DocumentService {
       }
 
       // Generar el consecutivo del documento
-      const consecutive = await this.generateDocumentConsecutive(
-        recordId,
-        createDocumentDto.document,
-      );
+      const { consecutive, consecutiveNumber } =
+        await this.generateDocumentConsecutive(
+          recordId,
+          createDocumentDto.document,
+        );
 
       // Subir el archivo
       const fileUrl = await this.fileService.uploadOneFile(file);
@@ -65,7 +66,8 @@ export class DocumentService {
         record: recordId,
         settledDate: new Date(createDocumentDto.settledDate),
         url: fileUrl,
-        consecutive: consecutive,
+        consecutive,
+        consecutiveNumber,
       });
       return await document.save();
     } catch (error) {
@@ -155,9 +157,8 @@ export class DocumentService {
     return document;
   }
   // -----------------------------------------------------
-  async update(id: string, updateDocumentDto: UpdateDocumentDto) {
+  async update(id: string, updateDocumentDto: UpdateDocumentDto, file?: any) {
     try {
-      // Buscar el documento actual para comparar el campo 'document'
       const currentDocument = await this.documentModel.findById(id);
       if (!currentDocument || currentDocument.deletedAt) {
         throw new NotFoundException('Documento no encontrado');
@@ -169,13 +170,15 @@ export class DocumentService {
         updateDocumentDto.document &&
         updateDocumentDto.document !== currentDocument.document
       ) {
-        const newConsecutive = await this.generateDocumentConsecutive(
-          currentDocument.record,
-          updateDocumentDto.document,
-        );
-        updateData.consecutive = newConsecutive;
+        const { consecutive, consecutiveNumber } =
+          await this.generateDocumentConsecutive(
+            currentDocument.record,
+            updateDocumentDto.document,
+          );
+        updateData.consecutive = consecutive;
+        updateData.consecutiveNumber = consecutiveNumber;
       }
-      const document = await this.documentModel.findByIdAndUpdate(
+      const updatedDocument = await this.documentModel.findByIdAndUpdate(
         id,
         {
           ...updateData,
@@ -185,10 +188,15 @@ export class DocumentService {
         },
         { new: true },
       );
-      if (!document || document.deletedAt) {
+      if (!updatedDocument || updatedDocument.deletedAt) {
         throw new NotFoundException('Documento no encontrado');
       }
-      return document;
+
+      if (file) {
+        const dataUploaded = await this.addFileToDocument(id, file);
+        return dataUploaded.document;
+      }
+      return updatedDocument;
     } catch (error) {
       if (error.code === 11000) {
         throw new BadRequestException('El consecutivo ya existe');
@@ -200,6 +208,19 @@ export class DocumentService {
         throw error;
       }
       throw new BadRequestException('Error al actualizar el documento');
+    }
+  }
+
+  private async deleteDocumentFile(document: any): Promise<void> {
+    if (!document?.url) return;
+
+    try {
+      await this.fileService.deleteFile(document.url);
+    } catch (error) {
+      console.warn(
+        `No se pudo eliminar archivo de GCS para documento ${document._id}`,
+        error,
+      );
     }
   }
   // -----------------------------------------------------
@@ -220,29 +241,20 @@ export class DocumentService {
         updateDocumentDto.document &&
         updateDocumentDto.document !== currentDocument.document
       ) {
-        const newConsecutive = await this.generateDocumentConsecutive(
-          currentDocument.record,
-          updateDocumentDto.document,
-        );
-        updateData.consecutive = newConsecutive;
+        const { consecutive, consecutiveNumber } =
+          await this.generateDocumentConsecutive(
+            currentDocument.record,
+            updateDocumentDto.document,
+          );
+        updateData.consecutive = consecutive;
+        updateData.consecutiveNumber = consecutiveNumber;
       }
       // Si viene un nuevo archivo
       if (file) {
         const newUrl = await this.fileService.uploadOneFile(file);
         updateData.url = newUrl;
-        if (currentDocument.url) {
-          try {
-            // Extraer la key del S3 desde la URL
-            const urlParts = currentDocument.url.split('/');
-            const s3Key = urlParts.slice(-2).join('/'); // documents/filename
-            await this.fileService.deleteFile(s3Key);
-          } catch (deleteError) {
-            console.warn(
-              'Error al eliminar archivo anterior de S3:',
-              deleteError,
-            );
-          }
-        }
+
+        await this.deleteDocumentFile(currentDocument);
       }
       const updatedDocument = await this.documentModel.findByIdAndUpdate(
         id,
@@ -270,14 +282,19 @@ export class DocumentService {
   }
   // -----------------------------------------------------
   async remove(id: string) {
-    const document = await this.documentModel.findByIdAndUpdate(
-      id,
-      { deletedAt: new Date() },
-      { new: true },
-    );
-    if (!document) {
+    const document = await this.documentModel.findById(id);
+
+    if (!document || document.deletedAt) {
       throw new NotFoundException('Documento no encontrado');
     }
+
+    // 1. Eliminar archivo (best effort)
+    await this.deleteDocumentFile(document);
+
+    // 2. Soft delete
+    document.deletedAt = new Date();
+    await document.save();
+
     return { message: 'Documento eliminado correctamente' };
   }
   // -----------------------------------------------------
@@ -290,16 +307,7 @@ export class DocumentService {
         throw new NotFoundException('Documento no encontrado');
       }
       if (document.url) {
-        try {
-          const urlParts = document.url.split('/');
-          const s3Key = urlParts.slice(-2).join('/'); // documents/filename
-          await this.fileService.deleteFile(s3Key);
-        } catch (deleteError) {
-          console.warn(
-            'Error al eliminar archivo anterior de S3:',
-            deleteError,
-          );
-        }
+        await this.deleteDocumentFile(document);
       }
       const fileUrl = await this.fileService.uploadOneFile(file);
       const updatedDocument = await this.documentModel.findByIdAndUpdate(
@@ -341,41 +349,28 @@ export class DocumentService {
   }
   // -----------------------------------------------------
   async removeFileFromDocument(documentId: string) {
-    try {
-      // Verificar que el documento existe
-      const document = await this.documentModel.findById(documentId);
-      if (!document || document.deletedAt) {
-        throw new NotFoundException('Documento no encontrado');
-      }
-      if (!document.url) {
-        throw new NotFoundException('El documento no tiene archivo asociado');
-      }
-      try {
-        const urlParts = document.url.split('/');
-        const s3Key = urlParts.slice(-2).join('/'); // documents/filename
-        await this.fileService.deleteFile(s3Key);
-      } catch (deleteError) {
-        console.warn('Error al eliminar archivo de S3:', deleteError);
-        // Continuar con la eliminación en BD aunque falle la eliminación en S3
-      }
-      // Remover la URL del documento
-      const updatedDocument = await this.documentModel.findByIdAndUpdate(
-        documentId,
-        { $unset: { url: 1 } },
-        { new: true },
-      );
-      return {
-        message: 'Archivo eliminado exitosamente',
-        document: updatedDocument,
-      };
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new BadRequestException(
-        'Error al eliminar el archivo del documento',
-      );
+    const document = await this.documentModel.findById(documentId);
+
+    if (!document || document.deletedAt) {
+      throw new NotFoundException('Documento no encontrado');
     }
+
+    if (!document.url) {
+      throw new BadRequestException('El documento no tiene archivo asociado');
+    }
+
+    await this.deleteDocumentFile(document);
+
+    const updatedDocument = await this.documentModel.findByIdAndUpdate(
+      documentId,
+      { $unset: { url: 1 } },
+      { new: true },
+    );
+
+    return {
+      message: 'Archivo eliminado exitosamente',
+      document: updatedDocument,
+    };
   }
   // -----------------------------------------------------
   /**
@@ -384,7 +379,7 @@ export class DocumentService {
   private async generateDocumentConsecutive(
     recordId: ObjectId,
     documentType: string,
-  ): Promise<string> {
+  ): Promise<{ consecutive: string; consecutiveNumber: number }> {
     try {
       // Obtener el record para obtener el internalCode
       const RecordModel = this.connection.model('Record');
@@ -403,28 +398,25 @@ export class DocumentService {
           `Tipo de documento inválido: ${documentType}`,
         );
       }
-      // Obtener el siguiente número consecutivo para este tipo de documento específico
-      const documentPattern = `^${internalCode}-${secondPart}-QPA-`;
-      // Buscar el último documento con este patrón para este record específico
       const lastDocument = await this.documentModel
         .findOne({
           record: recordId,
-          consecutive: { $regex: documentPattern },
-          deletedAt: { $exists: false },
+          document: documentType,
         })
-        .sort({ consecutive: -1 })
-        .select('consecutive')
+        .sort({ consecutiveNumber: -1 })
+        .select('consecutiveNumber')
         .exec();
 
-      let nextDocumentNumber = 1;
-      if (lastDocument && lastDocument.consecutive) {
-        const matches = lastDocument.consecutive.match(/-(\d+)$/);
-        if (matches) {
-          nextDocumentNumber = parseInt(matches[1]) + 1;
-        }
-      }
-      const paddedNumber = nextDocumentNumber.toString().padStart(2, '0');
-      return `${internalCode}-${secondPart}-QPA-${paddedNumber}`;
+      const nextNumber = lastDocument ? lastDocument.consecutiveNumber + 1 : 1;
+
+      // 4. Formatear consecutivo
+      const padded = nextNumber.toString().padStart(2, '0');
+      const consecutive = `${internalCode}-${secondPart}-QPA-${padded}`;
+
+      return {
+        consecutive,
+        consecutiveNumber: nextNumber,
+      };
     } catch (error) {
       console.error('Error al generar consecutivo del documento:', error);
       throw new InternalServerErrorException(
