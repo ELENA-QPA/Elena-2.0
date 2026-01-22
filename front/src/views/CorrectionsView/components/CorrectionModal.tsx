@@ -150,6 +150,9 @@ export function NotificationCorrectionModal({
 
   const estadoActual = form.watch("estado");
   const blockAmount = estadoActual !== "Conciliada";
+  const shouldEditEtiqueta =
+    form.getValues("record_id") === undefined ||
+    form.getValues("record_id") === "";
 
   const handleSync = async () => {
     const etiqueta = form.getValues("etiqueta");
@@ -217,7 +220,7 @@ export function NotificationCorrectionModal({
         notification.audience_id,
         {
           ...audienceData,
-        }
+        },
       );
 
       if (result.success) {
@@ -276,8 +279,11 @@ export function NotificationCorrectionModal({
               <Input disabled={true} {...form.register("title")} />
             </div>
             <div>
-              <Label>Etiqueta *</Label>
-              <Input {...form.register("etiqueta")} />
+              <Label>Etiqueta</Label>
+              <Input
+                disabled={!shouldEditEtiqueta}
+                {...form.register("etiqueta")}
+              />
             </div>
             <div>
               <Label>Abogado *</Label>
