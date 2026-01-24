@@ -763,13 +763,6 @@ export default function InformacionCasoFormViewOld() {
 
   // Helper para convertir fechas a formato ISO 8601 completo
   function toISO8601ForPayments(dateStr?: string | null): string {
-    console.log(
-      "[toISO8601ForPayments] Input:",
-      dateStr,
-      "Type:",
-      typeof dateStr,
-    );
-
     // Manejar valores nulos, undefined o string vacío
     if (
       !dateStr ||
@@ -778,10 +771,6 @@ export default function InformacionCasoFormViewOld() {
       dateStr === undefined
     ) {
       const result = getCurrentDate() + "T00:00:00.000Z";
-      console.log(
-        "[toISO8601ForPayments] Empty/null input, using current date:",
-        result,
-      );
       return result;
     }
 
@@ -801,10 +790,6 @@ export default function InformacionCasoFormViewOld() {
       if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
         // Simplemente agregar la hora UTC sin cambiar el día
         const result = `${dateString}T00:00:00.000Z`;
-        console.log(
-          "[toISO8601ForPayments] YYYY-MM-DD converted to ISO:",
-          result,
-        );
         return result;
       }
 
@@ -1168,18 +1153,6 @@ export default function InformacionCasoFormViewOld() {
       total = paymentsTotal + premiumToAdd;
     }
 
-    console.log("[CALCULATE_TOTAL]:", {
-      mode: isViewMode ? "view" : isEditMode ? "edit" : "create",
-      paymentsFromForm: isCreateMode
-        ? payments.reduce((sum, payment) => sum + (payment.value || 0), 0)
-        : "N/A",
-      savedPaymentsTotal,
-      successPremiumPrice,
-      savedSuccessPremium,
-      includeSuccessPremium,
-      total,
-    });
-
     form.setValue("totalAmount", total);
   }, [form, caso, isViewMode, isEditMode, isCreateMode]);
 
@@ -1272,18 +1245,6 @@ export default function InformacionCasoFormViewOld() {
 
         setUserRole(roleString);
         setIsAdmin(isUserAdmin);
-
-        console.log("User role set:", {
-          roleString,
-          isUserAdmin,
-          roles: userRoles,
-          isAdminCalculated: isUserAdmin,
-          isViewMode,
-          isEditMode,
-          isCreateMode,
-          mode,
-          isFieldDisabled: isViewMode || (mode === "edit" && !isUserAdmin),
-        });
       } catch (error) {
         console.error("Error checking authentication:", error);
         router.push("/login");
@@ -1376,15 +1337,9 @@ export default function InformacionCasoFormViewOld() {
                   `Ciudad "${currentCity}" no está disponible en ${selectedDepartment}. Por favor seleccione una ciudad válida.`,
                 );
               } else {
-                console.log(
-                  "[DEPARTMENT_CHANGE] Ciudad pertenece al departamento, manteniendo...",
-                );
               }
             }
           } else {
-            console.log(
-              "[DEPARTMENT_CHANGE] Departamento no encontrado en divipola",
-            );
           }
         } else {
           // Si no hay departamento seleccionado, no mostrar ciudades
@@ -1500,20 +1455,10 @@ export default function InformacionCasoFormViewOld() {
             );
 
             if (cityExists) {
-              console.log(
-                "[DIVIPOLA_LOAD] Ciudad del caso encontrada en departamento",
-              );
             } else {
-              console.log(
-                "[DIVIPOLA_LOAD] Ciudad del caso no encontrada en departamento, limpiando",
-              );
               form.setValue("city", "");
             }
           }
-        } else {
-          console.log(
-            "[DIVIPOLA_LOAD] Departamento del caso no encontrado en divipola",
-          );
         }
       }
     }
@@ -1573,13 +1518,6 @@ export default function InformacionCasoFormViewOld() {
 
     if (!despachoJudicialData) return;
 
-    if (caso) {
-      console.log("[CASE_LOAD] Datos del caso:", {
-        city: caso.city,
-        despachoJudicial: caso.despachoJudicial,
-      });
-    }
-
     // Solo procesar durante la carga inicial del caso en modo EDIT, no en modo CREATE
     if (!caso || caseInitialLoadCompleted) {
       return;
@@ -1597,10 +1535,6 @@ export default function InformacionCasoFormViewOld() {
           setShowManualDespacho(false);
           // Asegurar que el valor esté establecido en el formulario
           form.setValue("despachoJudicial", currentDespacho);
-          console.log(
-            "[CASE_LOAD] Despacho establecido en formulario:",
-            currentDespacho,
-          );
         } else {
           // Despacho no está en la lista o no hay despacho, usar input manual
           setAvailableDespachos([]);
@@ -1660,13 +1594,6 @@ export default function InformacionCasoFormViewOld() {
 
   // Efecto para actualizar el formulario cuando caso cambie
   useEffect(() => {
-    console.log({
-      hasCaso: !!caso,
-      mode,
-      casoId: caso?._id || (caso as any)?._id,
-      loadedCaseId,
-    });
-
     if (!caso) {
       return;
     }
@@ -1677,14 +1604,6 @@ export default function InformacionCasoFormViewOld() {
 
     const incomingCaseId =
       (caso as any)._id || (caso as any).record?._id || null;
-
-    console.log({
-      incomingCaseId,
-      loadedCaseId,
-      shouldReset:
-        incomingCaseId &&
-        (loadedCaseId === null || incomingCaseId !== loadedCaseId),
-    });
 
     // Permitir reset si loadedCaseId es null (primera carga) O si el ID cambió
     if (
@@ -1947,16 +1866,6 @@ export default function InformacionCasoFormViewOld() {
         setCaseInitialLoadCompleted(true);
       }, 100);
     } else {
-      console.log(
-        "⚠️ [FORM_RESET_TRIGGER] No se ejecutó reset - condición no cumplida",
-        {
-          incomingCaseId,
-          loadedCaseId,
-          condition1: !!incomingCaseId,
-          condition2: loadedCaseId === null,
-          condition3: incomingCaseId !== loadedCaseId,
-        },
-      );
     }
   }, [
     caso,
@@ -2105,9 +2014,6 @@ export default function InformacionCasoFormViewOld() {
     if (isEditMode && caseId) {
       // Prevenir doble actualización
       if (isCreatingCase) {
-        console.log(
-          "[INFORMACION_CASO_VIEW] Actualización bloqueada por isCreatingCase=true",
-        );
         return;
       }
 
@@ -3048,23 +2954,9 @@ export default function InformacionCasoFormViewOld() {
 
           if ((iv as any)._id) {
             // Actualizar existente
-            console.log(
-              `[saveIntervinientes] Actualizando interviniente ${
-                (iv as any)._id
-              }`,
-            );
             const result = await updateIntervener((iv as any)._id, payload);
-            console.log(
-              `[saveIntervinientes] Resultado actualización:`,
-              result,
-            );
             if (result && !result.statusCode) {
               updatedCount++;
-              console.log(
-                `[saveIntervinientes] Interviniente ${
-                  (iv as any)._id
-                } actualizado exitosamente`,
-              );
             } else {
               const msg = Array.isArray((result as any)?.message)
                 ? (result as any).message.join(", ")
@@ -3082,10 +2974,6 @@ export default function InformacionCasoFormViewOld() {
             const res = await createIntervener(payload);
             if ("intervener" in res && res.intervener) {
               createdCount++;
-              console.log(
-                "[saveIntervinientes] Interviniente creado exitosamente:",
-                res.intervener,
-              );
             } else {
               const msg = Array.isArray((res as any).message)
                 ? (res as any).message.join(", ")
@@ -7373,10 +7261,6 @@ export default function InformacionCasoFormViewOld() {
                       className="elena-button-primary"
                       disabled={isCaseLoading || isCreatingCase}
                       onClick={async (e) => {
-                        console.log(
-                          "[INFORMACION_CASO_VIEW] Botón submit clickeado!",
-                        );
-
                         // Forzar validación del formulario antes de proceder
                         const isValid = await form.trigger();
                         const errors = form.formState.errors;

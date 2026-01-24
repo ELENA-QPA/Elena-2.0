@@ -117,7 +117,7 @@ export default function ExpedientesView({
         setSortDirection("asc");
       }
     },
-    [sortColumn]
+    [sortColumn],
   );
 
   // Paginación híbrida: carga progresiva del servidor, paginación local
@@ -175,7 +175,7 @@ export default function ExpedientesView({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -183,7 +183,7 @@ export default function ExpedientesView({
         return;
       }
 
-      const data = await response.json();     
+      const data = await response.json();
 
       if (data.lastSync) {
         setLastSyncDate(new Date(data.lastSync));
@@ -224,12 +224,12 @@ export default function ExpedientesView({
               ...mun,
               nombre: capitalizeName(mun.nombre),
             })),
-          })
+          }),
         );
 
         console.log(
           "[DIVIPOLA] Departamentos formateados:",
-          departamentosFormateados.slice(0, 3)
+          departamentosFormateados.slice(0, 3),
         );
 
         setDepartments(departamentosFormateados);
@@ -239,7 +239,7 @@ export default function ExpedientesView({
           dept.municipios.map((municipio: any) => ({
             ...municipio,
             departamento: dept.nombre,
-          }))
+          })),
         );
         setAllCities(allCitiesData);
 
@@ -341,7 +341,7 @@ export default function ExpedientesView({
 
     // Filtrar ciudades del departamento seleccionado
     const cities = allCities.filter(
-      (city) => city.departamento === departmentFilter
+      (city) => city.departamento === departmentFilter,
     );
 
     return cities;
@@ -492,14 +492,14 @@ export default function ExpedientesView({
     // pero el navegador las enviará automáticamente con withCredentials: true
     if (!token && !user) {
       console.error(
-        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación"
+        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación",
       );
       setAuthStatus("unauthenticated");
       return false;
     }
 
     console.log(
-      "[EXPEDIENTES][Auth Success]: Cookies de autenticación encontradas"
+      "[EXPEDIENTES][Auth Success]: Cookies de autenticación encontradas",
     );
     setAuthStatus("authenticated");
     return true;
@@ -534,7 +534,7 @@ export default function ExpedientesView({
             // Agregar nuevos casos evitando duplicados
             const existingIds = new Set(allLoadedCasos.map((caso) => caso._id));
             const uniqueNewCasos = newCasos.filter(
-              (caso) => !existingIds.has(caso._id)
+              (caso) => !existingIds.has(caso._id),
             );
 
             if (uniqueNewCasos.length > 0) {
@@ -554,7 +554,7 @@ export default function ExpedientesView({
             if (newCasos.length < batchSize) {
               setHasMoreToLoad(false);
               console.log(
-                "[EXPEDIENTES][End Detected]: Último lote incompleto, fin de datos"
+                "[EXPEDIENTES][End Detected]: Último lote incompleto, fin de datos",
               );
             }
           }
@@ -592,7 +592,7 @@ export default function ExpedientesView({
         setIsLoadingMore(false);
       }
     },
-    [getAllCasos, allLoadedCasos, isLoadingMore, hasMoreToLoad, totalRecords]
+    [getAllCasos, allLoadedCasos, isLoadingMore, hasMoreToLoad, totalRecords],
   );
 
   const handleRetry = useCallback(() => {
@@ -624,7 +624,7 @@ export default function ExpedientesView({
         throw new Error(errorMsg);
       }
     },
-    [deleteCaso]
+    [deleteCaso],
   );
 
   // Función para sincronizar con Monolegal
@@ -652,7 +652,7 @@ export default function ExpedientesView({
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({}),
-        }
+        },
       );
 
       const data = await response.json();
@@ -660,11 +660,11 @@ export default function ExpedientesView({
       if (response.ok && data.success) {
         console.log("[SYNC][Monolegal] Sincronización exitosa:", data);
         setSyncResults(data);
- 
+
         setLastSyncDate(new Date());
 
         toast.success(
-          `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`
+          `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`,
         );
 
         setTimeout(() => {
@@ -689,7 +689,7 @@ export default function ExpedientesView({
       // Eliminar duplicados por _id
       const uniqueCasos = initialCasos.filter(
         (caso, index, self) =>
-          index === self.findIndex((c) => c._id === caso._id)
+          index === self.findIndex((c) => c._id === caso._id),
       );
 
       console.log("[EXPEDIENTES][Server Data]: Usando datos del servidor", {
@@ -714,7 +714,7 @@ export default function ExpedientesView({
     if (initialError) {
       console.log(
         "[EXPEDIENTES][Server Error]: Error del servidor",
-        initialError
+        initialError,
       );
       setLocalError(initialError);
       setAuthStatus("authenticated");
@@ -744,10 +744,6 @@ export default function ExpedientesView({
   // Sincronizar totalRecords con initialTotal cuando cambie
   useEffect(() => {
     if (initialTotal !== undefined && initialTotal !== totalRecords) {
-      console.log("[EXPEDIENTES][Total Sync]:", {
-        previousTotal: totalRecords,
-        newTotal: initialTotal,
-      });
       setTotalRecords(initialTotal);
     }
   }, [initialTotal, totalRecords]);
@@ -757,15 +753,8 @@ export default function ExpedientesView({
     // PRIMERO: Eliminar duplicados por _id
     const uniqueCasos = allLoadedCasos.filter(
       (caso, index, self) =>
-        index === self.findIndex((c: Caso) => c._id === caso._id)
+        index === self.findIndex((c: Caso) => c._id === caso._id),
     );
-
-    console.log("[EXPEDIENTES][Dedup in Filter]:", {
-      original: allLoadedCasos.length,
-      unique: uniqueCasos.length,
-      duplicatesRemoved: allLoadedCasos.length - uniqueCasos.length,
-    });
-
     let filtered = uniqueCasos;
 
     // 1. Filtro por BÚSQUEDA DE TEXTO (nombre, código, etc)
@@ -806,7 +795,7 @@ export default function ExpedientesView({
     if (internalCodeFilter.trim()) {
       const codeLower = internalCodeFilter.toLowerCase().trim();
       filtered = filtered.filter((caso) =>
-        caso.etiqueta?.toLowerCase().includes(codeLower)
+        caso.etiqueta?.toLowerCase().includes(codeLower),
       );
     }
 
@@ -818,19 +807,9 @@ export default function ExpedientesView({
     // 4. Filtro por TIPO DE CLIENTE
     if (clientTypeFilter !== "all") {
       filtered = filtered.filter(
-        (caso) => caso.clientType === clientTypeFilter
+        (caso) => caso.clientType === clientTypeFilter,
       );
     }
-
-    console.log(
-      "[FILTER DEBUG] Casos sample:",
-      allLoadedCasos.slice(0, 3).map((c) => ({
-        city: c.city,
-        department: c.department,
-        despachoJudicial: c.despachoJudicial,
-      }))
-    );
-
     // 5. Filtro por DEPARTAMENTO
     if (departmentFilter !== "all") {
       filtered = filtered.filter((caso) => {
@@ -839,7 +818,7 @@ export default function ExpedientesView({
         }
         if (caso.city && allCities.length > 0) {
           const cityData = allCities.find((c) =>
-            compareNames(c.nombre, caso.city || "")
+            compareNames(c.nombre, caso.city || ""),
           );
           if (cityData) {
             return compareNames(cityData.departamento, departmentFilter);
@@ -887,7 +866,7 @@ export default function ExpedientesView({
     // 8. Filtro por TIPO DE PROCESO
     if (processTypeFilter !== "all") {
       filtered = filtered.filter(
-        (caso) => caso.processType === processTypeFilter
+        (caso) => caso.processType === processTypeFilter,
       );
     }
 
@@ -1025,7 +1004,7 @@ export default function ExpedientesView({
               // PRIMERO: Si es formato DD/MM/YYYY (verificar antes de ISO)
               if (typeof dateValue === "string") {
                 const match = dateValue.match(
-                  /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+                  /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
                 );
                 if (match) {
                   const day = parseInt(match[1]);
@@ -1094,55 +1073,11 @@ export default function ExpedientesView({
   const endIndex = startIndex + itemsPerPage;
   const currentPageCasos = filteredCasos.slice(startIndex, endIndex);
 
-  // Debug: Log para verificar datos de la tabla
-  console.log("[EXPEDIENTES][Table Data Debug]:", {
-    allLoadedCasosLength: allLoadedCasos.length,
-    filteredCasosLength: filteredCasos.length,
-    searchTerm,
-    filters: {
-      estadoFilter,
-      clientTypeFilter,
-      departmentFilter,
-      jurisdictionFilter,
-      processTypeFilter,
-      cityFilter,
-      locationFilter,
-      typeFilter,
-      internalCodeFilter,
-      dateFrom,
-      dateTo,
-    },
-    currentPage,
-    itemsPerPage,
-    startIndex,
-    endIndex,
-    currentPageCasosLength: currentPageCasos.length,
-    currentPageCasos: currentPageCasos.map((c) => ({
-      id: c._id,
-      name: c.etiqueta,
-    })),
-    filteredCasosSample: filteredCasos
-      .slice(0, 5)
-      .map((c) => ({ id: c._id, name: c.etiqueta })),
-  });
-
   // Efecto para detectar automáticamente el final de los datos
   useEffect(() => {
     if (allLoadedCasos.length > 0 && !hasMoreToLoad) {
       const isCurrentPageIncomplete =
         currentPageCasos.length < itemsPerPage && currentPageCasos.length > 0;
-
-      if (isCurrentPageIncomplete) {
-        console.log(
-          "[EXPEDIENTES][End Detected]: Página actual incompleta, fin de paginación",
-          {
-            currentPage,
-            pageElements: currentPageCasos.length,
-            expectedElements: itemsPerPage,
-            totalLoaded: allLoadedCasos.length,
-          }
-        );
-      }
     }
   }, [
     allLoadedCasos,
@@ -1171,19 +1106,6 @@ export default function ExpedientesView({
 
   // Páginas que podemos mostrar en la UI (todas las necesarias)
   const maxVisiblePages = actualTotalPages;
-
-  // Debug: Log para verificar valores
-  console.log("[EXPEDIENTES][Pagination Debug]:", {
-    totalRecords,
-    itemsPerPage,
-    estimatedTotalPages,
-    totalLoadedPages,
-    allLoadedCasosLength: allLoadedCasos.length,
-    initialTotal,
-    hasMoreToLoad,
-    actualTotalPages,
-    maxVisiblePages,
-  });
 
   // Información dinámica para el usuario
   const progressInfo = useMemo(() => {
@@ -1225,16 +1147,6 @@ export default function ExpedientesView({
         hasMoreToLoad &&
         !isLoadingMore
       ) {
-        console.log(
-          "[EXPEDIENTES][Auto Load]: Cargando más datos para página",
-          page,
-          {
-            requiredCasos,
-            currentLoaded: allLoadedCasos.length,
-            itemsPerPage,
-          }
-        );
-
         // Calcular cuántos casos necesitamos cargar
         const neededCasos = requiredCasos - allLoadedCasos.length;
         // Cargar en lotes de itemsPerPage, pero mínimo 20 para eficiencia
@@ -1252,18 +1164,12 @@ export default function ExpedientesView({
       hasMoreToLoad,
       isLoadingMore,
       loadMoreFromServer,
-    ]
+    ],
   );
 
   // Manejar cambio de items por página
   const handleItemsPerPageChange = useCallback(
     async (newItemsPerPage: number) => {
-      console.log("[EXPEDIENTES][Items Per Page Change]:", {
-        from: itemsPerPage,
-        to: newItemsPerPage,
-        currentLoaded: allLoadedCasos.length,
-      });
-
       setItemsPerPage(newItemsPerPage);
       setCurrentPage(1); // Volver a la primera página
 
@@ -1283,7 +1189,7 @@ export default function ExpedientesView({
       hasMoreToLoad,
       isLoadingMore,
       loadMoreFromServer,
-    ]
+    ],
   );
 
   // Obtener valores únicos para los filtros (memoizado)
@@ -1291,24 +1197,24 @@ export default function ExpedientesView({
     () => ({
       estados: Array.from(new Set(allLoadedCasos.map((caso) => caso.estado))),
       clientTypes: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.clientType))
+        new Set(allLoadedCasos.map((caso) => caso.clientType)),
       ),
       departments: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.department))
+        new Set(allLoadedCasos.map((caso) => caso.department)),
       ),
       jurisdictions: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.despachoJudicial))
+        new Set(allLoadedCasos.map((caso) => caso.despachoJudicial)),
       ),
       processTypes: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.processType))
+        new Set(allLoadedCasos.map((caso) => caso.processType)),
       ),
       cities: Array.from(new Set(allLoadedCasos.map((caso) => caso.city))),
       locations: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.location))
+        new Set(allLoadedCasos.map((caso) => caso.location)),
       ),
       types: Array.from(new Set(allLoadedCasos.map((caso) => caso.type))),
     }),
-    [allLoadedCasos]
+    [allLoadedCasos],
   );
 
   const clearFilters = useCallback(() => {
@@ -1802,7 +1708,7 @@ export default function ExpedientesView({
                       {uniqueValues.processTypes
                         .filter(
                           (processType) =>
-                            processType && processType.trim() !== ""
+                            processType && processType.trim() !== "",
                         )
                         .map((processType) => (
                           <SelectItem key={processType} value={processType!}>
@@ -2257,12 +2163,12 @@ export default function ExpedientesView({
                           caso.estado === "ADMITE"
                             ? "bg-blue-100 text-blue-800"
                             : caso.estado === "FINALIZADO"
-                            ? "bg-green-100 text-green-800"
-                            : caso.estado === "EN PROCESO"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : caso.estado === "SUSPENDIDO"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
+                              ? "bg-green-100 text-green-800"
+                              : caso.estado === "EN PROCESO"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : caso.estado === "SUSPENDIDO"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-gray-100 text-gray-800"
                         }`}
                       >
                         {caso.estado || "N/A"}
@@ -2283,8 +2189,8 @@ export default function ExpedientesView({
                           caso.type === "ACTIVO"
                             ? "bg-green-100 text-green-800"
                             : caso.type === "INACTIVO"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
                         }`}
                       >
                         {caso.type || "N/A"}
@@ -2363,13 +2269,6 @@ export default function ExpedientesView({
                     const pages = [];
                     const totalPages = maxVisiblePages;
 
-                    console.log("[EXPEDIENTES][Render Pages Debug]:", {
-                      totalPages,
-                      maxVisiblePages,
-                      totalRecords,
-                      itemsPerPage,
-                    });
-
                     if (totalPages <= 10) {
                       // Si hay 10 páginas o menos, mostrar todas
                       for (let i = 1; i <= totalPages; i++) {
@@ -2396,7 +2295,7 @@ export default function ExpedientesView({
                             ) : (
                               i
                             )}
-                          </Button>
+                          </Button>,
                         );
                       }
                     } else {
@@ -2442,7 +2341,7 @@ export default function ExpedientesView({
                           pages.push(
                             <span key="dots1" className="px-2">
                               ...
-                            </span>
+                            </span>,
                           );
                         }
                       } else if (currentPage >= totalPages - 3) {
@@ -2451,7 +2350,7 @@ export default function ExpedientesView({
                           pages.push(
                             <span key="dots1" className="px-2">
                               ...
-                            </span>
+                            </span>,
                           );
                         }
                         for (
@@ -2466,7 +2365,7 @@ export default function ExpedientesView({
                         pages.push(
                           <span key="dots1" className="px-2">
                             ...
-                          </span>
+                          </span>,
                         );
                         for (
                           let i = currentPage - 1;
@@ -2478,7 +2377,7 @@ export default function ExpedientesView({
                         pages.push(
                           <span key="dots2" className="px-2">
                             ...
-                          </span>
+                          </span>,
                         );
                       }
 
