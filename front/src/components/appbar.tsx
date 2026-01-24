@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteCookie } from "cookies-next";
-import { CookiesKeysEnum } from "@/utilities/enums";
+import { CookiesKeysEnum, UserRoleBase } from "@/utilities/enums";
 import { routes } from "@/config/routes/routes";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/data/interfaces/user.interface";
@@ -30,7 +30,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
   const router = useRouter();
   const { role } = useAuth();
 
-  const isAdmin = role === "Administrador";
+  const isAdmin = role === UserRoleBase.ADMINISTRADOR;
   // Verificar si estamos dentro de un SidebarProvider
   let hasSidebarProvider = false;
   try {
@@ -50,7 +50,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
     console.log("[APPBAR][DEBUG] Función handlePerfilClick ejecutada");
     try {
       console.log(
-        "[APPBAR][DEBUG] Intentando navegar a /dashboard/configuracion"
+        "[APPBAR][DEBUG] Intentando navegar a /dashboard/configuracion",
       );
 
       router.push("/dashboard/configuracion");
@@ -59,7 +59,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
       setTimeout(() => {
         if (window.location.pathname !== "/dashboard/configuracion") {
           console.log(
-            "[APPBAR][DEBUG] Router.push falló, usando window.location como fallback"
+            "[APPBAR][DEBUG] Router.push falló, usando window.location como fallback",
           );
           window.location.href = "/dashboard/configuracion";
         }
@@ -78,7 +78,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
       setTimeout(() => {
         if (window.location.pathname !== "/dashboard/configuracion") {
           console.log(
-            "[APPBAR][DEBUG] Router.push configuración falló, usando window.location como fallback"
+            "[APPBAR][DEBUG] Router.push configuración falló, usando window.location como fallback",
           );
           window.location.href = "/dashboard/configuracion";
         }
@@ -93,7 +93,7 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
     <header
       className={cn(
         "h-16 px-2 sm:px-4 md:px-6 flex items-center justify-between bg-white border-b border-gray-200 min-w-0",
-        className
+        className,
       )}
       {...props}
     >
@@ -122,12 +122,13 @@ export const AppBar = ({ user, className, ...props }: AppBarProps) => {
         {/* Greeting (hidden on small screens) */}
         {user?.name && (
           <p className="hidden md:block text-gray-700 font-medium text-sm xl:text-base mr-2">
-            ¡Hola, <span className="text-pink-600 font-semibold">{user.name}</span>!
+            ¡Hola,{" "}
+            <span className="text-pink-600 font-semibold">{user.name}</span>!
           </p>
         )}
-        
+
         {isAdmin && <NotificationBell />}
-        
+
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function DashboardHomeView() {
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string[] | null>(null);
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
   const [isLitigiosOpen, setIsLitigiosOpen] = useState(false);
 
@@ -53,18 +53,14 @@ export default function DashboardHomeView() {
 
       let userRoleFromStorage = null;
 
-      if (user.roles && Array.isArray(user.roles) && user.roles.length > 0) {
-        userRoleFromStorage = user.roles[0];
-        console.log("[DASHBOARD] User roles from array:", userRoleFromStorage);
-      } else if (user.rol && Array.isArray(user.rol) && user.rol.length > 0) {
-        userRoleFromStorage = user.rol[0];
-        console.log("[DASHBOARD] User rol from array:", userRoleFromStorage);
-      } else if (user.role) {
-        userRoleFromStorage = user.role;
-        console.log("[DASHBOARD] User role from string:", userRoleFromStorage);
-      } else if (user.rol && typeof user.rol === "string") {
+      if (user.roles && Array.isArray(user.roles)) {
+        userRoleFromStorage = user.roles;
+      } else if (user.rol && Array.isArray(user.rol)) {
         userRoleFromStorage = user.rol;
-        console.log("[DASHBOARD] User rol from string:", userRoleFromStorage);
+      } else if (user.role) {
+        userRoleFromStorage = [user.role];
+      } else if (user.rol && typeof user.rol === "string") {
+        userRoleFromStorage = [user.rol];
       }
 
       if (userRoleFromStorage) {
@@ -78,7 +74,7 @@ export default function DashboardHomeView() {
     }
   }, []);
 
-  const isAdmin = userRole === UserRoleBase.ADMINISTRADOR;
+  const isAdmin = userRole?.includes(UserRoleBase.ADMINISTRADOR);
 
   console.log("[DASHBOARD] Role comparison:", {
     userRole,

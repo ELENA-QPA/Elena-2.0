@@ -35,16 +35,16 @@ export async function middleware(request: NextRequest) {
             Authorization: `Bearer ${token}`,
           },
           timeout: 10000,
-        }
+        },
       );
 
       const user = response.data;
-      const role: UserRoleType = Array.isArray(user.rol)
-        ? user.rol[0]
-        : user.rol || user.role;
+      const roles = Array.isArray(user.rol)
+        ? user.rol
+        : [user.rol || user.role];
 
       // Solo permitir acceso a administradores
-      if (role !== UserRoleBase.ADMINISTRADOR) {
+      if (!roles.includes(UserRoleBase.ADMINISTRADOR)) {
         return NextResponse.redirect(new URL("/no-autorizado", request.url));
       }
 
@@ -68,16 +68,14 @@ export async function middleware(request: NextRequest) {
           Authorization: `Bearer ${token}`,
         },
         timeout: 10000, // 10 segundos timeout
-      }
+      },
     );
 
     // Adaptar el usuario según la respuesta del login
     // Si el rol viene como array, tomamos el primero
     let user = response.data;
     // ✅ CORREGIDO: El backend envía "roles" (plural), no "rol" (singular)
-    let role: UserRoleType = Array.isArray(user.roles)
-      ? user.roles[0]
-      : user.roles || user.rol || user.role;
+    const roles = Array.isArray(user.rol) ? user.rol : [user.rol || user.role];
     // Si el token viene en el body, lo actualizamos
     if (user.token) {
       token = user.token;
@@ -91,19 +89,19 @@ export async function middleware(request: NextRequest) {
       roles: Array.isArray(user.roles)
         ? user.roles
         : user.roles
-        ? [user.roles]
-        : [],
+          ? [user.roles]
+          : [],
       rol: Array.isArray(user.roles)
         ? user.roles
         : user.roles
-        ? [user.roles]
-        : [], // Para compatibilidad con localStorage
-      role: role, // Agregar también en formato string para compatibilidad
+          ? [user.roles]
+          : [], // Para compatibilidad con localStorage
+      role: roles[0], // Agregar también en formato string para compatibilidad
     };
 
     // Guardar token y usuario en cookies
     const userEncoded = Buffer.from(JSON.stringify(normalizedUser)).toString(
-      "base64"
+      "base64",
     );
     res.cookies.set("user", userEncoded);
     res.cookies.set("token", token ?? "", {
@@ -122,7 +120,7 @@ export async function middleware(request: NextRequest) {
 
     // Control de acceso basado en roles
     // Solo los analistas y usuarios básicos tienen restricciones
-    if (role !== UserRoleBase.ADMINISTRADOR) {
+    if (!roles.includes(UserRoleBase.ADMINISTRADOR)) {
       if (pathName !== "/" && !pathName.startsWith("/dashboard")) {
         return NextResponse.redirect(new URL("/no-autorizado", request.url));
       }
@@ -150,7 +148,7 @@ export async function middleware(request: NextRequest) {
       error.code === "ECONNREFUSED"
     ) {
       console.log(
-        "[MIDDLEWARE][Connectivity Error]: Error de conectividad, permitiendo acceso temporal"
+        "[MIDDLEWARE][Connectivity Error]: Error de conectividad, permitiendo acceso temporal",
       );
       // En caso de error de conectividad, podríamos permitir acceso temporal
       // pero para seguridad, mejor redirigir a login
@@ -161,7 +159,7 @@ export async function middleware(request: NextRequest) {
       console.log("[MIDDLEWARE][Auth Error]: Token inválido o expirado");
     } else {
       console.log(
-        "[MIDDLEWARE][Unknown Error]: Error desconocido de validación"
+        "[MIDDLEWARE][Unknown Error]: Error desconocido de validación",
       );
     }
 

@@ -30,16 +30,11 @@ export function AdminGuard({ children }: AdminGuardProps) {
 
         // Decodificar el usuario
         const userData = JSON.parse(atob(userCookie));
-        const role = Array.isArray(userData.rol)
-          ? userData.rol[0]
-          : userData.rol || userData.role;
+        const roles = Array.isArray(userData.rol)
+          ? userData.rol
+          : [userData.rol || userData.role];
 
-        console.log("[AdminGuard][Role Check]:", {
-          role,
-          isAdmin: role === UserRoleBase.ADMINISTRADOR,
-        });
-
-        if (role !== UserRoleBase.ADMINISTRADOR) {
+        if (!roles.includes(UserRoleBase.ADMINISTRADOR)) {
           router.push("/no-autorizado");
           return;
         }
