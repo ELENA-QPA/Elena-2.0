@@ -28,6 +28,8 @@ export const useAuth = () => {
       } catch (error) {}
     }
 
+    console.log("[useAuth][DEBUG] Auth Data:", data);
+
     setAuthData(data);
     setIsLoading(false);
   }, []);

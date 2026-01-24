@@ -41,6 +41,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
+import { UserRoleBase } from "@/utilities/enums/user-roles.enum";
 
 // Definir las rutas que aún no tienen integración completa con APIs
 const pendingIntegrationRoutes = ["/dashboard/informacion-caso"];
@@ -111,17 +112,7 @@ export function AppSidebar() {
           const userRoles = userData.rol || userData.roles || [];
 
           // Verificar si el usuario tiene rol de administrador
-          const isUserAdmin = Array.isArray(userRoles)
-            ? userRoles.includes("admin") ||
-              userRoles.includes("administrator") ||
-              userRoles.includes("Administrador") ||
-              userRoles.includes("Admin") ||
-              userRoles.includes("ADMIN")
-            : userRoles === "admin" ||
-              userRoles === "administrator" ||
-              userRoles === "Administrador" ||
-              userRoles === "Admin" ||
-              userRoles === "ADMIN";
+          const isUserAdmin = userRoles.includes(UserRoleBase.ADMINISTRADOR);
 
           setIsAdmin(isUserAdmin);
         }
@@ -136,7 +127,7 @@ export function AppSidebar() {
 
   const toggleMenu = (title: string) => {
     setOpenMenus((prev) =>
-      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
+      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title],
     );
   };
 
@@ -183,7 +174,7 @@ export function AppSidebar() {
               if ("subItems" in item && item.subItems) {
                 const isOpen = openMenus.includes(item.title);
                 const hasActiveSubItem = item.subItems.some(
-                  (sub) => pathname === sub.href
+                  (sub) => pathname === sub.href,
                 );
 
                 return (
