@@ -27,9 +27,6 @@ export const useAuth = () => {
         data.id = id;
       } catch (error) {}
     }
-
-    console.log("[useAuth][DEBUG] Auth Data:", data);
-
     setAuthData(data);
     setIsLoading(false);
   }, []);
