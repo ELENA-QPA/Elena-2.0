@@ -14,7 +14,7 @@ on:
       - main
 
 jobs:
-  dockerize-and-deploy:
+  deploy-bot:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +35,7 @@ jobs:
           gcloud auth configure-docker us-east1-docker.pkg.dev
 
       - name: Build and Push Docker Image
-        working-directory: backend
+        working-directory: bot
         run: |
           docker build -t $DOCKER_IMAGE_URL:latest .
           docker push $DOCKER_IMAGE_URL:latest
