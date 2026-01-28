@@ -5,7 +5,7 @@
     "declaration": false,
     "declarationMap": false,
     "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "types": ["node"],
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -21,10 +21,7 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": [
-    "**/*.js",
-    "**/*.ts"
-  ],
+  "include": ["**/*.js", "**/*.ts"],
   "exclude": [
     "node_modules",
     "dist",
