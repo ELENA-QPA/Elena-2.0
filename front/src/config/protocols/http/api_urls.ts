@@ -96,6 +96,7 @@ export const apiUrls = {
     getByLawyer: "/api/orchestrator/audience",
     getRecordByInternal: "/api/orchestrator/record/internalCode",
     getAudience: "/api/orchestrator/audience/fix",
+    archiveFile: "/api/orchestrator/filepay",
   },
 
   audiencias: {

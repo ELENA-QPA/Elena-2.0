@@ -35,13 +35,22 @@ import {
   mapEventoFormToAudienceUpdate,
 } from "@/modules/audiencias/data/adapters/audience.adapter";
 import { DeleteConfirmationDialog } from "../../../components/modales/DeleteConfirmation";
+import { ArchiveConfirmation } from "@/components/modales/ArchiveConfirmation";
 import { Trash2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Archive } from "lucide-react";
 
 export const estadoLabels: Record<Estado, string> = {
   Programada: "Programada",
   Celebrada: "Celebrada",
   No_celebrada: "No Celebrada",
   Conciliada: "Conciliada",
+  Archivado: "Archivado",
 };
 
 interface EventModalProps {
@@ -88,9 +97,11 @@ export function EventModal({
     createAudience,
     updateAudience,
     deleteAudience,
+    archiveFile,
   } = useAudience();
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
 
   const form = useForm<EventoForm>({
     resolver: zodResolver(eventoSchema),
@@ -105,7 +116,11 @@ export function EventModal({
   }, [open, initialData]);
 
   const estadoActual = form.watch("estado");
-  const blockAmount = estadoActual !== "Conciliada";
+  const montoActual = form.watch("monto_conciliado");
+  const isArchivado = estadoActual === "Archivado";
+  const canArchive = montoActual ? montoActual > 0 : false;
+  const blockAmount =
+    estadoActual !== "Conciliada" && estadoActual !== "Archivado";
 
   const handleSync = async () => {
     const etiqueta = form.getValues("etiqueta");
@@ -147,10 +162,40 @@ export function EventModal({
       onClose();
     }
   };
+
+  const handleArchive = async () => {
+    const recordId = form.getValues("record_id");
+    if (!recordId) {
+      setError("Error recuperando el ID del record");
+      return;
+    }
+
+    const values = form.getValues();
+    if (!idEvent) {
+      setError("Error recuperando el ID del evento");
+      return;
+    }
+
+    const audienceData = mapEventoFormToAudienceUpdate(values);
+    const updateResult = await updateAudience(idEvent, audienceData);
+
+    if (!updateResult.success) {
+      setShowArchiveConfirm(false);
+      return;
+    }
+
+    const result = await archiveFile(recordId);
+    if (result.success) {
+      setShowArchiveConfirm(false);
+      window.location.reload();
+      onClose();
+    }
+  };
+
   const create = async (values: EventoForm) => {
     if (!values.record_id) {
       setError(
-        "No se encontró el ID del registro. Por favor, sincroniza primero."
+        "No se encontró el ID del registro. Por favor, sincroniza primero.",
       );
       return;
     }
@@ -384,8 +429,8 @@ export function EventModal({
                     Sincronizar
                   </Button>
                 )}
-                {editing &&
-                  !isEditable && ( // ← NUEVO BOTÓN
+                {editing && !isEditable && (
+                  <div className="flex gap-2">
                     <Button
                       type="button"
                       variant="destructive"
@@ -395,7 +440,35 @@ export function EventModal({
                       <Trash2 className="h-4 w-4 mr-2" />
                       Eliminar
                     </Button>
-                  )}
+
+                    {isArchivado && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span>
+                              <Button
+                                type="button"
+                                className="bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={() => setShowArchiveConfirm(true)}
+                                disabled={!canArchive}
+                              >
+                                <Archive className="h-4 w-4 mr-2" />
+                                Archivar
+                              </Button>
+                            </span>
+                          </TooltipTrigger>
+                          {!canArchive && (
+                            <TooltipContent>
+                              <p>
+                                Para archivar, el monto debe ser mayor a cero
+                              </p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" type="button" onClick={closeModal}>
@@ -424,6 +497,12 @@ export function EventModal({
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
         onConfirm={handleDelete}
+      />
+
+      <ArchiveConfirmation
+        open={showArchiveConfirm}
+        onOpenChange={setShowArchiveConfirm}
+        onConfirm={handleArchive}
       />
     </>
   );
