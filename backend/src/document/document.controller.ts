@@ -25,8 +25,8 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ObjectId } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-//import { FileService } from 'src/common/services/file.service';
-import { FileLocalService } from 'src/common/services/file-local.service';
+import { FileService } from 'src/common/services/file.service';
+// import { FileLocalService } from 'src/common/services/file-local.service';
 
 @ApiTags('Documentos')
 @Controller('document')
@@ -39,7 +39,7 @@ export class DocumentController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file', FileLocalService.multerConfig))
+  @UseInterceptors(FileInterceptor('file', FileService.multerConfig))
   create(
     @Body() createDocumentDto: CreateDocumentMultipartDto,
     @UploadedFile() file: any,
@@ -76,11 +76,14 @@ export class DocumentController {
   @UseGuards(JwtAuthGuard)
   @ApiParam({ name: 'id', description: 'ID del documento' })
   @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file', FileService.multerConfig))
   update(
     @Param('id') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
+    @UploadedFile() file?: any,
   ) {
-    return this.documentService.update(id, updateDocumentDto);
+    return this.documentService.update(id, updateDocumentDto, file);
   }
   // -----------------------------------------------------
   @ApiOperation({ summary: 'Subir archivo a un documento existente' })
@@ -89,7 +92,7 @@ export class DocumentController {
   @ApiParam({ name: 'id', description: 'ID del documento' })
   @ApiConsumes('multipart/form-data')
   //@UseInterceptors(FileInterceptor('file', FileService.multerConfig))
-  @UseInterceptors(FileInterceptor('file', FileLocalService.multerConfig))
+  @UseInterceptors(FileInterceptor('file', FileService.multerConfig))
   @Post(':id/upload-file')
   uploadFile(@Param('id') id: string, @UploadedFile() file: any) {
     if (!file) {

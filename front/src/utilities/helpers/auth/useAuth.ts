@@ -27,7 +27,6 @@ export const useAuth = () => {
         data.id = id;
       } catch (error) {}
     }
-
     setAuthData(data);
     setIsLoading(false);
   }, []);

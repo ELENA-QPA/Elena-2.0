@@ -1,9 +1,4 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
+import { Storage } from '@google-cloud/storage';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { memoryStorage } from 'multer';
@@ -24,14 +19,12 @@ export interface UploadedFile {
 
 @Injectable()
 export class FileService {
-  private s3: S3Client;
+  private storage: Storage;
   private bucketName: string;
 
-  // Configuración de Multer para documentos (usando memoria para S3)
   static multerConfig = {
     storage: memoryStorage(),
     fileFilter: (req, file, cb) => {
-      // Filtrar tipos de archivo permitidos
       const allowedMimeTypes = [
         'application/pdf',
         'image/jpeg',
@@ -56,42 +49,36 @@ export class FileService {
 
   // -----------------------------------------------------
   constructor(private configService: ConfigService) {
-    this.s3 = new S3Client({
-      region: this.configService.get<string>('AWS_REGION'),
+    this.storage = new Storage({
+      projectId: this.configService.get('GCP_PROJECT_ID'),
       credentials: {
-        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.get<string>(
-          'AWS_SECRET_ACCESS_KEY',
-        ),
+        client_email: this.configService.get('GCP_CLIENT_EMAIL'),
+        private_key: this.configService
+          .get('GCP_PRIVATE_KEY')
+          .replace(/\\n/g, '\n'),
       },
     });
-    this.bucketName = this.configService.get<string>('BUCKET_NAME');
+    this.bucketName = this.configService.get<string>('GCP_BUCKET_NAME');
   }
   // -----------------------------------------------------
-
-  // Validar archivos antes de procesarlos
   validateFiles(files: UploadedFile[]): boolean {
     if (!files || files.length === 0) {
-      return true; // Los archivos son opcionales
+      return true;
     }
 
-    // Validar que no excedan el límite de archivos
     if (files.length > 10) {
       throw new BadRequestException(
         'No se pueden subir más de 10 archivos a la vez',
       );
     }
 
-    // Validar cada archivo individualmente
     files.forEach((file, index) => {
-      // Validar tamaño
       if (file.size > 10 * 1024 * 1024) {
         throw new BadRequestException(
           `El archivo ${file.originalname} excede el tamaño máximo de 10MB`,
         );
       }
 
-      // Validar tipo MIME
       const allowedMimeTypes = [
         'application/pdf',
         'image/jpeg',
@@ -113,38 +100,44 @@ export class FileService {
     return true;
   }
 
-  // Procesar archivos subidos usando S3
   async processUploadedFiles(files: UploadedFile[]): Promise<any[]> {
     if (!files || files.length === 0) {
       return [];
     }
 
     try {
-      // Subir archivos a S3 de forma paralela
+      const bucket = this.storage.bucket(this.bucketName);
+
       const uploadPromises = files.map(async (file) => {
         const fileExtension = extname(file.originalname);
-        const fileName = `documents/${uuid()}${fileExtension}`;
+        const fileName = `${uuid()}${fileExtension}`;
 
-        const upload = new Upload({
-          client: this.s3,
-          params: {
-            Bucket: this.bucketName,
-            Key: fileName,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-            // ACL: 'public-read'
+        const blob = bucket.file(fileName);
+
+        const blobStream = blob.createWriteStream({
+          resumable: false,
+          metadata: {
+            contentType: file.mimetype,
           },
         });
 
-        const result = await upload.done();
+        await new Promise((resolve, reject) => {
+          blobStream.on('error', (err) => reject(err));
+          blobStream.on('finish', () => resolve(true));
+          blobStream.end(file.buffer);
+        });
+
+        await blob.makePublic();
+
+        const publicUrl = `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
 
         return {
           originalName: file.originalname,
           filename: fileName,
           size: file.size,
           mimetype: file.mimetype,
-          url: result.Location,
-          s3Key: fileName,
+          url: publicUrl,
+          gcsKey: fileName,
         };
       });
 
@@ -158,55 +151,70 @@ export class FileService {
     }
   }
 
-  // -----------------------------------------------------
   async uploadOneFile(file: any): Promise<string> {
-    const upload = new Upload({
-      client: this.s3,
-      params: {
-        Bucket: this.bucketName,
-        Key: `${Date.now()}-${file.originalname}`,
-        Body: file.buffer,
-        ContentType: file.mimetype,
+    const bucket = this.storage.bucket(this.bucketName);
+    const fileName = `${Date.now()}-${file.originalname}`;
+    const blob = bucket.file(fileName);
+
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+      metadata: {
+        contentType: file.mimetype,
       },
     });
-    const result = await upload.done();
-    return result.Location; // Retorna la URL del archivo subido
-  }
-  // -----------------------------------------------------
 
-  async uploadMultipleFiles(files: any[]): Promise<string[]> {
-    const uploadPromises = files.map((file) => {
-      const upload = new Upload({
-        client: this.s3,
-        params: {
-          Bucket: this.bucketName,
-          Key: `${Date.now()}-${file.originalname}`,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        },
-      });
-      return upload.done();
+    await new Promise((resolve, reject) => {
+      blobStream.on('error', (err) => reject(err));
+      blobStream.on('finish', () => resolve(true));
+      blobStream.end(file.buffer);
     });
 
-    const results = await Promise.all(uploadPromises);
-    return results.map((result) => result.Location); // Retorna las URLs de los archivos subidos
+    await blob.makePublic();
+    const publicUrl = `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
+    return publicUrl;
   }
-  // -----------------------------------------------------
+
+  async uploadMultipleFiles(files: any[]): Promise<string[]> {
+    const bucket = this.storage.bucket(this.bucketName);
+
+    const uploadPromises = files.map(async (file) => {
+      const fileName = `${Date.now()}-${file.originalname}`;
+      const blob = bucket.file(fileName);
+
+      const blobStream = blob.createWriteStream({
+        resumable: false,
+        metadata: {
+          contentType: file.mimetype,
+        },
+      });
+
+      await new Promise((resolve, reject) => {
+        blobStream.on('error', (err) => reject(err));
+        blobStream.on('finish', () => resolve(true));
+        blobStream.end(file.buffer);
+      });
+
+      await blob.makePublic();
+
+      return `https://storage.googleapis.com/${this.bucketName}/${fileName}`;
+    });
+
+    return await Promise.all(uploadPromises);
+  }
+
   async deleteFile(url: string): Promise<void> {
     try {
-      const key = url.split('/').pop();
-      console.log('Deleting file:', key);
+      const fileName = url.split(`${this.bucketName}/`)[1];
 
-      const command = new DeleteObjectCommand({
-        Bucket: this.bucketName,
-        Key: key,
-      });
-      const res = await this.s3.send(command);
-      console.log(res);
+      if (!fileName) {
+        throw new Error('No se pudo extraer el nombre del archivo de la URL');
+      }
+
+      const bucket = this.storage.bucket(this.bucketName);
+      await bucket.file(fileName).delete();
     } catch (error) {
       console.error('Error deleting file:', error);
       throw error;
     }
   }
-  // -----------------------------------------------------
 }

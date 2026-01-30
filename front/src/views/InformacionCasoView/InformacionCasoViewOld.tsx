@@ -1233,7 +1233,8 @@ export default function InformacionCasoFormViewOld() {
 
         setUserRole(roleString);
         setIsAdmin(isUserAdmin);
-      } catch {
+      } catch (error) {
+        console.error("Error checking authentication:", error);
         router.push("/login");
       }
     };
@@ -2520,6 +2521,7 @@ export default function InformacionCasoFormViewOld() {
             responsibleType: documentForm.tipoResponsable || "Sistema",
             responsible: documentForm.responsable || "Sistema",
             observations: documentForm.observaciones || "",
+            file: uploadedFiles.length > 0 ? uploadedFiles[0].file : "",
           };
 
           const result = await updateDocument(

@@ -99,7 +99,7 @@ export class RecordsService {
   private async generateDocumentConsecutive(
     etiqueta: string,
     documentType: string,
-  ): Promise<string> {
+  ): Promise<{ consecutive: string; consecutiveNumber: number }> {
     try {
       // Obtener el código del documento de la constante
       const secondPart = secondConsecutivePart[documentType];
@@ -109,29 +109,26 @@ export class RecordsService {
         );
       }
 
-      // Obtener el siguiente número consecutivo para este tipo de documento específico
-      const documentPattern = `^${etiqueta}-${secondPart}-QPA-`;
-
       // Buscar directamente en la colección de documentos usando regex
       const DocumentModel = this.connection.model('Documento');
       const lastDocument = await DocumentModel.findOne({
-        consecutive: { $regex: documentPattern },
-        deletedAt: { $exists: false },
+        etiqueta: etiqueta,
+        document: documentType,
       })
-        .sort({ consecutive: -1 })
-        .select('consecutive')
+        .sort({ consecutiveNumber: -1 })
+        .select('consecutiveNumber')
         .exec();
 
-      let nextDocumentNumber = 1;
-      if (lastDocument && lastDocument.consecutive) {
-        const matches = lastDocument.consecutive.match(/-(\d+)$/);
-        if (matches) {
-          nextDocumentNumber = parseInt(matches[1]) + 1;
-        }
-      }
+      const nextNumber = lastDocument ? lastDocument.consecutiveNumber + 1 : 1;
 
-      const paddedNumber = nextDocumentNumber.toString().padStart(2, '0');
-      return `${etiqueta}-${secondPart}-QPA-${paddedNumber}`;
+      // 4. Formatear consecutivo
+      const padded = nextNumber.toString().padStart(2, '0');
+      const consecutive = `${etiqueta}-${secondPart}-QPA-${padded}`;
+
+      return {
+        consecutive,
+        consecutiveNumber: nextNumber,
+      };
     } catch (error) {
       console.error('Error al generar consecutivo del documento:', error);
       throw new InternalServerErrorException(
@@ -312,15 +309,17 @@ export class RecordsService {
       // 4. Crear documentos si existen
       if (documents && Array.isArray(documents) && documents.length > 0) {
         const firstDocument = documents[0];
-        const documentConsecutive = await this.generateDocumentConsecutive(
-          etiqueta,
-          firstDocument.document,
-        );
+        const { consecutive, consecutiveNumber } =
+          await this.generateDocumentConsecutive(
+            etiqueta,
+            firstDocument.document,
+          );
 
         const documentToCreate = [
           {
             ...firstDocument,
-            consecutive: documentConsecutive,
+            consecutive,
+            consecutiveNumber,
           },
         ];
 
@@ -328,9 +327,6 @@ export class RecordsService {
           documentToCreate,
           recordCreated._id as unknown as ObjectId,
           null, // session = null
-        );
-        console.log(
-          `Created 1 document with consecutive: ${documentConsecutive}`,
         );
       }
 
@@ -464,14 +460,16 @@ export class RecordsService {
       let createdDocuments = [];
       if (documents && Array.isArray(documents) && documents.length > 0) {
         const firstDocument = documents[0];
-        const documentConsecutive = await this.generateDocumentConsecutive(
-          etiqueta,
-          firstDocument.document,
-        );
+        const { consecutive, consecutiveNumber } =
+          await this.generateDocumentConsecutive(
+            etiqueta,
+            firstDocument.document,
+          );
 
         const documentToCreate = {
           ...firstDocument,
-          consecutive: documentConsecutive,
+          consecutive,
+          consecutiveNumber,
         };
 
         // Si hay archivos, asociar URL al documento

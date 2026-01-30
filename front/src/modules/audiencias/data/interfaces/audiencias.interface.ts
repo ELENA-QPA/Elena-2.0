@@ -1,13 +1,19 @@
 import { Lawyer } from "./lawyers.interface";
 import { z } from "zod";
 
-export type Estado = "Programada" | "Celebrada" | "No_celebrada" | "Conciliada";
+export type Estado =
+  | "Programada"
+  | "Celebrada"
+  | "No_celebrada"
+  | "Conciliada"
+  | "Archivado";
 
 export const ESTADOS = [
   "Programada",
   "Celebrada",
   "No_celebrada",
   "Conciliada",
+  "Archivado",
 ] as const;
 
 export const LegendColors: Record<string, string> = {

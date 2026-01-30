@@ -1,0 +1,60 @@
+name: Chatbot to Cloud Run
+
+env:
+  SERVICE_NAME: chatbot-api
+  PROJECT_ID: encoded-pointer-484522-d6
+  DOCKER_IMAGE_URL: us-east1-docker.pkg.dev/encoded-pointer-484522-d6/chatbot-api/chatbot-api
+  CLOUD_RUN_SA: chatbot@encoded-pointer-484522-d6.iam.gserviceaccount.com
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Google Cloud Auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GCP_CHATBOT_API }}"
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        working-directory: bot
+        run: |
+          docker build -t $DOCKER_IMAGE_URL:latest .
+          docker push $DOCKER_IMAGE_URL:latest
+
+      - name: Deploy to Cloud Run
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_KEY: ${{secrets.API_KEY}}
+          API_AUTH_EMAIL: ${{secrets.API_AUTH_EMAIL}}
+          API_AUTH_PASSWORD: ${{secrets.API_AUTH_PASSWORD}}
+        run: |
+          ENV_VARS="API_BASE_UR=${API_BASE_UR}"
+          ENV_VARS="${ENV_VARS},API_KEY=${API_KEY}"
+          ENV_VARS="${ENV_VARS},API_AUTH_EMAIL=${API_AUTH_EMAIL}"
+          ENV_VARS="${ENV_VARS},API_AUTH_PASSWORD=${API_AUTH_PASSWORD}"
+          gcloud run deploy $SERVICE_NAME \
+            --image ${{ env.DOCKER_IMAGE_URL }}:latest \
+            --platform managed \
+            --region us-east1 \
+            --allow-unauthenticated \
+            --service-account $CLOUD_RUN_SA \
+            --set-env-vars "${ENV_VARS}"

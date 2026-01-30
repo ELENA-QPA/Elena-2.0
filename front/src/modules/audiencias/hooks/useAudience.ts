@@ -103,14 +103,14 @@ export function useAudience() {
 
   const updateAudienceWithValidation = async (
     id: string,
-    audienceData: AudienceUpdate
+    audienceData: AudienceUpdate,
   ) => {
     setLoading(true);
     setError(null);
     try {
       const data = await audienceRepository.updateAudienceWithValidation(
         id,
-        audienceData
+        audienceData,
       );
       setError(null);
       return { success: true, data };
@@ -137,6 +137,21 @@ export function useAudience() {
     }
   };
 
+  const archiveFile = async (idRecord: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await audienceRepository.archiveFile(idRecord);
+      setError(null);
+      return { success: true };
+    } catch (err: any) {
+      setError(err.message || "Error al eliminar la audiencia");
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     audiences,
     loading,
@@ -150,5 +165,6 @@ export function useAudience() {
     updateAudience,
     updateAudienceWithValidation,
     deleteAudience,
+    archiveFile,
   };
 }

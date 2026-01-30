@@ -40,12 +40,14 @@ API backend desarrollada con NestJS para el sistema QP Alliance. Esta aplicació
 ## 🚀 Instalación y Configuración
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone <repository-url>
-cd Backend-QP Alliance
+cd backend
 ```
 
 ### 2. Instalar dependencias
+
 ```bash
 yarn install
 # o
@@ -53,41 +55,64 @@ npm install
 ```
 
 ### 3. Instalar NestJS CLI (opcional)
+
 ```bash
 npm i -g @nestjs/cli
 ```
 
 ### 4. Configurar variables de entorno
+
 Crear un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```env
 # Base de datos
-MONGODB_URI=mongodb://localhost:27017/qpAlliance
+MONGODB_URI=
 
 # Puerto de la aplicación
-PORT=3000
+PORT=
 
 # JWT
-JWT_SECRET=your-secret-key
-JWT_EXPIRATION=7d
+JWT_SECRET=
+JWT_EXPIRATION=
 
-# AWS S3 (opcional)
-AWS_ACCESS_KEY_ID=your-access-key
-AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_S3_BUCKET_NAME=your-bucket-name
-AWS_REGION=us-east-1
+# GCP
+GCP_PROJECT_ID=
+GCP_BUCKET_NAME=
+GCP_CLIENT_EMAIL=
+GCP_PRIVATE_KEY=
+
+# REDIS
+REDIS_HOST=
+REDIS_PORT=
 
 # Correo electrónico
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-password
+SMTP_HOST=
+SMTP_PORT=
+SMTP_SECURE=
+SMTP_USER=
+SMTP_PASS=
 
-# API Key para acceso externo
-API_KEY=your-api-key
+EMAIL_USER=
+INVITATION_LINK=
+
+# API Key for external endpoints (generate a new one for production)
+API_KEY=
+
+# Monolegal
+MONOLEGAL_EMAIL=
+MONOLEGAL_PASSWORD=
+
+# OpenAI
+OPENAI_API_KEY=
+OPENAI_MODEL=
+
+# Dapta
+DAPTA_ENDPOINT=
+DAPTA_API_KEY=
 ```
 
-### 5. Levantar la base de datos
+### 5. Levantar la base de datos y redis
+
 ```bash
 docker-compose up -d
 ```
@@ -95,6 +120,7 @@ docker-compose up -d
 ### 6. Ejecutar la aplicación
 
 #### Desarrollo
+
 ```bash
 yarn start:dev
 # o
@@ -102,6 +128,7 @@ npm run start:dev
 ```
 
 #### Producción
+
 ```bash
 yarn build
 yarn start:prod
@@ -134,9 +161,9 @@ src/
 
 ## 🔗 Endpoints Principales
 
-La API estará disponible en `http://localhost:3000/api`
+La API estará disponible en `http://localhost:4000/api`
 
-- **Documentación Swagger**: `http://localhost:3000/api`
+- **Documentación Swagger**: `http://localhost:4000/api`
 - **Autenticación**: `/api/auth`
 - **Documentos**: `/api/documents`
 - **Registros**: `/api/records`
@@ -148,6 +175,7 @@ La API estará disponible en `http://localhost:3000/api`
 La API soporta dos tipos de autenticación:
 
 1. **JWT Bearer Token**: Para usuarios autenticados
+
    ```
    Authorization: Bearer <jwt-token>
    ```
@@ -193,6 +221,7 @@ npm run test:e2e
 ## 🐳 Docker
 
 ### Desarrollo con Docker
+
 ```bash
 # Construir la imagen
 docker build -t qp-alliance-backend .
@@ -202,6 +231,7 @@ docker run -p 3000:3000 qp-alliance-backend
 ```
 
 ### Docker Compose (Recomendado)
+
 ```bash
 # Levantar todos los servicios
 docker-compose up -d

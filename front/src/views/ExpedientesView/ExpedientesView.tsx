@@ -119,7 +119,7 @@ export default function ExpedientesView({
         setSortDirection("asc");
       }
     },
-    [sortColumn],
+    [sortColumn],    
   );
 
   // Paginación híbrida: carga progresiva del servidor, paginación local
@@ -159,7 +159,7 @@ export default function ExpedientesView({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        },        
       );
 
       if (!response.ok) {
@@ -167,7 +167,7 @@ export default function ExpedientesView({
         return;
       }
 
-      const data = await response.json();
+      const data = await response.json();      
 
       if (data.lastSync) {
         setLastSyncDate(new Date(data.lastSync));
@@ -434,7 +434,7 @@ export default function ExpedientesView({
     // pero el navegador las enviará automáticamente con withCredentials: true
     if (!token && !user) {
       console.error(
-        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación",
+        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación",        
       );
       setAuthStatus("unauthenticated");
       return false;
@@ -601,7 +601,7 @@ export default function ExpedientesView({
       // Eliminar duplicados por _id
       const uniqueCasos = initialCasos.filter(
         (caso, index, self) =>
-          index === self.findIndex((c) => c._id === caso._id),
+          index === self.findIndex((c) => c._id === caso._id),          
       );
 
       setAllLoadedCasos(uniqueCasos);
@@ -691,7 +691,7 @@ export default function ExpedientesView({
     if (internalCodeFilter.trim()) {
       const codeLower = internalCodeFilter.toLowerCase().trim();
       filtered = filtered.filter((caso) =>
-        caso.etiqueta?.toLowerCase().includes(codeLower),
+        caso.etiqueta?.toLowerCase().includes(codeLower),   
       );
     }
 
@@ -967,28 +967,25 @@ export default function ExpedientesView({
     }
 
     return filtered;
-  }, [
-    allLoadedCasos,
-    searchTerm,
-    internalCodeFilter,
-    nameFilter,
-    radicadoFilter,
-    estadoFilter,
-    clientTypeFilter,
-    departmentFilter,
-    cityFilter,
-    jurisdictionFilter,
-    processTypeFilter,
-    locationFilter,
-    typeFilter,
-    dateFrom,
-    dateTo,
-    compareNames,
-    hasDespachoOptions,
-    sortColumn,
-    sortDirection,
-    allCities,
-  ]);
+}, [
+  allLoadedCasos,
+  allCities,
+  cityFilter,
+  clientTypeFilter,
+  compareNames,
+  dateFrom,
+  dateTo,
+  departmentFilter,
+  hasDespachoOptions,
+  internalCodeFilter,
+  jurisdictionFilter,
+  nameFilter,
+  radicadoFilter,
+  searchTerm,
+  sortColumn,
+  sortDirection,
+  typeFilter,
+]);
 
   // Paginación local de los datos filtrados
   const totalLoadedPages = Math.ceil(filteredCasos.length / itemsPerPage);

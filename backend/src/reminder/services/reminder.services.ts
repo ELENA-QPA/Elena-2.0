@@ -4,6 +4,7 @@ import { Queue } from 'bull';
 import { DaptaData, EmailReminderData } from '../interfaces/reminder.interface';
 import * as fs from 'fs';
 import * as Handlebars from 'handlebars';
+import { start } from 'repl';
 
 @Injectable()
 export class ReminderService {
@@ -115,7 +116,6 @@ export class ReminderService {
   buildAudienceContext(audience) {
     const startCol = this.utcToColombia(audience.start);
     const endCol = this.utcToColombia(audience.end);
-
     const formatTime = (date: Date): string => {
       const hours = date.getUTCHours().toString().padStart(2, '0');
       const minutes = date.getUTCMinutes().toString().padStart(2, '0');

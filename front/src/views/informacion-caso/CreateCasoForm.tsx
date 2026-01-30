@@ -181,7 +181,7 @@ const NORMALIZED_PROCESS_TYPES = new Map<string, string[]>(
   Object.entries(PROCESS_TYPES_BY_JURISDICTION).map(([k, v]) => [
     k.toLowerCase().trim(),
     v,
-  ])
+  ]),
 );
 
 export function CreateCasoForm() {
@@ -300,11 +300,6 @@ export function CreateCasoForm() {
     }
   }, [caso, mode]);
 
-  // USEEFFECT 3: Debug del estado actual
-  useEffect(() => {
-    console.log("[DEBUG] Estado actual - Modo:", mode, "| FormData:", formData);
-  }, [mode, formData]);
-
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -357,12 +352,6 @@ export function CreateCasoForm() {
 
       // Verificar token en cookies (usado por el HttpClient)
       const cookieToken = getCookie(CookiesKeysEnum.token);
-      console.log("[CREATE_CASO_FORM] Token de cookie:", {
-        hasToken: !!cookieToken,
-        tokenPreview: cookieToken
-          ? `${cookieToken.substring(0, 20)}...`
-          : "null",
-      });
 
       if (!cookieToken) {
         toast.error("Sesión expirada. Por favor, inicia sesión nuevamente.");
@@ -376,20 +365,15 @@ export function CreateCasoForm() {
         if (userDataString) {
           const userData = JSON.parse(userDataString);
           responsible = userData?.name || userData?.email || "Sistema";
-          console.log("[CREATE_CASO_FORM] Usuario autenticado:", {
-            name: userData?.name,
-            email: userData?.email,
-            responsible,
-          });
         } else {
           console.warn(
-            "[CREATE_CASO_FORM] No se encontró información de usuario en localStorage, usando datos por defecto"
+            "[CREATE_CASO_FORM] No se encontró información de usuario en localStorage, usando datos por defecto",
           );
         }
       } catch (err) {
         console.warn(
           "[CREATE_CASO_FORM] Error al obtener el usuario del localStorage:",
-          err
+          err,
         );
       }
 
@@ -449,7 +433,7 @@ export function CreateCasoForm() {
       if ("record" in response) {
         toast.success("Caso creado exitosamente", { position: "top-right" });
         router.push(
-          `/dashboard/informacion-caso?mode=view&id=${response.record._id}`
+          `/dashboard/informacion-caso?mode=view&id=${response.record._id}`,
         );
       } else {
         const errorMsg = Array.isArray(response.message)
@@ -804,9 +788,7 @@ export function CreateCasoForm() {
                 type="submit"
                 className="bg-pink-600 hover:bg-pink-700 text-white"
                 disabled={isSubmitting}
-                onClick={() =>
-                  console.log("[CREATE_CASO_FORM] Botón submit clickeado!")
-                }
+                onClick={() => {}}
               >
                 {isSubmitting ? (
                   <>

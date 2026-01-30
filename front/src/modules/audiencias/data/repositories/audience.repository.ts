@@ -30,19 +30,21 @@ export abstract class AudienceRepository {
 
   abstract updateAudience(
     id: string,
-    body: AudienceUpdate
+    body: AudienceUpdate,
   ): Promise<AudienceUpdate>;
 
   abstract updateAudienceWithValidation(
     id: string,
-    body: AudienceUpdate
+    body: AudienceUpdate,
   ): Promise<AudienceUpdate>;
 
   abstract getAudienceById(
-    AudienceId: string
+    AudienceId: string,
   ): Promise<AudienceOrchestratorResponse>;
 
   abstract deleteAudience(AudienceId: string): Promise<void>;
+
+  abstract archiveFile(recordId: string): Promise<void>;
 }
 
 @injectable()
@@ -69,7 +71,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
   }
 
   async getAudienceById(
-    AudienceId: string
+    AudienceId: string,
   ): Promise<AudienceOrchestratorResponse> {
     const response = await this.httpClient.request({
       url: apiUrls.orchestrator.getAudience,
@@ -98,7 +100,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     }
 
     throw new CustomError(
-      response.body?.message || "Error fetching audiences by lawyer"
+      response.body?.message || "Error fetching audiences by lawyer",
     );
   }
 
@@ -115,7 +117,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     }
 
     throw new CustomError(
-      response.body?.message || "Error fetching by InternalCode"
+      response.body?.message || "Error fetching by InternalCode",
     );
   }
 
@@ -136,7 +138,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
   async updateAudience(
     id: string,
-    audience: AudienceUpdate
+    audience: AudienceUpdate,
   ): Promise<AudienceUpdate> {
     const response = await this.httpClient.request({
       url: `${apiUrls.audiencias.updateAudience}${id}`,
@@ -154,7 +156,7 @@ export class AudienceRepositoryImpl implements AudienceRepository {
 
   async updateAudienceWithValidation(
     id: string,
-    audience: AudienceUpdate
+    audience: AudienceUpdate,
   ): Promise<AudienceUpdate> {
     const response = await this.httpClient.request({
       url: `${apiUrls.audiencias.updateAudienceWithValidation}${id}`,
@@ -182,5 +184,22 @@ export class AudienceRepositoryImpl implements AudienceRepository {
     }
 
     throw new CustomError(response.body?.message || "Error updating audience");
+  }
+
+  async archiveFile(recordId: string): Promise<void> {
+    const response = await this.httpClient.request({
+      url: `${apiUrls.orchestrator.archiveFile}`,
+      method: "put",
+      body: JSON.stringify({ id: recordId }),
+      isAuth: true,
+    });
+
+    if (response.statusCode === HttpStatusCode.ok) {
+      return;
+    }
+
+    throw new CustomError(
+      response.body?.message || "Error archivando el record",
+    );
   }
 }
