@@ -3,6 +3,7 @@ export enum EstadoAudiencia {
   CELEBRADA = 'Celebrada',
   NO_CELEBRADA = 'No_celebrada',
   CONCILIADA = 'Conciliada',
+  ARCHIVADO = 'Archivado',
 }
 
 export interface AudienceBase {

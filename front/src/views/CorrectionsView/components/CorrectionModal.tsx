@@ -66,6 +66,7 @@ export const estadoLabels: Record<Estado, string> = {
   Celebrada: "Celebrada",
   No_celebrada: "No Celebrada",
   Conciliada: "Conciliada",
+  Archivado: "Archivado",
 };
 
 export function NotificationCorrectionModal({

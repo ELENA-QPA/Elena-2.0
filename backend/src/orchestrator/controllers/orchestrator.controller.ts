@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Logger,
+  Put,
 } from '@nestjs/common';
 import { OrchestratorService } from '../services/orchestrator.service';
 import {
@@ -738,5 +739,82 @@ export class OrchestratorController {
   })
   extractRange(@Body() dto) {
     return this.orchestratorService.extractDate(dto.text);
+  }
+
+  @Put('/filepay')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Archivar y marcar como pagado un caso',
+    description:
+      'Recibe el identificador de un caso y actualiza su estado a ' +
+      '"ARCHIVADO_Y_PAGADO". Retorna el caso actualizado.',
+  })
+  @ApiBody({
+    description: 'Identificador del caso a archivar y marcar como pagado',
+    schema: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          description: 'Identificador del caso',
+          example: '697c0b0ee200e73d829d8d49',
+        },
+      },
+      required: ['id'],
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Caso actualizado exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Caso actualizado exitosamente',
+        },
+        record: {
+          type: 'object',
+          description: 'Caso actualizado',
+          properties: {
+            _id: { type: 'string', example: '697c0b0ee200e73d829d8d49' },
+            user: { type: 'string', example: '696809d1e3ad0c02055ee650' },
+            clientType: { type: 'string', example: 'Uber' },
+            department: { type: 'string', example: 'Antioquia' },
+            personType: { type: 'string', example: 'NATURAL' },
+            jurisdiction: { type: 'string', example: 'Administrativo' },
+            location: { type: 'string', example: 'Unificada' },
+            processType: { type: 'string', example: 'Acciones de grupo' },
+            city: { type: 'string', example: 'Abejorral' },
+            country: { type: 'string', example: 'COLOMBIA' },
+            radicado: { type: 'string', example: '554654' },
+            despachoJudicial: { type: 'string', example: 'sassa' },
+            etiqueta: { type: 'string', example: 'U004' },
+            sincronizadoMonolegal: { type: 'boolean', example: false },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              example: '2026-01-30T01:36:14.299Z',
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              example: '2026-01-30T02:42:22.944Z',
+            },
+            estado: {
+              type: 'string',
+              example: 'ARCHIVADO_Y_PAGADO',
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos o el caso no puede ser actualizado',
+  })
+  filepay(@Body() dto) {
+    return this.orchestratorService.filePay(dto.id);
   }
 }

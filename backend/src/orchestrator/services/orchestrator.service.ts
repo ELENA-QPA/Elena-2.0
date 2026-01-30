@@ -18,6 +18,7 @@ import {
 } from '../interfaces/audience.interface';
 import { NotificationService } from 'src/notifications/services/notification.service';
 import { CreateAudienceDto } from 'src/audience/dto/create-audience.dto';
+import { Estado } from 'src/records/dto/create-record.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { ReminderService } from 'src/reminder/services/reminder.services';
 import {
@@ -25,6 +26,7 @@ import {
   EmailReminderData,
 } from 'src/reminder/interfaces/reminder.interface';
 import OpenAI from 'openai';
+import { BadRequestException } from '@nestjs/common';
 import { UtilitiesService } from 'src/common/services/utilities.service';
 import { Cron } from '@nestjs/schedule/dist/decorators/cron.decorator';
 
@@ -532,5 +534,18 @@ export class OrchestratorService {
 
   async cleanQueue() {
     return this.reminderService.cleanQueue();
+  }
+
+  //Relacionado al modulo de cartera
+
+  async filePay(recordId: string) {
+    try {
+      const updatedRecordDto = { estado: Estado.ARCHIVADO_Y_PAGADO };
+      return this.recordsService.updateRecord(recordId, updatedRecordDto);
+    } catch {
+      throw new BadRequestException(
+        'Error al updatear el record con estado archivado',
+      );
+    }
   }
 }
