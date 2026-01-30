@@ -154,8 +154,7 @@ export class MonolegalApiService {
   async getExpediente(idExpediente: string): Promise<ExpedienteDetalle> {
     const token = await this.login();
 
-    try {
-      // this.logger.log(`Obteniendo expediente ${idExpediente}`);
+    try {     
 
       const response = await firstValueFrom(
         this.httpService.get<ExpedienteDetalle>(
@@ -361,16 +360,30 @@ export class MonolegalApiService {
     try {
       const procesos = await this.buscarProcesosPorRadicado(numeroRadicado);
 
+      // Validar que hay procesos válidos con id
       if (!procesos || procesos.length === 0) {
         this.logger.warn(`No se encontraron procesos para ${numeroRadicado}`);
         return [];
       }
 
-      const procesoSeleccionado = procesos.reduce((mejor, actual) => {
-        return (actual.totalActuaciones || 0) > (mejor.totalActuaciones || 0)
-          ? actual
-          : mejor;
-      }, procesos[0]);
+      // Filtrar solo procesos que tengan id válido
+      const procesosValidos = procesos.filter((p: any) => p && p.id);
+
+      if (procesosValidos.length === 0) {
+        this.logger.warn(
+          `No hay procesos válidos con id para ${numeroRadicado}`,
+        );
+        return [];
+      }
+
+      const procesoSeleccionado = procesosValidos.reduce(
+        (mejor: any, actual: any) => {
+          return (actual.totalActuaciones || 0) > (mejor.totalActuaciones || 0)
+            ? actual
+            : mejor;
+        },
+        procesosValidos[0],
+      );
 
       this.logger.log(
         `Proceso seleccionado: ${procesoSeleccionado.id} con ${procesoSeleccionado.totalActuaciones} actuaciones`,
@@ -479,5 +492,392 @@ export class MonolegalApiService {
       this.logger.error('Error obteniendo actuaciones:', error.message);
       return [];
     }
+  }
+
+  /**
+   * Obtiene actuaciones de todas las fuentes (Unificada + PublicacionesProcesales)
+   * Si Unificada está vacía, busca en otras fuentes como fallback
+   * @param idExpediente - ID del expediente en Monolegal
+   */
+  async getActuacionesTodasLasFuentes(idExpediente: string): Promise<{
+    unificada: any[];
+    publicacionesProcesales: any[];
+    otras: any[];
+    combinadas: any[];
+    fechaUltimaActuacion: string;
+  }> {
+    const resultado = {
+      unificada: [],
+      publicacionesProcesales: [],
+      otras: [],
+      combinadas: [],
+      fechaUltimaActuacion: '',
+    };
+
+    try {
+      // 1. Obtener el expediente con todas sus fuentes
+      const expediente = await this.getExpediente(idExpediente);
+
+      if (!expediente?.procesosEnFuentesDatos) {
+        this.logger.warn(
+          `Expediente ${idExpediente} no tiene procesosEnFuentesDatos`,
+        );
+        return resultado;
+      }
+
+      // BUSCAR LA FECHA MÁS RECIENTE entre Unificada y PublicacionesProcesales
+      let fechaMasReciente: Date | null = null;
+
+      for (const fuente of expediente.procesosEnFuentesDatos) {
+        const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+        // Solo considerar Unificada y PublicacionesProcesales
+        if (
+          tipoFuente !== 'unificada' &&
+          tipoFuente !== 'publicacionesprocesales'
+        ) {
+          continue;
+        }
+
+        if (
+          fuente.fechaUltimaActuacion &&
+          fuente.fechaUltimaActuacion.trim() !== ''
+        ) {
+          const fechaParsed = this.parsearFecha(fuente.fechaUltimaActuacion);
+
+          if (fechaParsed) {
+            // Si no hay fecha aún, o esta es más reciente, guardarla
+            if (
+              !fechaMasReciente ||
+              fechaParsed.getTime() > fechaMasReciente.getTime()
+            ) {
+              fechaMasReciente = fechaParsed;
+              this.logger.log(
+                `[FECHA] Nueva fecha más reciente de ${fuente.tipoFuente}: ${fuente.fechaUltimaActuacion}`,
+              );
+            }
+          }
+        }
+      }
+
+      // Formatear la fecha encontrada
+      if (fechaMasReciente) {
+        resultado.fechaUltimaActuacion = `${String(
+          fechaMasReciente.getDate(),
+        ).padStart(2, '0')}/${String(fechaMasReciente.getMonth() + 1).padStart(
+          2,
+          '0',
+        )}/${fechaMasReciente.getFullYear()}`;
+      }
+
+      this.logger.log(
+        `[FECHA] Fecha final más reciente: ${
+          resultado.fechaUltimaActuacion || 'N/A'
+        }`,
+      );
+
+      // 2. Primera pasada: obtener Unificada y PublicacionesProcesales
+      for (const fuente of expediente.procesosEnFuentesDatos) {
+        if (!fuente.activo) continue;
+
+        const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+        if (tipoFuente === 'unificada') {
+          if (fuente.idProceso) {
+            try {
+              const actuacionesDetalle = await this.getActuacionesPorIdProceso(
+                fuente.idProceso,
+              );
+              for (const act of actuacionesDetalle) {
+                resultado.unificada.push({
+                  ...act,
+                  fuente: 'Unificada',
+                  tipoFuente: 'Unificada',
+                });
+              }
+            } catch (error) {
+              this.logger.error(
+                `Error obteniendo detalle de Unificada: ${error.message}`,
+              );
+            }
+          }
+        } else if (tipoFuente === 'publicacionesprocesales') {
+          // SOLO agregar si tiene fecha válida
+          if (
+            fuente.fechaUltimaActuacion &&
+            fuente.fechaUltimaActuacion.trim() !== ''
+          ) {
+            const actuacionData = {
+              id: fuente.idProceso || `${tipoFuente}-${Date.now()}`,
+              idProceso: fuente.idProceso,
+              actuacion: fuente.ultimaActuacion || '',
+              textoActuacion: fuente.ultimaActuacion || '',
+              anotacion: fuente.descripcionUltimaActuacion || '',
+              fechaActuacion: this.normalizarFechaPublicaciones(
+                fuente.fechaUltimaActuacion,
+              ),
+              fechaDeActuacion: this.normalizarFechaPublicaciones(
+                fuente.fechaUltimaActuacion,
+              ),
+              numActuaciones: fuente.numActuaciones || 0,
+              fuente: 'PublicacionesProcesales',
+              tipoFuente: 'PublicacionesProcesales',
+              estado: fuente.estado,
+              esProcesoPrincipal: fuente.esProcesoPrincipal,
+            };
+            resultado.publicacionesProcesales.push(actuacionData);
+          }
+        }
+      }
+
+      // 3. SI UNIFICADA ESTÁ VACÍA, buscar en otras fuentes
+      if (resultado.unificada.length === 0) {
+        this.logger.log(
+          `[FALLBACK] Unificada vacía, buscando en otras fuentes...`,
+        );
+
+        for (const fuente of expediente.procesosEnFuentesDatos) {
+          if (!fuente.activo || !fuente.idProceso) continue;
+
+          const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+          if (
+            tipoFuente === 'unificada' ||
+            tipoFuente === 'publicacionesprocesales'
+          ) {
+            continue;
+          }
+
+          try {
+            this.logger.log(
+              `[FALLBACK] Intentando obtener de ${tipoFuente.toUpperCase()}`,
+            );
+
+            const actuaciones = await this.getActuaciones(
+              fuente.idProceso,
+              tipoFuente,
+            );
+
+            for (const act of actuaciones) {
+              resultado.otras.push({
+                ...act,
+                fuente: fuente.tipoFuente,
+                tipoFuente: fuente.tipoFuente,
+              });
+            }
+
+            this.logger.log(
+              `[FALLBACK] ${tipoFuente.toUpperCase()}: ${
+                actuaciones.length
+              } actuaciones encontradas`,
+            );
+          } catch (error) {
+            this.logger.error(
+              `[FALLBACK] Error obteniendo ${tipoFuente}: ${error.message}`,
+            );
+          }
+        }
+      }
+
+      // 4. Combinar todas las fuentes
+      const todas = [
+        ...resultado.unificada,
+        ...resultado.publicacionesProcesales,
+        ...resultado.otras,
+      ];
+
+      // 5. Eliminar duplicados
+      const mapaUnicos = new Map();
+      for (const act of todas) {
+        const clave = `${act.textoActuacion || act.actuacion}-${
+          act.fechaActuacion || act.fechaDeActuacion
+        }`;
+        if (!mapaUnicos.has(clave)) {
+          mapaUnicos.set(clave, act);
+        }
+      }
+      const sinDuplicados = Array.from(mapaUnicos.values());
+
+      // 6. Ordenar por fecha
+      resultado.combinadas = sinDuplicados.sort((a, b) => {
+        const fechaA = this.parsearFecha(
+          a.fechaActuacion || a.fechaDeActuacion,
+        );
+        const fechaB = this.parsearFecha(
+          b.fechaActuacion || b.fechaDeActuacion,
+        );
+
+        if (!fechaA && !fechaB) return 0;
+        if (!fechaA) return 1;
+        if (!fechaB) return -1;
+
+        return fechaB.getTime() - fechaA.getTime();
+      });
+
+      // 7. Si no se encontró fecha en las fuentes, usar la de la actuación más reciente
+      if (!resultado.fechaUltimaActuacion && resultado.combinadas.length > 0) {
+        const primeraActuacion = resultado.combinadas[0];
+        const fechaActuacion =
+          primeraActuacion.fechaActuacion || primeraActuacion.fechaDeActuacion;
+
+        if (fechaActuacion) {
+          const fechaParsed = this.parsearFecha(fechaActuacion);
+          if (fechaParsed) {
+            resultado.fechaUltimaActuacion = `${String(
+              fechaParsed.getDate(),
+            ).padStart(2, '0')}/${String(fechaParsed.getMonth() + 1).padStart(
+              2,
+              '0',
+            )}/${fechaParsed.getFullYear()}`;
+            this.logger.log(
+              `[FECHA] Tomada de actuación más reciente: ${resultado.fechaUltimaActuacion}`,
+            );
+          }
+        }
+      }
+
+      this.logger.log(
+        `[ACTUACIONES] Expediente ${idExpediente}: ` +
+          `Unificada=${resultado.unificada.length}, ` +
+          `PublicacionesProcesales=${resultado.publicacionesProcesales.length}, ` +
+          `Otras=${resultado.otras.length}, ` +
+          `Total=${resultado.combinadas.length}, ` +
+          `FechaReciente=${resultado.fechaUltimaActuacion}`,
+      );
+
+      return resultado;
+    } catch (error) {
+      this.logger.error(
+        `Error en getActuacionesTodasLasFuentes: ${error.message}`,
+      );
+      throw error;
+    }
+  }
+ 
+  //Parsea diferentes formatos de fecha
+   
+  private parsearFecha(fecha: any): Date | null {
+    if (!fecha) return null;
+
+    if (fecha instanceof Date) {
+      return isNaN(fecha.getTime()) ? null : fecha;
+    }
+
+    if (typeof fecha === 'string') {
+     
+      if (fecha.includes('T')) {
+        const parsed = new Date(fecha);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      }
+
+      // Formato "1/27/2026 9:54:54 AM" 
+      const usFormat =
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM|a\.\s*m\.|p\.\s*m\.)?/i;
+      const usMatch = fecha.match(usFormat);
+      if (usMatch) {
+        const [, month, day, year, hour, min, sec, ampm] = usMatch;
+        let hourNum = parseInt(hour, 10);
+        const isPM = ampm?.toLowerCase().includes('p');
+        const isAM = ampm?.toLowerCase().includes('a');
+        if (isPM && hourNum < 12) hourNum += 12;
+        if (isAM && hourNum === 12) hourNum = 0;
+        return new Date(
+          parseInt(year),
+          parseInt(month) - 1,
+          parseInt(day),
+          hourNum,
+          parseInt(min),
+          parseInt(sec),
+        );
+      }
+
+      // Formato "DD/MM/YYYY"
+      const simpleMatch = fecha.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (simpleMatch) {
+        const [, p1, p2, year] = simpleMatch;
+        const day = parseInt(p1, 10);
+        const month = parseInt(p2, 10);
+        return new Date(parseInt(year), month - 1, day, 12, 0, 0);
+      }
+
+      // Último intento
+      const parsed = new Date(fecha);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    return null;
+  }
+
+  /**
+   * Normaliza fechas de PublicacionesProcesales (formato: "12/18/2025 6:39:39 AM")
+   * a formato DD/MM/YYYY
+   */
+  private normalizarFechaPublicaciones(fecha: string): string {
+    if (!fecha) return '';
+
+    try {
+      // Formato: "12/18/2025 6:39:39 AM" -> "18/12/2025"
+      const match = fecha.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (match) {
+        const [, month, day, year] = match;
+        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+      }
+    } catch (error) {
+      this.logger.error(`Error normalizando fecha: ${error.message}`);
+    }
+
+    return fecha;
+  }
+
+  /**
+   * Obtiene todos los expedientes paginados
+   */
+  async getTodosExpedientes(): Promise<any[]> {
+    await this.login();
+
+    const todosLosExpedientes: any[] = [];
+    let pagina = 0;
+    let tieneMasDatos = true;
+
+    while (tieneMasDatos) {
+      try {
+        const response = await firstValueFrom(
+          this.httpService.get<any[]>(`${this.baseUrl}/Expedientes`, {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+            params: {
+              pagina: pagina,
+              ordenadoPor: 'primerolosquehancambiado',
+            },
+          }),
+        );
+
+        const expedientes = response.data || [];
+
+        if (expedientes.length === 0) {
+          tieneMasDatos = false;
+        } else {
+          todosLosExpedientes.push(...expedientes);
+          this.logger.log(
+            `[EXPEDIENTES] Página ${pagina}: ${expedientes.length} expedientes`,
+          );
+          pagina++;
+
+          if (pagina > 100) {
+            this.logger.warn('Se alcanzó el límite de 100 páginas');
+            break;
+          }
+        }
+      } catch (error) {
+        this.logger.error(`Error en página ${pagina}: ${error.message}`);
+        tieneMasDatos = false;
+      }
+    }
+
+    this.logger.log(
+      `[EXPEDIENTES] Total obtenidos: ${todosLosExpedientes.length}`,
+    );
+    return todosLosExpedientes;
   }
 }

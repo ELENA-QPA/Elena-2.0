@@ -90,6 +90,8 @@ export default function ExpedientesView({
   const [locationFilter, setLocationFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [internalCodeFilter, setInternalCodeFilter] = useState("");
+  const [nameFilter, setNameFilter] = useState("");
+  const [radicadoFilter, setRadicadoFilter] = useState("");
 
   // Estados para departamentos y ciudades de divipola.json
   const [departments, setDepartments] = useState<any[]>([]);
@@ -117,7 +119,7 @@ export default function ExpedientesView({
         setSortDirection("asc");
       }
     },
-    [sortColumn]
+    [sortColumn],
   );
 
   // Paginación híbrida: carga progresiva del servidor, paginación local
@@ -125,24 +127,6 @@ export default function ExpedientesView({
   const [itemsPerPage, setItemsPerPage] = useState(25);
   const [totalRecords, setTotalRecords] = useState(initialTotal ?? 0);
 
-  // Debug: Log para verificar inicialización
-  console.log("[EXPEDIENTES][Initialization Debug]:", {
-    initialTotal,
-    totalRecords,
-    initialCasosLength: initialCasos?.length || 0,
-  });
-
-  // Debug: Log para verificar filtros activos
-  console.log("[EXPEDIENTES][Active Filters Debug]:", {
-    departmentFilter,
-    cityFilter,
-    estadoFilter,
-    clientTypeFilter,
-    processTypeFilter,
-    jurisdictionFilter,
-    locationFilter,
-    typeFilter,
-  });
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [allLoadedCasos, setAllLoadedCasos] = useState<Caso[]>(initialCasos); // Todos los casos cargados
   const [hasMoreToLoad, setHasMoreToLoad] = useState(true);
@@ -175,7 +159,7 @@ export default function ExpedientesView({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -183,7 +167,7 @@ export default function ExpedientesView({
         return;
       }
 
-      const data = await response.json();     
+      const data = await response.json();
 
       if (data.lastSync) {
         setLastSyncDate(new Date(data.lastSync));
@@ -224,12 +208,7 @@ export default function ExpedientesView({
               ...mun,
               nombre: capitalizeName(mun.nombre),
             })),
-          })
-        );
-
-        console.log(
-          "[DIVIPOLA] Departamentos formateados:",
-          departamentosFormateados.slice(0, 3)
+          }),
         );
 
         setDepartments(departamentosFormateados);
@@ -239,7 +218,7 @@ export default function ExpedientesView({
           dept.municipios.map((municipio: any) => ({
             ...municipio,
             departamento: dept.nombre,
-          }))
+          })),
         );
         setAllCities(allCitiesData);
 
@@ -250,7 +229,6 @@ export default function ExpedientesView({
         const despachoResponse = await fetch("/despacho_judicial.json");
         const despachoData = await despachoResponse.json();
         setDespachoJudicialData(despachoData);
-        console.log("[EXPEDIENTES][Despacho Data Loaded]:", despachoData);
       } catch (error) {
         console.error("Error loading data:", error);
       }
@@ -341,7 +319,7 @@ export default function ExpedientesView({
 
     // Filtrar ciudades del departamento seleccionado
     const cities = allCities.filter(
-      (city) => city.departamento === departmentFilter
+      (city) => city.departamento === departmentFilter,
     );
 
     return cities;
@@ -367,12 +345,6 @@ export default function ExpedientesView({
     if (despachoJudicial && despachoJudicial.length > 0) {
       const cityDespachos = despachoJudicial[0][cityFilter];
 
-      console.log("[EXPEDIENTES][Despacho Update]:", {
-        cityFilter,
-        cityDespachos,
-        hasDespachos: !!cityDespachos,
-      });
-
       if (
         cityDespachos &&
         Array.isArray(cityDespachos) &&
@@ -397,24 +369,12 @@ export default function ExpedientesView({
     const token = getCookie(CookiesKeysEnum.token);
     const user = getCookie("user");
 
-    console.log("[EXPEDIENTES][Auth Check]:", {
-      hasToken: !!token,
-      hasUser: !!user,
-      tokenPreview: token ? `${token.toString().substring(0, 20)}...` : "null",
-      userPreview: user ? `${user.toString().substring(0, 50)}...` : "null",
-      // Verificar si las cookies son HttpOnly
-      tokenType: typeof token,
-      userType: typeof user,
-    });
-
     // Intentar obtener roles del localStorage primero (más confiable)
     try {
       const roles = localStorage.getItem("roles");
-      console.log("[EXPEDIENTES][LocalStorage Roles Raw]:", roles);
 
       if (roles) {
         const parsedRoles = JSON.parse(roles);
-        console.log("[EXPEDIENTES][LocalStorage Parsed Roles]:", parsedRoles);
 
         // Verificar diferentes variantes del rol de admin
         const isAdmin = Array.isArray(parsedRoles)
@@ -430,14 +390,6 @@ export default function ExpedientesView({
             parsedRoles === "ADMIN";
 
         setUserRole(isAdmin ? "admin" : "user");
-        console.log("[EXPEDIENTES][LocalStorage User Role]:", {
-          roles: parsedRoles,
-          isAdmin,
-          userRole: isAdmin ? "admin" : "user",
-          roleType: typeof parsedRoles,
-          isArray: Array.isArray(parsedRoles),
-          firstRole: Array.isArray(parsedRoles) ? parsedRoles[0] : parsedRoles,
-        });
         return; // Salir si se obtuvo del localStorage
       }
     } catch (roleError) {
@@ -450,7 +402,6 @@ export default function ExpedientesView({
       if (localUserData) {
         const userData = JSON.parse(localUserData);
         const roles = userData.rol || userData.roles || [];
-        console.log("[EXPEDIENTES][LocalStorage User Roles Raw]:", roles);
 
         // Verificar diferentes variantes del rol de admin
         const isAdmin = Array.isArray(roles)
@@ -469,15 +420,6 @@ export default function ExpedientesView({
         if (!user || isAdmin) {
           setUserRole(isAdmin ? "admin" : "user");
         }
-
-        console.log("[EXPEDIENTES][LocalStorage User Role]:", {
-          roles,
-          isAdmin,
-          userRole: isAdmin ? "admin" : "user",
-          roleType: typeof roles,
-          isArray: Array.isArray(roles),
-          willUpdate: !user || isAdmin,
-        });
       } else if (!user) {
         setUserRole("user"); // Default role only if no cookies
       }
@@ -492,15 +434,12 @@ export default function ExpedientesView({
     // pero el navegador las enviará automáticamente con withCredentials: true
     if (!token && !user) {
       console.error(
-        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación"
+        "[EXPEDIENTES][Auth Error]: No hay cookies de autenticación",
       );
       setAuthStatus("unauthenticated");
       return false;
     }
 
-    console.log(
-      "[EXPEDIENTES][Auth Success]: Cookies de autenticación encontradas"
-    );
     setAuthStatus("authenticated");
     return true;
   };
@@ -513,19 +452,11 @@ export default function ExpedientesView({
       setIsLoadingMore(true);
       try {
         const currentOffset = allLoadedCasos.length;
-        console.log("[EXPEDIENTES][Load More Server]:", {
-          currentOffset,
-          batchSize,
-        });
 
         const response = await getAllCasos(batchSize, currentOffset);
 
         if ("records" in response) {
           const newCasos = response.records;
-          console.log("[EXPEDIENTES][Load More Success]:", {
-            newCount: newCasos.length,
-            total: response.total,
-          });
 
           if (newCasos.length === 0) {
             setHasMoreToLoad(false);
@@ -534,17 +465,12 @@ export default function ExpedientesView({
             // Agregar nuevos casos evitando duplicados
             const existingIds = new Set(allLoadedCasos.map((caso) => caso._id));
             const uniqueNewCasos = newCasos.filter(
-              (caso) => !existingIds.has(caso._id)
+              (caso) => !existingIds.has(caso._id),
             );
 
             if (uniqueNewCasos.length > 0) {
               setAllLoadedCasos((prev) => {
                 const newTotal = [...prev, ...uniqueNewCasos];
-                console.log("[EXPEDIENTES][Data Update]:", {
-                  previousCount: prev.length,
-                  newCount: newTotal.length,
-                  addedCount: uniqueNewCasos.length,
-                });
                 return newTotal;
               });
               // toast.success(`${uniqueNewCasos.length} expedientes adicionales cargados`);
@@ -553,21 +479,12 @@ export default function ExpedientesView({
             // Si cargamos menos del batchSize solicitado, no hay más datos
             if (newCasos.length < batchSize) {
               setHasMoreToLoad(false);
-              console.log(
-                "[EXPEDIENTES][End Detected]: Último lote incompleto, fin de datos"
-              );
             }
           }
 
           // Actualizar el total dinámicamente (puede cambiar si se agregaron nuevos expedientes)
           const newTotal = response.total || 0;
           if (newTotal !== totalRecords) {
-            console.log("[EXPEDIENTES][Total Updated]:", {
-              previousTotal: totalRecords,
-              newTotal: newTotal,
-              difference: newTotal - totalRecords,
-            });
-
             // Si el total aumentó, significa que hay nuevos expedientes
             if (newTotal > totalRecords) {
               setHasMoreToLoad(true); // Asegurar que podemos cargar más
@@ -592,11 +509,10 @@ export default function ExpedientesView({
         setIsLoadingMore(false);
       }
     },
-    [getAllCasos, allLoadedCasos, isLoadingMore, hasMoreToLoad, totalRecords]
+    [getAllCasos, allLoadedCasos, isLoadingMore, hasMoreToLoad, totalRecords],
   );
 
   const handleRetry = useCallback(() => {
-    console.log("[EXPEDIENTES][Retry]: Intentando cargar datos nuevamente");
     setAuthStatus("checking");
     setLocalError(null);
     setTimeout(() => {
@@ -609,7 +525,6 @@ export default function ExpedientesView({
   // Función optimizada para manejar eliminación de casos
   const handleDeleteCaso = useCallback(
     async (id: string) => {
-      console.log("Eliminando expediente:", id);
       const result = await deleteCaso(id);
 
       if ("message" in result && !("statusCode" in result)) {
@@ -624,7 +539,7 @@ export default function ExpedientesView({
         throw new Error(errorMsg);
       }
     },
-    [deleteCaso]
+    [deleteCaso],
   );
 
   // Función para sincronizar con Monolegal
@@ -641,8 +556,6 @@ export default function ExpedientesView({
         return;
       }
 
-      console.log("[SYNC][Monolegal] Iniciando sincronización...");
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/monolegal/sync`,
         {
@@ -652,19 +565,18 @@ export default function ExpedientesView({
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({}),
-        }
+        },
       );
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        console.log("[SYNC][Monolegal] Sincronización exitosa:", data);
         setSyncResults(data);
- 
+
         setLastSyncDate(new Date());
 
         toast.success(
-          `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`
+          `Sincronización completada: ${data.summary.created} creados, ${data.summary.updated} actualizados`,
         );
 
         setTimeout(() => {
@@ -689,18 +601,10 @@ export default function ExpedientesView({
       // Eliminar duplicados por _id
       const uniqueCasos = initialCasos.filter(
         (caso, index, self) =>
-          index === self.findIndex((c) => c._id === caso._id)
+          index === self.findIndex((c) => c._id === caso._id),
       );
 
-      console.log("[EXPEDIENTES][Server Data]: Usando datos del servidor", {
-        count: initialCasos.length,
-        unique: uniqueCasos.length,
-        duplicatesRemoved: initialCasos.length - uniqueCasos.length,
-        initialTotal,
-        hasMoreData: initialTotal > uniqueCasos.length,
-      });
-
-      setAllLoadedCasos(uniqueCasos); // ← Usar uniqueCasos en vez de initialCasos
+      setAllLoadedCasos(uniqueCasos);
       setAuthStatus("authenticated");
 
       if (initialTotal && initialTotal > uniqueCasos.length) {
@@ -712,25 +616,16 @@ export default function ExpedientesView({
     }
 
     if (initialError) {
-      console.log(
-        "[EXPEDIENTES][Server Error]: Error del servidor",
-        initialError
-      );
       setLocalError(initialError);
       setAuthStatus("authenticated");
       return;
     }
-
-    console.log("[EXPEDIENTES][Loading Data]: Iniciando carga de expedientes");
     loadMoreFromServer(2000);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect separado para manejar cambios en los datos después de cargas
   useEffect(() => {
     if (casos && casos.length > 0 && allLoadedCasos.length === 0) {
-      console.log("[EXPEDIENTES][Hook Data]: Usando datos del hook", {
-        count: casos.length,
-      });
       setAllLoadedCasos(casos);
     }
   }, [casos, allLoadedCasos.length]);
@@ -744,10 +639,6 @@ export default function ExpedientesView({
   // Sincronizar totalRecords con initialTotal cuando cambie
   useEffect(() => {
     if (initialTotal !== undefined && initialTotal !== totalRecords) {
-      console.log("[EXPEDIENTES][Total Sync]:", {
-        previousTotal: totalRecords,
-        newTotal: initialTotal,
-      });
       setTotalRecords(initialTotal);
     }
   }, [initialTotal, totalRecords]);
@@ -757,14 +648,8 @@ export default function ExpedientesView({
     // PRIMERO: Eliminar duplicados por _id
     const uniqueCasos = allLoadedCasos.filter(
       (caso, index, self) =>
-        index === self.findIndex((c: Caso) => c._id === caso._id)
+        index === self.findIndex((c: Caso) => c._id === caso._id),
     );
-
-    console.log("[EXPEDIENTES][Dedup in Filter]:", {
-      original: allLoadedCasos.length,
-      unique: uniqueCasos.length,
-      duplicatesRemoved: allLoadedCasos.length - uniqueCasos.length,
-    });
 
     let filtered = uniqueCasos;
 
@@ -806,32 +691,50 @@ export default function ExpedientesView({
     if (internalCodeFilter.trim()) {
       const codeLower = internalCodeFilter.toLowerCase().trim();
       filtered = filtered.filter((caso) =>
-        caso.etiqueta?.toLowerCase().includes(codeLower)
+        caso.etiqueta?.toLowerCase().includes(codeLower),
       );
     }
 
     // 3. Filtro por ESTADO
-    if (estadoFilter !== "all") {
-      filtered = filtered.filter((caso) => caso.estado === estadoFilter);
+    // if (estadoFilter !== "all") {
+    //   filtered = filtered.filter((caso) => caso.estado === estadoFilter);
+    // }
+
+    // 3. Filtro por NOMBRE
+    if (nameFilter.trim()) {
+      const nameLower = nameFilter.toLowerCase().trim();
+      filtered = filtered.filter((caso) => {
+        const casoName = caso.proceduralParts?.[0]?.name || "";
+        return casoName.toLowerCase().includes(nameLower);
+      });
     }
 
-    // 4. Filtro por TIPO DE CLIENTE
+    // 4. Filtro por RADICADO
+    if (radicadoFilter.trim()) {
+      const radicadoSearch = radicadoFilter.trim();
+      filtered = filtered.filter((caso) => {
+        const radicado = caso.numeroRadicado || caso.radicado || "";
+        // Búsqueda parcial para ser más flexible
+        return radicado.includes(radicadoSearch);
+      });
+    }
+
+    // 5. Filtro por TIPO DE CLIENTE
     if (clientTypeFilter !== "all") {
-      filtered = filtered.filter(
-        (caso) => caso.clientType === clientTypeFilter
-      );
+      filtered = filtered.filter((caso) => {
+        const clientType = caso.clientType?.trim();
+
+        if (clientTypeFilter === "Rappi SAS") {
+          return clientType === "Rappi SAS";
+        } else if (clientTypeFilter === "other") {
+          return clientType && clientType !== "Rappi SAS";
+        }
+
+        return false;
+      });
     }
-
-    console.log(
-      "[FILTER DEBUG] Casos sample:",
-      allLoadedCasos.slice(0, 3).map((c) => ({
-        city: c.city,
-        department: c.department,
-        despachoJudicial: c.despachoJudicial,
-      }))
-    );
-
-    // 5. Filtro por DEPARTAMENTO
+    
+    // 6. Filtro por DEPARTAMENTO
     if (departmentFilter !== "all") {
       filtered = filtered.filter((caso) => {
         if (caso.department) {
@@ -839,7 +742,7 @@ export default function ExpedientesView({
         }
         if (caso.city && allCities.length > 0) {
           const cityData = allCities.find((c) =>
-            compareNames(c.nombre, caso.city || "")
+            compareNames(c.nombre, caso.city || ""),
           );
           if (cityData) {
             return compareNames(cityData.departamento, departmentFilter);
@@ -849,7 +752,7 @@ export default function ExpedientesView({
       });
     }
 
-    // 6. Filtro por CIUDAD
+    // 7. Filtro por CIUDAD
     if (cityFilter !== "all") {
       filtered = filtered.filter((caso) => {
         if (!caso.city) return false;
@@ -869,7 +772,7 @@ export default function ExpedientesView({
       });
     }
 
-    // 7. Filtro por DESPACHO/JURISDICCIÓN
+    // 8. Filtro por DESPACHO/JURISDICCIÓN
     if (jurisdictionFilter !== "all" && jurisdictionFilter.trim()) {
       filtered = filtered.filter((caso) => {
         // Si hay despachos específicos de la ciudad, comparar exacto
@@ -885,29 +788,29 @@ export default function ExpedientesView({
     }
 
     // 8. Filtro por TIPO DE PROCESO
-    if (processTypeFilter !== "all") {
-      filtered = filtered.filter(
-        (caso) => caso.processType === processTypeFilter
-      );
-    }
+    // if (processTypeFilter !== "all") {
+    //   filtered = filtered.filter(
+    //     (caso) => caso.processType === processTypeFilter,
+    //   );
+    // }
 
     // 9. Filtro por UBICACIÓN
-    if (locationFilter !== "all") {
-      filtered = filtered.filter((caso) => caso.location === locationFilter);
-    }
+    // if (locationFilter !== "all") {
+    //   filtered = filtered.filter((caso) => caso.location === locationFilter);
+    // }
 
     // 10. Filtro por TIPO (Activo/Inactivo)
     if (typeFilter !== "all") {
-      filtered = filtered.filter((caso) => caso.type === typeFilter);
+      filtered = filtered.filter((caso) => caso.isActive === typeFilter);
     }
 
-    // Función para parsear fecha DD/MM/YY o DD/MM/YYYY
+    // Función para parsear fecha DD/MM/YY, DD/MM/YYYY o yyyy-MM-dd
     const parseDate = (dateStr: string): Date | null => {
       if (!dateStr) return null;
 
-      // Si ya es una fecha ISO, parsearla directamente
-      if (dateStr.includes("-")) {
-        const parsed = new Date(dateStr);
+      // Si es formato ISO yyyy-MM-dd (del DatePicker)
+      if (dateStr.includes("-") && dateStr.length === 10) {
+        const parsed = new Date(dateStr + "T00:00:00");
         return isNaN(parsed.getTime()) ? null : parsed;
       }
 
@@ -915,10 +818,9 @@ export default function ExpedientesView({
       const parts = dateStr.split("/");
       if (parts.length === 3) {
         const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1; // Meses van de 0-11
+        const month = parseInt(parts[1], 10) - 1;
         let year = parseInt(parts[2], 10);
 
-        // Si el año es de 2 dígitos, asumir 2000+
         if (year < 100) {
           year += 2000;
         }
@@ -936,8 +838,12 @@ export default function ExpedientesView({
       if (fromDate) {
         fromDate.setHours(0, 0, 0, 0);
         filtered = filtered.filter((caso) => {
-          const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
-          return !isNaN(casoDate.getTime()) && casoDate >= fromDate;
+          // Usar fechaUltimaActuacion en lugar de updatedAt/createdAt
+          const fechaStr = caso.fechaUltimaActuacion;
+          if (!fechaStr) return false;
+
+          const casoDate = parseDate(fechaStr);
+          return casoDate && casoDate >= fromDate;
         });
       }
     }
@@ -948,8 +854,11 @@ export default function ExpedientesView({
       if (toDate) {
         toDate.setHours(23, 59, 59, 999);
         filtered = filtered.filter((caso) => {
-          const casoDate = new Date(caso.updatedAt || caso.createdAt || "");
-          return !isNaN(casoDate.getTime()) && casoDate <= toDate;
+          const fechaStr = caso.fechaUltimaActuacion;
+          if (!fechaStr) return false;
+
+          const casoDate = parseDate(fechaStr);
+          return casoDate && casoDate <= toDate;
         });
       }
     }
@@ -972,16 +881,6 @@ export default function ExpedientesView({
             valueA = extractEtiquetaNumber(a.etiqueta || "");
             valueB = extractEtiquetaNumber(b.etiqueta || "");
             break;
-          // case "internalCode":
-          //   // Extraer TODOS los números del código (año + secuencial)
-          //   const extractFullNumber = (code: string) => {
-          //     if (!code) return 0;
-          //     const numbers = code.match(/\d+/g);
-          //     return numbers ? parseInt(numbers.join("")) : 0;
-          //   };
-          //   valueA = extractFullNumber(a.internalCode || "");
-          //   valueB = extractFullNumber(b.internalCode || "");
-          //   break;
           case "name":
             valueA = (a.proceduralParts?.[0]?.name || "zzz").toLowerCase();
             valueB = (b.proceduralParts?.[0]?.name || "zzz").toLowerCase();
@@ -1009,9 +908,9 @@ export default function ExpedientesView({
             valueA = (a.clientType || "zzz").toLowerCase();
             valueB = (b.clientType || "zzz").toLowerCase();
             break;
-          case "type":
-            valueA = (a.type || "zzz").toLowerCase();
-            valueB = (b.type || "zzz").toLowerCase();
+          case "isActive":
+            valueA = (a.isActive || "zzz").toLowerCase();
+            valueB = (b.isActive || "zzz").toLowerCase();
             break;
           case "estado":
             valueA = (a.estado || "zzz").toLowerCase();
@@ -1025,7 +924,7 @@ export default function ExpedientesView({
               // PRIMERO: Si es formato DD/MM/YYYY (verificar antes de ISO)
               if (typeof dateValue === "string") {
                 const match = dateValue.match(
-                  /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+                  /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
                 );
                 if (match) {
                   const day = parseInt(match[1]);
@@ -1072,6 +971,8 @@ export default function ExpedientesView({
     allLoadedCasos,
     searchTerm,
     internalCodeFilter,
+    nameFilter,
+    radicadoFilter,
     estadoFilter,
     clientTypeFilter,
     departmentFilter,
@@ -1086,6 +987,7 @@ export default function ExpedientesView({
     hasDespachoOptions,
     sortColumn,
     sortDirection,
+    allCities,
   ]);
 
   // Paginación local de los datos filtrados
@@ -1094,55 +996,11 @@ export default function ExpedientesView({
   const endIndex = startIndex + itemsPerPage;
   const currentPageCasos = filteredCasos.slice(startIndex, endIndex);
 
-  // Debug: Log para verificar datos de la tabla
-  console.log("[EXPEDIENTES][Table Data Debug]:", {
-    allLoadedCasosLength: allLoadedCasos.length,
-    filteredCasosLength: filteredCasos.length,
-    searchTerm,
-    filters: {
-      estadoFilter,
-      clientTypeFilter,
-      departmentFilter,
-      jurisdictionFilter,
-      processTypeFilter,
-      cityFilter,
-      locationFilter,
-      typeFilter,
-      internalCodeFilter,
-      dateFrom,
-      dateTo,
-    },
-    currentPage,
-    itemsPerPage,
-    startIndex,
-    endIndex,
-    currentPageCasosLength: currentPageCasos.length,
-    currentPageCasos: currentPageCasos.map((c) => ({
-      id: c._id,
-      name: c.etiqueta,
-    })),
-    filteredCasosSample: filteredCasos
-      .slice(0, 5)
-      .map((c) => ({ id: c._id, name: c.etiqueta })),
-  });
-
   // Efecto para detectar automáticamente el final de los datos
   useEffect(() => {
     if (allLoadedCasos.length > 0 && !hasMoreToLoad) {
       const isCurrentPageIncomplete =
         currentPageCasos.length < itemsPerPage && currentPageCasos.length > 0;
-
-      if (isCurrentPageIncomplete) {
-        console.log(
-          "[EXPEDIENTES][End Detected]: Página actual incompleta, fin de paginación",
-          {
-            currentPage,
-            pageElements: currentPageCasos.length,
-            expectedElements: itemsPerPage,
-            totalLoaded: allLoadedCasos.length,
-          }
-        );
-      }
     }
   }, [
     allLoadedCasos,
@@ -1171,19 +1029,6 @@ export default function ExpedientesView({
 
   // Páginas que podemos mostrar en la UI (todas las necesarias)
   const maxVisiblePages = actualTotalPages;
-
-  // Debug: Log para verificar valores
-  console.log("[EXPEDIENTES][Pagination Debug]:", {
-    totalRecords,
-    itemsPerPage,
-    estimatedTotalPages,
-    totalLoadedPages,
-    allLoadedCasosLength: allLoadedCasos.length,
-    initialTotal,
-    hasMoreToLoad,
-    actualTotalPages,
-    maxVisiblePages,
-  });
 
   // Información dinámica para el usuario
   const progressInfo = useMemo(() => {
@@ -1225,16 +1070,6 @@ export default function ExpedientesView({
         hasMoreToLoad &&
         !isLoadingMore
       ) {
-        console.log(
-          "[EXPEDIENTES][Auto Load]: Cargando más datos para página",
-          page,
-          {
-            requiredCasos,
-            currentLoaded: allLoadedCasos.length,
-            itemsPerPage,
-          }
-        );
-
         // Calcular cuántos casos necesitamos cargar
         const neededCasos = requiredCasos - allLoadedCasos.length;
         // Cargar en lotes de itemsPerPage, pero mínimo 20 para eficiencia
@@ -1252,22 +1087,15 @@ export default function ExpedientesView({
       hasMoreToLoad,
       isLoadingMore,
       loadMoreFromServer,
-    ]
+    ],
   );
 
   // Manejar cambio de items por página
   const handleItemsPerPageChange = useCallback(
     async (newItemsPerPage: number) => {
-      console.log("[EXPEDIENTES][Items Per Page Change]:", {
-        from: itemsPerPage,
-        to: newItemsPerPage,
-        currentLoaded: allLoadedCasos.length,
-      });
-
       setItemsPerPage(newItemsPerPage);
-      setCurrentPage(1); // Volver a la primera página
+      setCurrentPage(1);
 
-      // Si necesitamos más datos para la nueva configuración, cargarlos
       if (
         newItemsPerPage > allLoadedCasos.length &&
         hasMoreToLoad &&
@@ -1277,13 +1105,7 @@ export default function ExpedientesView({
         await loadMoreFromServer(batchSize);
       }
     },
-    [
-      itemsPerPage,
-      allLoadedCasos.length,
-      hasMoreToLoad,
-      isLoadingMore,
-      loadMoreFromServer,
-    ]
+    [allLoadedCasos.length, hasMoreToLoad, isLoadingMore, loadMoreFromServer],
   );
 
   // Obtener valores únicos para los filtros (memoizado)
@@ -1291,24 +1113,24 @@ export default function ExpedientesView({
     () => ({
       estados: Array.from(new Set(allLoadedCasos.map((caso) => caso.estado))),
       clientTypes: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.clientType))
+        new Set(allLoadedCasos.map((caso) => caso.clientType)),
       ),
       departments: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.department))
+        new Set(allLoadedCasos.map((caso) => caso.department)),
       ),
       jurisdictions: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.despachoJudicial))
+        new Set(allLoadedCasos.map((caso) => caso.despachoJudicial)),
       ),
       processTypes: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.processType))
+        new Set(allLoadedCasos.map((caso) => caso.processType)),
       ),
       cities: Array.from(new Set(allLoadedCasos.map((caso) => caso.city))),
       locations: Array.from(
-        new Set(allLoadedCasos.map((caso) => caso.location))
+        new Set(allLoadedCasos.map((caso) => caso.location)),
       ),
-      types: Array.from(new Set(allLoadedCasos.map((caso) => caso.type))),
+      types: Array.from(new Set(allLoadedCasos.map((caso) => caso.isActive))),
     }),
-    [allLoadedCasos]
+    [allLoadedCasos],
   );
 
   const clearFilters = useCallback(() => {
@@ -1324,7 +1146,8 @@ export default function ExpedientesView({
     setLocationFilter("all");
     setTypeFilter("all");
     setInternalCodeFilter("");
-    // También resetear estado de despachos
+    setNameFilter("");
+    setRadicadoFilter("");
     setAvailableDespachos([]);
     setHasDespachoOptions(false);
     setCurrentPage(1);
@@ -1336,6 +1159,8 @@ export default function ExpedientesView({
   }, [
     searchTerm,
     internalCodeFilter,
+    nameFilter,
+    radicadoFilter,
     estadoFilter,
     clientTypeFilter,
     departmentFilter,
@@ -1685,7 +1510,9 @@ export default function ExpedientesView({
                 dateTo ||
                 estadoFilter !== "all" ||
                 clientTypeFilter !== "all" ||
-                departmentFilter !== "all") && (
+                departmentFilter !== "all" ||
+                nameFilter.trim() || // NUEVO
+                radicadoFilter.trim()) && ( // NUEVO
                 <span className="ml-1 sm:ml-2 text-xs px-1 py-0 bg-red-100 text-red-800 rounded">
                   {
                     [
@@ -1694,6 +1521,8 @@ export default function ExpedientesView({
                       estadoFilter !== "all" ? "1" : "",
                       clientTypeFilter !== "all" ? "1" : "",
                       departmentFilter !== "all" ? "1" : "",
+                      nameFilter.trim(),
+                      radicadoFilter.trim(),
                     ].filter(Boolean).length
                   }
                 </span>
@@ -1706,12 +1535,38 @@ export default function ExpedientesView({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2 sm:gap-4">
                 <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
-                    Código Interno
+                    Etiqueta #
                   </label>
                   <Input
                     value={internalCodeFilter}
                     onChange={(e) => setInternalCodeFilter(e.target.value)}
-                    placeholder="Código interno"
+                    placeholder="Etiqueta #"
+                    className="text-sm"
+                  />
+                </div>
+
+                {/* NUEVO: Filtro por Nombre */}
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-gray-700">
+                    Nombre
+                  </label>
+                  <Input
+                    value={nameFilter}
+                    onChange={(e) => setNameFilter(e.target.value)}
+                    placeholder="Buscar por nombre"
+                    className="text-sm"
+                  />
+                </div>
+
+                {/* NUEVO: Filtro por Radicado */}
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-gray-700">
+                    Radicado
+                  </label>
+                  <Input
+                    value={radicadoFilter}
+                    onChange={(e) => setRadicadoFilter(e.target.value)}
+                    placeholder="Buscar por radicado"
                     className="text-sm"
                   />
                 </div>
@@ -1738,7 +1593,7 @@ export default function ExpedientesView({
                   />
                 </div>
 
-                <div className="space-y-1 sm:space-y-2">
+                {/* <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
                     Estado
                   </label>
@@ -1757,7 +1612,7 @@ export default function ExpedientesView({
                         ))}
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
 
                 <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
@@ -1772,19 +1627,14 @@ export default function ExpedientesView({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos los tipos</SelectItem>
-                      {uniqueValues.clientTypes
-                        .filter((type) => type && type.trim() !== "")
-                        .map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
+                      <SelectItem value="Rappi SAS">Rappi SAS</SelectItem>
+                      <SelectItem value="other">Otro</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Filtro por Tipo de Proceso */}
-                <div className="space-y-1 sm:space-y-2">
+                {/* <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
                     Tipo de Proceso
                   </label>
@@ -1802,7 +1652,7 @@ export default function ExpedientesView({
                       {uniqueValues.processTypes
                         .filter(
                           (processType) =>
-                            processType && processType.trim() !== ""
+                            processType && processType.trim() !== "",
                         )
                         .map((processType) => (
                           <SelectItem key={processType} value={processType!}>
@@ -1811,7 +1661,7 @@ export default function ExpedientesView({
                         ))}
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
 
                 {/* Filtro por Departamento */}
                 <div className="space-y-1 sm:space-y-2">
@@ -1872,7 +1722,7 @@ export default function ExpedientesView({
                 </div>
 
                 {/* Filtro por Ubicación Expediente */}
-                <div className="space-y-1 sm:space-y-2">
+                {/* <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
                     Ubicación
                   </label>
@@ -1893,7 +1743,7 @@ export default function ExpedientesView({
                       <SelectItem value="SIC">SIC</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
 
                 {/* Filtro por Despacho */}
                 <div className="space-y-1 sm:space-y-2">
@@ -1970,10 +1820,12 @@ export default function ExpedientesView({
                     <SelectContent>
                       <SelectItem value="all">Todos los tipos</SelectItem>
                       {uniqueValues.types
-                        .filter((type) => type && type.trim() !== "")
-                        .map((type) => (
-                          <SelectItem key={type!} value={type!}>
-                            {type}
+                        .filter(
+                          (isActive) => isActive && isActive.trim() !== "",
+                        )
+                        .map((isActive) => (
+                          <SelectItem key={isActive!} value={isActive!}>
+                            {isActive}
                           </SelectItem>
                         ))}
                     </SelectContent>
@@ -2099,27 +1951,27 @@ export default function ExpedientesView({
                         ))}
                     </div>
                   </TableHead>
-                  {/* <TableHead
+                  <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
-                    onClick={() => handleSort("type")}
+                    onClick={() => handleSort("isActive")}
                   >
                     <div className="flex items-center gap-1">
                       Activo
-                      {sortColumn === "type" &&
+                      {sortColumn === "isActive" &&
                         (sortDirection === "asc" ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
                           <ChevronDown className="h-3 w-3" />
                         ))}
                     </div>
-                  </TableHead> */}
+                  </TableHead>
                   {/* <TableHead
                     className="text-white font-semibold cursor-pointer hover:bg-pink-700"
                     onClick={() => handleSort("estado")}
                   >
                     <div className="flex items-center gap-1">
                       Estado
-                      {sortColumn === "estado" &&f
+                      {sortColumn === "estado" &&
                         (sortDirection === "asc" ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
@@ -2257,12 +2109,12 @@ export default function ExpedientesView({
                           caso.estado === "ADMITE"
                             ? "bg-blue-100 text-blue-800"
                             : caso.estado === "FINALIZADO"
-                            ? "bg-green-100 text-green-800"
-                            : caso.estado === "EN PROCESO"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : caso.estado === "SUSPENDIDO"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
+                              ? "bg-green-100 text-green-800"
+                              : caso.estado === "EN PROCESO"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : caso.estado === "SUSPENDIDO"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-gray-100 text-gray-800"
                         }`}
                       >
                         {caso.estado || "N/A"}
@@ -2280,14 +2132,14 @@ export default function ExpedientesView({
                       </span>
                       <span
                         className={`px-1 py-0.5 rounded-full text-xs font-medium ${
-                          caso.type === "ACTIVO"
+                          caso.isActive === "Activo"
                             ? "bg-green-100 text-green-800"
-                            : caso.type === "INACTIVO"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
+                            : caso.isActive === "Inactivo"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {caso.type || "N/A"}
+                        {caso.isActive || "N/A"}
                       </span>
                     </div>
                   </div>
@@ -2363,13 +2215,6 @@ export default function ExpedientesView({
                     const pages = [];
                     const totalPages = maxVisiblePages;
 
-                    console.log("[EXPEDIENTES][Render Pages Debug]:", {
-                      totalPages,
-                      maxVisiblePages,
-                      totalRecords,
-                      itemsPerPage,
-                    });
-
                     if (totalPages <= 10) {
                       // Si hay 10 páginas o menos, mostrar todas
                       for (let i = 1; i <= totalPages; i++) {
@@ -2396,7 +2241,7 @@ export default function ExpedientesView({
                             ) : (
                               i
                             )}
-                          </Button>
+                          </Button>,
                         );
                       }
                     } else {
@@ -2442,7 +2287,7 @@ export default function ExpedientesView({
                           pages.push(
                             <span key="dots1" className="px-2">
                               ...
-                            </span>
+                            </span>,
                           );
                         }
                       } else if (currentPage >= totalPages - 3) {
@@ -2451,7 +2296,7 @@ export default function ExpedientesView({
                           pages.push(
                             <span key="dots1" className="px-2">
                               ...
-                            </span>
+                            </span>,
                           );
                         }
                         for (
@@ -2466,7 +2311,7 @@ export default function ExpedientesView({
                         pages.push(
                           <span key="dots1" className="px-2">
                             ...
-                          </span>
+                          </span>,
                         );
                         for (
                           let i = currentPage - 1;
@@ -2478,7 +2323,7 @@ export default function ExpedientesView({
                         pages.push(
                           <span key="dots2" className="px-2">
                             ...
-                          </span>
+                          </span>,
                         );
                       }
 

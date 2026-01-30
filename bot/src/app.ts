@@ -96,7 +96,7 @@ async function delay(ms: number): Promise<void> {
 async function sendTyping(
   sock: WASocket,
   jid: string,
-  duration: number = 1200
+  duration: number = 1200,
 ): Promise<void> {
   try {
     await sock.sendPresenceUpdate("composing", jid);
@@ -110,7 +110,7 @@ async function sendTyping(
 async function sendMessage(
   sock: WASocket,
   jid: string,
-  text: string
+  text: string,
 ): Promise<void> {
   await sock.sendMessage(jid, { text });
 }
@@ -119,7 +119,7 @@ async function sendMediaMessage(
   sock: WASocket,
   jid: string,
   text: string,
-  mediaUrl: string
+  mediaUrl: string,
 ): Promise<void> {
   await sock.sendMessage(jid, {
     document: { url: mediaUrl },
@@ -135,7 +135,7 @@ async function sendMediaMessage(
 
 async function handleMessage(
   sock: WASocket,
-  msg: proto.IWebMessageInfo
+  msg: proto.IWebMessageInfo,
 ): Promise<void> {
   if (!msg.message || msg.key.fromMe) return;
 
@@ -208,7 +208,7 @@ async function handleMessage(
 async function handleWelcome(
   sock: WASocket,
   jid: string,
-  userName: string
+  userName: string,
 ): Promise<void> {
   const userId = jid.replace("@s.whatsapp.net", "");
 
@@ -216,7 +216,7 @@ async function handleWelcome(
 
   const message = generateOptionsMessage(
     "👋 ¡Hola! Bienvenido/a a ELENA – QPAlliance, tu asistente legal virtual.\n\nAntes de continuar, cuéntame:",
-    HELLO_OPTIONS
+    HELLO_OPTIONS,
   );
 
   await sendMessage(sock, jid, message);
@@ -227,7 +227,7 @@ async function handleHelloSelection(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const option = input.trim();
 
@@ -235,7 +235,7 @@ async function handleHelloSelection(
     await sendMessage(
       sock,
       jid,
-      "❌ Opción inválida. Por favor, responde con 1 o 2."
+      "❌ Opción inválida. Por favor, responde con 1 o 2.",
     );
     return;
   }
@@ -262,7 +262,7 @@ async function handleDataAuthorization(
   jid: string,
   input: string,
   userId: string,
-  userName: string
+  userName: string,
 ): Promise<void> {
   const normalized = input.trim().toLowerCase();
   const state = getState(userId);
@@ -275,7 +275,7 @@ async function handleDataAuthorization(
     await sendMessage(
       sock,
       jid,
-      "✅ ¡Perfecto! Gracias por aceptar nuestra política de privacidad.\n\nAhora continuemos con tu solicitud..."
+      "✅ ¡Perfecto! Gracias por aceptar nuestra política de privacidad.\n\nAhora continuemos con tu solicitud...",
     );
 
     if (state.selectedOption === "1") {
@@ -290,14 +290,14 @@ async function handleDataAuthorization(
     await sendMessage(
       sock,
       jid,
-      "Gracias por tu respuesta, en esta ocasión no podemos seguir adelante con tu solicitud debido a que no hay aceptación del tratamiento de datos personales.\n\nSi cambias de opinión en el futuro, puedes contactarnos nuevamente.\n\n¡Que tengas un excelente día! 👋"
+      "Gracias por tu respuesta, en esta ocasión no podemos seguir adelante con tu solicitud debido a que no hay aceptación del tratamiento de datos personales.\n\nSi cambias de opinión en el futuro, puedes contactarnos nuevamente.\n\n¡Que tengas un excelente día! 👋",
     );
     resetState(userId);
   } else {
     await sendMessage(
       sock,
       jid,
-      "❌ Opción inválida. Por favor, responde con 1, 2, sí, no, acepto o no acepto."
+      "❌ Opción inválida. Por favor, responde con 1, 2, sí, no, acepto o no acepto.",
     );
   }
 }
@@ -309,13 +309,13 @@ async function handleDataAuthorization(
 async function handleNewProcess(
   sock: WASocket,
   jid: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   await sendTyping(sock, jid, 1200);
 
   const message = generateOptionsMessage(
     "¡Excelente noticia! 🎉\n\nQueremos acompañarte en este camino legal y asegurarnos de que recibas la mejor orientación.\n\nPara comenzar, dime por favor:",
-    PROFILE_OPTIONS
+    PROFILE_OPTIONS,
   );
 
   await sendMessage(sock, jid, message);
@@ -326,7 +326,7 @@ async function handleNewProcessProfile(
   jid: string,
   input: string,
   userId: string,
-  userName: string
+  userName: string,
 ): Promise<void> {
   const option = input.trim();
 
@@ -351,7 +351,7 @@ https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/E
 📹 Video 2 - ¿Qué pasa después de la demanda?:
 https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/ESQL3wiJawNHpcpJw3WaQUUBsPyFvtU08gR-sqHpGRiJAQ
 
-Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.`
+Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.`,
       );
       resetState(userId);
       break;
@@ -362,7 +362,7 @@ Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abog
         userId,
         userName,
         "Empresa",
-        "Iniciar proceso legal empresarial"
+        "Iniciar proceso legal empresarial",
       );
       await sendMessage(
         sock,
@@ -371,7 +371,7 @@ Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abog
 
 Para darte un servicio ajustado a tu caso, te contactaremos con un asesor.
 
-Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas empresariales🙌.`
+Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas empresariales🙌.`,
       );
       resetState(userId);
       break;
@@ -382,7 +382,7 @@ Un abogado especializado se pondrá en contacto contigo en las próximas 24 hora
         userId,
         userName,
         "Otro perfil",
-        "Iniciar proceso legal personalizado"
+        "Iniciar proceso legal personalizado",
       );
       await sendMessage(
         sock,
@@ -393,7 +393,7 @@ Queremos conocer mejor tu perfil y tu caso para ofrecerte la mejor asesoría.
 
 Para darte un servicio ajustado a tu caso, te contactaremos con un asesor.
 
-Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas🙌.`
+Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas🙌.`,
       );
       resetState(userId);
       break;
@@ -402,7 +402,7 @@ Un abogado especializado se pondrá en contacto contigo en las próximas 24 hora
       await sendMessage(
         sock,
         jid,
-        "❌ Opción inválida. Por favor, responde con 1, 2 o 3."
+        "❌ Opción inválida. Por favor, responde con 1, 2 o 3.",
       );
   }
 }
@@ -414,7 +414,7 @@ Un abogado especializado se pondrá en contacto contigo en las próximas 24 hora
 async function handleDocumentHandler(
   sock: WASocket,
   jid: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   await sendTyping(sock, jid, 1000);
 
@@ -426,7 +426,7 @@ async function handleDocumentType(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const option = parseInt(input.trim());
 
@@ -434,7 +434,7 @@ async function handleDocumentType(
     await sendMessage(
       sock,
       jid,
-      `❌ Opción inválida. Por favor, responde con 1, 2, 3, 4, 5 o 6.`
+      `❌ Opción inválida. Por favor, responde con 1, 2, 3, 4, 5 o 6.`,
     );
     return;
   }
@@ -452,7 +452,7 @@ async function handleDocumentType(
     jid,
     `✅ Perfecto, ${selectedType} seleccionado.
 
-¡Perfecto! Para brindarte la información que requieres, indícame tu número de identificación. (sin puntos, comas, ni guiones).`
+¡Perfecto! Para brindarte la información que requieres, indícame tu número de identificación. (sin puntos, comas, ni guiones).`,
   );
 }
 
@@ -460,7 +460,7 @@ async function handleDocumentNumber(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const documentNumber = input.trim();
 
@@ -468,7 +468,7 @@ async function handleDocumentNumber(
     await sendMessage(
       sock,
       jid,
-      "❌ Por favor, envía un número de identificación válido (6-15 dígitos).\nEnvía tu número de identificación:"
+      "❌ Por favor, envía un número de identificación válido (6-15 dígitos).\nEnvía tu número de identificación:",
     );
     return;
   }
@@ -480,9 +480,8 @@ async function handleDocumentNumber(
     const legalApiService = LegalApiServiceFactory.create();
 
     // Usar getAllCasesWithDetails para obtener el nombre del cliente
-    const detailedResponse = await legalApiService.getAllCasesWithDetails(
-      documentNumber
-    );
+    const detailedResponse =
+      await legalApiService.getAllCasesWithDetails(documentNumber);
 
     // La respuesta tiene 'active' y 'finalized' según TransformedDetailedCasesResponse
     const activeRecords = detailedResponse.active || [];
@@ -538,7 +537,7 @@ async function handleDocumentNumber(
         `❌ No se encontraron procesos para el documento ${documentNumber}.
 Por favor, verifica tu número de identificación e intenta nuevamente.
 
-Envía tu número de identificación:`
+Envía tu número de identificación:`,
       );
       return;
     }
@@ -585,7 +584,7 @@ Envía tu número de identificación:`
     await sendMessage(
       sock,
       jid,
-      "❌ Error al consultar tus procesos. Por favor, verifica tu número de identificación e intenta nuevamente.\n\nEnvía tu número de identificación:"
+      "❌ Error al consultar tus procesos. Por favor, verifica tu número de identificación e intenta nuevamente.\n\nEnvía tu número de identificación:",
     );
   }
 }
@@ -598,7 +597,7 @@ async function handleProcessSelection(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const option = input.trim();
@@ -625,7 +624,7 @@ async function handleProcessSelection(
     await sendMessage(
       sock,
       jid,
-      `❌ Opción no válida. Por favor, responde con un número del 1 al ${dynamicOptions.length}.`
+      `❌ Opción no válida. Por favor, responde con un número del 1 al ${dynamicOptions.length}.`,
     );
     return;
   }
@@ -640,7 +639,7 @@ async function handleProcessSelection(
       await sendMessage(
         sock,
         jid,
-        "📋 No tienes procesos activos en este momento."
+        "📋 No tienes procesos activos en este momento.",
       );
       return;
     }
@@ -684,7 +683,7 @@ async function handleProcessDetails(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const inputLower = input.trim().toLowerCase();
@@ -723,7 +722,7 @@ async function handleProcessDetails(
     await sendMessage(
       sock,
       jid,
-      `❌ Por favor, responde con el número de la lista (1-${processes.length}).`
+      `❌ Por favor, responde con el número de la lista (1-${processes.length}).`,
     );
     return;
   }
@@ -737,7 +736,7 @@ async function handleProcessDetails(
     const legalApiService = LegalApiServiceFactory.create();
     const etiqueta = (selectedProcess as any).etiqueta;
     const processDetailsResponse = await legalApiService.getProcessDetails(
-      selectedProcess.etiqueta
+      selectedProcess.etiqueta,
     );
     const processDetails = toProcessDetails(processDetailsResponse);
 
@@ -771,7 +770,7 @@ async function handleProcessDetails(
       generateOptionsMessage("¿Quieres recibir el PDF de este proceso?", [
         "Sí",
         "No",
-      ])
+      ]),
     );
   } catch (error) {
     console.error("Error obteniendo detalles:", error);
@@ -779,7 +778,7 @@ async function handleProcessDetails(
     await sendMessage(
       sock,
       jid,
-      "❌ Error al obtener los detalles del proceso. Por favor, intenta nuevamente."
+      "❌ Error al obtener los detalles del proceso. Por favor, intenta nuevamente.",
     );
   }
 }
@@ -790,7 +789,7 @@ async function handleProcessDetails(
 async function handleFinalizedProcessesDisplay(
   sock: WASocket,
   jid: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const finalizedProcesses = state.currentProcesses?.finalizedProcesses || [];
@@ -800,7 +799,7 @@ async function handleFinalizedProcessesDisplay(
     await sendMessage(
       sock,
       jid,
-      "❌ No se encontraron procesos finalizados para tu documento."
+      "❌ No se encontraron procesos finalizados para tu documento.",
     );
     resetState(userId);
     return;
@@ -835,7 +834,7 @@ async function handleFinalizedProcesses(
   jid: string,
   input: string,
   userId: string,
-  userName: string
+  userName: string,
 ): Promise<void> {
   const state = getState(userId);
   const option = input.trim();
@@ -846,7 +845,7 @@ async function handleFinalizedProcesses(
       await sendMessage(
         sock,
         jid,
-        "✅ Perfecto, te ayudo a iniciar un nuevo proceso legal."
+        "✅ Perfecto, te ayudo a iniciar un nuevo proceso legal.",
       );
       updateState(userId, { currentFlow: "NEW_PROCESS_PROFILE" });
       await handleNewProcess(sock, jid, userId);
@@ -858,8 +857,8 @@ async function handleFinalizedProcesses(
         jid,
         generateOptionsMessage(
           "¡Perfecto! Te ayudo a consultar otro tipo de procesos.\n\n¿Qué tipo de procesos quieres consultar?",
-          ["Ver procesos activos", "Ver procesos finalizados"]
-        )
+          ["Ver procesos activos", "Ver procesos finalizados"],
+        ),
       );
       updateState(userId, { currentFlow: "LEGAL_PROCESS_SELECTION" });
       break;
@@ -871,12 +870,12 @@ async function handleFinalizedProcesses(
         "",
         "Consulta sobre procesos finalizados",
         "existing",
-        state.currentDocument
+        state.currentDocument,
       );
       await sendMessage(
         sock,
         jid,
-        "👨‍💼 Para darte un servicio ajustado a tu caso, te contactaremos con uno de nuestros abogados."
+        "👨‍💼 Para darte un servicio ajustado a tu caso, te contactaremos con uno de nuestros abogados.",
       );
       resetState(userId);
       break;
@@ -884,7 +883,7 @@ async function handleFinalizedProcesses(
       await sendMessage(
         sock,
         jid,
-        "❌ Opción inválida. Por favor, responde con 1, 2 o 3."
+        "❌ Opción inválida. Por favor, responde con 1, 2 o 3.",
       );
   }
 }
@@ -897,7 +896,7 @@ async function handlePdfConfirmation(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const inputLower = input.trim().toLowerCase();
@@ -910,7 +909,7 @@ async function handlePdfConfirmation(
       await sendMessage(
         sock,
         jid,
-        "❌ No se encontró el proceso seleccionado. Por favor, intenta nuevamente."
+        "❌ No se encontró el proceso seleccionado. Por favor, intenta nuevamente.",
       );
       return;
     }
@@ -954,23 +953,26 @@ async function handlePdfConfirmation(
 
       if (idProcesoMonolegal) {
         try {
-          actuaciones = await legalApiService.getActuaciones(
-            idProcesoMonolegal
-          );
+          actuaciones =
+            await legalApiService.getActuaciones(idProcesoMonolegal);
+
+          if (actuaciones.length > 5) {
+            actuaciones = actuaciones.slice(0, 5);
+          }
         } catch (error) {
-          console.warn("No se pudieron obtener actuaciones:", error);
+          console.warn("⚠️ No se pudieron obtener actuaciones:", error);
         }
       }
 
       // Pasar las actuaciones al generador de PDF
       const processWithActuaciones = {
         ...state.selectedProcess,
-        actuacionesMonolegal: actuaciones, // ← Las actuaciones van aquí
+        actuacionesMonolegal: actuaciones,
       };
 
       const pdfResult = await pdfGeneratorService.generateProcessReport(
         processWithActuaciones,
-        state.clientName || "Cliente"
+        state.clientName || "Cliente",
       );
 
       const processId =
@@ -982,7 +984,7 @@ async function handlePdfConfirmation(
         sock,
         jid,
         `📄 Aquí tienes el reporte personalizado del proceso #${processId}:`,
-        pdfResult.url
+        pdfResult.url,
       );
       setTimeout(() => pdfGeneratorService.deletePdf(pdfResult.filename), 5000);
     } catch (error) {
@@ -990,7 +992,7 @@ async function handlePdfConfirmation(
       await sendMessage(
         sock,
         jid,
-        "❌ Lo siento, hubo un error generando el reporte."
+        "❌ Lo siento, hubo un error generando el reporte.",
       );
     }
 
@@ -1005,7 +1007,7 @@ async function handlePdfConfirmation(
     await sendMessage(
       sock,
       jid,
-      '❌ Por favor, responde con "sí" para recibir el PDF o "no" para cancelar.'
+      '❌ Por favor, responde con "sí" para recibir el PDF o "no" para cancelar.',
     );
   }
 }
@@ -1013,7 +1015,7 @@ async function handlePdfConfirmation(
 async function handlePdfSummary(
   sock: WASocket,
   jid: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const documentNumber = state.currentDocument;
@@ -1022,7 +1024,7 @@ async function handlePdfSummary(
     await sendMessage(
       sock,
       jid,
-      "❌ No se encontró el número de documento. Por favor, intenta nuevamente."
+      "❌ No se encontró el número de documento. Por favor, intenta nuevamente.",
     );
     return;
   }
@@ -1031,14 +1033,13 @@ async function handlePdfSummary(
   await sendMessage(
     sock,
     jid,
-    "📄 Generando el resumen completo de todos tus procesos..."
+    "📄 Generando el resumen completo de todos tus procesos...",
   );
 
   try {
     const legalApiService = LegalApiServiceFactory.create();
-    const allCasesResponse = await legalApiService.getAllCasesWithDetails(
-      documentNumber
-    );
+    const allCasesResponse =
+      await legalApiService.getAllCasesWithDetails(documentNumber);
     const allProcesses = toAllProcessDetails(allCasesResponse);
 
     if (allProcesses.length === 0)
@@ -1047,7 +1048,7 @@ async function handlePdfSummary(
     const clientName = allProcesses[0].clientName;
     const pdfResult = await pdfGeneratorService.generateProcessReport(
       allProcesses,
-      clientName
+      clientName,
     );
 
     await sendTyping(sock, jid, 1000);
@@ -1055,7 +1056,7 @@ async function handlePdfSummary(
       sock,
       jid,
       `📄 Aquí tienes el resumen completo de todos tus procesos asociados al documento ${documentNumber}:`,
-      pdfResult.url
+      pdfResult.url,
     );
     setTimeout(() => pdfGeneratorService.deletePdf(pdfResult.filename), 5000);
 
@@ -1067,7 +1068,7 @@ async function handlePdfSummary(
         "Consultar otro tipo de procesos",
         "¿Quieres iniciar un proceso con nosotros?",
         "¿Prefieres hablar directamente con un abogado?",
-      ])
+      ]),
     );
 
     updateState(userId, { currentFlow: "PDF_SUMMARY_OPTIONS" });
@@ -1083,8 +1084,8 @@ async function handlePdfSummary(
           "Quieres intentarlo nuevamente",
           "¿Quieres iniciar un proceso con nosotros?",
           "¿Prefieres hablar directamente con un abogado?",
-        ]
-      )
+        ],
+      ),
     );
     updateState(userId, { currentFlow: "PDF_SUMMARY_OPTIONS" });
   }
@@ -1095,7 +1096,7 @@ async function handlePdfSummaryOptions(
   jid: string,
   input: string,
   userId: string,
-  userName: string
+  userName: string,
 ): Promise<void> {
   const state = getState(userId);
   const option = input.trim();
@@ -1113,7 +1114,7 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        generateProcessOptionsMessage(dynamicOptions)
+        generateProcessOptionsMessage(dynamicOptions),
       );
       break;
     }
@@ -1122,7 +1123,7 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        "🎉 ¡Excelente! Te ayudo a iniciar un nuevo proceso..."
+        "🎉 ¡Excelente! Te ayudo a iniciar un nuevo proceso...",
       );
       updateState(userId, { currentFlow: "NEW_PROCESS_PROFILE" });
       await handleNewProcess(sock, jid, userId);
@@ -1132,7 +1133,7 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        "👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.\n\nUn abogado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas."
+        "👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.\n\nUn abogado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas.",
       );
       resetState(userId);
       break;
@@ -1140,7 +1141,7 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        "❌ Opción inválida. Por favor, responde con 1, 2 o 3."
+        "❌ Opción inválida. Por favor, responde con 1, 2 o 3.",
       );
   }
 }
@@ -1152,7 +1153,7 @@ async function handlePdfSummaryOptions(
 async function handleMainOptionsDisplay(
   sock: WASocket,
   jid: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
 
@@ -1174,7 +1175,7 @@ async function handleMainOptionsDisplay(
   await sendMessage(
     sock,
     jid,
-    generateOptionsMessage("💡 *¿Qué deseas hacer?*", options)
+    generateOptionsMessage("💡 *¿Qué deseas hacer?*", options),
   );
 }
 
@@ -1182,7 +1183,7 @@ async function handleMainOptions(
   sock: WASocket,
   jid: string,
   input: string,
-  userId: string
+  userId: string,
 ): Promise<void> {
   const state = getState(userId);
   const option = input.trim();
@@ -1211,7 +1212,7 @@ async function handleMainOptions(
     await sendMessage(
       sock,
       jid,
-      `❌ Opción no válida. Por favor, responde con un número del 1 al ${dynamicOptions.length}.`
+      `❌ Opción no válida. Por favor, responde con un número del 1 al ${dynamicOptions.length}.`,
     );
     return;
   }
@@ -1260,7 +1261,7 @@ function startHttpServer(port: number): void {
       } else {
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(
-          '<html><body style="font-family:Arial;text-align:center;padding:50px;"><h1>⏳ Esperando QR...</h1><p>Recarga en unos segundos</p><script>setTimeout(()=>location.reload(),3000)</script></body></html>'
+          '<html><body style="font-family:Arial;text-align:center;padding:50px;"><h1>⏳ Esperando QR...</h1><p>Recarga en unos segundos</p><script>setTimeout(()=>location.reload(),3000)</script></body></html>',
         );
       }
       return;
@@ -1269,7 +1270,7 @@ function startHttpServer(port: number): void {
     if (url === "/info" || url === "/") {
       res.writeHead(200, { "Content-Type": "text/html" });
       res.end(
-        `<!DOCTYPE html><html><head><title>ELENA Bot</title></head><body style="font-family:Arial;max-width:600px;margin:50px auto;text-align:center;"><h1>🤖 ELENA Bot</h1><p>✅ Servidor funcionando</p><p><a href="/qr">📱 Ver QR Code</a></p><p><a href="/files">📁 Ver archivos PDF</a></p></body></html>`
+        `<!DOCTYPE html><html><head><title>ELENA Bot</title></head><body style="font-family:Arial;max-width:600px;margin:50px auto;text-align:center;"><h1>🤖 ELENA Bot</h1><p>✅ Servidor funcionando</p><p><a href="/qr">📱 Ver QR Code</a></p><p><a href="/files">📁 Ver archivos PDF</a></p></body></html>`,
       );
       return;
     }
@@ -1305,7 +1306,7 @@ function startHttpServer(port: number): void {
                 .map((f) => `<li><a href="/public/reports/${f}">${f}</a></li>`)
                 .join("") +
               "</ul>"
-        }<p><a href="/">← Volver</a></p></body></html>`
+        }<p><a href="/">← Volver</a></p></body></html>`,
       );
       return;
     }
@@ -1327,7 +1328,7 @@ async function startBot(): Promise<void> {
 
   const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
-  const sock = makeWASocket({ auth: state, printQRInTerminal: false });
+  const sock = makeWASocket({ auth: state });
 
   // Configurar servicio de notificación
   lawyerNotificationService.setProvider({
@@ -1342,29 +1343,53 @@ async function startBot(): Promise<void> {
   sock.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
-      const qrTerminal = await QRCode.toString(qr, {
-        type: "terminal",
-        small: true,
-      });
+    console.log("\n🔍 CONNECTION UPDATE:", {
+      hasQR: !!qr,
+      connection,
+      timestamp: new Date().toISOString(),
+    });
 
-      await QRCode.toFile(join(process.cwd(), "qr.png"), qr);
+    if (qr) {
+      console.log("\n\n🎯 QR DETECTADO!\n");
+      console.log("QR DATA:", qr.substring(0, 50) + "...\n");
+
+      try {
+        const qrTerminal = await QRCode.toString(qr, {
+          type: "terminal",
+          small: true,
+        });
+
+        console.log("📱 ESCANEA ESTE QR CON WHATSAPP:\n");
+        console.log(qrTerminal);
+        console.log("\n");
+
+        await QRCode.toFile(join(process.cwd(), "qr.png"), qr);
+        console.log(`✅ QR guardado en: ${process.cwd()}/qr.png`);
+        console.log(`✅ También en: http://localhost:${PORT}/qr\n`);
+      } catch (err) {
+        console.error("❌ ERROR GENERANDO QR:", err);
+      }
+    } else {
+      console.log("⚠️ No hay QR en este update");
     }
 
     if (connection === "close") {
       const reason = (lastDisconnect?.error as Boom)?.output?.statusCode;
+      console.log("🔴 Conexión cerrada. Razón:", reason);
 
       if (reason !== DisconnectReason.loggedOut) {
+        console.log("🔄 Reconectando en 3 segundos...");
         await delay(3000);
         startBot();
       } else {
-        console.log(
-          "Sesión cerrada. Elimina la carpeta bot_sessions y reinicia."
-        );
+        console.log("❌ Sesión cerrada. Elimina bot_sessions y reinicia.");
       }
     }
-  });
 
+    if (connection === "open") {
+      console.log("✅✅✅ ¡CONECTADO A WHATSAPP! ✅✅✅");
+    }
+  });
   sock.ev.on("messages.upsert", async ({ messages }) => {
     for (const msg of messages) {
       try {

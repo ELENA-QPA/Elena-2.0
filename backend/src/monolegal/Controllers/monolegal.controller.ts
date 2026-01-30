@@ -25,7 +25,6 @@ import { GetUser } from '../../auth/decorators';
 import { IUser } from '../../records/interfaces/user.interface';
 import { ImportMonolegalDto } from '../dto/import-monolegal.dto';
 import { CustomExcelImportService } from '../services/custom-excel-import.service';
-import { User } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Record } from 'src/records/entities/record.entity';
 import { Model } from 'mongoose';
@@ -299,5 +298,38 @@ export class MonolegalController {
     return this.monolegalCronService.ejecutarSincronizacionManual(
       user._id.toString(),
     );
+  }
+
+  @Get('actuaciones-por-radicado/:radicado')
+  @ApiOperation({
+    summary: 'Obtener actuaciones usando el número de radicado',
+    description: 'Busca el proceso por radicado y obtiene sus actuaciones',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Actuaciones obtenidas exitosamente',
+  })
+  async getActuacionesPorRadicado(@Param('radicado') radicado: string) {
+    return this.monolegalService.getActuacionesPorRadicado(radicado);
+  }
+
+  @Post('sync-ids-fuentes')
+  @ApiOperation({
+    summary:
+      'Sincronizar IDs de todas las fuentes (Unificada y PublicacionesProcesales)',
+    description:
+      'Recorre todos los expedientes y guarda los idProceso de cada fuente',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Sincronización de IDs completada',
+  })
+  async sincronizarIdsFuentes(@Req() req: any) {
+    const userId = req.user.id;
+    return this.monolegalService.sincronizarIdsFuentes(userId);
   }
 }

@@ -93,6 +93,7 @@ export interface Caso {
   location?: string;
   estado?: string;
   type?: string;
+  isActive?: string;
 
   etiqueta?: string;
   etapaProcesal?: string;
@@ -150,6 +151,7 @@ export interface UpdateCasoBody {
   fechaUltimaActuacion?: string;
   location?: string;
   type?: string;
+  isActive?: string;
 }
 
 // Datos para crear documento (sin _id ni record)

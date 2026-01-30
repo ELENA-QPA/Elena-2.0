@@ -162,25 +162,32 @@ export class PdfGeneratorService {
     clientName: string
   ): PdfTemplateData {
     // Convertir array de ProcessDetails a ProcessData
-    const processes: ProcessData[] = processesData.map((data) => ({
-      etiqueta: (data as any).etiqueta || "",
-      radicado: (data as any).radicado || "N/A",
-      despachoJudicial: (data as any).despachoJudicial || "No especificado",
-      city: (data as any).city || "No especificada",
-      ultimaActuacion: (data as any).ultimaActuacion || "Sin información",
-      fechaUltimaActuacion: (data as any).fechaUltimaActuacion || "N/A",
-      processType: data.processType,
-      jurisdiction: data.jurisdiction,
-      plaintiffs: data.plaintiffs.map((name) => ({ name, document: "N/A" })),
-      defendants: data.defendants.map((name) => ({ name })),
-      performances: data.performances.map((perf) => ({
-        performanceType: perf.type,
-        responsible: perf.responsible,
-        observation: perf.observation,
-        updatedAt: perf.updatedAt,
-      })),
-      actuacionesMonolegal: (data as any).actuacionesMonolegal || [],
-    }));
+    const processes: ProcessData[] = processesData.map((data) => {
+      // Extraer observation de la primera performance si existe
+      const firstPerformance = data.performances?.[0];
+      const observation = firstPerformance?.observation || "Sin información";
+
+      return {
+        etiqueta: (data as any).etiqueta || "",
+        radicado: (data as any).radicado || "N/A",
+        despachoJudicial: (data as any).despachoJudicial || "No especificado",
+        city: (data as any).city || "No especificada",
+        ultimaActuacion: (data as any).ultimaActuacion || "Sin información",
+        fechaUltimaActuacion: (data as any).fechaUltimaActuacion || "N/A",
+        observation: observation,  // ← Campo nuevo
+        processType: data.processType,
+        jurisdiction: data.jurisdiction,
+        plaintiffs: data.plaintiffs.map((name) => ({ name, document: "N/A" })),
+        defendants: data.defendants.map((name) => ({ name })),
+        performances: data.performances.map((perf) => ({
+          performanceType: perf.type,
+          responsible: perf.responsible,
+          observation: perf.observation,
+          updatedAt: perf.updatedAt,
+        })),
+        actuacionesMonolegal: (data as any).actuacionesMonolegal || [],
+      };
+    });
 
     // Para compatibilidad, usar el primer proceso
     const firstProcess = processesData[0];

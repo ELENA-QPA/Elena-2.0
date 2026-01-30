@@ -85,6 +85,18 @@ export class Record extends Document {
 
   @Prop()
   idProcesoMonolegal?: string;
+
+  @Prop()
+  isActive?: string; 
+
+  @Prop()
+  isArchived?: boolean;
+
+  @Prop()
+  idProcesoPublicaciones?: string;
+
+  @Prop()
+  idExpedienteMonolegal?: string;
 }
 
 export const RecordSchema = SchemaFactory.createForClass(Record);

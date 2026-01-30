@@ -56,18 +56,12 @@ const ExpedienteTableRow = memo(
         </TableCell>
 
         {/* Radicado */}
-        <TableCell className="bg-white max-w-[120px]">
+        <TableCell className="bg-white">
           <span
-            className="truncate block"
-            title={
-              caso.radicado && caso.radicado.trim() !== ""
-                ? caso.radicado
-                : ""
-            }
+            className="block break-words"
+            title={caso.radicado?.trim() || ""}
           >
-            {caso.radicado && caso.radicado.trim() !== ""
-              ? caso.radicado
-              : ""}
+            {caso.radicado?.trim() || ""}
           </span>
         </TableCell>
 
@@ -91,24 +85,36 @@ const ExpedienteTableRow = memo(
         {/* Tipo de Cliente */}
         <TableCell className="bg-white max-w-[120px]">
           <span className="truncate block" title={caso.clientType}>
-            {caso.clientType}
+            {caso.clientType?.trim() === "Rappi SAS"
+              ? "Rappi SAS"
+              : caso.clientType?.trim()
+                ? "Otro"
+                : ""}
           </span>
         </TableCell>
 
         {/* Activo */}
-        {/* <TableCell className="bg-white">
+        <TableCell className="bg-white">
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
-              caso.type === "ACTIVO"
+              caso.isActive === "Activo"
                 ? "bg-green-100 text-green-800"
-                : caso.type === "INACTIVO"
-                ? "bg-red-100 text-red-800"
-                : "bg-gray-100 text-gray-800"
+                : caso.isActive === "Inactivo"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-gray-100 text-gray-800"
             }`}
           >
-            {caso.type || "N/A"}
+            {(() => {
+              console.log(
+                "isActive value:",
+                caso.isActive,
+                "type:",
+                typeof caso.isActive,
+              );
+              return caso.isActive || "N/A";
+            })()}
           </span>
-        </TableCell> */}
+        </TableCell>
 
         {/* Estado */}
         {/* <TableCell className="bg-white">
@@ -138,7 +144,7 @@ const ExpedienteTableRow = memo(
                     if (
                       typeof caso.fechaUltimaActuacion === "string" &&
                       /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(
-                        caso.fechaUltimaActuacion
+                        caso.fechaUltimaActuacion,
                       )
                     ) {
                       return caso.fechaUltimaActuacion;
@@ -149,7 +155,7 @@ const ExpedienteTableRow = memo(
                       const year = date.getUTCFullYear();
                       const month = String(date.getUTCMonth() + 1).padStart(
                         2,
-                        "0"
+                        "0",
                       );
                       const day = String(date.getUTCDate()).padStart(2, "0");
                       return `${day}/${month}/${year}`;

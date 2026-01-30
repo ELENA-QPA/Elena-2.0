@@ -166,8 +166,7 @@ export class CustomExcelImportService {
     row: ExcelRow,
     userId: string,
   ): Promise<ImportResult> {
-    // EXTRAER DATOS DEL EXCEL
-    // La ETIQUETA es la combinación de Cod + #
+    // ETIQUETA es la combinación de Cod + #
     const cod = this.getColumnValue(row, ['Cod', 'cod', 'COD']);
     const numero = this.getColumnValue(row, ['#']);
     const etiqueta = cod && numero ? `${cod}${numero}` : numero || cod || '';
@@ -180,7 +179,6 @@ export class CustomExcelImportService {
       'radicado',
     ]);
 
-    // Datos del demandante
     const demandante = this.getColumnValue(row, ['Demandante', 'demandante']);
     const tipoDocumento = this.getColumnValue(row, [
       'Tipo de documento',
@@ -195,7 +193,6 @@ export class CustomExcelImportService {
       'email',
     ]);
 
-    // Datos del proceso
     const jurisdiccion = this.getColumnValue(row, [
       'Jurisdicción',
       'jurisdiccion',
@@ -220,8 +217,6 @@ export class CustomExcelImportService {
     ]);
     const activoStr = this.getColumnValue(row, ['Activo', 'activo']);
 
-    // VALIDACIÓN BÁSICA
-
     if (!etiqueta || etiqueta === '') {
       return {
         etiqueta: 'Sin etiqueta',
@@ -231,10 +226,13 @@ export class CustomExcelImportService {
       };
     }
 
-    // NORMALIZAR DATOS
-
     const fechaRadicado = this.parseDate(fechaRadicadoStr);
-    const activo = activoStr?.toLowerCase() === 'activo';
+    const activo =
+      activoStr && activoStr.trim() !== ''
+        ? activoStr.toLowerCase() === 'activo'
+          ? 'Activo'
+          : 'Inactivo'
+        : undefined;
     const archivado =
       archivadoStr?.toLowerCase() === 'sí' ||
       archivadoStr?.toLowerCase() === 'si';
@@ -245,18 +243,14 @@ export class CustomExcelImportService {
     const ciudadNorm = this.normalizeCity(ciudad);
     const departamentoNorm = this.normalizeDepartment(departamento);
 
-    // BUSCAR REGISTRO EXISTENTE POR ETIQUETA O RADICADO
-
     let existingRecord = null;
     let foundBy = '';
 
-    // Primero buscar por ETIQUETA
     existingRecord = await this.recordModel.findOne({ etiqueta: etiqueta });
     if (existingRecord) {
       foundBy = 'etiqueta';
     }
 
-    // Si no encontró por etiqueta, buscar por RADICADO (si es válido)
     if (
       !existingRecord &&
       radicado &&
@@ -269,18 +263,14 @@ export class CustomExcelImportService {
       }
     }
 
-    // SI EXISTE: ACTUALIZAR SOLO CAMPOS VACÍOS
-
     if (existingRecord) {
       const updatedFields: string[] = [];
 
-      // Actualizar etiqueta si es diferente
       if (etiqueta && existingRecord.etiqueta !== etiqueta) {
         existingRecord.etiqueta = etiqueta;
         updatedFields.push('etiqueta');
       }
 
-      // Actualizar radicado si estaba vacío y tenemos uno válido
       if (
         (!existingRecord.radicado ||
           existingRecord.radicado === '' ||
@@ -293,7 +283,6 @@ export class CustomExcelImportService {
         updatedFields.push('radicado');
       }
 
-      // Actualizar juzgado si estaba vacío
       if (
         (!existingRecord.despachoJudicial ||
           existingRecord.despachoJudicial === '') &&
@@ -304,47 +293,40 @@ export class CustomExcelImportService {
         updatedFields.push('despachoJudicial');
       }
 
-      // Actualizar ciudad si estaba vacía
       if (!existingRecord.city || existingRecord.city === '') {
         existingRecord.city = ciudadNorm;
         updatedFields.push('city');
       }
 
-      // Actualizar departamento si estaba vacío
       if (!existingRecord.department || existingRecord.department === '') {
         existingRecord.department = departamentoNorm;
         updatedFields.push('department');
       }
 
-      // Actualizar jurisdicción si estaba vacía
       if (!existingRecord.jurisdiction || existingRecord.jurisdiction === '') {
         existingRecord.jurisdiction = jurisdiccionNorm;
         updatedFields.push('jurisdiction');
       }
 
-      // Actualizar tipo de proceso si estaba vacío
       if (!existingRecord.processType || existingRecord.processType === '') {
         existingRecord.processType = tipoProcesoNorm;
         updatedFields.push('processType');
       }
 
-      // Actualizar fecha de radicado si estaba vacía
       if (!existingRecord.filingDate && fechaRadicado) {
         existingRecord.filingDate = fechaRadicado;
         updatedFields.push('filingDate');
       }
 
-      // Actualizar estado activo/archivado
-      // (Siempre actualizar estos porque pueden cambiar)
-      existingRecord.isActive = activo;
+      if (activo !== undefined) {
+        existingRecord.isActive = activo;
+      }
       existingRecord.isArchived = archivado;
 
-      // Guardar cambios del record
       if (updatedFields.length > 0) {
         await existingRecord.save();
       }
 
-      // Actualizar datos del demandante
       const demandanteUpdates = await this.updateProceduralPartIfNeeded(
         existingRecord._id,
         {
@@ -372,13 +354,9 @@ export class CustomExcelImportService {
       };
     }
 
-    // SI NO EXISTE: CREAR NUEVO REGISTRO
-
-    // Verificar si el radicado es válido
     const radicadoValido =
       radicado && radicado !== '' && radicado.toLowerCase() !== 'na';
 
-    // Si tiene radicado válido, verificar que no exista ya
     if (radicadoValido) {
       const existeRadicado = await this.recordModel.findOne({
         radicado: radicado,
@@ -411,9 +389,6 @@ export class CustomExcelImportService {
     });
     const internalCode = `CE-${year}-${String(count + 1).padStart(4, '0')}`;
 
-    // Si no tiene radicado válido, generar uno único basado en la etiqueta
-    //const radicadoFinal = radicadoValido ? radicado : `SIN-RAD-${etiqueta}-${Date.now()}`;
-
     const recordData = {
       radicado,
       etiqueta,
@@ -425,8 +400,7 @@ export class CustomExcelImportService {
       processType: tipoProcesoNorm,
       filingDate: fechaRadicado,
       country: 'Colombia',
-      clientType: 'Rappi SAS',
-      isActive: activo,
+      ...(activo !== undefined && { isActive: activo }),
       isArchived: archivado,
     };
 
@@ -482,16 +456,6 @@ export class CustomExcelImportService {
       email: em,
       contact: cont,
     });
-
-    await this.proceduralPartModel.create({
-      record: recordId,
-      partType: PartType.demandada,
-      name: 'Rappi SAS',
-      documentType: 'Nit',
-      document: '900843898',
-      email: 'notificacionesrappi@rappi.com',
-      contact: '6017433711',
-    });
   }
 
   private async updateProceduralPartIfNeeded(
@@ -516,7 +480,6 @@ export class CustomExcelImportService {
       return ['creado'];
     }
 
-    // Actualizar nombre si está vacío
     if (
       data.demandante &&
       (!demandante.name ||
@@ -527,7 +490,6 @@ export class CustomExcelImportService {
       updatedFields.push('name');
     }
 
-    // Actualizar tipo de documento si está vacío o es "Por verificar"
     if (
       data.tipoDocumento &&
       data.tipoDocumento !== '' &&
@@ -537,7 +499,6 @@ export class CustomExcelImportService {
       updatedFields.push('documentType');
     }
 
-    // Actualizar documento si está vacío o es "Por verificar"
     if (
       data.documento &&
       data.documento !== '' &&
@@ -547,7 +508,6 @@ export class CustomExcelImportService {
       updatedFields.push('document');
     }
 
-    // Actualizar contacto si está vacío o es "Por verificar"
     if (
       data.contacto &&
       data.contacto !== '' &&
@@ -557,7 +517,6 @@ export class CustomExcelImportService {
       updatedFields.push('contact');
     }
 
-    // Actualizar email si está vacío o es placeholder
     if (
       data.email &&
       data.email !== '' &&

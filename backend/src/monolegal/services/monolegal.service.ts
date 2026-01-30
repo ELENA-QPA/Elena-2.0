@@ -17,7 +17,6 @@ import { MonolegalApiService } from './monolegal-api.service';
 import { JuzgadoNormalizerService } from './juzgado-normalizer.service';
 import { normalizeClientType } from '../constants/normalize-client-type';
 import { OrchestratorService } from 'src/orchestrator/services/orchestrator.service';
-import internal from 'stream';
 
 @Injectable()
 export class MonolegalService {
@@ -297,6 +296,81 @@ export class MonolegalService {
             email: 'por-verificar@temp.com',
             contact: 'Por verificar',
           });
+        }
+      }
+    }
+  }
+
+  private async updateOrCreateProceduralParts(
+    recordId: any,
+    data: { demandantes: string; demandados: string },
+  ): Promise<void> {
+    const demandantes =
+      data.demandantes
+        ?.split(',')
+        .map((d) => d.trim())
+        .filter((d) => d.length > 0) || [];
+
+    const demandados =
+      data.demandados
+        ?.split(',')
+        .map((d) => d.trim())
+        .filter((d) => d.length > 0) || [];
+
+    const isRappi = (nombre: string): boolean => {
+      return (nombre || '').toLowerCase().includes('rappi');
+    };
+
+    const existingDemandantes = await this.proceduralPartModel.find({
+      record: recordId,
+      partType: PartType.demandante,
+    });
+
+    const existingDemandados = await this.proceduralPartModel.find({
+      record: recordId,
+      partType: PartType.demandada,
+    });
+
+    if (existingDemandantes.length === 0) {
+      for (const nombre of demandantes) {
+        if (nombre) {
+          await this.proceduralPartModel.create({
+            record: recordId,
+            partType: PartType.demandante,
+            name: nombre,
+            documentType: 'Por verificar',
+            document: 'Por verificar',
+            email: 'por-verificar@temp.com',
+            contact: 'Por verificar',
+          });
+        }
+      }
+    }
+
+    if (existingDemandados.length === 0) {
+      for (const nombre of demandados) {
+        if (nombre) {
+          if (isRappi(nombre)) {
+            await this.proceduralPartModel.create({
+              record: recordId,
+              partType: PartType.demandada,
+              name: 'Rappi SAS',
+              documentType: 'Nit',
+              document: '900843898',
+              email: 'notificacionesrappi@rappi.com',
+              contact: '6017433711',
+            });
+          } else {
+            await this.proceduralPartModel.create({
+              record: recordId,
+              partType: PartType.demandada,
+              name: nombre,
+              documentType: 'Por verificar',
+              document: 'Por verificar',
+              email: 'por-verificar@temp.com',
+              contact: 'Por verificar',
+            });
+          }
         }
       }
     }
@@ -591,11 +665,32 @@ export class MonolegalService {
       return null;
     }
 
-    const regex = /(\d{1,2}\/\d{1,2}\/\d{4})/;
+    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{4})/;
     const match = fechaUltimaActuacion.match(regex);
 
-    if (match && match[1]) {
-      return match[1];
+    if (match) {
+      const part1 = parseInt(match[1], 10);
+      const part2 = parseInt(match[2], 10);
+      const year = match[3];
+
+      let day: number;
+      let month: number;
+
+      // Si part2 > 12, es imposible que sea mes, entonces es DD
+      // Significa que el formato es MM/DD/YYYY
+      if (part2 > 12 && part1 <= 12) {
+        day = part2;
+        month = part1;
+      } else {
+        // Formato DD/MM/YYYY (estándar colombiano)
+        day = part1;
+        month = part2;
+      }
+
+      return `${String(day).padStart(2, '0')}/${String(month).padStart(
+        2,
+        '0',
+      )}/${year}`;
     }
 
     return null;
@@ -607,6 +702,7 @@ export class MonolegalService {
     let ciudad = '';
     let ubicacion = '';
     let idProcesoMonolegal = '';
+    let idProcesoPublicaciones = '';
 
     try {
       if (cambio.id) {
@@ -614,10 +710,23 @@ export class MonolegalService {
           cambio.id,
         );
 
-        if (
-          cambio.ultimosCambiosEnFuentes &&
-          cambio.ultimosCambiosEnFuentes.length > 0
-        ) {
+        // Extraer idProceso de ambas fuentes desde procesosEnFuentesDatos
+        if (expedienteDetalle.procesosEnFuentesDatos?.length > 0) {
+          for (const fuente of expedienteDetalle.procesosEnFuentesDatos) {
+            if (!fuente.activo || !fuente.idProceso) continue;
+
+            const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+            if (tipoFuente === 'unificada') {
+              idProcesoMonolegal = fuente.idProceso;
+            } else if (tipoFuente === 'publicacionesprocesales') {
+              idProcesoPublicaciones = fuente.idProceso;
+            }
+          }
+        }
+
+        // Fallback al método anterior si no encontramos Unificada
+        if (!idProcesoMonolegal && cambio.ultimosCambiosEnFuentes?.length > 0) {
           const fuenteUnificada = cambio.ultimosCambiosEnFuentes.find(
             (f: any) => f.fuente?.toLowerCase() === 'unificada' && f.idProceso,
           );
@@ -626,7 +735,6 @@ export class MonolegalService {
             idProcesoMonolegal = fuenteUnificada.idProceso;
           }
         }
-
         ciudad = expedienteDetalle.ciudad || '';
         ubicacion = expedienteDetalle.ubicacion || '';
 
@@ -684,16 +792,37 @@ export class MonolegalService {
           fechaExtraida = `${day}/${month}/${year}`;
         }
       }
-      // Si es formato DD/MM/YYYY
+
+      // Si es formato DD/MM/YYYY o MM/DD/YYYY
       else if (
         typeof ultimoRegistro === 'string' &&
         /\d{1,2}\/\d{1,2}\/\d{4}/.test(ultimoRegistro)
       ) {
-        const match = ultimoRegistro.match(/(\d{1,2}\/\d{1,2}\/\d{4})/);
+        const match = ultimoRegistro.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
         if (match) {
-          fechaExtraida = match[1];
+          const part1 = parseInt(match[1], 10);
+          const part2 = parseInt(match[2], 10);
+          const year = match[3];
+
+          let day: number;
+          let month: number;
+
+          if (part2 > 12 && part1 <= 12) {
+            // Formato MM/DD/YYYY detectado
+            day = part2;
+            month = part1;
+          } else {
+            // Formato DD/MM/YYYY
+            day = part1;
+            month = part2;
+          }
+
+          fechaExtraida = `${String(day).padStart(2, '0')}/${String(
+            month,
+          ).padStart(2, '0')}/${year}`;
         }
       }
+
       // Si es formato "16 Dec 2025" o "16 Dec 2025"
       else if (typeof ultimoRegistro === 'string') {
         const meses: { [key: string]: string } = {
@@ -786,17 +915,20 @@ export class MonolegalService {
       department: departmentValue,
       location: ubicacion,
       idProcesoMonolegal: idProcesoMonolegal,
+      idProcesoPublicaciones: idProcesoPublicaciones,
       etapaProcesal: '',
       ultimaActuacion: cambio.ultimaActuacion?.trim() || '',
       ultimaAnotacion: cambio.ultimaAnotacion?.trim() || '',
       fechaUltimaActuacion: fechaExtraida || fechaUltimaActuacionTexto,
       sincronizadoMonolegal: true,
       fechaSincronizacion: new Date(),
-      etiqueta: (cambio.etiqueta || '').replace(/\s+/g, ''),
       internalCode: '',
-      // Campos específicos para Rappi
       processType: isRappiClient ? 'Ordinario' : '',
       jurisdiction: isRappiClient ? 'Laboral circuito' : '',
+      ...(cambio.etiqueta &&
+        cambio.etiqueta.trim() !== '' && {
+          etiqueta: cambio.etiqueta.replace(/\s+/g, ''),
+        }),
     };
     return recordData;
   }
@@ -840,6 +972,11 @@ export class MonolegalService {
         record.clientType || cambio.demandados,
       );
       await record.save();
+
+      await this.updateOrCreateProceduralParts(record._id, {
+        demandantes: cambio.demandantes || '',
+        demandados: cambio.demandados || '',
+      });
 
       if (cambio.ultimaActuacion) {
         await this.createOrUpdatePerformance(record._id, {
@@ -1041,12 +1178,6 @@ export class MonolegalService {
     let diasProcesados = 0;
     let expedientesProcesados = 0;
 
-    this.logger.log(
-      `[SYNC ALL] Iniciando sincronización desde ${
-        startDate.toISOString().split('T')[0]
-      } hasta ${endDate.toISOString().split('T')[0]}`,
-    );
-
     // Iterar por cada día
     const currentDate = new Date(startDate);
 
@@ -1061,12 +1192,6 @@ export class MonolegalService {
         );
 
         if (resumen.tieneCambios) {
-          this.logger.log(
-            `[SYNC ALL] Procesando fecha ${fechaFormateada} - ${
-              resumen.estadisticas?.numeroExpedientes || '?'
-            } expedientes`,
-          );
-
           // Obtener todos los cambios de ese día (todas las páginas)
           const cambios = await this.monolegalApiService.getTodosCambios(
             fechaFormateada,
@@ -1082,13 +1207,6 @@ export class MonolegalService {
               else if (result.status === 'updated') totalUpdated++;
               else if (result.status === 'skipped') totalSkipped++;
               else if (result.status === 'error') totalErrors++;
-
-              // Log de progreso cada 50 expedientes
-              if (expedientesProcesados % 50 === 0) {
-                this.logger.log(
-                  `[SYNC ALL] Progreso: ${expedientesProcesados} expedientes procesados`,
-                );
-              }
             } catch (error) {
               totalErrors++;
               results.push({
@@ -1170,5 +1288,415 @@ export class MonolegalService {
     }
 
     return {};
+  }
+
+  async getActuacionesPorRadicado(radicado: string): Promise<any[]> {
+    const record = await this.recordModel.findOne({ radicado: radicado });
+
+    if (!record) {
+      this.logger.warn(
+        `No se encontró registro local para radicado: ${radicado}`,
+      );
+      try {
+        return await this.monolegalApiService.getActuacionesPorRadicado(
+          radicado,
+        );
+      } catch (error) {
+        return [];
+      }
+    }
+
+    if (record.idExpedienteMonolegal) {
+      try {
+        this.logger.log(`[ACTUACIONES] Usando método de todas las fuentes`);
+        const resultado =
+          await this.monolegalApiService.getActuacionesTodasLasFuentes(
+            record.idExpedienteMonolegal,
+          );
+        return resultado.combinadas || [];
+      } catch (error) {
+        this.logger.error(
+          `Error obteniendo todas las fuentes: ${error.message}`,
+        );
+        // Fallback al método anterior
+      }
+    }
+
+    let actuacionesApi: any[] = [];
+    const actuacionesLocales: any[] = [];
+
+    if (record.idProcesoMonolegal && record.idProcesoMonolegal.trim() !== '') {
+      try {
+        actuacionesApi =
+          await this.monolegalApiService.getActuacionesPorIdProceso(
+            record.idProcesoMonolegal,
+          );
+      } catch (error) {
+        this.logger.error(`Error API Monolegal por ID: ${error.message}`);
+        try {
+          actuacionesApi =
+            await this.monolegalApiService.getActuacionesPorRadicado(radicado);
+        } catch (error2) {
+          this.logger.error(
+            `Error API Monolegal por radicado: ${error2.message}`,
+          );
+        }
+      }
+    } else {
+      try {
+        actuacionesApi =
+          await this.monolegalApiService.getActuacionesPorRadicado(radicado);
+      } catch (error) {
+        this.logger.error(`Error API Monolegal por radicado: ${error.message}`);
+      }
+    }
+
+    // 3. SIEMPRE agregar datos locales
+    if (
+      record.ultimaActuacion &&
+      record.ultimaActuacion.trim() !== '' &&
+      record.ultimaActuacion !== '---'
+    ) {
+      actuacionesLocales.push({
+        id: `local-${record._id}`,
+        actuacion: record.ultimaActuacion,
+        anotacion: (record as any).ultimaAnotacion || '',
+        fechaActuacion: (record as any).fechaUltimaActuacion || null,
+        fechaDeActuacion: (record as any).fechaUltimaActuacion || null,
+        fuente: 'local',
+      });
+    }
+
+    // 4. Agregar performances
+    const performances = await this.performanceModel
+      .find({ record: record._id })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .exec();
+
+    for (const perf of performances) {
+      const yaExisteEnApi = actuacionesApi.some(
+        (a) =>
+          a.textoActuacion === perf.performanceType ||
+          a.actuacion === perf.performanceType,
+      );
+      const yaExisteEnLocal = actuacionesLocales.some(
+        (a) => a.actuacion === perf.performanceType,
+      );
+
+      if (!yaExisteEnApi && !yaExisteEnLocal) {
+        actuacionesLocales.push({
+          id: `perf-${perf._id}`,
+          actuacion: perf.performanceType,
+          anotacion: perf.observation || '',
+          fechaActuacion: perf.createdAt,
+          fechaDeActuacion: perf.createdAt,
+          fuente: 'local-performance',
+        });
+      }
+    }
+
+    // 5. Combinar
+    const actuacionesCombinadas = [...actuacionesApi];
+
+    for (const local of actuacionesLocales) {
+      const yaExiste = actuacionesCombinadas.some(
+        (a) =>
+          a.textoActuacion === local.actuacion ||
+          a.actuacion === local.actuacion,
+      );
+      if (!yaExiste) {
+        actuacionesCombinadas.push(local);
+      }
+    }
+
+    return actuacionesCombinadas;
+  }
+
+  /**
+   * Sincroniza los idProceso de todas las fuentes para todos los expedientes
+   */
+
+  async sincronizarIdsFuentes(userId: string): Promise<any> {
+    this.logger.log(
+      '[SYNC IDS] Obteniendo todos los expedientes de Monolegal...',
+    );
+
+    // 1. Obtener TODOS los expedientes de la API
+    const expedientes = await this.monolegalApiService.getTodosExpedientes();
+
+    if (expedientes.length === 0) {
+      return {
+        success: true,
+        message: 'No hay expedientes en Monolegal',
+        summary: { total: 0, updated: 0, created: 0, errors: 0 },
+      };
+    }
+
+    let updated = 0;
+    let created = 0;
+    const notFound = 0;
+    let errors = 0;
+
+    this.logger.log(`[SYNC IDS] Procesando ${expedientes.length} expedientes`);
+
+    for (const expediente of expedientes) {
+      try {
+        const radicado = expediente.numero?.trim();
+        if (!radicado) continue;
+
+        // Buscar el record local por radicado
+        const record = await this.recordModel.findOne({ radicado });
+
+        // Extraer IDs de las fuentes
+        let idProcesoMonolegal = '';
+        let idProcesoPublicaciones = '';
+
+        if (expediente.procesosEnFuentesDatos?.length > 0) {
+          for (const fuente of expediente.procesosEnFuentesDatos) {
+            if (!fuente.activo || !fuente.idProceso) continue;
+
+            const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+            if (tipoFuente === 'unificada') {
+              idProcesoMonolegal = fuente.idProceso;
+            } else if (tipoFuente === 'publicacionesprocesales') {
+              idProcesoPublicaciones = fuente.idProceso;
+            }
+          }
+        }
+
+        const cambioSimulado = {
+          id: expediente.id,
+          numero: expediente.numero,
+          demandantes: expediente.demandantes,
+          demandados: expediente.demandados,
+          despacho: expediente.despacho,
+          ultimaActuacion: this.obtenerUltimaActuacionDeExpediente(expediente),
+          ultimaAnotacion: this.obtenerUltimaAnotacionDeExpediente(expediente),
+          fechaUltimaActuacion:
+            this.obtenerFechaUltimaActuacionDeExpediente(expediente),
+          ultimoRegistro: expediente.fechaUltimoCambioEnFuente,
+          etiqueta: expediente.etiqueta,
+        };
+
+        const recordData = await this.prepareRecordData(cambioSimulado);
+
+        recordData.idExpedienteMonolegal = expediente.id;
+        recordData.idProcesoMonolegal =
+          idProcesoMonolegal || recordData.idProcesoMonolegal || '';
+        recordData.idProcesoPublicaciones = idProcesoPublicaciones;
+
+        if (record) {
+          Object.assign(record, recordData);
+
+          record.clientType = normalizeClientType(
+            record.clientType || cambioSimulado.demandados,
+          );
+
+          await record.save();
+
+          await this.updateOrCreateProceduralParts(record._id, {
+            demandantes: cambioSimulado.demandantes || '',
+            demandados: cambioSimulado.demandados || '',
+          });
+
+          if (cambioSimulado.ultimaActuacion) {
+            await this.createOrUpdatePerformance(record._id, {
+              ultimaActuacion: cambioSimulado.ultimaActuacion,
+              etapaProcesal: '',
+              ultimaAnotacion: cambioSimulado.ultimaAnotacion,
+            });
+          }
+
+          await this.createAudience(
+            cambioSimulado.ultimaActuacion,
+            cambioSimulado.ultimaAnotacion,
+            record._id,
+          );
+
+          updated++;
+        } else {
+          const internalCode = await this.buildInternalCode();
+          recordData.internalCode = internalCode;
+
+          const newRecord = new this.recordModel({
+            user: userId,
+            ...recordData,
+            clientType: normalizeClientType(cambioSimulado.demandados),
+            country: 'Colombia',
+          });
+
+          await newRecord.save();
+
+          // Crear partes procesales
+          await this.createProceduralParts(newRecord._id, {
+            demandantes: cambioSimulado.demandantes || '',
+            demandados: cambioSimulado.demandados || '',
+          });
+
+          // Crear performance
+          if (cambioSimulado.ultimaActuacion) {
+            await this.createOrUpdatePerformance(newRecord._id, {
+              ultimaActuacion: cambioSimulado.ultimaActuacion,
+              etapaProcesal: '',
+              ultimaAnotacion: cambioSimulado.ultimaAnotacion,
+            });
+          }
+
+          await this.createAudience(
+            cambioSimulado.ultimaActuacion,
+            cambioSimulado.ultimaAnotacion,
+            newRecord._id,
+          );
+
+          created++;
+        }
+
+        if ((updated + created) % 50 === 0) {
+          this.logger.log(
+            `[SYNC IDS] Progreso: ${updated} actualizados, ${created} creados`,
+          );
+        }
+      } catch (error) {
+        errors++;
+        this.logger.error(`[SYNC IDS] Error: ${error.message}`);
+      }
+    }
+
+    this.logger.log(
+      `[SYNC IDS] Finalizado: ${updated} actualizados, ${created} creados, ${notFound} no encontrados, ${errors} errores`,
+    );
+
+    return {
+      success: true,
+      message: 'Sincronización de IDs y datos completada',
+      summary: {
+        totalExpedientes: expedientes.length,
+        updated,
+        created,
+        notFound,
+        errors,
+      },
+    };
+  }
+
+  /**
+   * Métodos auxiliares para extraer datos del expediente
+   */
+  private obtenerUltimaActuacionDeExpediente(expediente: any): string {
+    if (!expediente.procesosEnFuentesDatos?.length) return '';
+
+    const fuenteActiva = expediente.procesosEnFuentesDatos.find(
+      (f: any) => f.activo === true,
+    );
+
+    return fuenteActiva?.ultimaActuacion || '';
+  }
+
+  private obtenerUltimaAnotacionDeExpediente(expediente: any): string {
+    if (!expediente.procesosEnFuentesDatos?.length) return '';
+
+    const fuenteActiva = expediente.procesosEnFuentesDatos.find(
+      (f: any) => f.activo === true,
+    );
+
+    return fuenteActiva?.descripcionUltimaActuacion || '';
+  }
+
+  /**
+   * Obtiene la fecha de última actuación más reciente de Unificada o PublicacionesProcesales
+   */
+  private obtenerFechaUltimaActuacionDeExpediente(expediente: any): string {
+    if (!expediente.procesosEnFuentesDatos?.length) return '';
+
+    let fechaMasReciente: Date | null = null;
+    let fechaString = '';
+
+    for (const fuente of expediente.procesosEnFuentesDatos) {
+      const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+      // Solo considerar Unificada y PublicacionesProcesales
+      if (
+        tipoFuente !== 'unificada' &&
+        tipoFuente !== 'publicacionesprocesales'
+      ) {
+        continue;
+      }
+
+      if (
+        fuente.fechaUltimaActuacion &&
+        fuente.fechaUltimaActuacion.trim() !== ''
+      ) {
+        const fechaParsed = this.parsearFechaEnServicio(
+          fuente.fechaUltimaActuacion,
+        );
+
+        if (
+          fechaParsed &&
+          (!fechaMasReciente ||
+            fechaParsed.getTime() > fechaMasReciente.getTime())
+        ) {
+          fechaMasReciente = fechaParsed;
+          fechaString = fuente.fechaUltimaActuacion;
+        }
+      }
+    }
+
+    return fechaString;
+  }
+
+  /**
+   * Parsea fecha en el servicio (copia simplificada del método en MonolegalApiService)
+   */
+  private parsearFechaEnServicio(fecha: any): Date | null {
+    if (!fecha) return null;
+
+    if (fecha instanceof Date) {
+      return isNaN(fecha.getTime()) ? null : fecha;
+    }
+
+    if (typeof fecha === 'string') {
+      // Formato ISO: "2025-10-10T00:00:00"
+      if (fecha.includes('T')) {
+        const parsed = new Date(fecha);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      }
+
+      // Formato "MM/DD/YYYY HH:MM:SS AM/PM"
+      const usFormat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/;
+      const usMatch = fecha.match(usFormat);
+      if (usMatch) {
+        const [, month, day, year] = usMatch;
+        return new Date(
+          parseInt(year),
+          parseInt(month) - 1,
+          parseInt(day),
+          12,
+          0,
+          0,
+        );
+      }
+
+      // Último intento
+      const parsed = new Date(fecha);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    return null;
+  }
+
+  async getActuacionesMonolegal(radicado: string): Promise<any> {
+    // Buscar el record para obtener el idExpedienteMonolegal
+    const record = await this.recordModel.findOne({ radicado });
+
+    if (!record?.idExpedienteMonolegal) {
+      throw new Error('Expediente no encontrado o sin idExpedienteMonolegal');
+    }
+
+    // Usar el método que ya tienes
+    return this.monolegalApiService.getActuacionesTodasLasFuentes(
+      record.idExpedienteMonolegal,
+    );
   }
 }

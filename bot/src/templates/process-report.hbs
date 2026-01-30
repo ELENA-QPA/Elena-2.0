@@ -337,7 +337,7 @@
     <div class="process-info">
         <div class="info-item">
             <span class="label">Radicado del proceso:</span>
-            <span class="value">{{../radicado}}</span>
+            <span class="value">{{radicado}}</span>
         </div>
         <div class="info-item">
             <span class="label">Tipo de proceso:</span>
@@ -385,28 +385,22 @@
                 </tr>
             </thead>
             <tbody>
-                {{!-- Primero mostrar actuaciones de Monolegal (tiempo real) --}}
                 {{#if actuacionesMonolegal.length}}
+                    {{!-- PDF Individual: 5 actuaciones de Monolegal --}}
                     {{#each actuacionesMonolegal}}
                     <tr>
-                        <td>{{this.fechaUltimaActuacion}</td>
-                        <td>{{this.performanceType}}</td>
-                        <td>{{this.observation}}</td>
+                        <td>{{formatDate this.fechaDeActuacion}}</td>
+                        <td>{{this.textoActuacion}}</td>
+                        <td>{{this.anotacion}}</td>
                     </tr>
                     {{/each}}
                 {{else}}
-                    {{!-- Si no hay de Monolegal, usar las guardadas (performances) --}}
-                    {{#each performances}}
+                    {{!-- PDF Resumen: Solo última actuación --}}
                     <tr>
-                        <td>{{../fechaUltimaActuacion}}</td>
-                        <td>{{performanceType}}</td>
-                        <td>{{observation}}</td>
+                        <td>{{fechaUltimaActuacion}}</td>
+                        <td>{{ultimaActuacion}}</td>
+                        <td>{{observation}}</td>                        
                     </tr>
-                    {{else}}
-                    <tr>
-                        <td colspan="3" class="no-data">No hay actuaciones registradas</td>
-                    </tr>
-                    {{/each}}
                 {{/if}}
             </tbody>
         </table>
@@ -423,9 +417,8 @@
 
     <!-- Legal Unit -->
     <div class="legal-unit">
-        <div class="unit-name">Unidad de litigio jurídico</div>
-        <div class="company">QPALLIANCE S.A.S</div>
-        <div class="nit">Nit 901405080-7</div>
+        <div class="unit-name">Unidad de litigios</div>
+        <div class="company">QPALLIANCE S.A.S</div>        
     </div>
 
     <!-- Footer Container -->

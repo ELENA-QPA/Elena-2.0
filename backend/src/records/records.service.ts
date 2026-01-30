@@ -223,7 +223,7 @@ export class RecordsService {
       const performancesMap = this.groupByRecordId(allPerformances);
 
       const recordsWithRelations = records.map((record) => {
-        const id = record._id.toString();
+        const id = record._id.toString();        
         return {
           ...record,
           documents: documentsMap[id] || [],
@@ -232,7 +232,7 @@ export class RecordsService {
           // payments: paymentsMap[id] || [],
           performances: performancesMap[id] || [],
         };
-      });
+      });     
 
       return {
         records: recordsWithRelations,
@@ -2033,7 +2033,7 @@ export class RecordsService {
           deletedAt: { $exists: false },
         })
         .select(
-          'internalCode processType jurisdiction settled office clientType etiqueta radicado despachoJudicial city department ultimaActuacion fechaUltimaActuacion location country idProcesoMonolegal',
+          'internalCode processType jurisdiction settled office clientType etiqueta radicado despachoJudicial city department ultimaActuacion fechaUltimaActuacion location country idProcesoMonolegal isActive',
         );
 
       if (!record) {

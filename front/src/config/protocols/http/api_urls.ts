@@ -109,8 +109,9 @@ export const apiUrls = {
     delete: "/api/notifications",
     websocket: "/notifications",
   },
+
   // Monolegal
   monolegal: {
-    actuaciones: "/api/monolegal/actuaciones",
+    actuaciones: "/api/monolegal/actuaciones-por-radicado",
   },
 };

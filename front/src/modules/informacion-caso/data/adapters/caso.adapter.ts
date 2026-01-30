@@ -129,6 +129,7 @@ export function mapCasoApiToModel(api: any): Caso {
       location: "",
       estado: "",
       type: "",
+      isActive: api.isActive, 
       user: undefined,
       createdAt: "",
       updatedAt: "",
@@ -160,6 +161,7 @@ export function mapCasoApiToModel(api: any): Caso {
     location: api.location || undefined,
     estado: api.estado,
     type: api.type,
+    isActive: api.isActive,
     numeroRadicado:
       api.numeroRadicado || api.radicado || api.internalCode || "",
     despachoJudicial: api.despachoJudicial || api.office || "",

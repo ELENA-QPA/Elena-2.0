@@ -191,6 +191,11 @@ export class QpAllianceLegalApiService implements LegalApiService {
         request
       );     
 
+      if (response.activeRecords?.[0]) {
+        console.log("🔍 Campos del primer registro activo:", Object.keys(response.activeRecords[0]));
+        console.log("🔍 Primer registro completo:", JSON.stringify(response.activeRecords[0], null, 2));
+      }
+
       // Transformar la respuesta de la API real al formato esperado por el bot
       const transformedResponse = this.transformDetailedCasesResponse(response);
 
