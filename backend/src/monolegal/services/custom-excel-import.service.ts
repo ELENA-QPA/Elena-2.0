@@ -243,6 +243,9 @@ export class CustomExcelImportService {
     const ciudadNorm = this.normalizeCity(ciudad);
     const departamentoNorm = this.normalizeDepartment(departamento);
 
+    // Normalizar radicado: convertir "NA", vacíos, etc. a null
+    const radicadoNormalizado = this.normalizeRadicado(radicado);
+
     let existingRecord = null;
     let foundBy = '';
 
@@ -251,13 +254,8 @@ export class CustomExcelImportService {
       foundBy = 'etiqueta';
     }
 
-    if (
-      !existingRecord &&
-      radicado &&
-      radicado !== '' &&
-      radicado.toLowerCase() !== 'na'
-    ) {
-      existingRecord = await this.recordModel.findOne({ radicado: radicado });
+    if (!existingRecord && radicadoNormalizado) {
+      existingRecord = await this.recordModel.findOne({ radicado: radicadoNormalizado });
       if (existingRecord) {
         foundBy = 'radicado';
       }
@@ -271,15 +269,14 @@ export class CustomExcelImportService {
         updatedFields.push('etiqueta');
       }
 
+      // Solo actualizar radicado si el existente está vacío/nulo/NA y el nuevo es válido
       if (
         (!existingRecord.radicado ||
           existingRecord.radicado === '' ||
           existingRecord.radicado.toLowerCase() === 'na') &&
-        radicado &&
-        radicado !== '' &&
-        radicado.toLowerCase() !== 'na'
+        radicadoNormalizado
       ) {
-        existingRecord.radicado = radicado;
+        existingRecord.radicado = radicadoNormalizado;
         updatedFields.push('radicado');
       }
 
@@ -344,7 +341,7 @@ export class CustomExcelImportService {
 
       return {
         etiqueta,
-        radicado: radicado || existingRecord.radicado || 'Sin radicado',
+        radicado: radicadoNormalizado || existingRecord.radicado || 'Sin radicado',
         status: 'updated',
         message:
           updatedFields.length > 0
@@ -354,12 +351,10 @@ export class CustomExcelImportService {
       };
     }
 
-    const radicadoValido =
-      radicado && radicado !== '' && radicado.toLowerCase() !== 'na';
-
-    if (radicadoValido) {
+    // Verificar si ya existe un registro con este radicado (solo si es válido)
+    if (radicadoNormalizado) {
       const existeRadicado = await this.recordModel.findOne({
-        radicado: radicado,
+        radicado: radicadoNormalizado,
       });
       if (existeRadicado) {
         // Ya existe, actualizar en lugar de crear
@@ -368,7 +363,7 @@ export class CustomExcelImportService {
           await existeRadicado.save();
           return {
             etiqueta,
-            radicado,
+            radicado: radicadoNormalizado,
             status: 'updated',
             message: 'Etiqueta actualizada (radicado ya existía)',
             updatedFields: ['etiqueta'],
@@ -376,7 +371,7 @@ export class CustomExcelImportService {
         }
         return {
           etiqueta,
-          radicado,
+          radicado: radicadoNormalizado,
           status: 'skipped',
           message: 'Radicado ya existe, sin cambios necesarios',
         };
@@ -389,8 +384,9 @@ export class CustomExcelImportService {
     });
     const internalCode = `CE-${year}-${String(count + 1).padStart(4, '0')}`;
 
+    // Crear el registro con radicado como null si es inválido
     const recordData = {
-      radicado,
+      radicado: radicadoNormalizado || null,
       etiqueta,
       internalCode,
       despachoJudicial: this.normalizeJuzgado(juzgado),
@@ -422,7 +418,7 @@ export class CustomExcelImportService {
 
     return {
       etiqueta,
-      radicado: radicado || 'Sin radicado',
+      radicado: radicadoNormalizado || 'Sin radicado',
       status: 'created',
       message: 'Registro creado exitosamente',
     };
@@ -531,6 +527,28 @@ export class CustomExcelImportService {
     }
 
     return updatedFields;
+  }
+
+  /**
+   * Normaliza el valor del radicado
+   * Retorna null si el radicado es inválido (NA, vacío, Desconocido)
+   * Esto permite que MongoDB guarde null en lugar de valores duplicados
+   */
+  private normalizeRadicado(radicado: string): string | null {
+    if (!radicado || radicado === '') {
+      return null;
+    }
+
+    const radicadoLower = radicado.toLowerCase().trim();
+
+    // Lista de valores que se consideran inválidos
+    const valoresInvalidos = ['na', 'n/a', 'desconocido', 'sin radicado', 'pendiente'];
+
+    if (valoresInvalidos.includes(radicadoLower)) {
+      return null;
+    }
+
+    return radicado.trim();
   }
 
   private parseDate(dateString: any): Date | undefined {

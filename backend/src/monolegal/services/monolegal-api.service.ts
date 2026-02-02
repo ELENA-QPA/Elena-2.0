@@ -154,8 +154,7 @@ export class MonolegalApiService {
   async getExpediente(idExpediente: string): Promise<ExpedienteDetalle> {
     const token = await this.login();
 
-    try {     
-
+    try {
       const response = await firstValueFrom(
         this.httpService.get<ExpedienteDetalle>(
           `${this.baseUrl}/Expedientes/${idExpediente}`,
@@ -293,6 +292,14 @@ export class MonolegalApiService {
         baseUrl = `https://apityba.monolegal.co/api/Procesos/${idProceso}/Actuaciones`;
         tokenToUse = this.token;
         break;
+      case 'estadoselectronicos':
+      case 'publicacionesprocesales':
+      case 'siugj':
+        return this.getActuacionesPublicacionesProcesales(idProceso);
+      case 'samai':
+        baseUrl = `https://apisamai.monolegal.co/api/Procesos/${idProceso}/Actuaciones`;
+        tokenToUse = this.token;
+        break;
       default:
         this.logger.warn(`Fuente desconocida: ${fuente}, intentando con Rama`);
         baseUrl = `https://apirama.monolegal.co/api/Procesos/${idProceso}/Actuaciones`;
@@ -301,29 +308,158 @@ export class MonolegalApiService {
 
     try {
       const response = await firstValueFrom(
-        this.httpService.get<ActuacionUnificada[]>(baseUrl, {
+        this.httpService.get<any[]>(baseUrl, {
           headers: {
             Authorization: `Bearer ${tokenToUse}`,
           },
         }),
       );
 
-      const actuaciones = response.data.sort((a, b) => {
-        const dateA = new Date(a.fechaDeActuacion).getTime();
-        const dateB = new Date(b.fechaDeActuacion).getTime();
-        return dateB - dateA;
-      });
+      // Formatear las actuaciones
+      const actuaciones = (response.data || []).map((act) => ({
+        ...act,
+        // Formatear fechaActuacion si viene en formato texto "14 Oct 2025"
+        fechaActuacion:
+          this.formatearFechaTexto(act.fechaActuacion) || act.fechaActuacion,
+        fechaDeActuacion:
+          this.formatearFechaTexto(act.fechaActuacion) || act.fechaDeActuacion,
+      }));
 
-      return actuaciones;
+      // Ordenar por fecha
+      return actuaciones.sort((a, b) => {
+        const dateA = this.parsearFecha(a.fechaActuacion || a.fechaDeActuacion);
+        const dateB = this.parsearFecha(b.fechaActuacion || b.fechaDeActuacion);
+
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+
+        return dateB.getTime() - dateA.getTime();
+      });
     } catch (error) {
       this.logger.error(
         `Error obteniendo actuaciones (${fuente}):`,
         error.message,
       );
-      throw new BadRequestException(
-        'Error al obtener actuaciones de Monolegal: ' + error.message,
-      );
+      return [];
     }
+  }
+
+  /**
+   * Obtiene actuaciones de PublicacionesProcesales y las transforma al formato estándar
+   */
+  private async getActuacionesPublicacionesProcesales(
+    idProceso: string,
+  ): Promise<any[]> {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get<any>(
+          `https://estadoselectronicos.monolegal.co/backend/api/v2/procesos/${idProceso}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          },
+        ),
+      );
+
+      const data = response.data;
+      const actuaciones: any[] = [];
+
+      if (
+        data.documentosDondeSeEncuentra &&
+        Array.isArray(data.documentosDondeSeEncuentra)
+      ) {
+        for (const doc of data.documentosDondeSeEncuentra) {
+          const extracto = doc.coincidenciasDelDocumento?.[0]?.extracto || '';
+
+          // Convertir fecha "22 abril 2025" a "22/04/2025"
+          const fechaFormateada = this.formatearFechaTexto(doc.fecha);
+
+          actuaciones.push({
+            id: doc.idDocumento || `pp-${Date.now()}`,
+            idProceso: idProceso,
+            textoActuacion: doc.nombreDocumento || '',
+            actuacion: doc.nombreDocumento || '',
+            anotacion: extracto,
+            fechaActuacion: fechaFormateada,
+            fechaDeActuacion: fechaFormateada,
+            linkDocumento: doc.linkAlDocumento || '',
+            seccion: doc.seccion || '',
+            fuente: 'PublicacionesProcesales',
+            tipoFuente: 'PublicacionesProcesales',
+          });
+        }
+      }
+
+      return actuaciones.sort((a, b) => {
+        const fechaA = this.parsearFecha(a.fechaActuacion);
+        const fechaB = this.parsearFecha(b.fechaActuacion);
+
+        if (!fechaA && !fechaB) return 0;
+        if (!fechaA) return 1;
+        if (!fechaB) return -1;
+
+        return fechaB.getTime() - fechaA.getTime();
+      });
+    } catch (error) {
+      this.logger.error(
+        `Error obteniendo PublicacionesProcesales: ${error.message}`,
+      );
+      return [];
+    }
+  }
+
+  /**
+   * Convierte "22 abril 2025" a "22/04/2025"
+   */
+  private formatearFechaTexto(fecha: string): string {
+    if (!fecha) return '';
+
+    const meses: { [key: string]: string } = {
+      // Español completo
+      enero: '01',
+      febrero: '02',
+      marzo: '03',
+      abril: '04',
+      mayo: '05',
+      junio: '06',
+      julio: '07',
+      agosto: '08',
+      septiembre: '09',
+      octubre: '10',
+      noviembre: '11',
+      diciembre: '12',
+      // Inglés abreviado
+      jan: '01',
+      feb: '02',
+      mar: '03',
+      apr: '04',
+      may: '05',
+      jun: '06',
+      jul: '07',
+      aug: '08',
+      sep: '09',
+      oct: '10',
+      nov: '11',
+      dec: '12',
+      // Español abreviado
+      ene: '01',
+      abr: '04',
+      ago: '08',
+      dic: '12',
+    };
+
+    const match = fecha.match(/^(\d{1,2})\s+([a-zA-ZáéíóúÁÉÍÓÚ]+)\s+(\d{4})$/i);
+    if (match) {
+      const [, day, mesTexto, year] = match;
+      const mes = meses[mesTexto.toLowerCase()];
+      if (mes) {
+        return `${day.padStart(2, '0')}/${mes}/${year}`;
+      }
+    }
+
+    return fecha;
   }
   /**
    * Busca procesos por número de radicado en la API Unificada
@@ -495,8 +631,7 @@ export class MonolegalApiService {
   }
 
   /**
-   * Obtiene actuaciones de todas las fuentes (Unificada + PublicacionesProcesales)
-   * Si Unificada está vacía, busca en otras fuentes como fallback
+   * Obtiene actuaciones de TODAS las fuentes disponibles
    * @param idExpediente - ID del expediente en Monolegal
    */
   async getActuacionesTodasLasFuentes(idExpediente: string): Promise<{
@@ -515,7 +650,6 @@ export class MonolegalApiService {
     };
 
     try {
-      // 1. Obtener el expediente con todas sus fuentes
       const expediente = await this.getExpediente(idExpediente);
 
       if (!expediente?.procesosEnFuentesDatos) {
@@ -525,42 +659,25 @@ export class MonolegalApiService {
         return resultado;
       }
 
-      // BUSCAR LA FECHA MÁS RECIENTE entre Unificada y PublicacionesProcesales
+      // Buscar fecha más reciente
       let fechaMasReciente: Date | null = null;
 
       for (const fuente of expediente.procesosEnFuentesDatos) {
-        const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
-
-        // Solo considerar Unificada y PublicacionesProcesales
-        if (
-          tipoFuente !== 'unificada' &&
-          tipoFuente !== 'publicacionesprocesales'
-        ) {
-          continue;
-        }
-
         if (
           fuente.fechaUltimaActuacion &&
           fuente.fechaUltimaActuacion.trim() !== ''
         ) {
           const fechaParsed = this.parsearFecha(fuente.fechaUltimaActuacion);
-
-          if (fechaParsed) {
-            // Si no hay fecha aún, o esta es más reciente, guardarla
-            if (
-              !fechaMasReciente ||
-              fechaParsed.getTime() > fechaMasReciente.getTime()
-            ) {
-              fechaMasReciente = fechaParsed;
-              this.logger.log(
-                `[FECHA] Nueva fecha más reciente de ${fuente.tipoFuente}: ${fuente.fechaUltimaActuacion}`,
-              );
-            }
+          if (
+            fechaParsed &&
+            (!fechaMasReciente ||
+              fechaParsed.getTime() > fechaMasReciente.getTime())
+          ) {
+            fechaMasReciente = fechaParsed;
           }
         }
       }
 
-      // Formatear la fecha encontrada
       if (fechaMasReciente) {
         resultado.fechaUltimaActuacion = `${String(
           fechaMasReciente.getDate(),
@@ -570,94 +687,43 @@ export class MonolegalApiService {
         )}/${fechaMasReciente.getFullYear()}`;
       }
 
-      this.logger.log(
-        `[FECHA] Fecha final más reciente: ${
-          resultado.fechaUltimaActuacion || 'N/A'
-        }`,
-      );
-
-      // 2. Primera pasada: obtener Unificada y PublicacionesProcesales
+      // Recorrer TODAS las fuentes
       for (const fuente of expediente.procesosEnFuentesDatos) {
-        if (!fuente.activo) continue;
+        if (!fuente.activo || !fuente.idProceso) continue;
 
         const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
 
-        if (tipoFuente === 'unificada') {
-          if (fuente.idProceso) {
-            try {
-              const actuacionesDetalle = await this.getActuacionesPorIdProceso(
-                fuente.idProceso,
-              );
-              for (const act of actuacionesDetalle) {
-                resultado.unificada.push({
-                  ...act,
-                  fuente: 'Unificada',
-                  tipoFuente: 'Unificada',
-                });
-              }
-            } catch (error) {
-              this.logger.error(
-                `Error obteniendo detalle de Unificada: ${error.message}`,
-              );
-            }
-          }
-        } else if (tipoFuente === 'publicacionesprocesales') {
-          // SOLO agregar si tiene fecha válida
-          if (
-            fuente.fechaUltimaActuacion &&
-            fuente.fechaUltimaActuacion.trim() !== ''
-          ) {
-            const actuacionData = {
-              id: fuente.idProceso || `${tipoFuente}-${Date.now()}`,
-              idProceso: fuente.idProceso,
-              actuacion: fuente.ultimaActuacion || '',
-              textoActuacion: fuente.ultimaActuacion || '',
-              anotacion: fuente.descripcionUltimaActuacion || '',
-              fechaActuacion: this.normalizarFechaPublicaciones(
-                fuente.fechaUltimaActuacion,
-              ),
-              fechaDeActuacion: this.normalizarFechaPublicaciones(
-                fuente.fechaUltimaActuacion,
-              ),
-              numActuaciones: fuente.numActuaciones || 0,
-              fuente: 'PublicacionesProcesales',
-              tipoFuente: 'PublicacionesProcesales',
-              estado: fuente.estado,
-              esProcesoPrincipal: fuente.esProcesoPrincipal,
-            };
-            resultado.publicacionesProcesales.push(actuacionData);
-          }
-        }
-      }
-
-      // 3. SI UNIFICADA ESTÁ VACÍA, buscar en otras fuentes
-      if (resultado.unificada.length === 0) {
-        this.logger.log(
-          `[FALLBACK] Unificada vacía, buscando en otras fuentes...`,
-        );
-
-        for (const fuente of expediente.procesosEnFuentesDatos) {
-          if (!fuente.activo || !fuente.idProceso) continue;
-
-          const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
-
-          if (
-            tipoFuente === 'unificada' ||
-            tipoFuente === 'publicacionesprocesales'
-          ) {
-            continue;
-          }
-
-          try {
-            this.logger.log(
-              `[FALLBACK] Intentando obtener de ${tipoFuente.toUpperCase()}`,
+        try {
+          if (tipoFuente === 'unificada') {
+            const actuaciones = await this.getActuacionesPorIdProceso(
+              fuente.idProceso,
             );
-
+            for (const act of actuaciones) {
+              resultado.unificada.push({
+                ...act,
+                fuente: 'Unificada',
+                tipoFuente: 'Unificada',
+              });
+            }
+          } else if (tipoFuente === 'publicacionesprocesales') {
+            // Obtener actuaciones de la API de estados electrónicos
+            const actuaciones = await this.getActuaciones(
+              fuente.idProceso,
+              'publicacionesprocesales',
+            );
+            for (const act of actuaciones) {
+              resultado.publicacionesProcesales.push({
+                ...act,
+                fuente: 'PublicacionesProcesales',
+                tipoFuente: 'PublicacionesProcesales',
+              });
+            }
+          } else {
+            // Otras fuentes: rama, tyba, samai, etc.
             const actuaciones = await this.getActuaciones(
               fuente.idProceso,
               tipoFuente,
             );
-
             for (const act of actuaciones) {
               resultado.otras.push({
                 ...act,
@@ -665,28 +731,26 @@ export class MonolegalApiService {
                 tipoFuente: fuente.tipoFuente,
               });
             }
-
-            this.logger.log(
-              `[FALLBACK] ${tipoFuente.toUpperCase()}: ${
-                actuaciones.length
-              } actuaciones encontradas`,
-            );
-          } catch (error) {
-            this.logger.error(
-              `[FALLBACK] Error obteniendo ${tipoFuente}: ${error.message}`,
-            );
           }
+
+          this.logger.log(
+            `[FUENTE] ${fuente.tipoFuente}: obtenidas actuaciones`,
+          );
+        } catch (error) {
+          this.logger.error(
+            `[FUENTE] Error obteniendo ${fuente.tipoFuente}: ${error.message}`,
+          );
         }
       }
 
-      // 4. Combinar todas las fuentes
+      // Combinar todas
       const todas = [
         ...resultado.unificada,
         ...resultado.publicacionesProcesales,
         ...resultado.otras,
       ];
 
-      // 5. Eliminar duplicados
+      // Eliminar duplicados
       const mapaUnicos = new Map();
       for (const act of todas) {
         const clave = `${act.textoActuacion || act.actuacion}-${
@@ -696,10 +760,9 @@ export class MonolegalApiService {
           mapaUnicos.set(clave, act);
         }
       }
-      const sinDuplicados = Array.from(mapaUnicos.values());
 
-      // 6. Ordenar por fecha
-      resultado.combinadas = sinDuplicados.sort((a, b) => {
+      // Ordenar por fecha (más reciente primero)
+      resultado.combinadas = Array.from(mapaUnicos.values()).sort((a, b) => {
         const fechaA = this.parsearFecha(
           a.fechaActuacion || a.fechaDeActuacion,
         );
@@ -714,35 +777,12 @@ export class MonolegalApiService {
         return fechaB.getTime() - fechaA.getTime();
       });
 
-      // 7. Si no se encontró fecha en las fuentes, usar la de la actuación más reciente
-      if (!resultado.fechaUltimaActuacion && resultado.combinadas.length > 0) {
-        const primeraActuacion = resultado.combinadas[0];
-        const fechaActuacion =
-          primeraActuacion.fechaActuacion || primeraActuacion.fechaDeActuacion;
-
-        if (fechaActuacion) {
-          const fechaParsed = this.parsearFecha(fechaActuacion);
-          if (fechaParsed) {
-            resultado.fechaUltimaActuacion = `${String(
-              fechaParsed.getDate(),
-            ).padStart(2, '0')}/${String(fechaParsed.getMonth() + 1).padStart(
-              2,
-              '0',
-            )}/${fechaParsed.getFullYear()}`;
-            this.logger.log(
-              `[FECHA] Tomada de actuación más reciente: ${resultado.fechaUltimaActuacion}`,
-            );
-          }
-        }
-      }
-
       this.logger.log(
         `[ACTUACIONES] Expediente ${idExpediente}: ` +
           `Unificada=${resultado.unificada.length}, ` +
           `PublicacionesProcesales=${resultado.publicacionesProcesales.length}, ` +
           `Otras=${resultado.otras.length}, ` +
-          `Total=${resultado.combinadas.length}, ` +
-          `FechaReciente=${resultado.fechaUltimaActuacion}`,
+          `Total=${resultado.combinadas.length}`,
       );
 
       return resultado;
@@ -753,9 +793,9 @@ export class MonolegalApiService {
       throw error;
     }
   }
- 
+
   //Parsea diferentes formatos de fecha
-   
+
   private parsearFecha(fecha: any): Date | null {
     if (!fecha) return null;
 
@@ -764,13 +804,13 @@ export class MonolegalApiService {
     }
 
     if (typeof fecha === 'string') {
-     
+      // Formato ISO
       if (fecha.includes('T')) {
         const parsed = new Date(fecha);
         return isNaN(parsed.getTime()) ? null : parsed;
       }
 
-      // Formato "1/27/2026 9:54:54 AM" 
+      // Formato "1/27/2026 9:54:54 AM"
       const usFormat =
         /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM|a\.\s*m\.|p\.\s*m\.)?/i;
       const usMatch = fecha.match(usFormat);
@@ -798,6 +838,64 @@ export class MonolegalApiService {
         const day = parseInt(p1, 10);
         const month = parseInt(p2, 10);
         return new Date(parseInt(year), month - 1, day, 12, 0, 0);
+      }
+
+      // Formato "22 abril 2025" o "14 Oct 2025" (mes completo o abreviado)
+      const meses: { [key: string]: number } = {
+        // Español completo
+        enero: 0,
+        febrero: 1,
+        marzo: 2,
+        abril: 3,
+        mayo: 4,
+        junio: 5,
+        julio: 6,
+        agosto: 7,
+        septiembre: 8,
+        octubre: 9,
+        noviembre: 10,
+        diciembre: 11,
+        // Inglés completo
+        january: 0,
+        february: 1,
+        march: 2,
+        april: 3,
+        may: 4,
+        june: 5,
+        july: 6,
+        august: 7,
+        september: 8,
+        october: 9,
+        november: 10,
+        december: 11,
+        // Inglés abreviado
+        jan: 0,
+        feb: 1,
+        mar: 2,
+        apr: 3,
+        jun: 5,
+        jul: 6,
+        aug: 7,
+        sep: 8,
+        oct: 9,
+        nov: 10,
+        dec: 11,
+        // Español abreviado
+        ene: 0,
+        abr: 3,
+        ago: 7,
+        dic: 11,
+      };
+
+      const textoMatch = fecha.match(
+        /^(\d{1,2})\s+([a-zA-ZáéíóúÁÉÍÓÚ]+)\s+(\d{4})$/i,
+      );
+      if (textoMatch) {
+        const [, day, mesTexto, year] = textoMatch;
+        const mes = meses[mesTexto.toLowerCase()];
+        if (mes !== undefined) {
+          return new Date(parseInt(year), mes, parseInt(day), 12, 0, 0);
+        }
       }
 
       // Último intento

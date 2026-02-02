@@ -7399,85 +7399,103 @@ export default function InformacionCasoFormViewOld() {
             )}
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-  {/* Mostrar actuaciones de Monolegal */}
-  {actuacionesMonolegal.length > 0 ? (
-    actuacionesMonolegal.map((p: any) => (
-      <div
-        key={p._id || (p as any).id}
-        className="bg-white rounded-lg p-4 shadow-sm"
-      >
-        <div className="space-y-2">      
-          <div className="flex items-center justify-between">
-           <span
-  className={`px-2 py-0.5 text-xs rounded border-l-4 ${
-    p.fuente === "Unificada"
-      ? "bg-pink-50 text-pink-700 border-pink-500"
-      : "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-500"
-  }`}
->
-  {p.fuente || p.tipoFuente}
-</span>
+              {/* Mostrar actuaciones de Monolegal */}
+              {actuacionesMonolegal.length > 0 ? (
+                actuacionesMonolegal.map((p: any) => (
+                  <div
+                    key={p._id || (p as any).id}
+                    className="bg-white rounded-lg p-4 shadow-sm"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`px-2 py-0.5 text-xs rounded border-l-4 ${
+                            p.fuente === "Unificada"
+                              ? "bg-pink-50 text-pink-700 border-pink-500"
+                              : p.fuente === "Rama"
+                                ? "bg-blue-50 text-blue-700 border-blue-500"
+                                : p.fuente === "Tyba"
+                                  ? "bg-purple-50 text-purple-700 border-purple-500"
+                                  : p.fuente === "estadoselectronicos"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-500"
+                                    : p.fuente === "PublicacionesProcesales"
+                                      ? "bg-amber-50 text-amber-700 border-amber-500"
+                                      : p.fuente === "Siugj"
+                                        ? "bg-cyan-50 text-cyan-700 border-cyan-500"
+                                        : p.fuente === "Samai"
+                                          ? "bg-violet-50 text-violet-700 border-violet-500"
+                                          : "bg-gray-50 text-gray-700 border-gray-500"
+                          }`}
+                        >
+                          {p.fuente || p.tipoFuente}
+                        </span>
 
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 p-1 h-auto"
-                onClick={() => {
-                  setSelectedPerformance(p);
-                  setShowPerformanceDetailModal(true);
-                }}
-              >
-                <Eye className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-red-600 hover:text-red-700 p-1 h-auto"
-                onClick={async () => {
-                  if (!p._id && !(p as any).id) return;
-                  const id = p._id || (p as any).id;
-                  if (!caseId) return;
-                  if (!window.confirm("¿Eliminar actuación?")) return;
-                  try {
-                    await deletePerformance(id);
-                    toast.success("Actuación eliminada");
-                    await getCasoById(caseId);
-                  } catch (err) {
-                    console.error("Error eliminando actuación:", err);
-                    toast.error("No se pudo eliminar actuación");
-                  }
-                }}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-600 hover:text-gray-900 p-1 h-auto"
+                            onClick={() => {
+                              setSelectedPerformance(p);
+                              setShowPerformanceDetailModal(true);
+                            }}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 p-1 h-auto"
+                            onClick={async () => {
+                              if (!p._id && !(p as any).id) return;
+                              const id = p._id || (p as any).id;
+                              if (!caseId) return;
+                              if (!window.confirm("¿Eliminar actuación?"))
+                                return;
+                              try {
+                                await deletePerformance(id);
+                                toast.success("Actuación eliminada");
+                                await getCasoById(caseId);
+                              } catch (err) {
+                                console.error(
+                                  "Error eliminando actuación:",
+                                  err,
+                                );
+                                toast.error("No se pudo eliminar actuación");
+                              }
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="text-pink-600 font-medium text-base">
+                        {p.textoActuacion ||
+                          p.actuacion ||
+                          p.performanceType ||
+                          "Actuación"}{" "}
+                        -{" "}
+                        <span className="text-gray-600">
+                          {p.fechaDeActuacion
+                            ? formatToDisplay(p.fechaDeActuacion)
+                            : ""}
+                        </span>
+                      </div>
+
+                      {/* ✅ Anotación en la tercera línea */}
+                      <p className="text-sm text-gray-600 line-clamp-3">
+                        {p.anotacion || "Sin anotación"}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-sm text-gray-500">
+                  No hay actuaciones registradas
+                </div>
+              )}
             </div>
-          </div>
-          
-          <div className="text-pink-600 font-medium text-base">
-            {p.textoActuacion ||
-              p.actuacion ||
-              p.performanceType ||
-              "Actuación"}{" "}
-            -{" "}
-            <span className="text-gray-600">
-              {p.fechaDeActuacion ? formatToDisplay(p.fechaDeActuacion) : ""}
-            </span>
-          </div>
-
-          {/* ✅ Anotación en la tercera línea */}
-          <p className="text-sm text-gray-600 line-clamp-3">
-            {p.anotacion || "Sin anotación"}
-          </p>
-        </div>
-      </div>
-    ))
-  ) : (
-    <div className="text-sm text-gray-500">
-      No hay actuaciones registradas
-    </div>
-  )}
-</div>
             {/* Botón Agregar Actuación */}
             {!showPerformanceForm && (
               <div className="flex flex-col gap-2 items-center">
@@ -8364,12 +8382,12 @@ export default function InformacionCasoFormViewOld() {
                     Tipo de Actuación
                   </Label>
                   <div className="p-3 bg-gray-50 rounded-lg border">
-                    <span className="text-gray-900 font-medium">
+                    <p className="text-gray-900 font-medium break-all">
                       {(selectedPerformance as any).textoActuacion ||
                         (selectedPerformance as any).actuacion ||
                         selectedPerformance.performanceType ||
                         "No especificado"}
-                    </span>
+                    </p>
                   </div>
                 </div>
 
@@ -8426,7 +8444,7 @@ export default function InformacionCasoFormViewOld() {
               <div className="space-y-2">
                 <Label className="text-gray-700 font-medium">Anotación</Label>
                 <div className="p-4 bg-gray-50 rounded-lg border min-h-[100px]">
-                  <span className="text-gray-900 whitespace-pre-wrap">
+                  <span className="text-gray-900 whitespace-pre-wrap break-all">
                     {(selectedPerformance as any).anotacion ||
                       selectedPerformance.observation ||
                       "Sin anotación"}
@@ -8474,7 +8492,7 @@ export default function InformacionCasoFormViewOld() {
               <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
-                  <span className="text-pink-700 font-medium">
+                  <span className="text-pink-700 font-medium break-all">
                     {(selectedPerformance as any).textoActuacion ||
                       (selectedPerformance as any).actuacion ||
                       selectedPerformance.performanceType ||
