@@ -58,73 +58,53 @@ export class MonolegalCronService implements OnModuleInit {
 
   /**
    * Intento principal: 6:00 AM
+   * Siempre ejecuta para capturar los primeros registros del día
    */
   @Cron('0 6 * * *', {
     name: 'sincronizacion-monolegal-6am',
     timeZone: 'America/Bogota',
   })
   async sincronizacionDiaria6am() {
+    this.logger.log('🔄 Ejecutando sincronización de las 6 AM...');
     await this.ejecutarSincronizacionConLog('cron');
   }
 
   /**
-   * Reintento: 7:00 AM - Solo si no hubo cambios a las 6am
+   * Reintento: 7:00 AM
+   * Siempre ejecuta para capturar nuevos registros que la API agregó después de las 6 AM
    */
   @Cron('0 7 * * *', {
     name: 'sincronizacion-monolegal-7am',
     timeZone: 'America/Bogota',
   })
   async sincronizacionDiaria7am() {
-    if (await this.necesitaReintento()) {
-      this.logger.log('Reintentando sincronización (7am)...');
-      await this.ejecutarSincronizacionConLog('cron');
-    }
+    this.logger.log('🔄 Ejecutando sincronización de las 7 AM...');
+    await this.ejecutarSincronizacionConLog('cron');
   }
 
   /**
    * Reintento final: 8:00 AM
+   * Siempre ejecuta para capturar todos los registros finales del día
    */
   @Cron('0 8 * * *', {
     name: 'sincronizacion-monolegal-8am',
     timeZone: 'America/Bogota',
   })
   async sincronizacionDiaria8am() {
-    if (await this.necesitaReintento()) {
-      this.logger.log('Último reintento sincronización (8am)...');
-      await this.ejecutarSincronizacionConLog('cron');
-    }
+    this.logger.log('🔄 Ejecutando sincronización de las 8 AM...');
+    await this.ejecutarSincronizacionConLog('cron');
   }
 
   /**
-   * Verifica si necesita reintentar:
-   * - No hubo sync hoy, O
-   * - La sync de hoy tuvo 0 registros procesados
+   * PRUEBA: 1:00 PM - Para validar que funciona correctamente en producción
    */
-  private async necesitaReintento(): Promise<boolean> {
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-
-    const syncHoy = await this.syncLogModel
-      .findOne({
-        type: 'monolegal',
-        status: { $in: ['success', 'partial'] },
-        startedAt: { $gte: hoy },
-      })
-      .sort({ startedAt: -1 });
-
-    if (!syncHoy) {
-      return true;
-    }
-
-    if (syncHoy.summary?.total === 0) {
-      this.logger.log('Sync anterior sin cambios, reintentando...');
-      return true;
-    }
-
-    this.logger.log(
-      `Ya hay sync exitosa con ${syncHoy.summary?.total} registros`,
-    );
-    return false;
+  @Cron('0 13 * * *', {
+    name: 'sincronizacion-monolegal-1pm',
+    timeZone: 'America/Bogota',
+  })
+  async sincronizacionPrueba1pm() {
+    this.logger.log('🧪 [PRUEBA] Ejecutando sincronización de la 1:00 PM...');
+    await this.ejecutarSincronizacionConLog('cron');
   }
 
   /**
@@ -149,9 +129,20 @@ export class MonolegalCronService implements OnModuleInit {
         );
       }
 
+      this.logger.log(`👤 Sincronizando con userId: ${userId}`);
+
       await this.syncLogModel.findByIdAndUpdate(syncLog._id, { userId });
 
       const resultado = await this.monolegalService.syncFromApi(userId);
+
+      // Log del resumen
+      this.logger.log(
+        `📊 Resumen: ${resultado.summary.total} procesados (✅ ${
+          resultado.summary.created
+        } creados, 🔄 ${resultado.summary.updated} actualizados, ⏭️ ${
+          resultado.summary.skipped || 0
+        } omitidos, ❌ ${resultado.summary.errors} errores)`,
+      );
 
       if (resultado.summary.errors > 0 && resultado.details) {
         const errores = resultado.details.filter(
@@ -313,7 +304,7 @@ export class MonolegalCronService implements OnModuleInit {
     const lastSync = await this.syncLogModel
       .findOne({
         type: 'monolegal',
-        status: { $in: ['success', 'partial'] }, // ✅ ASÍ
+        status: { $in: ['success', 'partial'] },
       })
       .sort({ completedAt: -1 })
       .exec();
