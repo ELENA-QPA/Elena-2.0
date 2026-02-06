@@ -59,6 +59,10 @@ import {
   Clock,
   CreditCard,
   ArrowLeft,
+  Building2,
+  Bike,
+  ShoppingBag,
+  Package,
 } from "lucide-react";
 import {
   Form,
@@ -1248,21 +1252,25 @@ export default function InformacionCasoFormViewOld() {
 
   useEffect(() => {
     // Solo cargar si el caseId es diferente al que ya cargamos
-    if (caseId && (mode === "view" || mode === "edit") && caseId !== caseLoadedRef.current) {
+    if (
+      caseId &&
+      (mode === "view" || mode === "edit") &&
+      caseId !== caseLoadedRef.current
+    ) {
       caseLoadedRef.current = caseId;
       getCasoById(caseId);
     }
-  }, [caseId, mode]); 
-  
+  }, [caseId, mode]);
+
   // Efecto para cargar actuaciones de Monolegal
   const radicadoRef = useRef<string | null>(null);
 
   useEffect(() => {
     const radicado = (caso as any)?.radicado;
-    
+
     // Solo cargar si el radicado cambió realmente
     if (!radicado || radicado === radicadoRef.current) return;
-    
+
     radicadoRef.current = radicado;
 
     const cargarActuaciones = async () => {
@@ -1582,6 +1590,30 @@ export default function InformacionCasoFormViewOld() {
 
     // Marcar como completada la carga inicial - COMENTADO, se hace en FORM_RESET
   }, [caso, despachoJudicialData, form, caseInitialLoadCompleted]);
+
+  // Efecto adicional para despachos que no están en la lista
+  const watchedDespacho = form.watch("despachoJudicial");
+
+  useEffect(() => {
+    const currentDespacho = watchedDespacho;
+    const currentCity = form.getValues("city");
+
+    if (!currentDespacho || !currentCity || !despachoJudicialData) return;
+
+    const normalizedCity = normalizeCityName(currentCity);
+    const despachosForCity =
+      despachoJudicialData["Despacho judicial"]?.[0]?.[normalizedCity];
+
+    // Si hay despacho pero no está en la lista, mostrar input manual
+    if (
+      currentDespacho &&
+      despachosForCity &&
+      !despachosForCity.includes(currentDespacho)
+    ) {
+      setShowManualDespacho(true);
+      setManualDespacho(currentDespacho);
+    }
+  }, [watchedDespacho, despachoJudicialData]);
 
   // Efecto para actualizar el formulario cuando caso cambie
   useEffect(() => {
@@ -4030,59 +4062,68 @@ export default function InformacionCasoFormViewOld() {
                       <FormField
                         control={form.control}
                         name="despachoJudicial"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-gray-700 font-medium">
-                              Despacho judicial
-                            </FormLabel>
-                            {(() => {
-                              return null;
-                            })()}
-                            {showManualDespacho ? (
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  value={field.value || manualDespacho}
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    setManualDespacho(value);
-                                    field.onChange(value);
-                                  }}
-                                  placeholder="Escriba el despacho judicial"
-                                  disabled={isViewMode}
-                                  className="border-gray-300"
-                                />
-                              </FormControl>
-                            ) : (
-                              <Select
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                disabled={isViewMode}
-                              >
+                        render={({ field }) => {
+                          // Verificar aquí si el despacho está en la lista
+                          const currentCity = form.getValues("city");
+                          const normalizedCity = normalizeCityName(currentCity);
+                          const despachosForCity =
+                            despachoJudicialData?.["Despacho judicial"]?.[0]?.[
+                              normalizedCity
+                            ] || [];
+                          const despachoEnLista =
+                            field.value &&
+                            despachosForCity.includes(field.value);
+                          const mostrarManual =
+                            showManualDespacho ||
+                            (field.value && !despachoEnLista);
+
+                          return (
+                            <FormItem>
+                              <FormLabel className="text-gray-700 font-medium">
+                                Despacho judicial
+                              </FormLabel>
+                              {mostrarManual ? (
                                 <FormControl>
-                                  <SelectTrigger className="border-gray-300">
-                                    <SelectValue placeholder="Selecciona despacho judicial" />
-                                  </SelectTrigger>
+                                  <Input
+                                    {...field}
+                                    value={field.value || manualDespacho}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      setManualDespacho(value);
+                                      field.onChange(value);
+                                    }}
+                                    placeholder="Escriba el despacho judicial"
+                                    disabled={isViewMode}
+                                    className="border-gray-300"
+                                  />
                                 </FormControl>
-                                <SelectContent>
-                                  {(() => {
-                                    return availableDespachos.map(
-                                      (despacho) => (
-                                        <SelectItem
-                                          key={despacho}
-                                          value={despacho}
-                                        >
-                                          {despacho}
-                                        </SelectItem>
-                                      ),
-                                    );
-                                  })()}
-                                </SelectContent>
-                              </Select>
-                            )}
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                              ) : (
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                  disabled={isViewMode}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="border-gray-300">
+                                      <SelectValue placeholder="Selecciona despacho judicial" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {availableDespachos.map((despacho) => (
+                                      <SelectItem
+                                        key={despacho}
+                                        value={despacho}
+                                      >
+                                        {despacho}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
+                              <FormMessage />
+                            </FormItem>
+                          );
+                        }}
                       />
 
                       <FormField
@@ -4958,7 +4999,7 @@ export default function InformacionCasoFormViewOld() {
 
                       {/* Botón Agregar Demandado */}
                       {(isEditMode || isCreateMode) && (
-                        <div className="flex justify-start">
+                        <div className="flex justify-start gap-2">
                           <Button
                             type="button"
                             variant="outline"
@@ -4978,6 +5019,28 @@ export default function InformacionCasoFormViewOld() {
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Agregar Demandado
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="border-orange-500 text-orange-600 hover:bg-orange-50 hover:border-orange-600"
+                            onClick={() => {
+                              // Cargar datos de Rappi SAS
+                              form.setValue("tempDemandado", {
+                                name: "Rappi SAS",
+                                documentType: "NIT",
+                                documentNumber: "900843898",
+                                electronicAddress:
+                                  "notificacionesrappi@rappi.com",
+                                contact: "6017433711",
+                              });
+                              setEditingDemandado(null);
+                              setShowDemandadoForm(true);
+                            }}
+                          >
+                            <Bike className="w-4 h-4 mr-2" />
+                            Cargar Rappi
                           </Button>
                         </div>
                       )}

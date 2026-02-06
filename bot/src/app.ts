@@ -278,6 +278,13 @@ async function handleDataAuthorization(
       "✅ ¡Perfecto! Gracias por aceptar nuestra política de privacidad.\n\nAhora continuemos con tu solicitud...",
     );
 
+    await sendTyping(sock, jid, 800);
+    await sendMessage(
+      sock,
+      jid,
+      "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
+    );
+
     if (state.selectedOption === "1") {
       updateState(userId, { currentFlow: "WAITING_DOCUMENT_TYPE" });
       await handleDocumentHandler(sock, jid, userId);

@@ -18,6 +18,7 @@ import { PaymentModule } from 'src/payment/payment.module';
 import { PerfomanceModule } from 'src/perfomance/perfomance.module';
 //import { FileService } from 'src/common/services/file.service';
 import { CommonModule } from 'src/common/common.module';
+import { MonolegalModule } from '../monolegal/monolegal.module';
 
 @Module({
   controllers: [RecordsController],
@@ -25,7 +26,9 @@ import { CommonModule } from 'src/common/common.module';
   imports: [
     ConfigModule,
     CommonModule,
+    MonolegalModule,
     forwardRef(() => AuthModule),
+    forwardRef(() => MonolegalModule),
     // AuthModule,
     MongooseModule.forFeature([
       {
@@ -43,7 +46,6 @@ import { CommonModule } from 'src/common/common.module';
     ProceduralPartModule,
     PaymentModule,
     PerfomanceModule,
-    DocumentModule,
   ],
   exports: [RecordsService],
 })

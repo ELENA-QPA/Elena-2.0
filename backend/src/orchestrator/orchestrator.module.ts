@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { OrchestratorService } from './services/orchestrator.service';
 import { OrchestratorController } from './controllers/orchestrator.controller';
 import { RecordsModule } from 'src/records/records.module';
@@ -12,9 +12,9 @@ import { CommonModule } from 'src/common/common.module';
 
 @Module({
   imports: [
-    RecordsModule,
+    forwardRef(() => RecordsModule),   
     AudienceModule,
-    AuthModule,
+    forwardRef(() => AuthModule),
     NotificationModule,
     ReminderModule,
     CommonModule,

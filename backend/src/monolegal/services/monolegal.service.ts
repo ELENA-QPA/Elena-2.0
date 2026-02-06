@@ -100,7 +100,7 @@ export class MonolegalService {
           results.push({
             radicado: row['Número Proceso'] || 'Desconocido',
             status: 'error',
-            message: error.message,
+            message: (error as any).message,
           });
         }
       }
@@ -119,7 +119,7 @@ export class MonolegalService {
       };
     } catch (error) {
       throw new BadRequestException(
-        `Error al procesar el archivo: ${error.message}`,
+        `Error al procesar el archivo: ${(error as any).message}`,
       );
     }
   }
@@ -280,7 +280,7 @@ export class MonolegalService {
             record: recordId,
             partType: PartType.demandada,
             name: 'Rappi SAS',
-            documentType: 'Nit',
+            documentType: 'NIT',
             document: '900843898',
             email: 'notificacionesrappi@rappi.com',
             contact: '6017433711',
@@ -355,7 +355,7 @@ export class MonolegalService {
               record: recordId,
               partType: PartType.demandada,
               name: 'Rappi SAS',
-              documentType: 'Nit',
+              documentType: 'NIT',
               document: '900843898',
               email: 'notificacionesrappi@rappi.com',
               contact: '6017433711',
@@ -557,7 +557,7 @@ export class MonolegalService {
           results.push({
             radicado: cambio.numero || 'Desconocido',
             status: 'error',
-            message: error.message,
+            message: (error as any).message,
           });
         }
       }
@@ -577,7 +577,7 @@ export class MonolegalService {
       };
     } catch (error) {
       throw new BadRequestException(
-        `Error al sincronizar con Monolegal: ${error.message}`,
+        `Error al sincronizar con Monolegal: ${(error as any).message}`,
       );
     }
   }
@@ -676,8 +676,7 @@ export class MonolegalService {
       let day: number;
       let month: number;
 
-      // Si part2 > 12, es imposible que sea mes, entonces es DD
-      // Significa que el formato es MM/DD/YYYY
+      // Si part2 > 12, es imposible que sea mes, entonces es DD Significa que el formato es MM/DD/YYYY
       if (part2 > 12 && part1 <= 12) {
         day = part2;
         month = part1;
@@ -765,7 +764,9 @@ export class MonolegalService {
       }
     } catch (error) {
       this.logger.error(
-        `Error al obtener detalles del expediente para ${radicado}: ${error.message}`,
+        `Error al obtener detalles del expediente para ${radicado}: ${
+          (error as any).message
+        }`,
       );
     }
 
@@ -1135,7 +1136,9 @@ export class MonolegalService {
           }
         } catch (error) {
           errors++;
-          this.logger.error(`Error en ${record.radicado}: ${error.message}`);
+          this.logger.error(
+            `Error en ${record.radicado}: ${(error as any).message}`,
+          );
         }
       }
 
@@ -1150,9 +1153,9 @@ export class MonolegalService {
         },
       };
     } catch (error) {
-      this.logger.error(`Error en re-normalización: ${error.message}`);
+      this.logger.error(`Error en re-normalización: ${(error as any).message}`);
       throw new BadRequestException(
-        `Error al re-normalizar juzgados: ${error.message}`,
+        `Error al re-normalizar juzgados: ${(error as any).message}`,
       );
     }
   }
@@ -1212,14 +1215,16 @@ export class MonolegalService {
               results.push({
                 radicado: cambio.numero || 'Desconocido',
                 status: 'error',
-                message: error.message,
+                message: (error as any).message,
               });
             }
           }
         }
       } catch (error) {
         this.logger.error(
-          `[SYNC ALL] Error en fecha ${fechaFormateada}: ${error.message}`,
+          `[SYNC ALL] Error en fecha ${fechaFormateada}: ${
+            (error as any).message
+          }`,
         );
       }
 
@@ -1291,126 +1296,324 @@ export class MonolegalService {
   }
 
   async getActuacionesPorRadicado(radicado: string): Promise<any[]> {
+    // 1. Primero buscar en la BD local
     const record = await this.recordModel.findOne({ radicado: radicado });
 
-    if (!record) {
-      this.logger.warn(
-        `No se encontró registro local para radicado: ${radicado}`,
-      );
+    // 2. Si tiene idExpedienteMonolegal, usar ese
+    if (record?.idExpedienteMonolegal) {
       try {
-        return await this.monolegalApiService.getActuacionesPorRadicado(
-          radicado,
+        this.logger.log(
+          `[ACTUACIONES] Usando idExpedienteMonolegal: ${record.idExpedienteMonolegal}`,
         );
-      } catch (error) {
-        return [];
-      }
-    }
-
-    if (record.idExpedienteMonolegal) {
-      try {
-        this.logger.log(`[ACTUACIONES] Usando método de todas las fuentes`);
         const resultado =
           await this.monolegalApiService.getActuacionesTodasLasFuentes(
             record.idExpedienteMonolegal,
           );
         return resultado.combinadas || [];
-      } catch (error) {
-        this.logger.error(
-          `Error obteniendo todas las fuentes: ${error.message}`,
-        );
-        // Fallback al método anterior
+      } catch (error: any) {
+        this.logger.error(`Error con idExpedienteMonolegal: ${error.message}`);
       }
     }
 
-    let actuacionesApi: any[] = [];
-    const actuacionesLocales: any[] = [];
+    // 3. Si no tiene, buscar el expediente por radicado en la API
+    const expediente =
+      await this.monolegalApiService.buscarExpedientePorRadicado(radicado);
 
-    if (record.idProcesoMonolegal && record.idProcesoMonolegal.trim() !== '') {
+    if (expediente?.id) {
+      this.logger.log(`[ACTUACIONES] Expediente encontrado: ${expediente.id}`);
+     
+      // ACTUALIZAR TODA LA INFO DEL RECORD
+ 
+      if (record) {
+        await this.actualizarRecordConExpediente(record, expediente);
+      }
+
       try {
-        actuacionesApi =
-          await this.monolegalApiService.getActuacionesPorIdProceso(
-            record.idProcesoMonolegal,
+        const resultado =
+          await this.monolegalApiService.getActuacionesTodasLasFuentes(
+            expediente.id,
           );
-      } catch (error) {
-        this.logger.error(`Error API Monolegal por ID: ${error.message}`);
-        try {
-          actuacionesApi =
-            await this.monolegalApiService.getActuacionesPorRadicado(radicado);
-        } catch (error2) {
-          this.logger.error(
-            `Error API Monolegal por radicado: ${error2.message}`,
-          );
+        return resultado.combinadas || [];
+      } catch (error: any) {
+        this.logger.error(`Error obteniendo actuaciones: ${error.message}`);
+      }
+    }
+
+    // 4. Fallback: intentar con el método antiguo
+    this.logger.warn(
+      `[ACTUACIONES] Fallback a método antiguo para ${radicado}`,
+    );
+    return this.monolegalApiService.getActuacionesPorRadicado(radicado);
+  }
+
+  /**
+   * Actualiza el record local con TODA la info del expediente de Monolegal
+   * (Igual que sincronizarIdsFuentes)
+   */
+  private async actualizarRecordConExpediente(
+    record: any,
+    expediente: any,
+  ): Promise<void> {
+    try {
+      this.logger.log(
+        `[SYNC] Actualizando record ${record.radicado} con expediente ${expediente.id}`,
+      );
+
+      // Extraer IDs de las fuentes
+      let idProcesoMonolegal = '';
+      let idProcesoPublicaciones = '';
+
+      if (expediente.procesosEnFuentesDatos?.length > 0) {
+        for (const fuente of expediente.procesosEnFuentesDatos) {
+          if (!fuente.activo || !fuente.idProceso) continue;
+
+          const tipoFuente = (fuente.tipoFuente || '').toLowerCase();
+
+          if (tipoFuente === 'unificada') {
+            idProcesoMonolegal = fuente.idProceso;
+          } else if (tipoFuente === 'publicacionesprocesales') {
+            idProcesoPublicaciones = fuente.idProceso;
+          }
         }
       }
-    } else {
-      try {
-        actuacionesApi =
-          await this.monolegalApiService.getActuacionesPorRadicado(radicado);
-      } catch (error) {
-        this.logger.error(`Error API Monolegal por radicado: ${error.message}`);
+
+      // Extraer ciudad
+      let ciudad = expediente.ciudad || '';
+      if (!ciudad || ciudad.trim() === '') {
+        ciudad = this.extractCityFromDespacho(expediente.despacho || '');
       }
-    }
 
-    // 3. SIEMPRE agregar datos locales
-    if (
-      record.ultimaActuacion &&
-      record.ultimaActuacion.trim() !== '' &&
-      record.ultimaActuacion !== '---'
-    ) {
-      actuacionesLocales.push({
-        id: `local-${record._id}`,
-        actuacion: record.ultimaActuacion,
-        anotacion: (record as any).ultimaAnotacion || '',
-        fechaActuacion: (record as any).fechaUltimaActuacion || null,
-        fechaDeActuacion: (record as any).fechaUltimaActuacion || null,
-        fuente: 'local',
-      });
-    }
+      // Inferir departamento
+      const department = this.inferirDepartamento(ciudad);      
 
-    // 4. Agregar performances
-    const performances = await this.performanceModel
-      .find({ record: record._id })
-      .sort({ createdAt: -1 })
-      .limit(20)
-      .exec();
+      // Normalizar despacho - SOLO si está en la lista de válidos
+      let despachoFinal = expediente.despacho || '';
+      if (expediente.despacho && expediente.despacho.trim() !== '') {
+        const despachoNormalizado = this.juzgadoNormalizer.normalizeJuzgado(
+          expediente.despacho,
+          ciudad,
+        );
 
-    for (const perf of performances) {
-      const yaExisteEnApi = actuacionesApi.some(
-        (a) =>
-          a.textoActuacion === perf.performanceType ||
-          a.actuacion === perf.performanceType,
+        // SOLO usar el normalizado si el normalizador lo cambió Y está en la lista válida, Si el normalizador devuelve algo inventado, usar el original
+        if (
+          despachoNormalizado &&
+          despachoNormalizado !== expediente.despacho
+        ) {
+          // Verificar si realmente es un juzgado válido conocido
+          const esJuzgadoValido =
+            despachoNormalizado.startsWith('Juzgado') &&
+            (despachoNormalizado.includes('Laboral del Circuito') ||
+              despachoNormalizado.includes('Civil del Circuito') ||
+              despachoNormalizado.includes('Civil Municipal') ||
+              despachoNormalizado.includes('de Familia') ||
+              despachoNormalizado.includes('Administrativo') ||
+              despachoNormalizado.includes('Pequeñas Causas'));
+
+          // Solo usar si el tipo en el normalizado coincide con el tipo en el original
+          const tipoOriginal = expediente.despacho.toUpperCase();
+          const tipoNormalizado = despachoNormalizado.toUpperCase();
+
+          const coincideTipo =
+            (tipoOriginal.includes('LABORAL') &&
+              tipoNormalizado.includes('LABORAL')) ||
+            (tipoOriginal.includes('CIVIL') &&
+              tipoNormalizado.includes('CIVIL')) ||
+            (tipoOriginal.includes('PENAL') &&
+              tipoNormalizado.includes('PENAL')) ||
+            (tipoOriginal.includes('FAMILIA') &&
+              tipoNormalizado.includes('FAMILIA')) ||
+            (tipoOriginal.includes('ADMINISTRATIV') &&
+              tipoNormalizado.includes('ADMINISTRATIV'));
+
+          if (esJuzgadoValido && coincideTipo) {
+            despachoFinal = despachoNormalizado;
+          } else {
+            // No coincide el tipo, guardar original
+            despachoFinal = expediente.despacho;
+            this.logger.warn(
+              `[SYNC] Despacho no normalizado (tipo no coincide): ${expediente.despacho}`,
+            );
+          }
+        } else {
+          despachoFinal = expediente.despacho;
+        }
+      }
+
+      // Extraer ubicación
+      let ubicacion = expediente.ubicacion || '';
+      if (!ubicacion && expediente.procesosEnFuentesDatos?.length > 0) {
+        const fuenteActiva = expediente.procesosEnFuentesDatos.find(
+          (f: any) => f.activo === true || f.estado === 2,
+        );
+        if (fuenteActiva) {
+          ubicacion = fuenteActiva.tipoFuente || '';
+        }
+      }
+
+      // Obtener última actuación de las fuentes
+      const ultimaActuacionData =
+        this.obtenerUltimaActuacionDeExpediente(expediente);
+      const ultimaAnotacionData =
+        this.obtenerUltimaAnotacionDeExpediente(expediente);
+      const fechaUltimaActuacionData =
+        this.obtenerFechaUltimaActuacionDeExpediente(expediente);
+
+      // Detectar si es cliente Rappi
+      const isRappiClient = (expediente.demandados || '')
+        .toLowerCase()
+        .includes('rappi');
+
+      // Preparar datos para actualizar
+      const updateData: any = {
+        idExpedienteMonolegal: expediente.id,
+        idProcesoMonolegal:
+          idProcesoMonolegal || record.idProcesoMonolegal || '',
+        idProcesoPublicaciones:
+          idProcesoPublicaciones || record.idProcesoPublicaciones || '',
+        sincronizadoMonolegal: true,
+        fechaSincronizacion: new Date(),
+        pendienteSincronizacionMonolegal: false,
+        errorSincronizacionMonolegal: null,
+      };
+
+      // Actualizar ciudad si hay dato y no existe
+      if (ciudad && ciudad.trim() !== '') {
+        updateData.city = ciudad;
+      }
+
+      // Actualizar departamento si hay dato
+      if (department && department.trim() !== '') {
+        updateData.department = department;
+      }
+
+      // Actualizar despacho si hay dato
+      if (despachoFinal && despachoFinal.trim() !== '') {
+        updateData.despachoJudicial = despachoFinal;
+      }
+
+      // Actualizar ubicación si hay dato
+      if (ubicacion && ubicacion.trim() !== '') {
+        updateData.location = ubicacion;
+      }
+
+      // Actualizar última actuación
+      if (ultimaActuacionData && ultimaActuacionData.trim() !== '') {
+        updateData.ultimaActuacion = ultimaActuacionData;
+      }
+
+      // Actualizar última anotación
+      if (ultimaAnotacionData && ultimaAnotacionData.trim() !== '') {
+        updateData.ultimaAnotacion = ultimaAnotacionData;
+      }
+
+      // Actualizar fecha última actuación
+      if (fechaUltimaActuacionData && fechaUltimaActuacionData.trim() !== '') {
+        updateData.fechaUltimaActuacion = fechaUltimaActuacionData;
+      }
+
+      // Actualizar etiqueta si viene de Monolegal y no está vacía
+      if (expediente.etiqueta && expediente.etiqueta.trim() !== '') {
+        updateData.etiqueta = expediente.etiqueta.replace(/\s+/g, '');
+      }
+
+      // Si es Rappi y no tiene processType/jurisdiction, asignarlos
+      if (isRappiClient) {
+        if (!record.processType || record.processType === '') {
+          updateData.processType = 'Ordinario';
+        }
+        if (!record.jurisdiction || record.jurisdiction === '') {
+          updateData.jurisdiction = 'Laboral circuito';
+        }
+        if (!record.clientType || record.clientType === '') {
+          updateData.clientType = 'Rappi';
+        }
+      }
+
+      // Actualizar el record
+      await this.recordModel.findByIdAndUpdate(record._id, updateData);
+      this.logger.log(
+        `[SYNC] Record actualizado - ciudad: ${ciudad}, dept: ${department}, despacho: ${despachoFinal}`,
       );
-      const yaExisteEnLocal = actuacionesLocales.some(
-        (a) => a.actuacion === perf.performanceType,
-      );
 
-      if (!yaExisteEnApi && !yaExisteEnLocal) {
-        actuacionesLocales.push({
-          id: `perf-${perf._id}`,
-          actuacion: perf.performanceType,
-          anotacion: perf.observation || '',
-          fechaActuacion: perf.createdAt,
-          fechaDeActuacion: perf.createdAt,
-          fuente: 'local-performance',
+    
+      // CREAR/ACTUALIZAR PARTES PROCESALES
+
+      if (expediente.demandantes || expediente.demandados) {
+        await this.updateOrCreateProceduralParts(record._id, {
+          demandantes: expediente.demandantes || '',
+          demandados: expediente.demandados || '',
         });
+        this.logger.log(`[SYNC] Partes procesales creadas/actualizadas`);
       }
-    }
-
-    // 5. Combinar
-    const actuacionesCombinadas = [...actuacionesApi];
-
-    for (const local of actuacionesLocales) {
-      const yaExiste = actuacionesCombinadas.some(
-        (a) =>
-          a.textoActuacion === local.actuacion ||
-          a.actuacion === local.actuacion,
+  
+      // CREAR PERFORMANCE
+  
+      if (ultimaActuacionData) {
+        await this.createOrUpdatePerformance(record._id, {
+          ultimaActuacion: ultimaActuacionData,
+          etapaProcesal: '',
+          ultimaAnotacion: ultimaAnotacionData || '',
+        });
+        this.logger.log(`[SYNC] Performance creado/actualizado`);
+      }
+  
+      // CREAR AUDIENCIA SI APLICA
+     
+      await this.createAudience(
+        ultimaActuacionData,
+        ultimaAnotacionData,
+        record._id,
       );
-      if (!yaExiste) {
-        actuacionesCombinadas.push(local);
+    } catch (error: any) {
+      this.logger.error(`[SYNC] Error actualizando record: ${error.message}`);
+    }
+  }
+
+  /**
+   * Infiere el departamento desde la ciudad
+   */
+  private inferirDepartamento(city: string): string {
+    const cityToDepartment: { [key: string]: string } = {
+      Medellín: 'Antioquia',
+      Medellin: 'Antioquia',
+      Bogotá: 'Bogotá D.C.',
+      Bogota: 'Bogotá D.C.',
+      'Bogotá D.C.': 'Bogotá D.C.',
+      Cali: 'Valle del Cauca',
+      Barranquilla: 'Atlántico',
+      Cartagena: 'Bolívar',
+      Bucaramanga: 'Santander',
+      Cúcuta: 'Norte de Santander',
+      Cucuta: 'Norte de Santander',
+      Pereira: 'Risaralda',
+      Manizales: 'Caldas',
+      'Santa Marta': 'Magdalena',
+      Ibagué: 'Tolima',
+      Ibague: 'Tolima',
+      Villavicencio: 'Meta',
+      Pasto: 'Nariño',
+      Montería: 'Córdoba',
+      Monteria: 'Córdoba',
+      Neiva: 'Huila',
+      Armenia: 'Quindío',
+      Popayán: 'Cauca',
+      Popayan: 'Cauca',
+      Sincelejo: 'Sucre',
+      Valledupar: 'Cesar',
+      Tunja: 'Boyacá',
+      Riohacha: 'La Guajira',
+      Quibdó: 'Chocó',
+      Florencia: 'Caquetá',
+      Yopal: 'Casanare',
+      Mocoa: 'Putumayo',
+    };
+
+    for (const [cityName, dept] of Object.entries(cityToDepartment)) {
+      if (city.toLowerCase().includes(cityName.toLowerCase())) {
+        return dept;
       }
     }
-
-    return actuacionesCombinadas;
+    return '';
   }
 
   /**
@@ -1560,7 +1763,7 @@ export class MonolegalService {
         }
       } catch (error) {
         errors++;
-        this.logger.error(`[SYNC IDS] Error: ${error.message}`);
+        this.logger.error(`[SYNC IDS] Error: ${(error as any).message}`);
       }
     }
 
@@ -1677,8 +1880,7 @@ export class MonolegalService {
           0,
         );
       }
-
-      // Último intento
+      
       const parsed = new Date(fecha);
       return isNaN(parsed.getTime()) ? null : parsed;
     }
@@ -1698,5 +1900,51 @@ export class MonolegalService {
     return this.monolegalApiService.getActuacionesTodasLasFuentes(
       record.idExpedienteMonolegal,
     );
+  }
+
+  /**
+   * Sincroniza un expediente recién creado en Monolegal
+   * Busca el expediente por radicado y trae toda su información
+   */
+  async sincronizarExpedienteRecienCreado(radicado: string): Promise<{
+    success: boolean;
+    message: string;
+    data?: any;
+  }> {
+    this.logger.log(`[SYNC NUEVO] Intentando sync rápido para: ${radicado}`);
+
+    try {
+      // Solo un intento rápido (3 segundos)
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      const expediente =
+        await this.monolegalApiService.buscarExpedientePorRadicado(radicado);
+
+      if (!expediente?.id) {
+        this.logger.log(
+          `[SYNC NUEVO] Expediente no disponible aún. Se actualizará cuando consulten actuaciones.`,
+        );
+        return {
+          success: false,
+          message:
+            'Expediente se sincronizará cuando se consulten las actuaciones.',
+        };
+      }
+
+      // Si encontró el expediente, actualizar
+      const record = await this.recordModel.findOne({ radicado });
+      if (record) {
+        await this.actualizarRecordConExpediente(record, expediente);
+      }
+
+      return {
+        success: true,
+        message: 'Expediente sincronizado',
+        data: { idExpedienteMonolegal: expediente.id },
+      };
+    } catch (error: any) {
+      this.logger.warn(`[SYNC NUEVO] ${error.message}`);
+      return { success: false, message: error.message };
+    }
   }
 }

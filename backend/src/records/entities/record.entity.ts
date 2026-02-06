@@ -71,12 +71,6 @@ export class Record extends Document {
   @Prop()
   ultimaActuacion: string;
 
-  @Prop({ default: false })
-  sincronizadoMonolegal: boolean;
-
-  @Prop()
-  fechaSincronizacion: Date;
-
   @Prop()
   fechaUltimaActuacion?: string;
 
@@ -87,7 +81,7 @@ export class Record extends Document {
   idProcesoMonolegal?: string;
 
   @Prop()
-  isActive?: string; 
+  isActive?: string;
 
   @Prop()
   isArchived?: boolean;
@@ -95,13 +89,24 @@ export class Record extends Document {
   @Prop()
   idProcesoPublicaciones?: string;
 
-  @Prop()
-  idExpedienteMonolegal?: string;
+  @Prop({ default: false })
+  sincronizadoMonolegal: boolean;
+
+  @Prop({ default: false })
+  pendienteSincronizacionMonolegal: boolean; // ← NUEVO
+
+  @Prop({ type: Date, default: null })
+  fechaSincronizacion: Date;
+
+  @Prop({ default: null })
+  idExpedienteMonolegal: string;
+
+  @Prop({ default: null })
+  errorSincronizacionMonolegal: string; // ← NUEVO
 }
 
 export const RecordSchema = SchemaFactory.createForClass(Record);
 RecordSchema.methods.toJSON = function () {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __v, ...record } = this.toObject();
   return record;
 };

@@ -25,6 +25,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import { CookiesKeysEnum } from "@/utilities/enums";
 import Swal from "sweetalert2";
+import { DatePicker } from "@/components/ui/date-picker";
 
 interface ImportResult {
   radicado: string;
@@ -34,7 +35,7 @@ interface ImportResult {
     despachoJudicial: string;
     city: string;
     ultimaActuacion: string;
-    fechaUltimaActuacion?: Date | string;   
+    fechaUltimaActuacion?: Date | string;
   };
 }
 
@@ -74,7 +75,7 @@ export default function MonolegalImportPage() {
 
   const showUpdatedRecordsAlert = async (
     count: number,
-    updatedRecords: UpdatedRecord[]
+    updatedRecords: UpdatedRecord[],
   ) => {
     const recordsList = updatedRecords
       .slice(0, 10)
@@ -101,7 +102,7 @@ export default function MonolegalImportPage() {
             </div>
           </div>
         </div>
-      `
+      `,
       )
       .join("");
 
@@ -134,7 +135,7 @@ export default function MonolegalImportPage() {
     if (selectedFile) {
       const validExtensions = [".xlsx", ".xls"];
       const fileExtension = selectedFile.name.substring(
-        selectedFile.name.lastIndexOf(".")
+        selectedFile.name.lastIndexOf("."),
       );
 
       if (!validExtensions.includes(fileExtension.toLowerCase())) {
@@ -170,7 +171,7 @@ export default function MonolegalImportPage() {
 
       if (!token) {
         setError(
-          "No se encontró token de autenticación. Por favor inicia sesión nuevamente."
+          "No se encontró token de autenticación. Por favor inicia sesión nuevamente.",
         );
         setLoading(false);
         setLoadingType(null);
@@ -185,7 +186,7 @@ export default function MonolegalImportPage() {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -195,14 +196,14 @@ export default function MonolegalImportPage() {
         if (response.data.summary.updated > 0 && response.data.updatedRecords) {
           await showUpdatedRecordsAlert(
             response.data.summary.updated,
-            response.data.updatedRecords
+            response.data.updatedRecords,
           );
         }
       }
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al importar el archivo. Por favor intenta nuevamente."
+          "Error al importar el archivo. Por favor intenta nuevamente.",
       );
     } finally {
       setLoading(false);
@@ -222,7 +223,7 @@ export default function MonolegalImportPage() {
 
       if (!token) {
         setError(
-          "No se encontró token de autenticación. Por favor inicia sesión nuevamente."
+          "No se encontró token de autenticación. Por favor inicia sesión nuevamente.",
         );
         setLoading(false);
         setLoadingType(null);
@@ -236,7 +237,7 @@ export default function MonolegalImportPage() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -246,7 +247,7 @@ export default function MonolegalImportPage() {
         if (response.data.summary.updated > 0 && response.data.updatedRecords) {
           await showUpdatedRecordsAlert(
             response.data.summary.updated,
-            response.data.updatedRecords
+            response.data.updatedRecords,
           );
         }
 
@@ -261,7 +262,7 @@ export default function MonolegalImportPage() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al sincronizar. Por favor intenta nuevamente."
+          "Error al sincronizar. Por favor intenta nuevamente.",
       );
 
       Swal.fire({
@@ -292,7 +293,7 @@ export default function MonolegalImportPage() {
 
       if (!token) {
         setError(
-          "No se encontró token de autenticación. Por favor inicia sesión nuevamente."
+          "No se encontró token de autenticación. Por favor inicia sesión nuevamente.",
         );
         setLoading(false);
         setLoadingType(null);
@@ -306,7 +307,7 @@ export default function MonolegalImportPage() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -316,12 +317,12 @@ export default function MonolegalImportPage() {
         if (response.data.summary.updated > 0 && response.data.updatedRecords) {
           await showUpdatedRecordsAlert(
             response.data.summary.updated,
-            response.data.updatedRecords
+            response.data.updatedRecords,
           );
         }
 
         const fechaFormateada = new Date(
-          selectedDate + "T12:00:00"
+          selectedDate + "T12:00:00",
         ).toLocaleDateString("es-CO", {
           weekday: "long",
           year: "numeric",
@@ -340,7 +341,7 @@ export default function MonolegalImportPage() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al sincronizar. Por favor intenta nuevamente."
+          "Error al sincronizar. Por favor intenta nuevamente.",
       );
 
       Swal.fire({
@@ -391,7 +392,7 @@ export default function MonolegalImportPage() {
           Historial de sincronizaciones
         </h1>
       </div>
-     
+
       <Card className="mb-6 border-purple-200 bg-purple-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -411,13 +412,10 @@ export default function MonolegalImportPage() {
               >
                 Fecha a visualizar
               </Label>
-              <Input
-                id="sync-date"
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                max={new Date().toISOString().split("T")[0]}
-                className="bg-white"
+              <DatePicker
+                selected={selectedDate}
+                onSelect={(date) => setSelectedDate(date || "")}
+                placeholder="Seleccionar fecha"
                 disabled={loading}
               />
             </div>
@@ -425,7 +423,7 @@ export default function MonolegalImportPage() {
               <Button
                 onClick={handleSyncByDate}
                 disabled={loading || !selectedDate}
-                className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700"
+                className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 h-9"
                 size="lg"
               >
                 {loading && loadingType === "date" ? (
@@ -517,7 +515,7 @@ export default function MonolegalImportPage() {
                 <div
                   key={index}
                   className={`flex items-start gap-3 p-3 rounded-lg ${getStatusColor(
-                    result.status
+                    result.status,
                   )}`}
                 >
                   <div className="mt-0.5">{getStatusIcon(result.status)}</div>

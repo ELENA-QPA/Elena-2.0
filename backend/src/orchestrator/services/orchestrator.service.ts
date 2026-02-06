@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { RecordsService } from 'src/records/records.service';
 import { RecordAdapter } from '../adapters/record.adapter';
 import { RecordAdaptedResponse } from '../interfaces/record-adapted.interface';
@@ -36,8 +36,10 @@ export class OrchestratorService {
   private readonly model: string;
 
   constructor(
+    @Inject(forwardRef(() => AuthService))  
     private readonly authService: AuthService,
     private readonly audienceService: AudienceService,
+    @Inject(forwardRef(() => RecordsService)) 
     private readonly recordsService: RecordsService,
     private readonly reminderService: ReminderService,
     private readonly notificationService: NotificationService,

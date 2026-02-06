@@ -2,9 +2,11 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import mongoose, { Model, ObjectId, Connection } from 'mongoose';
@@ -34,6 +36,8 @@ import { GetStatisticsDto } from './dto/get-statistics.dto';
 import { ByClientDto } from './dto/by-client-document.dto';
 import { ByEtiquetaDto } from './dto/by-internal-code.dto';
 import { getEtiquetaByIdDto } from './dto/get-internal-code.dto';
+import { MonolegalApiService } from '../monolegal/services/monolegal-api.service';
+import { MonolegalService } from '../monolegal/services/monolegal.service';
 // import { Multer } from 'multer';
 
 @Injectable()
@@ -51,6 +55,9 @@ export class RecordsService {
     private readonly paymentService: PaymentService,
     private readonly perfomanceService: PerfomanceService,
     private readonly fileService: FileService,
+    private readonly monolegalApiService: MonolegalApiService,
+    @Inject(forwardRef(() => MonolegalService))
+    private readonly monolegalService: MonolegalService,
   ) {}
 
   /**
@@ -71,27 +78,45 @@ export class RecordsService {
           `Tipo de cliente o documento inválido: ${clientType}, ${documentType}`,
         );
       }
+      
+      const result = await this.recordModel.aggregate([
+        {
+          $match: {
+            etiqueta: { $regex: /^[A-Z]\d+$/ },
+            deletedAt: { $exists: false },
+          },
+        },
+        {
+          $project: {
+            // Extraer la parte numérica
+            numericPart: {
+              $toInt: {
+                $substr: ['$etiqueta', 1, -1], 
+              },
+            },
+          },
+        },
+        {
+          $sort: { numericPart: -1 }, 
+        },
+        {
+          $limit: 1, 
+        },
+      ]);
 
-      const maxEtiquetaData = await this.getMaxEtiquetaByProcessType(
-        clientType,
-      );
+      let nextNumber = 1;
 
-      let nextClientNumber = 1; // Número base inicial
-      if (maxEtiquetaData.maxEtiqueta) {
-        const matches = maxEtiquetaData.maxEtiqueta.match(/^[A-Z](\d+)$/);
-        if (matches) {
-          nextClientNumber = parseInt(matches[1]) + 1;
-        }
+      if (result.length > 0 && result[0].numericPart) {
+        nextNumber = result[0].numericPart + 1;
       }
 
-      const formattedNumber = Math.max(nextClientNumber, 1)
-        .toString()
-        .padStart(3, '0');
+      const formattedNumber = nextNumber.toString().padStart(3, '0');
+
       return `${firstPart}${formattedNumber}`;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al generar código interno:', error);
       throw new InternalServerErrorException(
-        'Error al generar el código interno',
+        `Error al generar el código interno: ${error.message}`,
       );
     }
   }
@@ -220,7 +245,7 @@ export class RecordsService {
       const performancesMap = this.groupByRecordId(allPerformances);
 
       const recordsWithRelations = records.map((record) => {
-        const id = record._id.toString();        
+        const id = record._id.toString();
         return {
           ...record,
           documents: documentsMap[id] || [],
@@ -229,7 +254,7 @@ export class RecordsService {
           // payments: paymentsMap[id] || [],
           performances: performancesMap[id] || [],
         };
-      });     
+      });
 
       return {
         records: recordsWithRelations,
@@ -300,7 +325,10 @@ export class RecordsService {
       const dataToInsert = {
         ...recordData,
         etiqueta: etiqueta,
-        user: user.id,
+        user: user.id,    
+        sincronizadoMonolegal: false,
+        pendienteSincronizacionMonolegal: false,
+        errorSincronizacionMonolegal: null,
       };
 
       const recordCreated = await this.recordModel.create(dataToInsert);
@@ -326,7 +354,7 @@ export class RecordsService {
         await this.documentService.createMany(
           documentToCreate,
           recordCreated._id as unknown as ObjectId,
-          null, // session = null
+          null,
         );
       }
 
@@ -336,10 +364,7 @@ export class RecordsService {
           ...intervener,
           record: recordCreated._id.toString(),
         }));
-        await this.intervenerService.createMany(
-          intervenersWithRecord,
-          null, // session = null
-        );
+        await this.intervenerService.createMany(intervenersWithRecord, null);
         console.log(`Created ${interveners.length} interveners`);
       }
 
@@ -351,7 +376,7 @@ export class RecordsService {
         }));
         await this.proceduralPartService.createMany(
           proceduralPartsWithRecord,
-          null, // session = null
+          null,
         );
         console.log(`Created ${proceduralParts.length} procedural parts`);
       }
@@ -371,6 +396,83 @@ export class RecordsService {
           `Created ${payments.length} payments with their payment values`,
         );
       }
+      
+      // 8. Registrar en Monolegal si tiene radicado
+      
+      let monolegalResult = {
+        registered: false,
+        pending: false,
+        error: null as string | null,
+        expedienteId: null as string | null,
+      };
+
+      if (recordData.radicado && recordData.radicado.trim() !== '') {
+        try {
+          const monolegalResponse =
+            await this.monolegalApiService.registrarProcesoEnMonolegal(
+              recordData.radicado.trim(),
+            );
+
+          if (monolegalResponse.success) {
+            // Actualizar el record con los datos de Monolegal
+            await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+              sincronizadoMonolegal: true,
+              pendienteSincronizacionMonolegal: false,
+              fechaSincronizacion: new Date(),
+              idExpedienteMonolegal: monolegalResponse.data?.id || null,
+              errorSincronizacionMonolegal: null,
+            });
+
+            monolegalResult = {
+              registered: true,
+              pending: false,
+              error: null,
+              expedienteId: monolegalResponse.data?.id || null,
+            };
+
+            console.log(
+              `[MONOLEGAL] Proceso ${recordData.radicado} registrado exitosamente`,
+            );
+          } else {
+            // Marcar como pendiente de sincronización
+            await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+              sincronizadoMonolegal: false,
+              pendienteSincronizacionMonolegal: true,
+              errorSincronizacionMonolegal: monolegalResponse.error,
+            });
+
+            monolegalResult = {
+              registered: false,
+              pending: true,
+              error: monolegalResponse.error,
+              expedienteId: null,
+            };
+
+            console.warn(
+              `[MONOLEGAL] No se pudo registrar ${recordData.radicado}: ${monolegalResponse.error}`,
+            );
+          }
+        } catch (monolegalError) {
+          // Si hay error, marcar como pendiente pero NO fallar la creación del caso
+          await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+            sincronizadoMonolegal: false,
+            pendienteSincronizacionMonolegal: true,
+            errorSincronizacionMonolegal: (monolegalError as any).message,
+          });
+
+          monolegalResult = {
+            registered: false,
+            pending: true,
+            error: (monolegalError as any).message,
+            expedienteId: null,
+          };
+
+          console.error(
+            `[MONOLEGAL] Error al registrar ${recordData.radicado}:`,
+            (monolegalError as any).message,
+          );
+        }
+      }
 
       return {
         success: true,
@@ -380,12 +482,13 @@ export class RecordsService {
         documentsCount: documents?.length || 0,
         intervenersCount: interveners?.length || 0,
         proceduralPartsCount: proceduralParts?.length || 0,
-        paymentsCount: payments?.length || 0,
+        paymentsCount: payments?.length || 0,        
+        monolegal: monolegalResult,
       };
     } catch (error) {
       console.error('Error creating complete record:', error);
       throw new BadRequestException(
-        `Error al crear el caso completo: ${error.message}`,
+        `Error al crear el caso completo: ${(error as any).message}`,
       );
     }
   }
@@ -451,7 +554,10 @@ export class RecordsService {
       const dataToInsert = {
         ...recordData,
         etiqueta: etiqueta,
-        user: user.id,
+        user: user.id,       
+        sincronizadoMonolegal: false,
+        pendienteSincronizacionMonolegal: false,
+        errorSincronizacionMonolegal: null,
       };
 
       const recordCreated = await this.recordModel.create(dataToInsert);
@@ -506,7 +612,7 @@ export class RecordsService {
           }));
           createdInterveners = await this.intervenerService.createMany(
             intervenersWithRecord,
-            null, // session = null
+            null,
           );
         }
       }
@@ -526,7 +632,7 @@ export class RecordsService {
           );
           createdProceduralParts = await this.proceduralPartService.createMany(
             proceduralPartsWithRecord,
-            null, // session = null
+            null,
           );
           console.log(
             `Created ${proceduralPartsArray.length} procedural parts`,
@@ -551,6 +657,109 @@ export class RecordsService {
         }
       }
 
+      // REGISTRAR EN MONOLEGAL SI TIENE RADICADO
+
+      let monolegalResult = {
+        registered: false,
+        pending: false,
+        error: null as string | null,
+        expedienteId: null as string | null,
+      };
+
+      if (recordData.radicado && recordData.radicado.trim() !== '') {
+        try {
+          const monolegalResponse =
+            await this.monolegalApiService.registrarProcesoEnMonolegal(
+              recordData.radicado.trim(),
+            );
+
+          if (monolegalResponse.success) {
+            await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+              sincronizadoMonolegal: true,
+              pendienteSincronizacionMonolegal: false,
+              fechaSincronizacion: new Date(),
+              idExpedienteMonolegal: monolegalResponse.data?.id || null,
+              errorSincronizacionMonolegal: null,
+            });
+
+            monolegalResult = {
+              registered: true,
+              pending: false,
+              error: null,
+              expedienteId: monolegalResponse.data?.id || null,
+            };
+         
+            if (monolegalResult.registered && recordData.radicado) {
+              // Intentar sincronizar la info completa del expediente
+              try {
+                const syncResult =
+                  await this.monolegalService.sincronizarExpedienteRecienCreado(
+                    recordData.radicado.trim(),
+                  );
+
+                if (syncResult.success) {
+                  console.log(
+                    `[MONOLEGAL] Info completa sincronizada para ${recordData.radicado}`,
+                  );
+                  monolegalResult.expedienteId =
+                    syncResult.data?.idExpedienteMonolegal ||
+                    monolegalResult.expedienteId;
+                } else {
+                  console.warn(
+                    `[MONOLEGAL] Sync parcial: ${syncResult.message}`,
+                  );
+                }
+              } catch (syncError) {
+                console.warn(
+                  `[MONOLEGAL] Error en sync completa: ${
+                    (syncError as any).message
+                  }`,
+                );
+              }
+            }
+
+            console.log(
+              `[MONOLEGAL] Proceso ${recordData.radicado} registrado exitosamente`,
+            );
+          } else {
+            await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+              sincronizadoMonolegal: false,
+              pendienteSincronizacionMonolegal: true,
+              errorSincronizacionMonolegal: monolegalResponse.error,
+            });
+
+            monolegalResult = {
+              registered: false,
+              pending: true,
+              error: monolegalResponse.error,
+              expedienteId: null,
+            };
+
+            console.warn(
+              `[MONOLEGAL] No se pudo registrar ${recordData.radicado}: ${monolegalResponse.error}`,
+            );
+          }
+        } catch (monolegalError) {
+          await this.recordModel.findByIdAndUpdate(recordCreated._id, {
+            sincronizadoMonolegal: false,
+            pendienteSincronizacionMonolegal: true,
+            errorSincronizacionMonolegal: (monolegalError as any).message,
+          });
+
+          monolegalResult = {
+            registered: false,
+            pending: true,
+            error: (monolegalError as any).message,
+            expedienteId: null,
+          };
+
+          console.error(
+            `[MONOLEGAL] Error al registrar ${recordData.radicado}:`,
+            (monolegalError as any).message,
+          );
+        }
+      }
+
       // Crear el objeto completo con todas las relaciones
       const completeRecord = {
         ...recordCreated.toObject(),
@@ -563,11 +772,14 @@ export class RecordsService {
       return {
         message: 'Caso creado exitosamente',
         record: completeRecord,
+        monolegal: monolegalResult,
       };
     } catch (error) {
       console.error('Error creating complete record with files:', error);
       throw new BadRequestException(
-        `Error al crear el caso completo con archivos: ${error.message}`,
+        `Error al crear el caso completo con archivos: ${
+          (error as any).message
+        }`,
       );
     }
   }
@@ -1675,7 +1887,7 @@ export class RecordsService {
       };
     } catch (error) {
       throw new Error(
-        `Error getting process statistics by state: ${error.message}`,
+        `Error getting process statistics by state: ${(error as any).message}`,
       );
     }
   }
@@ -1785,7 +1997,9 @@ export class RecordsService {
       };
     } catch (error) {
       throw new Error(
-        `Error getting process statistics by state and year: ${error.message}`,
+        `Error getting process statistics by state and year: ${
+          (error as any).message
+        }`,
       );
     }
   }
@@ -2125,7 +2339,7 @@ export class RecordsService {
           } catch (error) {
             console.warn(
               `Error obteniendo detalles del caso activo ${activeRecord.etiqueta}:`,
-              error.message,
+              (error as any).message,
             );
             // Si no se pueden obtener los detalles, incluir solo la información básica
             activeRecordsWithDetails.push({
@@ -2157,7 +2371,7 @@ export class RecordsService {
           } catch (error) {
             console.warn(
               `Error obteniendo detalles del caso finalizado ${finalizedRecord.etiqueta}:`,
-              error.message,
+              (error as any).message,
             );
             // Si no se pueden obtener los detalles, incluir solo la información básica
             finalizedRecordsWithDetails.push({
@@ -2223,5 +2437,155 @@ export class RecordsService {
 
     const count = await this.recordModel.countDocuments({ _id: id }).exec();
     return count > 0;
+  }
+
+  /*********
+   * Reintenta la sincronización con Monolegal para casos pendientes
+   * @param recordId ID del caso a sincronizar
+   * @returns Resultado de la sincronización
+   */
+  async retrySyncWithMonolegal(recordId: string): Promise<{
+    success: boolean;
+    message: string;
+    expedienteId?: string;
+  }> {
+    try {
+      const record = await this.recordModel.findById(recordId);
+
+      if (!record) {
+        throw new NotFoundException(`Caso con ID ${recordId} no encontrado`);
+      }
+
+      if (!record.radicado || record.radicado.trim() === '') {
+        throw new BadRequestException(
+          'El caso no tiene número de radicado para sincronizar',
+        );
+      }
+
+      if (record.sincronizadoMonolegal) {
+        return {
+          success: true,
+          message: 'El caso ya está sincronizado con Monolegal',
+          expedienteId: record.idExpedienteMonolegal,
+        };
+      }
+
+      const monolegalResponse =
+        await this.monolegalApiService.registrarProcesoEnMonolegal(
+          record.radicado.trim(),
+        );
+
+      if (monolegalResponse.success) {
+        await this.recordModel.findByIdAndUpdate(recordId, {
+          sincronizadoMonolegal: true,
+          pendienteSincronizacionMonolegal: false,
+          fechaSincronizacion: new Date(),
+          idExpedienteMonolegal: monolegalResponse.data?.id || null,
+          errorSincronizacionMonolegal: null,
+        });
+
+        return {
+          success: true,
+          message: 'Caso sincronizado exitosamente con Monolegal',
+          expedienteId: monolegalResponse.data?.id,
+        };
+      } else {
+        await this.recordModel.findByIdAndUpdate(recordId, {
+          errorSincronizacionMonolegal: monolegalResponse.error,
+        });
+
+        return {
+          success: false,
+          message: `Error al sincronizar: ${monolegalResponse.error}`,
+        };
+      }
+    } catch (error) {
+      throw new BadRequestException(
+        `Error al reintentar sincronización: ${(error as any).message}`,
+      );
+    }
+  }
+
+  /**
+   * Obtiene todos los casos pendientes de sincronización con Monolegal
+   * @returns Lista de casos pendientes
+   */
+  async getPendingSyncRecords(): Promise<any[]> {
+    return this.recordModel
+      .find({
+        pendienteSincronizacionMonolegal: true,
+        deletedAt: { $exists: false },
+      })
+      .select('_id radicado etiqueta errorSincronizacionMonolegal createdAt')
+      .sort({ createdAt: -1 })
+      .lean();
+  }
+
+  /**
+   * Sincroniza todos los casos pendientes con Monolegal
+   * @returns Resumen de la sincronización masiva
+   */
+  async syncAllPendingWithMonolegal(): Promise<{
+    total: number;
+    success: number;
+    failed: number;
+    details: Array<{
+      recordId: string;
+      radicado: string;
+      status: string;
+      error?: string;
+    }>;
+  }> {
+    const pendingRecords = await this.getPendingSyncRecords();
+
+    const results = {
+      total: pendingRecords.length,
+      success: 0,
+      failed: 0,
+      details: [] as Array<{
+        recordId: string;
+        radicado: string;
+        status: string;
+        error?: string;
+      }>,
+    };
+
+    for (const record of pendingRecords) {
+      try {
+        const syncResult = await this.retrySyncWithMonolegal(
+          record._id.toString(),
+        );
+
+        if (syncResult.success) {
+          results.success++;
+          results.details.push({
+            recordId: record._id.toString(),
+            radicado: record.radicado,
+            status: 'success',
+          });
+        } else {
+          results.failed++;
+          results.details.push({
+            recordId: record._id.toString(),
+            radicado: record.radicado,
+            status: 'failed',
+            error: (syncResult as any).message,
+          });
+        }
+      } catch (error) {
+        results.failed++;
+        results.details.push({
+          recordId: record._id.toString(),
+          radicado: record.radicado,
+          status: 'error',
+          error: (error as any).message,
+        });
+      }
+
+      // Pequeña pausa para no sobrecargar la API
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+
+    return results;
   }
 }

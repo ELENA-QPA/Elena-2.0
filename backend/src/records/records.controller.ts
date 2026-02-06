@@ -11,12 +11,14 @@ import {
   UseInterceptors,
   UploadedFiles,
   BadRequestException,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RecordsService } from './records.service';
 import { UpdateRecordDto } from './dto/update-record.dto';
-
+import { MonolegalApiService } from '../monolegal/services/monolegal-api.service';
 import { CreateCompleteRecordWithFilesDto } from './dto/create-complete-record-with-files.dto';
 import {
   ApiBearerAuth,
@@ -34,6 +36,7 @@ import { GetMaxInternalCodeDto } from './dto/get-max-internal-code.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetStatisticsDto } from './dto/get-statistics.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 export class GetProcessTrackingDto {
   @ApiProperty({
@@ -64,6 +67,8 @@ export class RecordsController {
     private readonly recordsService: RecordsService,
     private readonly documentService: DocumentService,
     private readonly proceduralPartService: ProceduralPartService,
+    @Inject(forwardRef(() => MonolegalApiService))
+    private readonly monolegalApiService: MonolegalApiService,
   ) {}
 
   private async validateAndTransform<T>(
@@ -1359,5 +1364,99 @@ export class RecordsController {
   @Post('detailed-by-client')
   async getDetailedRecordsByClient(@Body() body: ByClientDto) {
     return this.recordsService.getDetailedRecordsByClient(body);
+  }
+
+  // ====== ENDPOINTS PARA SINCRONIZACIÓN CON MONOLEGAL ======
+
+  /**
+   * Reintenta la sincronización de un caso específico con Monolegal
+   */
+  @Post('sync-monolegal/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async retrySyncWithMonolegal(@Param('id') id: string) {
+    return this.recordsService.retrySyncWithMonolegal(id);
+  }
+
+  /**
+   * Obtiene todos los casos pendientes de sincronización
+   */
+  @Get('pending-sync-monolegal')
+  @UseGuards(AuthGuard('jwt'))
+  async getPendingSyncRecords() {
+    const records = await this.recordsService.getPendingSyncRecords();
+    return {
+      count: records.length,
+      records,
+    };
+  }
+
+  /**
+   * Sincroniza todos los casos pendientes con Monolegal
+   */
+  @Post('sync-all-pending-monolegal')
+  @UseGuards(AuthGuard('jwt'))
+  async syncAllPendingWithMonolegal() {
+    return this.recordsService.syncAllPendingWithMonolegal();
+  }
+
+  // ============================================
+  // TAMBIÉN PUEDES AGREGAR UN ENDPOINT EN EL CONTROLLER DE MONOLEGAL
+  // Archivo: monolegal.controller.ts
+  // ============================================
+
+  /**
+   * Registra un proceso directamente en Monolegal (sin crear caso local)
+   * Útil para testing o casos especiales
+   */
+  @Post('register-process')
+  @ApiBearerAuth()
+  @Auth()
+  @UseGuards(JwtAuthGuard)
+  // @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Registrar proceso en Monolegal' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        radicado: {
+          type: 'string',
+          example: '05001400300120250000001',
+          description: 'Número de radicado del proceso (23 dígitos)',
+        },
+      },
+      required: ['radicado'],
+    },
+  })
+  async registerProcessInMonolegal(@Body() body: { radicado: string }) {
+    if (!body.radicado || body.radicado.trim() === '') {
+      throw new BadRequestException('El radicado es requerido');
+    }
+
+    return this.monolegalApiService.registrarProcesoEnMonolegal(
+      body.radicado.trim(),
+    );
+  }
+
+  /**
+   * Registra múltiples procesos en Monolegal
+   */
+  @Post('register-processes')
+  @UseGuards(AuthGuard('jwt'))
+  async registerProcessesInMonolegal(@Body() body: { radicados: string[] }) {
+    if (!body.radicados || body.radicados.length === 0) {
+      throw new BadRequestException('Se requiere al menos un radicado');
+    }
+
+    const radicadosLimpios = body.radicados
+      .map((r) => r.trim())
+      .filter((r) => r.length > 0);
+
+    if (radicadosLimpios.length === 0) {
+      throw new BadRequestException('No hay radicados válidos');
+    }
+
+    return this.monolegalApiService.registrarProcesosEnMonolegal(
+      radicadosLimpios,
+    );
   }
 }

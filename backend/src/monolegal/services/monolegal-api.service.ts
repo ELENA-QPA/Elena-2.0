@@ -141,9 +141,9 @@ export class MonolegalApiService {
       this.logger.log('Login exitoso en Monolegal');
       return this.token;
     } catch (error) {
-      this.logger.error('Error en login Monolegal:', error.message);
+      this.logger.error('Error en login Monolegal:', (error as any).message);
       throw new BadRequestException(
-        'No se pudo autenticar con Monolegal: ' + error.message,
+        'No se pudo autenticar con Monolegal: ' + (error as any).message,
       );
     }
   }
@@ -168,9 +168,9 @@ export class MonolegalApiService {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error obteniendo expediente:', error.message);
+      this.logger.error('Error obteniendo expediente:', (error as any).message);
       throw new BadRequestException(
-        'Error al obtener expediente de Monolegal: ' + error.message,
+        'Error al obtener expediente de Monolegal: ' + (error as any).message,
       );
     }
   }
@@ -195,9 +195,9 @@ export class MonolegalApiService {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error obteniendo resumen:', error.message);
+      this.logger.error('Error obteniendo resumen:', (error as any).message);
       throw new BadRequestException(
-        'Error al obtener resumen de Monolegal: ' + error.message,
+        'Error al obtener resumen de Monolegal: ' + (error as any).message,
       );
     }
   }
@@ -227,9 +227,9 @@ export class MonolegalApiService {
 
       return response.data;
     } catch (error) {
-      this.logger.error('Error obteniendo detalle:', error.message);
+      this.logger.error('Error obteniendo detalle:', (error as any).message);
       throw new BadRequestException(
-        'Error al obtener detalle de Monolegal: ' + error.message,
+        'Error al obtener detalle de Monolegal: ' + (error as any).message,
       );
     }
   }
@@ -339,7 +339,7 @@ export class MonolegalApiService {
     } catch (error) {
       this.logger.error(
         `Error obteniendo actuaciones (${fuente}):`,
-        error.message,
+        (error as any).message,
       );
       return [];
     }
@@ -404,7 +404,7 @@ export class MonolegalApiService {
       });
     } catch (error) {
       this.logger.error(
-        `Error obteniendo PublicacionesProcesales: ${error.message}`,
+        `Error obteniendo PublicacionesProcesales: ${(error as any).message}`,
       );
       return [];
     }
@@ -482,7 +482,7 @@ export class MonolegalApiService {
 
       return response.data || [];
     } catch (error) {
-      this.logger.error('Error buscando procesos:', error.message);
+      this.logger.error('Error buscando procesos:', (error as any).message);
       return [];
     }
   }
@@ -550,7 +550,7 @@ export class MonolegalApiService {
     } catch (error) {
       this.logger.error(
         'Error obteniendo actuaciones por radicado:',
-        error.message,
+        (error as any).message,
       );
       return [];
     }
@@ -589,7 +589,7 @@ export class MonolegalApiService {
       return procesos;
     } catch (error) {
       this.logger.error(
-        `[UNIFICADA] Error buscando procesos: ${error.message}`,
+        `[UNIFICADA] Error buscando procesos: ${(error as any).message}`,
       );
       return [];
     }
@@ -625,7 +625,7 @@ export class MonolegalApiService {
 
       return actuaciones;
     } catch (error) {
-      this.logger.error('Error obteniendo actuaciones:', error.message);
+      this.logger.error('Error obteniendo actuaciones:', (error as any).message);
       return [];
     }
   }
@@ -738,7 +738,7 @@ export class MonolegalApiService {
           );
         } catch (error) {
           this.logger.error(
-            `[FUENTE] Error obteniendo ${fuente.tipoFuente}: ${error.message}`,
+            `[FUENTE] Error obteniendo ${fuente.tipoFuente}: ${(error as any).message}`,
           );
         }
       }
@@ -788,7 +788,7 @@ export class MonolegalApiService {
       return resultado;
     } catch (error) {
       this.logger.error(
-        `Error en getActuacionesTodasLasFuentes: ${error.message}`,
+        `Error en getActuacionesTodasLasFuentes: ${(error as any).message}`,
       );
       throw error;
     }
@@ -921,7 +921,7 @@ export class MonolegalApiService {
         return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
       }
     } catch (error) {
-      this.logger.error(`Error normalizando fecha: ${error.message}`);
+      this.logger.error(`Error normalizando fecha: ${(error as any).message}`);
     }
 
     return fecha;
@@ -968,7 +968,7 @@ export class MonolegalApiService {
           }
         }
       } catch (error) {
-        this.logger.error(`Error en página ${pagina}: ${error.message}`);
+        this.logger.error(`Error en página ${pagina}: ${(error as any).message}`);
         tieneMasDatos = false;
       }
     }
@@ -977,5 +977,178 @@ export class MonolegalApiService {
       `[EXPEDIENTES] Total obtenidos: ${todosLosExpedientes.length}`,
     );
     return todosLosExpedientes;
+  }
+
+  /**
+   * Registra un proceso en Monolegal
+   * @param radicado - Número de radicado del proceso (ej: "05001400300120210113000")
+   * @returns Respuesta de la API de Monolegal con el ID del expediente creado
+   */
+  async registrarProcesoEnMonolegal(radicado: string): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> {
+    await this.login();
+
+    // Valores fijos proporcionados por el cliente
+    const ID_ABOGADO = '59917';
+    const ID_USUARIO_MIGRADO = 'e6267664-aeca-4ae5-8d84-c0776c9b8fcc';
+
+    try {
+      const payload = {
+        idAbogado: ID_ABOGADO,
+        idUsuarioMigrado: ID_USUARIO_MIGRADO,
+        numerosProcesos: [radicado],
+      };
+
+      this.logger.log(`[MONOLEGAL] Registrando proceso: ${radicado}`);
+
+      const response = await firstValueFrom(
+        this.httpService.post<any>(
+          'https://apisales.monolegal.co/api/RegistroAutomaticoProcesos',
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      this.logger.log(
+        `[MONOLEGAL] Proceso registrado exitosamente: ${radicado}`,
+      );
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      this.logger.error(
+        `[MONOLEGAL] Error al registrar proceso ${radicado}: ${(error as any).message}`,
+      );
+
+      // Extraer mensaje de error más específico si existe
+      const errorMessage =
+        (error as any).response?.data?.message ||
+        (error as any).response?.data?.error ||
+        (error as any).message ||
+        'Error desconocido al registrar en Monolegal';
+
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+  }
+
+  /**
+   * Registra múltiples procesos en Monolegal en una sola llamada
+   * @param radicados - Array de números de radicado
+   * @returns Respuesta de la API de Monolegal
+   */
+  async registrarProcesosEnMonolegal(radicados: string[]): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> {
+    await this.login();
+
+    const ID_ABOGADO = '59917';
+    const ID_USUARIO_MIGRADO = 'e6267664-aeca-4ae5-8d84-c0776c9b8fcc';
+
+    try {
+      const payload = {
+        idAbogado: ID_ABOGADO,
+        idUsuarioMigrado: ID_USUARIO_MIGRADO,
+        numerosProcesos: radicados,
+      };
+
+      this.logger.log(
+        `[MONOLEGAL] Registrando ${radicados.length} procesos en lote`,
+      );
+
+      const response = await firstValueFrom(
+        this.httpService.post<any>(
+          'https://apisales.monolegal.co/api/RegistroAutomaticoProcesos',
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      );
+
+      this.logger.log(
+        `[MONOLEGAL] ${radicados.length} procesos registrados exitosamente`,
+      );
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      this.logger.error(
+        `[MONOLEGAL] Error al registrar procesos en lote: ${(error as any).message}`,
+      );
+
+      return {
+        success: false,
+        error:
+          (error as any).response?.data?.message ||
+          (error as any).message ||
+          'Error al registrar en Monolegal',
+      };
+    }
+  }
+
+  /**
+   * Busca expediente por número de radicado en la API de Expedientes
+   */
+  async buscarExpedientePorRadicado(radicado: string): Promise<any | null> {
+    await this.login();
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get<any[]>(`${this.baseUrl}/Expedientes`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+          params: {
+            numero: radicado,
+          },
+        }),
+      );
+
+      const expedientes = response.data || [];
+
+      // Buscar el que coincida con el radicado
+      const expediente = expedientes.find(
+        (exp) =>
+          exp.numero === radicado ||
+          exp.numero?.replace(/\s/g, '') === radicado.replace(/\s/g, ''),
+      );
+
+      if (expediente) {
+        this.logger.log(
+          `[EXPEDIENTE] Encontrado: ${expediente.id} para radicado ${radicado}`,
+        );
+        return expediente;
+      }
+
+      this.logger.warn(
+        `[EXPEDIENTE] No se encontró expediente para radicado: ${radicado}`,
+      );
+      return null;
+    } catch (error) {
+      this.logger.error(
+        `Error buscando expediente por radicado: ${(error as any).message}`,
+      );
+      return null;
+    }
   }
 }

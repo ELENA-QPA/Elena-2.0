@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef  } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SyncLog, SyncLogSchema } from './entities/sync-log.entity';
 import { HttpModule } from '@nestjs/axios';
@@ -40,8 +40,8 @@ import { MonolegalCronService } from './services/monolegal-cron.service';
       { name: Performance.name, schema: PerfomanceSchema },
       { name: SyncLog.name, schema: SyncLogSchema },
     ]),
-    AuthModule,
-    OrchestratorModule,
+    forwardRef(() => AuthModule),        
+    forwardRef(() => OrchestratorModule), 
   ],
   controllers: [MonolegalController],
   providers: [
