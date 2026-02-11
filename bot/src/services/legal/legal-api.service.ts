@@ -82,7 +82,7 @@ export class QpAllianceLegalApiService implements LegalApiService {
     }
   }
 
-  async getActuaciones(idProceso: string): Promise<any[]> {
+  async getActuaciones(radicado: string): Promise<any[]> {
     const logContext = createLogContext(
       { from: "API_SERVICE" },
       "QP_ALLIANCE_API",
@@ -90,14 +90,14 @@ export class QpAllianceLegalApiService implements LegalApiService {
     );
 
     logger.info(
-      `Consultando actuaciones del proceso: "${idProceso}"`,
+      `Consultando actuaciones del proceso: "${radicado}"`,
       logContext
     );
 
     try {
       // Llamar al endpoint GET /monolegal/actuaciones/:idProceso
       const response = await this.httpClient.get<any[]>(
-        `/monolegal/actuaciones/${idProceso}`,
+         `/monolegal/actuaciones-por-radicado/${radicado}`,
         true
       );
 
@@ -361,6 +361,7 @@ export class QpAllianceLegalApiService implements LegalApiService {
         },
         performances: record.performances || [],
         idProcesoMonolegal: record.idProcesoMonolegal || null,
+        idExpedienteMonolegal: record.idExpedienteMonolegal || null,  
       },
     };    
     return result;

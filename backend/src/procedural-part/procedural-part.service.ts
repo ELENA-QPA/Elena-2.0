@@ -67,7 +67,7 @@ export class ProceduralPartService {
         record: { $in: recordIds },
         deletedAt: { $exists: false },
       })
-      .lean()
+      //.lean()
       .exec();
   }
 
@@ -147,7 +147,7 @@ export class ProceduralPartService {
         );
       // Separar por tipo (ACTIVO/FINALIZADO)
       const active = uniqueRecords
-        .filter((record) => record.type === 'ACTIVO')
+        //.filter((record) => record.type === 'ACTIVO')
         .map((record) => ({
           etiqueta: record.etiqueta,
           state: record.estado,

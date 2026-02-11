@@ -221,6 +221,13 @@ async function handleWelcome(
 
   await sendMessage(sock, jid, message);
   updateState(userId, { currentFlow: "HELLO_SELECTION" });
+
+  await sendTyping(sock, jid, 800);
+    await sendMessage(
+      sock,
+      jid,
+      "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
+    );
 }
 
 async function handleHelloSelection(
@@ -276,14 +283,7 @@ async function handleDataAuthorization(
       sock,
       jid,
       "✅ ¡Perfecto! Gracias por aceptar nuestra política de privacidad.\n\nAhora continuemos con tu solicitud...",
-    );
-
-    await sendTyping(sock, jid, 800);
-    await sendMessage(
-      sock,
-      jid,
-      "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
-    );
+    );    
 
     if (state.selectedOption === "1") {
       updateState(userId, { currentFlow: "WAITING_DOCUMENT_TYPE" });
@@ -358,7 +358,8 @@ https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/E
 📹 Video 2 - ¿Qué pasa después de la demanda?:
 https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/ESQL3wiJawNHpcpJw3WaQUUBsPyFvtU08gR-sqHpGRiJAQ
 
-Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.`,
+Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.
+👉 Puedes contactar directamente a un abogado especializado aquí: https://wa.me/573229203057`,
       );
       resetState(userId);
       break;
@@ -376,9 +377,9 @@ Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abog
         jid,
         `🏢 Gracias por confiar en nosotros.
 
-Para darte un servicio ajustado a tu caso, te contactaremos con un asesor.
+Para darte un servicio ajustado a tu caso, te puedes contactar con un asesor.
 
-Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas empresariales🙌.`,
+👉 Puedes contactar directamente a un abogado especializado aquí: https://wa.me/573229203057`,
       );
       resetState(userId);
       break;
@@ -398,9 +399,10 @@ Un abogado especializado se pondrá en contacto contigo en las próximas 24 hora
 
 Queremos conocer mejor tu perfil y tu caso para ofrecerte la mejor asesoría.
 
-Para darte un servicio ajustado a tu caso, te contactaremos con un asesor.
+Para darte un servicio ajustado a tu caso, te puedes contactar con un asesor.
 
-Un abogado especializado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas🙌.`,
+👉 Puedes contactar directamente a un abogado especializado aquí:
+https://wa.me/573229203057`,
       );
       resetState(userId);
       break;
@@ -759,9 +761,9 @@ async function handleProcessDetails(
     (processDetails as any).fechaUltimaActuacion = (
       selectedProcess as any
     ).fechaUltimaActuacion;
-    (processDetails as any).idProcesoMonolegal = (
+    (processDetails as any).idExpedienteMonolegal = (
       processDetailsResponse.record as any
-    )?.idProcesoMonolegal;
+    )?.idExpedienteMonolegal;
 
     updateState(userId, {
       selectedProcess: processDetails,
@@ -954,22 +956,48 @@ async function handlePdfConfirmation(
     try {
       const legalApiService = LegalApiServiceFactory.create();
 
-      let actuaciones: any[] = [];
-      const idProcesoMonolegal = (state.selectedProcess as any)
-        .idProcesoMonolegal;
+      let actuaciones: any[] = [];     
 
-      if (idProcesoMonolegal) {
-        try {
-          actuaciones =
-            await legalApiService.getActuaciones(idProcesoMonolegal);
+      const radicado = (state.selectedProcess as any).radicado;
 
-          if (actuaciones.length > 5) {
-            actuaciones = actuaciones.slice(0, 5);
-          }
-        } catch (error) {
-          console.warn("⚠️ No se pudieron obtener actuaciones:", error);
-        }
+        if (radicado) {
+    try {
+      console.log("🔍 Obteniendo actuaciones para radicado:", radicado);
+      
+      // Máximos configurables
+      const MAX_ACTUACIONES = 3;
+      const MAX_CHARS_TOTAL = 600;  // Reducido de 1200 a 600
+      const MAX_ANOTACION_LENGTH = 150;  // Reducido de 250 a 150
+
+      const actuacionesRaw = await legalApiService.getActuaciones(radicado);
+      actuaciones = actuacionesRaw.slice(0, MAX_ACTUACIONES);
+
+      // Primero truncar anotaciones muy largas
+      actuaciones = actuaciones.map(act => ({
+        ...act,
+        anotacion: act.anotacion?.length > MAX_ANOTACION_LENGTH 
+          ? act.anotacion.substring(0, MAX_ANOTACION_LENGTH) + '...'
+          : act.anotacion
+      }));
+
+      // Si aún es muy largo, reducir cantidad
+      let totalChars = actuaciones.reduce((sum, act) => 
+        sum + (act.anotacion?.length || 0) + (act.textoActuacion?.length || 0), 0
+      );
+
+      while (totalChars > MAX_CHARS_TOTAL && actuaciones.length > 1) {
+        actuaciones.pop();
+        totalChars = actuaciones.reduce((sum, act) => 
+          sum + (act.anotacion?.length || 0) + (act.textoActuacion?.length || 0), 0
+        );
       }
+
+      console.log(`✅ Actuaciones finales: ${actuaciones.length} (${totalChars} chars)`);
+      
+    } catch (error) {
+      console.warn("⚠️ No se pudieron obtener actuaciones:", error);
+    }
+  }
 
       // Pasar las actuaciones al generador de PDF
       const processWithActuaciones = {
@@ -1051,6 +1079,31 @@ async function handlePdfSummary(
 
     if (allProcesses.length === 0)
       throw new Error("No se encontraron procesos");
+
+    // 🆕 Obtener actuaciones para CADA proceso del resumen
+    for (const process of allProcesses) {
+      const radicado = (process as any).radicado;
+      if (radicado) {
+        try {
+          console.log(`🔍 Obteniendo actuaciones para proceso ${radicado}`);
+          const actuaciones = await legalApiService.getActuaciones(radicado);
+
+          if (actuaciones.length > 0) {
+            // Guardar las últimas 5 actuaciones
+            (process as any).actuacionesMonolegal = actuaciones.slice(0, 1);
+            console.log(`✅ Actuaciones obtenidas: ${actuaciones.length}`);
+          } else {
+            (process as any).actuacionesMonolegal = [];
+          }
+        } catch (error) {
+          console.warn(
+            `⚠️ No se pudieron obtener actuaciones para ${radicado}:`,
+            error,
+          );
+          (process as any).actuacionesMonolegal = [];
+        }
+      }
+    }
 
     const clientName = allProcesses[0].clientName;
     const pdfResult = await pdfGeneratorService.generateProcessReport(
@@ -1140,7 +1193,10 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        "👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.\n\nUn abogado se pondrá en contacto contigo en las próximas 24 horas para resolver tus dudas.",
+        `👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.
+👉 Contacta directamente aquí:
+https://wa.me/573229203057`,
+        
       );
       resetState(userId);
       break;

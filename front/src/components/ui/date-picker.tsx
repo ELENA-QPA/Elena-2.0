@@ -102,7 +102,7 @@ export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fech
                         cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
                         day: "h-9 w-9 p-0 font-normal hover:bg-accent hover:text-accent-foreground rounded-md",
                         day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground rounded-md",
-                        day_today: "bg-accent text-accent-foreground",
+                        day_today: "border border-primary",
                         day_outside: "text-muted-foreground opacity-50",
                         day_disabled: "text-muted-foreground opacity-50",
                         day_hidden: "invisible",

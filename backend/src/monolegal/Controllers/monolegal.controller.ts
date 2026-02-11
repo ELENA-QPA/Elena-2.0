@@ -163,6 +163,7 @@ export class MonolegalController {
       error: 'Bad Request',
     },
   })
+  
   @Post('sync')
   async syncWithMonolegal(
     @GetUser() user: IUser,

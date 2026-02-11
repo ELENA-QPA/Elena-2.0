@@ -587,7 +587,159 @@ export class MonolegalService {
   }
 
   async syncHistoryFromApi(fecha?: Date): Promise<SyncResponse> {
-    return this.syncFromApiAbstract(false, fecha);
+    const fechaConsulta = fecha || new Date();
+    const fechaFormateada =
+      this.monolegalApiService.formatearFechaMonolegal(fechaConsulta);
+
+    try {
+      const resumen = await this.monolegalApiService.getResumenCambios(
+        fechaFormateada,
+      );
+
+      if (!resumen.tieneCambios) {
+        return {
+          success: true,
+          message: 'No hay cambios para sincronizar',
+          summary: { total: 0, created: 0, updated: 0, skipped: 0, errors: 0 },
+          details: [],
+          updatedRecords: [],
+        };
+      }
+
+      const cambios = await this.monolegalApiService.getTodosCambios(
+        fechaFormateada,
+      );
+
+      const BATCH_SIZE = 10; 
+      const results: ProcessResult[] = [];
+      let created = 0,
+        updated = 0,
+        skipped = 0,
+        errors = 0;
+
+      for (let i = 0; i < cambios.length; i += BATCH_SIZE) {
+        const batch = cambios.slice(i, i + BATCH_SIZE);
+
+        const batchResults = await Promise.allSettled(
+          batch.map((cambio) => this.getApiChangeFast(cambio)),
+        );
+
+        for (const result of batchResults) {
+          if (result.status === 'fulfilled') {
+            results.push(result.value);
+            if (result.value.status === 'created') created++;
+            else if (result.value.status === 'updated') updated++;
+            else if (result.value.status === 'skipped') skipped++;
+          } else {
+            errors++;
+            results.push({
+              radicado: 'Desconocido',
+              status: 'error',
+              message: result.reason?.message || 'Error desconocido',
+            });
+          }
+        }
+
+        this.logger.log(
+          `Procesados ${Math.min(i + BATCH_SIZE, cambios.length)}/${
+            cambios.length
+          }`,
+        );
+      }
+
+      return {
+        success: true,
+        message: 'Consulta completada',
+        summary: { total: cambios.length, created, updated, skipped, errors },
+        details: results,
+        updatedRecords: [],
+      };
+    } catch (error) {
+      throw new BadRequestException(
+        `Error al consultar Monolegal: ${(error as any).message}`,
+      );
+    }
+  }
+
+  private async getApiChangeFast(cambio: any): Promise<ProcessResult> {
+    const radicado = cambio.numero?.trim();
+
+    if (!radicado) {
+      return {
+        radicado: 'Sin radicado',
+        status: 'skipped',
+        message: 'No tiene número de proceso',
+      };
+    }
+    
+    const record = await this.recordModel.findOne({ radicado }).lean();
+  
+    const recordDataFast = this.prepareRecordDataFast(cambio);
+
+    if (record) {
+      return {
+        radicado,
+        status: 'updated',
+        message: 'Registro se actualizaría',
+        details: {
+          despachoJudicial: recordDataFast.despachoJudicial,
+          city: recordDataFast.city,
+          ultimaActuacion: recordDataFast.ultimaActuacion,
+          ultimaAnotacion: recordDataFast.ultimaAnotacion,
+        },
+      };
+    } else {
+      return {
+        radicado,
+        status: 'created',
+        message: 'Registro se crearía',
+      };
+    }
+  }
+
+  private prepareRecordDataFast(cambio: any): MonolegalRecordData {
+    const radicado = cambio.numero?.trim();
+    const despachoOriginal = cambio.despacho?.trim() || '';
+    
+    const ciudad = this.extractCityFromDespacho(despachoOriginal);
+    
+    const despachoNormalizado = this.normalizeDespacho(
+      despachoOriginal,
+      ciudad,
+    );
+    
+    const fechaUltimaActuacionTexto = cambio.fechaUltimaActuacion || '';
+    const fechaExtraida = this.extractFechaFromUltimaAnotacion(
+      fechaUltimaActuacionTexto,
+    );
+
+    const isRappiClient = (cambio.demandados || '')
+      .toLowerCase()
+      .includes('rappi');
+    const departmentValue = this.inferirDepartamento(ciudad);
+
+    return {
+      radicado,
+      despachoJudicial: despachoNormalizado,
+      city: ciudad,
+      department: departmentValue,
+      location: '', 
+      idProcesoMonolegal: '', 
+      idProcesoPublicaciones: '', 
+      etapaProcesal: '',
+      ultimaActuacion: cambio.ultimaActuacion?.trim() || '',
+      ultimaAnotacion: cambio.ultimaAnotacion?.trim() || '',
+      fechaUltimaActuacion: fechaExtraida || fechaUltimaActuacionTexto,
+      sincronizadoMonolegal: true,
+      fechaSincronizacion: new Date(),
+      internalCode: '',
+      processType: isRappiClient ? 'Ordinario' : '',
+      jurisdiction: isRappiClient ? 'Laboral circuito' : '',
+      ...(cambio.etiqueta &&
+        cambio.etiqueta.trim() !== '' && {
+          etiqueta: cambio.etiqueta.replace(/\s+/g, ''),
+        }),
+    };
   }
 
   private extractCityFromDespacho(despacho: string): string {
@@ -1321,9 +1473,9 @@ export class MonolegalService {
 
     if (expediente?.id) {
       this.logger.log(`[ACTUACIONES] Expediente encontrado: ${expediente.id}`);
-     
+
       // ACTUALIZAR TODA LA INFO DEL RECORD
- 
+
       if (record) {
         await this.actualizarRecordConExpediente(record, expediente);
       }
@@ -1384,7 +1536,7 @@ export class MonolegalService {
       }
 
       // Inferir departamento
-      const department = this.inferirDepartamento(ciudad);      
+      const department = this.inferirDepartamento(ciudad);
 
       // Normalizar despacho - SOLO si está en la lista de válidos
       let despachoFinal = expediente.despacho || '';
@@ -1535,7 +1687,6 @@ export class MonolegalService {
         `[SYNC] Record actualizado - ciudad: ${ciudad}, dept: ${department}, despacho: ${despachoFinal}`,
       );
 
-    
       // CREAR/ACTUALIZAR PARTES PROCESALES
 
       if (expediente.demandantes || expediente.demandados) {
@@ -1545,9 +1696,9 @@ export class MonolegalService {
         });
         this.logger.log(`[SYNC] Partes procesales creadas/actualizadas`);
       }
-  
+
       // CREAR PERFORMANCE
-  
+
       if (ultimaActuacionData) {
         await this.createOrUpdatePerformance(record._id, {
           ultimaActuacion: ultimaActuacionData,
@@ -1556,9 +1707,9 @@ export class MonolegalService {
         });
         this.logger.log(`[SYNC] Performance creado/actualizado`);
       }
-  
+
       // CREAR AUDIENCIA SI APLICA
-     
+
       await this.createAudience(
         ultimaActuacionData,
         ultimaAnotacionData,
@@ -1880,7 +2031,7 @@ export class MonolegalService {
           0,
         );
       }
-      
+
       const parsed = new Date(fecha);
       return isNaN(parsed.getTime()) ? null : parsed;
     }
