@@ -151,7 +151,7 @@ async function handleMessage(
   const input = text.trim().toLowerCase();
 
   // Comandos globales de reinicio
-  if (["menu", "inicio", "reiniciar", "start", "volver", "atrás", "atras"].includes(input)) {
+  if (["menu", "menú", "inicio", "reiniciar", "start", "volver", "atrás", "atras"].includes(input)) {
     resetState(userId);
     await handleWelcome(sock, jid, userName);
     return;
@@ -160,7 +160,7 @@ async function handleMessage(
   // Comandos globales para terminar conversación
   if (["salir", "terminar", "finalizar", "adios", "chao", "bye", "cancelar"].includes(input)) {
     await sendTyping(sock, jid, 1000);
-    await sendMessage(sock, jid, "¡Gracias por usar ELENA - QPAlliance! 👋\n\nSi necesitas algo más, escribe *menu* para volver a empezar.");
+    await sendMessage(sock, jid, "¡Gracias por usar ELENA - QPAlliance! 👋\n\nSi necesitas algo más, escribe *menú* para volver a empezar.");
     resetState(userId);
     return;
   }
@@ -240,7 +240,7 @@ async function handleWelcome(
   await sendMessage(
     sock,
     jid,
-    "💡 _Escribe MENU para volver al inicio o SALIR para terminar, en cualquier momento_",
+    "_Escribe *menú* para volver al inicio o *salir* para terminar, en cualquier momento_",
   );
 }
 
@@ -674,12 +674,14 @@ async function handleProcessSelection(
     await sendTyping(sock, jid, 1000);
     await sendMessage(sock, jid, formatProcessList(processes, "active"));
 
-    let optionsMessage = `💡 *Opciones disponibles:*\n\n• Escribe el *número del proceso* (1-${processes.length}) para ver sus detalles`;
+    let optionsMessage = processes.length === 1
+  ? `💡 *Opciones disponibles:*\n\n• Escribe *1* para ver los detalles del proceso`
+  : `💡 *Opciones disponibles:*\n\n• Escribe el *número del proceso* que deseas consultar`;
     if (state.currentProcesses.totalFinalized > 0)
       optionsMessage +=
         "\n• Escribe *FINALIZADOS* para ver procesos finalizados";
     optionsMessage += "\n• Escribe *PDF* para recibir un resumen completo";
-    optionsMessage += "\n• Escribe *MENU* para volver al inicio";
+    optionsMessage += "\n• Escribe *menú* para volver al inicio";
 
     await sendMessage(sock, jid, optionsMessage);
   } else if (selectedOption.includes("procesos finalizados")) {
@@ -724,11 +726,11 @@ async function handleProcessDetails(
     return;
   }
 
-  if (inputLower === "menu" || inputLower === "menú") {
-    resetState(userId);
-    await handleWelcome(sock, jid, "");
-    return;
-  }
+  // if (inputLower === "menu" || inputLower === "menú") {
+  //   resetState(userId);
+  //   await handleWelcome(sock, jid, "");
+  //   return;
+  // }
 
   const selectedNumber = parseInt(input.trim());
   const processes =
@@ -844,8 +846,7 @@ async function handleFinalizedProcessesDisplay(
     "\n" +
     generateOptionsMessage("", [
       "Quieres iniciar un nuevo proceso",
-      "Quieres consultar otro proceso",
-      "¿Prefieres hablar directamente con un abogado?",
+      "Quieres consultar otro proceso", 
     ]);
 
   await sendMessage(sock, jid, message);
@@ -1139,8 +1140,7 @@ async function handlePdfSummary(
       jid,
       generateErrorAlternativesMessage("¿Qué te gustaría hacer ahora?", [
         "Consultar otro tipo de procesos",
-        "¿Quieres iniciar un proceso con nosotros?",
-        "¿Prefieres hablar directamente con un abogado?",
+        "¿Quieres iniciar un proceso con nosotros?",        
       ]),
     );
 
@@ -1155,8 +1155,7 @@ async function handlePdfSummary(
         "❌ Lo siento, hubo un error generando el resumen.\n¿Qué te gustaría hacer?",
         [
           "Quieres intentarlo nuevamente",
-          "¿Quieres iniciar un proceso con nosotros?",
-          "¿Prefieres hablar directamente con un abogado?",
+          "¿Quieres iniciar un proceso con nosotros?",          
         ],
       ),
     );
@@ -1206,9 +1205,7 @@ async function handlePdfSummaryOptions(
       await sendMessage(
         sock,
         jid,
-        `👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.
-👉 Contacta directamente aquí:
-https://wa.me/573229203057`,
+        `👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.`,
         
       );
       resetState(userId);
