@@ -151,6 +151,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
+            table-layout: fixed; 
         }
 
         th {
@@ -166,6 +167,11 @@
             padding: 6px;
             border: 1px solid black;
             vertical-align: top;
+            word-wrap: break-word;       
+            overflow-wrap: break-word;   
+            word-break: break-word;      
+            white-space: normal;         
+            max-width: 0;                
         }
 
         .contact-info {
@@ -308,7 +314,7 @@
             </div>
         </div>
         <div class="header-info">
-            <div class="internal-number">Número interno: <span class="internal-code">{{internalCode}}</span></div>
+            <div class="internal-number">Número interno: <span class="internal-code">{{etiqueta}}</span></div>
         </div>
     </div>
 
@@ -338,14 +344,22 @@
         <div class="info-item">
             <span class="label">Radicado del proceso:</span>
             <span class="value">{{radicado}}</span>
-        </div>
-        <div class="info-item">
-            <span class="label">Tipo de proceso:</span>
-            <span class="value">{{processType}}</span>
-        </div>
+        </div>       
         <div class="info-item">
             <span class="label">Despacho a cargo:</span>
-            <span class="value">{{jurisdiction}}</span>
+            <span class="value">{{despachoJudicial}}</span>        
+        </div>
+        <div class="info-item">
+            <span class="label">Ciudad:</span>
+            <span class="value">{{city}}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Última actuación:</span>
+            <span class="value">{{ultimaActuacion}}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Fecha última actuación:</span>
+            <span class="value">{{fechaUltimaActuacion}}</span>
         </div>
         <div class="info-item">
             <span class="label">Demandante:</span>
@@ -368,48 +382,55 @@
             </span>
         </div>
     </div>
+<!-- Section II: Actions History -->
+<!-- Section II: Actions History -->
+<div class="section-title">II. HISTORIAL DE ACTUACIONES</div>
 
-     <!-- Section II: Actions History -->
-    <div class="section-title">II. HISTORIAL DE ACTUACIONES</div>
-    <div class="table-subtitle">
-        (Últimos movimientos reportados en la consulta y seguimiento del proceso)
-    </div>
+<div class="table-subtitle">
+    {{#if actuacionesMonolegal.[1]}}
+        (Últimos 3 movimientos reportados en la consulta y seguimiento del proceso)
+    {{else}}
+        (Último movimiento reportado en la consulta y seguimiento del proceso)
+    {{/if}}
+</div>
 
-    <div class="table-container">
-        <table>
-            <thead>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>FECHA ACTUACIÓN</th>
+                <th>ACTUACIÓN</th>
+                <th>ANOTACIÓN</th>
+            </tr>
+        </thead>
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 30%;">
+            <col style="width: 55%;">
+        </colgroup>
+        <tbody>
+            {{#if actuacionesMonolegal.length}}
+                {{#each actuacionesMonolegal}}
                 <tr>
-                    <th>FECHA DE LA ACTUACIÓN</th>
-                    <th>ACTUACIÓN</th>
-                    <th>ANOTACIÓN</th>
+                    <td>{{formatDate this.fechaDeActuacion}}</td>
+                    <td>{{this.textoActuacion}}</td>
+                    <td>{{this.anotacion}}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {{#if actuacionesMonolegal.length}}
-                    {{!-- PDF Individual: 5 actuaciones de Monolegal --}}
-                    {{#each actuacionesMonolegal}}
-                    <tr>
-                        <td>{{formatDate this.fechaDeActuacion}}</td>
-                        <td>{{this.textoActuacion}}</td>
-                        <td>{{this.anotacion}}</td>
-                    </tr>
-                    {{/each}}
-                {{else}}
-                    {{!-- PDF Resumen: Solo última actuación --}}
-                    <tr>
-                        <td>{{fechaUltimaActuacion}}</td>
-                        <td>{{ultimaActuacion}}</td>
-                        <td>{{observation}}</td>                        
-                    </tr>
-                {{/if}}
-            </tbody>
-        </table>
-    </div>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td>{{fechaUltimaActuacion}}</td>
+                    <td>{{ultimaActuacion}}</td>
+                    <td>{{observation}}</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>
 
     <!-- Contact Information -->
     <div class="contact-info">
-        Cualquier inquietud adicional sobre su proceso, puede comunicarse al WhatsApp: +57 322 920 9346 o al correo
-        electrónico notificacionesjudiciales@qpalliance.co
+        Cualquier inquietud adicional sobre su proceso, puede comunicarse al correo electrónico notificacionesjudiciales@qpalliance.co
     </div>
 
     <!-- Closing -->
@@ -425,7 +446,7 @@
     <div class="footer-container">
         <div class="footer-box"></div>
         <div class="footer-banner">
-            <div class="left">Potenciamos     el     crecimiento</div>
+            <div class="left">Potenciamos el crecimiento empresarial</div>
             <div class="right">www.<span style="color: #db2777;">qpalliance</span>.co</div>
         </div>
     </div>

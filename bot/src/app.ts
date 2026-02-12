@@ -151,9 +151,17 @@ async function handleMessage(
   const input = text.trim().toLowerCase();
 
   // Comandos globales de reinicio
-  if (["menu", "inicio", "reiniciar", "start"].includes(input)) {
+  if (["menu", "inicio", "reiniciar", "start", "volver", "atrás", "atras"].includes(input)) {
     resetState(userId);
     await handleWelcome(sock, jid, userName);
+    return;
+  }
+
+  // Comandos globales para terminar conversación
+  if (["salir", "terminar", "finalizar", "adios", "chao", "bye", "cancelar"].includes(input)) {
+    await sendTyping(sock, jid, 1000);
+    await sendMessage(sock, jid, "¡Gracias por usar ELENA - QPAlliance! 👋\n\nSi necesitas algo más, escribe *menu* para volver a empezar.");
+    resetState(userId);
     return;
   }
 
@@ -228,6 +236,12 @@ async function handleWelcome(
       jid,
       "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
     );
+
+  await sendMessage(
+    sock,
+    jid,
+    "💡 _Escribe MENU para volver al inicio o SALIR para terminar, en cualquier momento_",
+  );
 }
 
 async function handleHelloSelection(
@@ -254,7 +268,7 @@ async function handleHelloSelection(
 
   await sendTyping(sock, jid, 2000);
 
-  const authMessage = `Antes de continuar, queremos contarte que de conformidad con la Ley 1581 de 2012 y demás normas aplicables en Colombia, los datos personales que suministres a través de este canal serán recolectados, almacenados y tratados por Alliance, con la finalidad de prestar asesoría jurídica, gestionar procesos legales, enviarte notificaciones sobre el estado de tus trámites y facilitar la comunicación contigo. Tus datos serán manejados de manera confidencial y segura, y no serán compartidos con terceros sin tu autorización expresa, salvo en los casos previstos por la ley. Como titular de la información, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos en cualquier momento.
+  const authMessage = `Antes de continuar, queremos contarte que de conformidad con la Ley 1581 de 2012 y demás normas aplicables en Colombia, los datos personales que suministres a través de este canal serán recolectados, almacenados y tratados por QPAlliance, con la finalidad de prestar asesoría jurídica, gestionar procesos legales, enviarte notificaciones sobre el estado de tus trámites y facilitar la comunicación contigo. Tus datos serán manejados de manera confidencial y segura, y no serán compartidos con terceros sin tu autorización expresa, salvo en los casos previstos por la ley. Como titular de la información, tienes derecho a conocer, actualizar, rectificar y solicitar la supresión de tus datos en cualquier momento.
 
 ¿Aceptas el tratamiento de tus datos personales conforme a nuestra política de privacidad?
 👉 Responde:
@@ -358,8 +372,7 @@ https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/E
 📹 Video 2 - ¿Qué pasa después de la demanda?:
 https://quinteropalacio-my.sharepoint.com/:v:/g/personal/storres_qpalliance_co/ESQL3wiJawNHpcpJw3WaQUUBsPyFvtU08gR-sqHpGRiJAQ
 
-Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.
-👉 Puedes contactar directamente a un abogado especializado aquí: https://wa.me/573229203057`,
+Gracias por confiar en nosotros. Una vez hayas completado el formulario, un abogado se pondrá en contacto contigo🙌.`,
       );
       resetState(userId);
       break;

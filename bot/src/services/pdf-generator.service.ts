@@ -202,15 +202,13 @@ export class PdfGeneratorService {
         month: "long",
         year: "numeric",
       }),
-      date: new Date()
-        .toLocaleDateString("es-CO", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-        .replace(/\//g, " de "),
-    };
-  }
+      date: new Date().toLocaleDateString("es-CO", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+  };
+} 
 
   /**
    * Compila un template Handlebars para múltiples procesos
