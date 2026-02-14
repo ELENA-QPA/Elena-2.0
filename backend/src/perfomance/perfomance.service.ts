@@ -146,11 +146,13 @@ export class PerfomanceService {
 
   // -----------------------------------------------------
   async findByRecord(recordId: string) {
-    return await this.perfomanceModel.find({
-      record: recordId,
-      deletedAt: { $exists: false },
-    });
-  }
+  const results = await this.perfomanceModel.find({
+    record: recordId,
+    deletedAt: { $exists: false },
+  }).lean().exec();
+   
+  return results;
+}
 
   async findByRecords(recordIds: string[]) {
     return this.perfomanceModel

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { PerformanceType } from './create-perfomance.dto';
 import { TipoEstado } from '../../records/dto/create-record.dto';
 
@@ -16,7 +16,8 @@ export class ValidateTransitionDto {
         enum: PerformanceType,
         example: PerformanceType.ADMITE
     })
-    @IsEnum(PerformanceType)
+    //@IsEnum(PerformanceType)
+    @IsString()
     newState: PerformanceType;
 }
 
@@ -33,7 +34,8 @@ export class CreatePerformanceWithValidationDto {
         enum: PerformanceType,
         example: PerformanceType.RADICADO
     })
-    @IsEnum(PerformanceType)
+    //@IsEnum(PerformanceType)
+    @IsString()
     performanceType: PerformanceType;
 
     @ApiProperty({
@@ -69,6 +71,14 @@ export class CreatePerformanceWithValidationDto {
     })
     @IsOptional()
     forceTransition?: boolean;
+    @ApiProperty({
+        description: 'Fecha de la actuación',
+        example: '2026-02-07',
+        required: false
+    })
+    @IsOptional()
+    @IsDateString()
+    performanceDate?: string;
 }
 
 export class StateFlowResponseDto {

@@ -345,6 +345,7 @@ export interface PerformanceData {
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string | null;
+  performanceDate?: string; 
 }
 
 export interface CreatePerformanceBody {

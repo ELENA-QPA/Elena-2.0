@@ -37,6 +37,9 @@ export class Performance extends Document {
     observation: string;
 
     @Prop()
+    performanceDate: Date;  
+
+    @Prop()
     deletedAt: Date;
 
     createdAt?: Date;

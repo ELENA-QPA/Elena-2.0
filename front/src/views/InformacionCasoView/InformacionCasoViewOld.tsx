@@ -1998,14 +1998,44 @@ export default function InformacionCasoFormViewOld() {
   // ]);
 
   // UN SOLO useEffect para calcular total - con flag para evitar loops
-  const [totalCalculated, setTotalCalculated] = useState(false);
+const [totalCalculated, setTotalCalculated] = useState(false);
 
-  useEffect(() => {
-    if (caso && !totalCalculated) {
-      calculateTotalAmount();
-      setTotalCalculated(true);
-    }
-  }, [caso?._id]); // Solo cuando cambia el ID del caso
+// Combinar actuaciones de BD + Monolegal
+const todasLasActuaciones = useMemo(() => {
+  const performancesBD = (caso?.performances || [])
+    .filter((p: any) => p.responsible !== "Monolegal")
+    .map((p: any) => {      
+      return {
+        ...p,
+        fuente: 'Base de Datos',
+        isFromBD: true,
+        fechaOrden: p.performanceDate || p.createdAt || p.fechaDeActuacion || '',
+      };
+    });
+  
+  const performancesMonolegal = actuacionesMonolegal.map((p: any) => ({
+    ...p,
+    isFromBD: false,
+    fechaOrden: p.fechaDeActuacion || p.fechaActuacion || p.createdAt || '',
+  }));
+  
+  // Combinar todas
+  const todas = [...performancesBD, ...performancesMonolegal];
+  
+  // Ordenar por fecha (más reciente primero)
+  return todas.sort((a: any, b: any) => {
+    const fechaA = new Date(a.fechaOrden || 0).getTime();
+    const fechaB = new Date(b.fechaOrden || 0).getTime();
+    return fechaB - fechaA;
+  });
+}, [caso?.performances, actuacionesMonolegal]);
+
+useEffect(() => {
+  if (caso && !totalCalculated) {
+    calculateTotalAmount();
+    setTotalCalculated(true);
+  }
+}, [caso?._id]); // Solo cuando cambia el ID del caso
 
   // Efecto para limpiar tipo de proceso cuando cambia la jurisdicción
   useEffect(() => {
@@ -7462,116 +7492,118 @@ export default function InformacionCasoFormViewOld() {
             )}
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-              {/* Mostrar actuaciones de Monolegal */}
-              {actuacionesMonolegal.length > 0 ? (
-                actuacionesMonolegal.map((p: any) => (
-                  <div
-                    key={p._id || (p as any).id}
-                    className="bg-white rounded-lg p-4 shadow-sm"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span
-                          className={`px-2 py-0.5 text-xs rounded border-l-4 ${
-                            p.fuente === "Unificada"
-                              ? "bg-pink-50 text-pink-700 border-pink-500"
-                              : p.fuente === "Rama"
-                                ? "bg-blue-50 text-blue-700 border-blue-500"
-                                : p.fuente === "Tyba"
-                                  ? "bg-purple-50 text-purple-700 border-purple-500"
-                                  : p.fuente === "estadoselectronicos"
-                                    ? "bg-emerald-50 text-emerald-700 border-emerald-500"
-                                    : p.fuente === "PublicacionesProcesales"
-                                      ? "bg-amber-50 text-amber-700 border-amber-500"
-                                      : p.fuente === "Siugj"
-                                        ? "bg-cyan-50 text-cyan-700 border-cyan-500"
-                                        : p.fuente === "Samai"
-                                          ? "bg-violet-50 text-violet-700 border-violet-500"
-                                          : "bg-gray-50 text-gray-700 border-gray-500"
-                          }`}
-                        >
-                          {p.fuente || p.tipoFuente}
-                        </span>
+  {/* Mostrar todas las actuaciones (BD + Monolegal) */}
+  {loadingActuaciones ? (
+    <div className="text-sm text-gray-500 text-center py-4">
+      Cargando actuaciones...
+    </div>
+  ) : todasLasActuaciones.length > 0 ? (
+    todasLasActuaciones.map((p: any) => (
+      <div
+        key={p._id || (p as any).id || `${p.performanceType}-${p.createdAt}`}
+        className="bg-white rounded-lg p-4 shadow-sm"
+      >
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span
+              className={`px-2 py-0.5 text-xs rounded border-l-4 ${
+                p.fuente === "Base de Datos"
+                  ? "bg-green-50 text-green-700 border-green-500"
+                  : p.fuente === "Unificada"
+                    ? "bg-pink-50 text-pink-700 border-pink-500"
+                    : p.fuente === "Rama"
+                      ? "bg-blue-50 text-blue-700 border-blue-500"
+                      : p.fuente === "Tyba"
+                        ? "bg-purple-50 text-purple-700 border-purple-500"
+                        : p.fuente === "estadoselectronicos"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-500"
+                          : p.fuente === "PublicacionesProcesales"
+                            ? "bg-amber-50 text-amber-700 border-amber-500"
+                            : p.fuente === "Siugj"
+                              ? "bg-cyan-50 text-cyan-700 border-cyan-500"
+                              : p.fuente === "Samai"
+                                ? "bg-violet-50 text-violet-700 border-violet-500"
+                                : "bg-gray-50 text-gray-700 border-gray-500"
+              }`}
+            >
+              {p.fuente || p.tipoFuente || "Sin fuente"}
+            </span>
 
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-gray-600 hover:text-gray-900 p-1 h-auto"
-                            onClick={() => {
-                              setSelectedPerformance(p);
-                              setShowPerformanceDetailModal(true);
-                            }}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-600 hover:text-red-700 p-1 h-auto"
-                            onClick={async () => {
-                              if (!p._id && !(p as any).id) return;
-                              const id = p._id || (p as any).id;
-                              if (!caseId) return;
-                              if (!window.confirm("¿Eliminar actuación?"))
-                                return;
-                              try {
-                                await deletePerformance(id);
-                                toast.success("Actuación eliminada");
-                                await getCasoById(caseId);
-                              } catch (err) {
-                                console.error(
-                                  "Error eliminando actuación:",
-                                  err,
-                                );
-                                toast.error("No se pudo eliminar actuación");
-                              }
-                            }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      <div className="text-pink-600 font-medium text-base">
-                        {p.textoActuacion ||
-                          p.actuacion ||
-                          p.performanceType ||
-                          "Actuación"}{" "}
-                        -{" "}
-                        <span className="text-gray-600">
-                          {p.fechaDeActuacion
-                            ? formatToDisplay(p.fechaDeActuacion)
-                            : ""}
-                        </span>
-                      </div>
-
-                      {/* ✅ Anotación en la tercera línea */}
-                      <p className="text-sm text-gray-600 line-clamp-3">
-                        {p.anotacion || "Sin anotación"}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-sm text-gray-500">
-                  No hay actuaciones registradas
-                </div>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600 hover:text-gray-900 p-1 h-auto"
+                onClick={() => {
+                  setSelectedPerformance(p);
+                  setShowPerformanceDetailModal(true);
+                }}
+              >
+                <Eye className="w-4 h-4" />
+              </Button>              
+              {p.isFromBD && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-red-600 hover:text-red-700 p-1 h-auto"
+                  onClick={async () => {
+                    if (!p._id && !(p as any).id) return;
+                    const id = p._id || (p as any).id;
+                    if (!caseId) return;
+                    if (!window.confirm("¿Eliminar actuación?")) return;
+                    try {
+                      await deletePerformance(id);
+                      toast.success("Actuación eliminada");
+                      await getCasoById(caseId);
+                    } catch (err) {
+                      console.error("Error eliminando actuación:", err);
+                      toast.error("No se pudo eliminar actuación");
+                    }
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               )}
             </div>
-            {/* Botón Agregar Actuación */}
-            {!showPerformanceForm && (
-              <div className="flex flex-col gap-2 items-center">
-                <Button
-                  type="button"
-                  className="elena-button-primary"
-                  onClick={() => setShowPerformanceForm(true)}
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Agregar Actuación
-                </Button>
-              </div>
-            )}
+          </div>
+
+          <div className="text-pink-600 font-medium text-base">
+            {p.textoActuacion ||
+              p.actuacion ||
+              p.performanceType ||
+              "Actuación"}{" "}
+            -{" "}
+            <span className="text-gray-600">
+              {p.performanceDate || p.fechaDeActuacion || p.createdAt ? formatToDisplay(p.performanceDate || p.fechaDeActuacion || p.createdAt) : ""} 
+            </span>
+          </div>
+
+          <p className="text-sm text-gray-600 line-clamp-3">
+            {p.anotacion || p.observation || "Sin anotación"}
+          </p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="text-sm text-gray-500">
+      No hay actuaciones registradas
+    </div>
+  )}
+</div>
+
+{/* Botón Agregar Actuación */}
+{!showPerformanceForm && (
+  <div className="flex flex-col gap-2 items-center">
+    <Button
+      type="button"
+      className="elena-button-primary"
+      onClick={() => setShowPerformanceForm(true)}
+    >
+      <Plus className="w-4 h-4 mr-2" />
+      Agregar Actuación
+    </Button>
+  </div>
+)}
 
             {/* Formulario de actuaciones - visible cuando showPerformanceForm es true */}
             {showPerformanceForm && (
@@ -7844,43 +7876,33 @@ export default function InformacionCasoFormViewOld() {
                     <Button
                       className="elena-button-primary text-xs"
                       onClick={async () => {
-                        if (!caseId) {
-                          toast.error(
-                            "Guarda el caso antes de agregar actuaciones",
-                          );
-                          return;
-                        }
-                        // Leer valores del formulario de actuación
-                        const estadoActuacion =
-                          (documentForm &&
-                            (documentForm as any).estadoActuacion) ||
-                          "";
-                        const responsableActuacion =
-                          (documentForm &&
-                            (documentForm as any).responsableActuacion) ||
-                          "Sistema";
-                        const observacionesActuacion =
-                          (documentForm &&
-                            (documentForm as any).observacionesActuacion) ||
-                          "";
-                        const relatedDoc =
-                          (documentForm &&
-                            (documentForm as any).documentoRelacion) ||
-                          "";
+  
+  
+  if (!caseId) {
+    toast.error("Guarda el caso antes de agregar actuaciones");
+    return;
+  }
+  
+  // Leer valores del formulario de actuación
+  const estadoActuacion = (documentForm && (documentForm as any).estadoActuacion) || "";
+  const responsableActuacion = (documentForm && (documentForm as any).responsableActuacion) || "Sistema";
+  const observacionesActuacion = (documentForm && (documentForm as any).observacionesActuacion) || "";
+  const relatedDoc = (documentForm && (documentForm as any).documentoRelacion) || ""; 
+  
+  // Validar que se haya seleccionado un estado
+  if (!estadoActuacion) {
+    toast.error("Selecciona un estado de actuación");
+    return;  // <-- AQUÍ SE ESTÁ DETENIENDO
+  }
 
-                        // Validar que se haya seleccionado un estado
-                        if (!estadoActuacion) {
-                          toast.error("Selecciona un estado de actuación");
-                          return;
-                        }
+                        const currentState = caso?.estado;                        
 
-                        const currentState = caso?.estado;
                         if (currentState === estadoActuacion) {
                           toast.error(
                             `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
                           );
                           return;
-                        }
+                        }                      
 
                         const payload = {
                           record: caseId,
@@ -7890,7 +7912,11 @@ export default function InformacionCasoFormViewOld() {
                             ? `${observacionesActuacion} | Documento relacionado: ${relatedDoc}`
                             : observacionesActuacion,
                           forceTransition: false,
+                          performanceDate: (documentForm as any).fechaActuacion 
+                            ? new Date((documentForm as any).fechaActuacion).toISOString() 
+                            : undefined,
                         };
+                       
 
                         try {
                           const res = await createPerformance(payload as any);
@@ -8369,7 +8395,7 @@ export default function InformacionCasoFormViewOld() {
                               `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
                             );
                             return;
-                          }
+                          }                          
 
                           const payload = {
                             record: caseId,
@@ -8379,6 +8405,9 @@ export default function InformacionCasoFormViewOld() {
                               ? `${observacionesActuacion} | Documento relacionado: ${relatedDoc}`
                               : observacionesActuacion,
                             forceTransition: false,
+                            performanceDate: performanceForm.fechaActuacion 
+                              ? new Date(performanceForm.fechaActuacion).toISOString() 
+                              : undefined,
                           };
 
                           try {

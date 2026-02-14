@@ -39,7 +39,8 @@ export class PerfomanceController {
       performanceType: createDto.performanceType,
       responsible: createDto.responsible,
       observation: createDto.observation,
-      document: createDto.document
+      document: createDto.document,
+      performanceDate: createDto.performanceDate,
     };
 
     return this.perfomanceService.create(createPerfomanceDto);

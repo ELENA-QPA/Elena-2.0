@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsMongoId, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsMongoId, IsEnum, IsDateString } from 'class-validator';
 import { Estado } from '../../records/dto/create-record.dto';
 
 // Re-exportamos el enum Estado como PerformanceType para mantener compatibilidad
@@ -28,7 +28,8 @@ export class CreatePerfomanceDto {
         required: false
     })
     @IsOptional()
-    @IsEnum(PerformanceType, { message: "El campo 'performanceType' debe ser un valor válido del enum PerformanceType" })
+    //@IsEnum(PerformanceType, { message: "El campo 'performanceType' debe ser un valor válido del enum PerformanceType" })
+    @IsString()
     performanceType?: PerformanceType;
 
     @ApiProperty({
@@ -55,4 +56,8 @@ export class CreatePerfomanceDto {
     @IsOptional()
     @IsMongoId()
     document?: string;
+
+    @IsOptional()
+    @IsDateString()
+    performanceDate?: string;
 }

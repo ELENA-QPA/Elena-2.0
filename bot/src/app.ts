@@ -44,6 +44,7 @@ interface UserState {
 }
 
 const userStates = new Map<string, UserState>();
+const pausedUsers = new Set<string>();
 
 const DOCUMENT_TYPES = [
   "Cédula de Ciudadanía",
@@ -137,7 +138,7 @@ async function handleMessage(
   sock: WASocket,
   msg: proto.IWebMessageInfo,
 ): Promise<void> {
-  if (!msg.message || msg.key.fromMe) return;
+  if (!msg.message) return;
 
   const jid = msg.key.remoteJid!;
   const userId = jid.replace("@s.whatsapp.net", "");
@@ -146,21 +147,82 @@ async function handleMessage(
   const userName = msg.pushName || "";
 
   if (!text) return;
+  
+ if (msg.key.fromMe) {
+   const targetUserId = jid.replace("@s.whatsapp.net", "");
+   const textLower = text.toLowerCase();
+
+   // 🔴 Pausar bot
+   if (textLower === "asesor" || textLower === "🔴") {
+     pausedUsers.add(targetUserId);
+     console.log(`⏸️ Bot pausado para ${targetUserId}`);
+
+     await sendMessage(sock, jid, "👨‍💼 Un asesor te atenderá en breve.");
+
+     return;
+   }
+
+   if (textLower === "bot" || textLower === "🟢") {
+      pausedUsers.delete(userId);
+      console.log(`▶️ Bot reactivado para ${userId}`);
+      
+      // Resetear estado y volver al inicio
+      resetState(userId);
+      
+      await sendMessage(sock, jid, "🤖 Bot reactivado para este chat");
+      await handleWelcome(sock, jid, userName);
+      
+      return;
+    }
+
+    // Ignorar otros mensajes propios
+    return;
+  } // ← FALTABA ESTA LLAVE
+
+  // 🛑 Verificar si está pausado
+  if (pausedUsers.has(userId)) {
+    return;
+  }
 
   const state = getState(userId);
   const input = text.trim().toLowerCase();
 
   // Comandos globales de reinicio
-  if (["menu", "menú", "inicio", "reiniciar", "start", "volver", "atrás", "atras"].includes(input)) {
+  if (
+    [
+      "menu",
+      "menú",
+      "inicio",
+      "reiniciar",
+      "start",
+      "volver",
+      "atrás",
+      "atras",
+    ].includes(input)
+  ) {
     resetState(userId);
     await handleWelcome(sock, jid, userName);
     return;
   }
 
   // Comandos globales para terminar conversación
-  if (["salir", "terminar", "finalizar", "adios", "chao", "bye", "cancelar"].includes(input)) {
+  if (
+    [
+      "salir",
+      "terminar",
+      "finalizar",
+      "adios",
+      "chao",
+      "bye",
+      "cancelar",
+    ].includes(input)
+  ) {
     await sendTyping(sock, jid, 1000);
-    await sendMessage(sock, jid, "¡Gracias por usar ELENA - QPAlliance! 👋\n\nSi necesitas algo más, escribe *menú* para volver a empezar.");
+    await sendMessage(
+      sock,
+      jid,
+      "¡Gracias por usar ELENA - QPAlliance! 👋\n\nSi necesitas algo más, escribe *menú* para volver a empezar.",
+    );
     resetState(userId);
     return;
   }
@@ -231,11 +293,11 @@ async function handleWelcome(
   updateState(userId, { currentFlow: "HELLO_SELECTION" });
 
   await sendTyping(sock, jid, 800);
-    await sendMessage(
-      sock,
-      jid,
-      "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
-    );
+  await sendMessage(
+    sock,
+    jid,
+    "💰 Si tu consulta está ligada a un pago, comunícate al siguiente correo: ydominguez@qpalliance.co",
+  );
 
   await sendMessage(
     sock,
@@ -297,7 +359,7 @@ async function handleDataAuthorization(
       sock,
       jid,
       "✅ ¡Perfecto! Gracias por aceptar nuestra política de privacidad.\n\nAhora continuemos con tu solicitud...",
-    );    
+    );
 
     if (state.selectedOption === "1") {
       updateState(userId, { currentFlow: "WAITING_DOCUMENT_TYPE" });
@@ -674,9 +736,10 @@ async function handleProcessSelection(
     await sendTyping(sock, jid, 1000);
     await sendMessage(sock, jid, formatProcessList(processes, "active"));
 
-    let optionsMessage = processes.length === 1
-  ? `💡 *Opciones disponibles:*\n\n• Escribe *1* para ver los detalles del proceso`
-  : `💡 *Opciones disponibles:*\n\n• Escribe el *número del proceso* que deseas consultar`;
+    let optionsMessage =
+      processes.length === 1
+        ? `💡 *Opciones disponibles:*\n\n• Escribe *1* para ver los detalles del proceso`
+        : `💡 *Opciones disponibles:*\n\n• Escribe el *número del proceso* que deseas consultar`;
     if (state.currentProcesses.totalFinalized > 0)
       optionsMessage +=
         "\n• Escribe *FINALIZADOS* para ver procesos finalizados";
@@ -846,7 +909,7 @@ async function handleFinalizedProcessesDisplay(
     "\n" +
     generateOptionsMessage("", [
       "Quieres iniciar un nuevo proceso",
-      "Quieres consultar otro proceso", 
+      "Quieres consultar otro proceso",
     ]);
 
   await sendMessage(sock, jid, message);
@@ -970,48 +1033,58 @@ async function handlePdfConfirmation(
     try {
       const legalApiService = LegalApiServiceFactory.create();
 
-      let actuaciones: any[] = [];     
+      let actuaciones: any[] = [];
 
       const radicado = (state.selectedProcess as any).radicado;
 
-        if (radicado) {
-    try {
-      console.log("🔍 Obteniendo actuaciones para radicado:", radicado);
-      
-      // Máximos configurables
-      const MAX_ACTUACIONES = 3;
-      const MAX_CHARS_TOTAL = 600;  // Reducido de 1200 a 600
-      const MAX_ANOTACION_LENGTH = 150;  // Reducido de 250 a 150
+      if (radicado) {
+        try {
+          console.log("🔍 Obteniendo actuaciones para radicado:", radicado);
 
-      const actuacionesRaw = await legalApiService.getActuaciones(radicado);
-      actuaciones = actuacionesRaw.slice(0, MAX_ACTUACIONES);
+          // Máximos configurables
+          const MAX_ACTUACIONES = 3;
+          const MAX_CHARS_TOTAL = 600;
+          const MAX_ANOTACION_LENGTH = 150; 
 
-      // Primero truncar anotaciones muy largas
-      actuaciones = actuaciones.map(act => ({
-        ...act,
-        anotacion: act.anotacion?.length > MAX_ANOTACION_LENGTH 
-          ? act.anotacion.substring(0, MAX_ANOTACION_LENGTH) + '...'
-          : act.anotacion
-      }));
+          const actuacionesRaw = await legalApiService.getActuaciones(radicado);
+          actuaciones = actuacionesRaw.slice(0, MAX_ACTUACIONES);
 
-      // Si aún es muy largo, reducir cantidad
-      let totalChars = actuaciones.reduce((sum, act) => 
-        sum + (act.anotacion?.length || 0) + (act.textoActuacion?.length || 0), 0
-      );
+          // Primero truncar anotaciones muy largas
+          actuaciones = actuaciones.map((act) => ({
+            ...act,
+            anotacion:
+              act.anotacion?.length > MAX_ANOTACION_LENGTH
+                ? act.anotacion.substring(0, MAX_ANOTACION_LENGTH) + "..."
+                : act.anotacion,
+          }));
 
-      while (totalChars > MAX_CHARS_TOTAL && actuaciones.length > 1) {
-        actuaciones.pop();
-        totalChars = actuaciones.reduce((sum, act) => 
-          sum + (act.anotacion?.length || 0) + (act.textoActuacion?.length || 0), 0
-        );
+          // Si aún es muy largo, reducir cantidad
+          let totalChars = actuaciones.reduce(
+            (sum, act) =>
+              sum +
+              (act.anotacion?.length || 0) +
+              (act.textoActuacion?.length || 0),
+            0,
+          );
+
+          while (totalChars > MAX_CHARS_TOTAL && actuaciones.length > 1) {
+            actuaciones.pop();
+            totalChars = actuaciones.reduce(
+              (sum, act) =>
+                sum +
+                (act.anotacion?.length || 0) +
+                (act.textoActuacion?.length || 0),
+              0,
+            );
+          }
+
+          console.log(
+            `Actuaciones finales: ${actuaciones.length} (${totalChars} chars)`,
+          );
+        } catch (error) {
+          console.warn("⚠️ No se pudieron obtener actuaciones:", error);
+        }
       }
-
-      console.log(`✅ Actuaciones finales: ${actuaciones.length} (${totalChars} chars)`);
-      
-    } catch (error) {
-      console.warn("⚠️ No se pudieron obtener actuaciones:", error);
-    }
-  }
 
       // Pasar las actuaciones al generador de PDF
       const processWithActuaciones = {
@@ -1140,7 +1213,7 @@ async function handlePdfSummary(
       jid,
       generateErrorAlternativesMessage("¿Qué te gustaría hacer ahora?", [
         "Consultar otro tipo de procesos",
-        "¿Quieres iniciar un proceso con nosotros?",        
+        "¿Quieres iniciar un proceso con nosotros?",
       ]),
     );
 
@@ -1155,7 +1228,7 @@ async function handlePdfSummary(
         "❌ Lo siento, hubo un error generando el resumen.\n¿Qué te gustaría hacer?",
         [
           "Quieres intentarlo nuevamente",
-          "¿Quieres iniciar un proceso con nosotros?",          
+          "¿Quieres iniciar un proceso con nosotros?",
         ],
       ),
     );
@@ -1206,7 +1279,6 @@ async function handlePdfSummaryOptions(
         sock,
         jid,
         `👨‍💼 Perfecto, te conecto con uno de nuestros abogados especializados.`,
-        
       );
       resetState(userId);
       break;

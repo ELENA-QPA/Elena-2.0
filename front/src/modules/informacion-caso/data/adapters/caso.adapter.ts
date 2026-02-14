@@ -398,6 +398,7 @@ export function mapPerformanceApiToModel(api: any): PerformanceData {
     createdAt: api.createdAt,
     updatedAt: api.updatedAt,
     deletedAt: api.deletedAt || null,
+    performanceDate: api.performanceDate,
   };
 }
 

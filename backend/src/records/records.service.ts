@@ -1337,57 +1337,92 @@ export class RecordsService {
     throw new InternalServerErrorException(`Error interno del servidor`);
   }
   // -----------------------------------------------------
-  async findById(id: string) {
-    try {
-      // Verificar que el ID sea válido
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new BadRequestException('ID de caso inválido');
-      }
-
-      // Buscar el record principal
-      const record = await this.recordModel.findById(id).select('-__v').exec();
-
-      if (!record) {
-        throw new NotFoundException(`Caso con ID: ${id} no encontrado`);
-      }
-
-      // Obtener todas las relaciones asociadas al record
-      const [documents, interveners, proceduralParts, payments, performances] =
-        await Promise.all([
-          this.documentService.findByRecord(id),
-          this.intervenerService.findByRecord(id),
-          this.proceduralPartService.findByRecord(id),
-          this.paymentService.findByRecord(id),
-          this.perfomanceService.findByRecord(id),
-        ]);
-
-      // Combinar toda la información similar al create
-      const completeRecord = {
-        ...record.toObject(),
-        documents: documents || [],
-        interveners: interveners || [],
-        proceduralParts: proceduralParts || [],
-        payments: payments || [],
-        performances: performances || [],
-      };
-
-      return {
-        message: 'Caso obtenido exitosamente',
-        record: completeRecord,
-      };
-    } catch (error) {
-      if (
-        error instanceof BadRequestException ||
-        error instanceof NotFoundException ||
-        error instanceof ForbiddenException
-      ) {
-        throw error;
-      }
-      throw new InternalServerErrorException(
-        'Error interno del servidor al buscar el caso',
-      );
+async findById(id: string) {
+  try {
+    // Verificar que el ID sea válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('ID de caso inválido');
     }
+
+    // Buscar el record principal
+    const record = await this.recordModel.findById(id).select('-__v').exec();
+
+    if (!record) {
+      throw new NotFoundException(`Caso con ID: ${id} no encontrado`);
+    }
+
+    // Obtener todas las relaciones asociadas al record
+    const [documents, interveners, proceduralParts, payments, performancesBD] =
+      await Promise.all([
+        this.documentService.findByRecord(id),
+        this.intervenerService.findByRecord(id),
+        this.proceduralPartService.findByRecord(id),
+        this.paymentService.findByRecord(id),
+        this.perfomanceService.findByRecord(id),
+      ]);
+
+    // Marcar las de BD para diferenciarlas
+    const performancesBDMarcadas = performancesBD.map((p: any) => ({
+      ...(p.toObject ? p.toObject() : p),
+      isFromMonolegal: false,
+    }));
+
+    // Obtener actuaciones de Monolegal si tiene idExpedienteMonolegal
+    let performancesMonolegal: any[] = [];
+    if (record.idExpedienteMonolegal) {
+      try {
+        const actuacionesMonolegal =
+          await this.monolegalApiService.getActuacionesTodasLasFuentes(
+            record.idExpedienteMonolegal,
+          );
+
+        // Transformar 
+        performancesMonolegal = actuacionesMonolegal.combinadas.map((act: any) => ({
+          _id: act.id || `monolegal-${Date.now()}-${Math.random()}`,
+          performanceType: act.textoActuacion || act.actuacion || 'Sin tipo',
+          observation: act.anotacion || '',
+          responsible: 'Monolegal',
+          createdAt: act.fechaActuacion || act.fechaDeActuacion,
+          fuente: act.fuente || 'Monolegal',
+          isFromMonolegal: true,
+        }));
+      } catch (error) {
+        console.warn(
+          `[MONOLEGAL] Error obteniendo actuaciones: ${(error as any).message}`,
+        );
+      }
+    }
+
+    // Unir ambas fuentes
+    const allPerformances: any[] = [...performancesBDMarcadas, ...performancesMonolegal];
+
+    // Combinar toda la información
+    const completeRecord = {
+      ...record.toObject(),
+      documents: documents || [],
+      interveners: interveners || [],
+      proceduralParts: proceduralParts || [],
+      payments: payments || [],
+      performances: allPerformances,
+    };
+
+    return {
+      message: 'Caso obtenido exitosamente',
+      record: completeRecord,
+    };
+  } catch (error) {
+    if (
+      error instanceof BadRequestException ||
+      error instanceof NotFoundException ||
+      error instanceof ForbiddenException
+    ) {
+      throw error;
+    }
+    throw new InternalServerErrorException(
+      'Error interno del servidor al buscar el caso',
+    );
   }
+}
 
   // -----------------------------------------------------
   async getMaxEtiquetaByProcessType(processType: string) {
