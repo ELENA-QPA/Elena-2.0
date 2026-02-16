@@ -14,6 +14,11 @@ interface ExpedienteTableRowProps {
 
 const ExpedienteTableRow = memo(
   ({ caso, userRole, onDelete }: ExpedienteTableRowProps) => {
+    // Extraer partes procesales por tipo
+    const demandante = caso.proceduralParts?.find(
+      (p) => p.partType === "demandante"
+    );
+
     const handleDelete = async () => {
       if (
         confirm(
@@ -48,9 +53,9 @@ const ExpedienteTableRow = memo(
           <div className="flex flex-col">
             <span
               className="font-medium truncate"
-              title={caso.proceduralParts?.[0]?.name || "Sin nombre"}
+              title={demandante?.name || "Sin nombre"}
             >
-              {caso.proceduralParts?.[0]?.name || "Sin nombre"}
+              {demandante?.name || "Sin nombre"}
             </span>
           </div>
         </TableCell>
