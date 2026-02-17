@@ -656,18 +656,16 @@ export default function ExpedientesView({
     // 1. Filtro por BÚSQUEDA DE TEXTO (nombre, código, etc)
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase().trim();
+      const searchNorm = normalizeString(searchTerm);
 
-      // Si parece un número de radicado (solo dígitos y más de 15 caracteres), buscar exacto
       const isRadicadoSearch = /^\d{15,}$/.test(searchTerm.trim());
 
       filtered = filtered.filter((caso) => {
         if (isRadicadoSearch) {
-          // Búsqueda exacta para radicados
           const radicado = caso.numeroRadicado || caso.radicado || "";
           return radicado === searchTerm.trim();
         }
 
-        // Búsqueda parcial para otros campos
         const searchableFields = [
           caso.etiqueta,
           caso.proceduralParts?.[0]?.name,
@@ -683,7 +681,15 @@ export default function ExpedientesView({
           .filter(Boolean)
           .map((field) => field?.toString().toLowerCase() || "");
 
-        return searchableFields.some((field) => field.includes(searchLower));
+        // Búsqueda normal (sin normalizar) para la mayoría de campos
+        const normalMatch = searchableFields.some((field) =>
+          field.includes(searchLower),
+        );
+        
+        const nameNorm = normalizeString(caso.proceduralParts?.[0]?.name || "");
+        const nameMatch = nameNorm.includes(searchNorm);
+
+        return normalMatch || nameMatch;
       });
     }
 
@@ -700,12 +706,12 @@ export default function ExpedientesView({
     //   filtered = filtered.filter((caso) => caso.estado === estadoFilter);
     // }
 
-    // 3. Filtro por NOMBRE
+   // 3. Filtro por NOMBRE
     if (nameFilter.trim()) {
-      const nameLower = nameFilter.toLowerCase().trim();
+      const nameNorm = normalizeString(nameFilter);
       filtered = filtered.filter((caso) => {
-        const casoName = caso.proceduralParts?.[0]?.name || "";
-        return casoName.toLowerCase().includes(nameLower);
+        const casoName = normalizeString(caso.proceduralParts?.[0]?.name || "");
+        return casoName.includes(nameNorm);
       });
     }
 

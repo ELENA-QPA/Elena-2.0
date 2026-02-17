@@ -141,38 +141,66 @@ const ExpedienteTableRow = memo(
         </TableCell> */}
 
         {/* Actualizado */}
-        <TableCell className="bg-white">
-          <div className="flex flex-col gap-1">
-            <span className="font-medium">
-              {caso.fechaUltimaActuacion
-                ? (() => {
-                    if (
-                      typeof caso.fechaUltimaActuacion === "string" &&
-                      /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(
-                        caso.fechaUltimaActuacion,
-                      )
-                    ) {
-                      return caso.fechaUltimaActuacion;
-                    }
+<TableCell className="bg-white">
+  <div className="flex flex-col gap-1">
+    <span className="font-medium">
+      {(() => {
+        const fechas: Date[] = [];
 
-                    const date = new Date(caso.fechaUltimaActuacion);
-                    if (!isNaN(date.getTime())) {
-                      const year = date.getUTCFullYear();
-                      const month = String(date.getUTCMonth() + 1).padStart(
-                        2,
-                        "0",
-                      );
-                      const day = String(date.getUTCDate()).padStart(2, "0");
-                      return `${day}/${month}/${year}`;
-                    }
+        // 1. Agregar fechaUltimaActuacion si existe
+        if (caso.fechaUltimaActuacion) {
+          let dateFromUltimaActuacion: Date | null = null;
+          
+          if (
+            typeof caso.fechaUltimaActuacion === "string" &&
+            /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(caso.fechaUltimaActuacion)
+          ) {
+            // Formato DD/MM/YYYY
+            const parts = caso.fechaUltimaActuacion.split("/");
+            dateFromUltimaActuacion = new Date(
+              parseInt(parts[2]),
+              parseInt(parts[1]) - 1,
+              parseInt(parts[0])
+            );
+          } else {
+            dateFromUltimaActuacion = new Date(caso.fechaUltimaActuacion);
+          }
 
-                    return "N/A";
-                  })()
-                : "N/A"}
-            </span>
-          </div>
-        </TableCell>
+          if (dateFromUltimaActuacion && !isNaN(dateFromUltimaActuacion.getTime())) {
+            fechas.push(dateFromUltimaActuacion);
+          }
+        }
 
+        // 2. Agregar fechas de performances (actuaciones de BD)
+        if (caso.performances && caso.performances.length > 0) {
+          caso.performances.forEach((p: any) => {
+            // Solo usar performanceDate, no createdAt
+            if (p.performanceDate) {
+              const perfDate = new Date(p.performanceDate);
+              if (!isNaN(perfDate.getTime())) {
+                fechas.push(perfDate);
+              }
+            }
+          });
+        }
+
+        // 3. Obtener la fecha más reciente
+        if (fechas.length > 0) {
+          const fechaMasReciente = fechas.reduce((max, fecha) => 
+            fecha.getTime() > max.getTime() ? fecha : max
+          );
+          
+          const year = fechaMasReciente.getUTCFullYear();
+          const month = String(fechaMasReciente.getUTCMonth() + 1).padStart(2, "0");
+          const day = String(fechaMasReciente.getUTCDate()).padStart(2, "0");
+          return `${day}/${month}/${year}`;
+        }
+
+        return "N/A";
+      })()}
+    </span>
+  </div>
+</TableCell>
         <TableCell className="text-right bg-white">
           <div className="flex items-center justify-end gap-2">
             <Link href={`/dashboard/informacion-caso?mode=view&id=${caso._id}`}>

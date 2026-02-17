@@ -241,6 +241,14 @@
             ]
         },
         {
+            "codigo": "BOG",
+            "abreviatura": "BOG",
+            "nombre": "Bogotá D.C.",
+            "municipios": [
+                { "codigo": "11001000", "nombre": "Bogotá" }
+            ]
+        },
+        {
             "codigo": "BOL",
             "abreviatura": "BOL",
             "nombre": "Bolívar",

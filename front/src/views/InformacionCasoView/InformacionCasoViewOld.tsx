@@ -1653,30 +1653,25 @@ export default function InformacionCasoFormViewOld() {
         return "";
       })();     
       const internalCodeValue = caso.etiqueta || "";
-
-      // Función para capitalizar nombres (ej: "ANTIOQUIA" -> "Antioquia")
+    
       // Función para capitalizar nombres
       const capitalizeName = (name: string) => {
-        if (!name) return "";
+  if (!name) return "";
 
-        const upperName = name.toUpperCase();
+  const upperName = name.toUpperCase();
 
-        // Si el departamento es Bogotá D.C., mapearlo a Cundinamarca
-        // porque en divipola.json Bogotá es una ciudad de Cundinamarca
-        if (upperName.includes("BOGOTA") || upperName.includes("BOGOTÁ")) {
-          return "Cundinamarca";
-        }
-
-        // Mapeo de nombres de departamentos para coincidir exactamente con divipola.json
-        const departmentMap: { [key: string]: string } = {
-          "VALLE DEL CAUCA": "Valle del Cauca",
-          "NORTE DE SANTANDER": "Norte de Santander",
-          "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA":
-            "San Andrés, Providencia y Santa Catalina",
-          "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA":
-            "San Andrés, Providencia y Santa Catalina",
-          "LA GUAJIRA": "La Guajira",
-        };
+  // Mapeo de nombres de departamentos para coincidir exactamente con divipola.json
+  const departmentMap: { [key: string]: string } = {
+    "BOGOTA": "Bogotá D.C.",
+    "BOGOTÁ": "Bogotá D.C.",
+    "BOGOTA D.C.": "Bogotá D.C.",
+    "BOGOTÁ D.C.": "Bogotá D.C.",
+    "VALLE DEL CAUCA": "Valle del Cauca",
+    "NORTE DE SANTANDER": "Norte de Santander",
+    "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA": "San Andrés, Providencia y Santa Catalina",
+    "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA": "San Andrés, Providencia y Santa Catalina",
+    "LA GUAJIRA": "La Guajira",
+  };
 
         // Buscar en el mapeo
         if (departmentMap[upperName]) {
@@ -7999,15 +7994,15 @@ export default function InformacionCasoFormViewOld() {
                           (selectedPerformance as any)?.id;
 
                         // Solo validar estado duplicado si es CREAR (no editar)
-                        if (!performanceId) {
-                          const currentState = caso?.estado;
-                          if (currentState === estadoActuacion) {
-                            toast.error(
-                              `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
-                            );
-                            return;
-                          }
-                        }
+                        // if (!performanceId) {
+                        //   const currentState = caso?.estado;
+                        //   if (currentState === estadoActuacion) {
+                        //     toast.error(
+                        //       `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
+                        //     );
+                        //     return;
+                        //   }
+                        // }
 
                         const payload = {
                           record: caseId,
