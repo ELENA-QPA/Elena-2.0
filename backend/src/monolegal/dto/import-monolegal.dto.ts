@@ -34,6 +34,7 @@ export interface ProcessResult {
     ultimaActuacion?: string;
     ultimaAnotacion?: string;
     fechaUltimaActuacion?: Date;
+    etiqueta?: string; 
   };
 }
 

@@ -36,6 +36,7 @@ interface ImportResult {
     city: string;
     ultimaActuacion: string;
     fechaUltimaActuacion?: Date | string;
+    etiqueta?: string;
   };
 }
 
@@ -533,6 +534,9 @@ export default function MonolegalImportPage() {
                         )}
                         {result.details.despachoJudicial && (
                           <span>- {result.details.despachoJudicial}</span>
+                        )}
+                        {result.details.etiqueta && (
+                          <span>- {result.details.etiqueta}</span>
                         )}
                       </div>
                     )}

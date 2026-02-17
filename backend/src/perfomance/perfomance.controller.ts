@@ -14,25 +14,28 @@ export class PerfomanceController {
   // -----------------------------------------------------
   constructor(
     private readonly perfomanceService: PerfomanceService,
-    private readonly recordStateTypeService: RecordStateTypeService
-  ) { }
+    private readonly recordStateTypeService: RecordStateTypeService,
+  ) {}
   // -----------------------------------------------------
   @Post('create')
   @ApiOperation({
     summary: 'Crear una nueva actuación con validación de estados',
-    description: 'Este endpoint valida que la transición de estado sea válida antes de crear la actuación'
+    description:
+      'Este endpoint valida que la transición de estado sea válida antes de crear la actuación',
   })
   @ApiBody({ type: CreatePerformanceWithValidationDto })
   @ApiResponse({
     status: 201,
     description: 'Actuación creada exitosamente',
-    type: PerfomanceResponseDto
+    type: PerfomanceResponseDto,
   })
   @ApiResponse({
     status: 400,
-    description: 'Transición de estado inválida'
+    description: 'Transición de estado inválida',
   })
-  async createWithValidation(@Body() createDto: CreatePerformanceWithValidationDto) {
+  async createWithValidation(
+    @Body() createDto: CreatePerformanceWithValidationDto,
+  ) {
     // Si no se fuerza la transición, se valida automáticamente en el servicio
     const createPerfomanceDto: CreatePerfomanceDto = {
       record: createDto.record,
@@ -59,4 +62,11 @@ export class PerfomanceController {
   // }
   // -----------------------------------------------------
 
+  @Patch(':id')
+  async updatePerformance(
+    @Param('id') id: string,
+    @Body() updatePerfomanceDto: UpdatePerfomanceDto, // ← Corregir nombre (con typo "Perfomance")
+  ) {
+    return this.perfomanceService.update(id, updatePerfomanceDto); // ← Corregir nombre del servicio
+  }
 }

@@ -1485,7 +1485,20 @@ async findById(id: string) {
       const dataToUpdate: Partial<Record> = {};
 
       // Solo incluir campos que no sean null/undefined (etiqueta NO es editable)
-      // if (updateRecordDto.clientType !== undefined) dataToUpdate.clientType = updateRecordDto.clientType;
+      if (updateRecordDto.clientType !== undefined) {
+        dataToUpdate.clientType = updateRecordDto.clientType;       
+          if (existingRecord.etiqueta) {
+          const currentEtiqueta = existingRecord.etiqueta;          
+          const numeroMatch = currentEtiqueta.match(/\d+$/);
+          if (numeroMatch) {
+            const numero = numeroMatch[0];
+            const nuevaLetra = firstConsecutivePart[updateRecordDto.clientType];
+            if (nuevaLetra) {
+              dataToUpdate.etiqueta = `${nuevaLetra}${numero}`;
+            }
+          }
+        }
+      }
       if (updateRecordDto.department !== undefined)
         dataToUpdate.department = updateRecordDto.department;
       if (updateRecordDto.personType !== undefined)
@@ -1506,6 +1519,10 @@ async findById(id: string) {
         dataToUpdate.country = updateRecordDto.country;
       if (updateRecordDto.estado !== undefined)
         dataToUpdate.estado = updateRecordDto.estado;
+      if (updateRecordDto.filingDate !== undefined)
+        dataToUpdate.filingDate = updateRecordDto.filingDate;
+      if (updateRecordDto.isActive !== undefined)
+        dataToUpdate.isActive = updateRecordDto.isActive;
 
       // Actualizar timestamp
       dataToUpdate.updatedAt = new Date();

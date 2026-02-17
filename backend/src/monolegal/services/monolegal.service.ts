@@ -676,7 +676,7 @@ export class MonolegalService {
   
     const recordDataFast = this.prepareRecordDataFast(cambio);
 
-    if (record) {
+    if (record) {      
       return {
         radicado,
         status: 'updated',
@@ -686,6 +686,7 @@ export class MonolegalService {
           city: recordDataFast.city,
           ultimaActuacion: recordDataFast.ultimaActuacion,
           ultimaAnotacion: recordDataFast.ultimaAnotacion,
+          etiqueta: record.etiqueta || '',
         },
       };
     } else {

@@ -111,7 +111,7 @@ export class PerfomanceService {
       }
 
       throw new BadRequestException(
-        'Error al crear la actuación: ' + error.message,
+        'Error al crear la actuación: ' + (error as any).message,
       );
     }
   }
@@ -139,7 +139,7 @@ export class PerfomanceService {
       return savedPerformance;
     } catch (error) {
       throw new BadRequestException(
-        'Error al crear la actuación: ' + error.message,
+        'Error al crear la actuación: ' + (error as any).message,
       );
     }
   }

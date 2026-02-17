@@ -81,7 +81,7 @@ export class Record extends Document {
   idProcesoMonolegal?: string;
 
   @Prop()
-  isActive?: string;
+  isActive?: string;  
 
   @Prop()
   isArchived?: boolean;
@@ -93,7 +93,7 @@ export class Record extends Document {
   sincronizadoMonolegal: boolean;
 
   @Prop({ default: false })
-  pendienteSincronizacionMonolegal: boolean; // ← NUEVO
+  pendienteSincronizacionMonolegal: boolean; 
 
   @Prop({ type: Date, default: null })
   fechaSincronizacion: Date;
@@ -102,7 +102,10 @@ export class Record extends Document {
   idExpedienteMonolegal: string;
 
   @Prop({ default: null })
-  errorSincronizacionMonolegal: string; // ← NUEVO
+  errorSincronizacionMonolegal: string; 
+
+  @Prop()
+  filingDate: Date;
 }
 
 export const RecordSchema = SchemaFactory.createForClass(Record);

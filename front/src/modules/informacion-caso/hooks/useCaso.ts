@@ -36,7 +36,7 @@ export function useCaso() {
 
   const createCaso = async (
     data: CreateCasoBody,
-    token?: string
+    token?: string,
   ): Promise<CreateCasoSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -73,7 +73,7 @@ export function useCaso() {
 
   const getAllCasos = async (
     limit: number = 50,
-    offset: number = 0
+    offset: number = 0,
   ): Promise<CasosPaginatedResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -105,7 +105,7 @@ export function useCaso() {
 
   const getCasoById = async (
     id: string,
-    token?: string
+    token?: string,
   ): Promise<GetCasoSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -166,6 +166,41 @@ export function useCaso() {
     }
   };
 
+  const updatePerformance = async (id: string, data: any) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await casoRepository.updatePerformance(id, data);
+      if ("performance" in response) {        
+        setCaso((prev) => {
+          if (!prev) return prev;
+          const updatedPerf = response.performance as any;
+          const existing = prev.performances || [];
+          return {
+            ...prev,
+            performances: existing.map((p) =>
+              p._id === id || (p as any).id === id ? updatedPerf : p,
+            ),
+          } as any;
+        });
+        return response;
+      } else {
+        const errMsg = Array.isArray((response as any).message)
+          ? (response as any).message.join(", ")
+          : (response as any).message;
+        setError(errMsg);
+        return response;
+      }
+    } catch (err: any) {
+      const errorMsg =
+        err.message || "Error inesperado al actualizar actuación";
+      setError(errorMsg);
+      return { statusCode: 500, message: errorMsg, error: "Unknown" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deletePerformance = async (id: string) => {
     setLoading(true);
     setError(null);
@@ -180,7 +215,7 @@ export function useCaso() {
           return {
             ...prev,
             performances: (prev.performances || []).filter(
-              (p) => p._id !== id && (p as any).id !== id
+              (p) => p._id !== id && (p as any).id !== id,
             ),
           } as any;
         });
@@ -204,7 +239,7 @@ export function useCaso() {
   // Actualizar información general del caso (PATCH /api/records/{id})
   const updateCaso = async (
     id: string,
-    data: any
+    data: any,
   ): Promise<GetCasoSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -243,7 +278,7 @@ export function useCaso() {
   };
 
   const deleteCaso = async (
-    id: string
+    id: string,
   ): Promise<{ message: string } | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -256,7 +291,7 @@ export function useCaso() {
 
       if ("message" in response && !("statusCode" in response)) {
         console.log(
-          "[USECASO][deleteCaso][Success]: Caso eliminado exitosamente"
+          "[USECASO][deleteCaso][Success]: Caso eliminado exitosamente",
         );
         // Remover caso del estado local si existe
         setCasos((prev) => prev.filter((caso) => caso._id !== id));
@@ -293,7 +328,7 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][updateDocument]: Iniciando actualización de documento",
-        { id }
+        { id },
       );
       const response = await casoRepository.updateDocument(id, data);
       console.log("[USECASO][updateDocument][Success]: Documento actualizado");
@@ -308,21 +343,21 @@ export function useCaso() {
   };
 
   const createDocument = async (
-    data: CreateDocumentBody
+    data: CreateDocumentBody,
   ): Promise<CreateDocumentSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
         "[USECASO][createDocument]: Iniciando creación de documento",
-        data
+        data,
       );
       const response = await casoRepository.createDocument(data);
       console.log("[USECASO][createDocument][Response]:", response);
 
       if ("document" in response) {
         console.log(
-          "[USECASO][createDocument][Success]: Documento creado exitosamente"
+          "[USECASO][createDocument][Success]: Documento creado exitosamente",
         );
         return response;
       } else {
@@ -353,7 +388,7 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][deleteDocument]: Iniciando eliminación de documento",
-        { id }
+        { id },
       );
       const response = await casoRepository.deleteDocument(id);
       console.log("[USECASO][deleteDocument][Success]: Documento eliminado");
@@ -369,20 +404,20 @@ export function useCaso() {
 
   // Intervinientes
   const createIntervener = async (
-    data: CreateIntervenerBody
+    data: CreateIntervenerBody,
   ): Promise<CreateIntervenerSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
-        "[USECASO][createIntervener]: Iniciando creación de interviniente"
+        "[USECASO][createIntervener]: Iniciando creación de interviniente",
       );
       const response = await casoRepository.createIntervener(data);
       console.log("[USECASO][createIntervener][Response]:", response);
 
       if ("record" in response) {
         console.log(
-          "[USECASO][createIntervener][Success]: Interviniente creado exitosamente"
+          "[USECASO][createIntervener][Success]: Interviniente creado exitosamente",
         );
         return response;
       } else {
@@ -413,11 +448,11 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][updateIntervener]: Iniciando actualización de interviniente",
-        { id }
+        { id },
       );
       const response = await casoRepository.updateIntervener(id, data);
       console.log(
-        "[USECASO][updateIntervener][Success]: Interviniente actualizado"
+        "[USECASO][updateIntervener][Success]: Interviniente actualizado",
       );
       return response;
     } catch (err: any) {
@@ -435,11 +470,11 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][deleteIntervener]: Iniciando eliminación de interviniente",
-        { id }
+        { id },
       );
       const response = await casoRepository.deleteIntervener(id);
       console.log(
-        "[USECASO][deleteIntervener][Success]: Interviniente eliminado"
+        "[USECASO][deleteIntervener][Success]: Interviniente eliminado",
       );
       return response;
     } catch (err: any) {
@@ -453,20 +488,20 @@ export function useCaso() {
 
   // Partes Procesales
   const createProceduralPart = async (
-    data: CreateProceduralPartBody
+    data: CreateProceduralPartBody,
   ): Promise<CreateProceduralPartSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
-        "[USECASO][createProceduralPart]: Iniciando creación de parte procesal"
+        "[USECASO][createProceduralPart]: Iniciando creación de parte procesal",
       );
       const response = await casoRepository.createProceduralPart(data);
       console.log("[USECASO][createProceduralPart][Response]:", response);
 
       if ("proceduralPart" in response) {
         console.log(
-          "[USECASO][createProceduralPart][Success]: Parte procesal creada exitosamente"
+          "[USECASO][createProceduralPart][Success]: Parte procesal creada exitosamente",
         );
         return response;
       } else {
@@ -494,18 +529,18 @@ export function useCaso() {
 
   const updateProceduralPart = async (
     id: string,
-    data: CreateProceduralPartBody
+    data: CreateProceduralPartBody,
   ) => {
     setLoading(true);
     setError(null);
     try {
       console.log(
         "[USECASO][updateProceduralPart]: Iniciando actualización de parte procesal",
-        { id }
+        { id },
       );
       const response = await casoRepository.updateProceduralPart(id, data);
       console.log(
-        "[USECASO][updateProceduralPart][Success]: Parte procesal actualizada"
+        "[USECASO][updateProceduralPart][Success]: Parte procesal actualizada",
       );
       return response;
     } catch (err: any) {
@@ -523,11 +558,11 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][deleteProceduralPart]: Iniciando eliminación de parte procesal",
-        { id }
+        { id },
       );
       const response = await casoRepository.deleteProceduralPart(id);
       console.log(
-        "[USECASO][deleteProceduralPart][Success]: Parte procesal eliminada"
+        "[USECASO][deleteProceduralPart][Success]: Parte procesal eliminada",
       );
       return response;
     } catch (err: any) {
@@ -541,7 +576,7 @@ export function useCaso() {
 
   // Pagos
   const createPayment = async (
-    data: CreatePaymentBody
+    data: CreatePaymentBody,
   ): Promise<CreatePaymentSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -552,7 +587,7 @@ export function useCaso() {
 
       if ("record" in response) {
         console.log(
-          "[USECASO][createPayment][Success]: Pago creado exitosamente"
+          "[USECASO][createPayment][Success]: Pago creado exitosamente",
         );
         return response;
       } else {
@@ -617,20 +652,20 @@ export function useCaso() {
 
   // Parámetros
   const createParameter = async (
-    data: CreateParameterBody
+    data: CreateParameterBody,
   ): Promise<CreateParameterSuccessResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
-        "[USECASO][createParameter]: Iniciando creación de parámetro"
+        "[USECASO][createParameter]: Iniciando creación de parámetro",
       );
       const response = await casoRepository.createParameter(data);
       console.log("[USECASO][createParameter][Response]:", response);
 
       if ("record" in response) {
         console.log(
-          "[USECASO][createParameter][Success]: Parámetro creado exitosamente"
+          "[USECASO][createParameter][Success]: Parámetro creado exitosamente",
         );
         return response;
       } else {
@@ -658,26 +693,26 @@ export function useCaso() {
   const searchParameters = async (
     data: SearchParametersBody,
     limit: number = 10,
-    offset: number = 0
+    offset: number = 0,
   ): Promise<ParametersPaginatedResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
         "[USECASO][searchParameters]: Iniciando búsqueda de parámetros",
-        { data, limit, offset }
+        { data, limit, offset },
       );
       const response = await casoRepository.searchParameters(
         data,
         limit,
-        offset
+        offset,
       );
       console.log("[USECASO][searchParameters][Response]:", response);
 
       if ("records" in response && Array.isArray(response.records)) {
         console.log(
           "[USECASO][searchParameters][Success]: Parámetros encontrados",
-          { count: response.records.length }
+          { count: response.records.length },
         );
         return response as ParametersPaginatedResponse;
       } else {
@@ -709,7 +744,7 @@ export function useCaso() {
     try {
       console.log(
         "[USECASO][deleteParameter]: Iniciando eliminación de parámetro",
-        { id }
+        { id },
       );
       const response = await casoRepository.deleteParameter(id);
       console.log("[USECASO][deleteParameter][Success]: Parámetro eliminado");
@@ -725,7 +760,7 @@ export function useCaso() {
 
   // Archivos
   const uploadSingleFile = async (
-    file: File
+    file: File,
   ): Promise<FileUploadResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
@@ -739,7 +774,7 @@ export function useCaso() {
 
       if ("record" in response) {
         console.log(
-          "[USECASO][uploadSingleFile][Success]: Archivo subido exitosamente"
+          "[USECASO][uploadSingleFile][Success]: Archivo subido exitosamente",
         );
         return response;
       } else {
@@ -765,14 +800,14 @@ export function useCaso() {
   };
 
   const uploadMultipleFiles = async (
-    files: File[]
+    files: File[],
   ): Promise<MultipleFileUploadResponse | ErrorResponse> => {
     setLoading(true);
     setError(null);
     try {
       console.log(
         "[USECASO][uploadMultipleFiles]: Iniciando subida de archivos",
-        { fileCount: files.length }
+        { fileCount: files.length },
       );
       const response = await casoRepository.uploadMultipleFiles(files);
       console.log("[USECASO][uploadMultipleFiles][Response]:", response);
@@ -780,7 +815,7 @@ export function useCaso() {
       if ("records" in response && Array.isArray(response.records)) {
         console.log(
           "[USECASO][uploadMultipleFiles][Success]: Archivos subidos exitosamente",
-          { count: response.records.length }
+          { count: response.records.length },
         );
         return response as MultipleFileUploadResponse;
       } else {
@@ -830,7 +865,7 @@ export function useCaso() {
     setError(null);
     try {
       console.log(
-        "[USECASO][getFileInfo]: Iniciando obtención de información de archivos"
+        "[USECASO][getFileInfo]: Iniciando obtención de información de archivos",
       );
       const response = await casoRepository.getFileInfo();
       console.log("[USECASO][getFileInfo][Response]:", response);
@@ -838,7 +873,7 @@ export function useCaso() {
       if ("records" in response && Array.isArray(response.records)) {
         console.log(
           "[USECASO][getFileInfo][Success]: Información de archivos obtenida",
-          { count: response.records.length }
+          { count: response.records.length },
         );
         return response as FileInfoResponse;
       } else {
@@ -880,7 +915,7 @@ export function useCaso() {
         setLoading(false);
       }
     },
-    [casoRepository]
+    [casoRepository],
   );
 
   return {
@@ -913,6 +948,7 @@ export function useCaso() {
     deleteFile,
     getFileInfo,
     createPerformance,
+    updatePerformance,
     deletePerformance,
     getActuacionesMonolegal,
   };

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsDate,
   IsEnum,
   IsNotEmpty,
@@ -150,4 +151,23 @@ export class CreateRecordDto {
   // @IsEnum(Estado, { message: "El campo 'estado' debe ser un valor válido del enum Estado" })
   // @IsOptional()
   estado: Estado;
+
+  @ApiProperty({
+  description: 'Fecha de radicación del proceso',
+  example: '2025-02-10T00:00:00.000Z',
+  required: false,
+  })
+  @IsDate({ message: "El campo 'filingDate' debe ser una fecha válida" })
+  @Type(() => Date)
+  @IsOptional()
+  filingDate?: Date;
+
+  @ApiProperty({
+  description: 'Estado activo del caso',
+  example: 'Activo',
+  required: false,
+  })
+  @IsString()
+  @IsOptional()
+  isActive?: string;
 }

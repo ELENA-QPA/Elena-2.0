@@ -94,7 +94,7 @@ export interface Caso {
   estado?: string;
   type?: string;
   isActive?: string;
-
+  filingDate?: string;
   etiqueta?: string;
   etapaProcesal?: string;
   ultimaActuacion?: string;

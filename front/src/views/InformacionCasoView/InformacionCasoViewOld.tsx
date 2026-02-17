@@ -63,6 +63,7 @@ import {
   Bike,
   ShoppingBag,
   Package,
+  Pencil,
 } from "lucide-react";
 import {
   Form,
@@ -148,7 +149,8 @@ export const caseFormSchema = z.object({
     .refine((val) => val && val !== "", {
       message: "Seleccione un tipo de proceso",
     }),
-  creationDate: z.string().min(1, "Fecha requerida"),
+  filingDate: z.string().min(1, "Fecha requerida"),
+  isActive: z.string().default("Activo"),
   jurisdiction: z
     .string()
     .optional()
@@ -882,6 +884,7 @@ export default function InformacionCasoFormViewOld() {
     updateCaso,
     updateIntervener,
     createPerformance,
+    updatePerformance,
     deletePerformance,
     getActuacionesMonolegal,
   } = useCaso();
@@ -1053,7 +1056,9 @@ export default function InformacionCasoFormViewOld() {
       country: "COLOMBIA",
       personType: "",
       processType: "",
-      creationDate: getCurrentDate(), // Asegurar fecha actual por defecto
+      //creationDate: getCurrentDate(), // Asegurar fecha actual por defecto
+      filingDate: "",
+      isActive: "Activo",
       jurisdiction: "",
       location: "",
       despachoJudicial: "",
@@ -1638,15 +1643,15 @@ export default function InformacionCasoFormViewOld() {
       setCaseInitialLoadCompleted(false);
 
       const clientTypeValue = (() => {
-        const rawValue = caso.clientType?.trim().toUpperCase() || "";
+        const rawValue = caso.clientType?.trim().toUpperCase() || "";     
         if (rawValue.includes("RAPPI")) return "Rappi SAS";
         if (rawValue.includes("UBER")) return "Uber";
         if (rawValue.includes("DIDI")) return "Didi";
         if (rawValue.includes("BEAT")) return "Beat";
         if (rawValue.includes("IFOOD")) return "Ifood";
-        if (rawValue) return "Otro"; // Si tiene valor pero no coincide, usar "Otro"
+        if (rawValue) return "Otro";
         return "";
-      })();
+      })();     
       const internalCodeValue = caso.etiqueta || "";
 
       // Función para capitalizar nombres (ej: "ANTIOQUIA" -> "Antioquia")
@@ -1774,6 +1779,8 @@ export default function InformacionCasoFormViewOld() {
 
       const numeroRadicadoValue =
         (caso as any).radicado || (caso as any).numeroRadicado || "";
+    
+      const filingDateValue = sanitizeDate((caso as any).filingDate) || "";
 
       // EJECUTAR EL RESET DEL FORMULARIO
       const resetData = {
@@ -1784,7 +1791,9 @@ export default function InformacionCasoFormViewOld() {
         country: countryValue,
         personType: personTypeValue,
         processType: processTypeValue,
-        creationDate: sanitizeDate(caso.createdAt),
+        //creationDate: sanitizeDate(caso.createdAt),
+        filingDate: sanitizeDate((caso as any).filingDate) || "",
+        isActive: caso.isActive || "Activo",
         jurisdiction: jurisdictionValue,
         location: locationValue,
         despachoJudicial: despachoJudicialValue,
@@ -1998,44 +2007,45 @@ export default function InformacionCasoFormViewOld() {
   // ]);
 
   // UN SOLO useEffect para calcular total - con flag para evitar loops
-const [totalCalculated, setTotalCalculated] = useState(false);
+  const [totalCalculated, setTotalCalculated] = useState(false);
 
-// Combinar actuaciones de BD + Monolegal
-const todasLasActuaciones = useMemo(() => {
-  const performancesBD = (caso?.performances || [])
-    .filter((p: any) => p.responsible !== "Monolegal")
-    .map((p: any) => {      
-      return {
-        ...p,
-        fuente: 'Base de Datos',
-        isFromBD: true,
-        fechaOrden: p.performanceDate || p.createdAt || p.fechaDeActuacion || '',
-      };
+  // Combinar actuaciones de BD + Monolegal
+  const todasLasActuaciones = useMemo(() => {
+    const performancesBD = (caso?.performances || [])
+      .filter((p: any) => p.responsible !== "Monolegal")
+      .map((p: any) => {
+        return {
+          ...p,
+          fuente: "Base de Datos",
+          isFromBD: true,
+          fechaOrden:
+            p.performanceDate || p.createdAt || p.fechaDeActuacion || "",
+        };
+      });
+
+    const performancesMonolegal = actuacionesMonolegal.map((p: any) => ({
+      ...p,
+      isFromBD: false,
+      fechaOrden: p.fechaDeActuacion || p.fechaActuacion || p.createdAt || "",
+    }));
+
+    // Combinar todas
+    const todas = [...performancesBD, ...performancesMonolegal];
+
+    // Ordenar por fecha (más reciente primero)
+    return todas.sort((a: any, b: any) => {
+      const fechaA = new Date(a.fechaOrden || 0).getTime();
+      const fechaB = new Date(b.fechaOrden || 0).getTime();
+      return fechaB - fechaA;
     });
-  
-  const performancesMonolegal = actuacionesMonolegal.map((p: any) => ({
-    ...p,
-    isFromBD: false,
-    fechaOrden: p.fechaDeActuacion || p.fechaActuacion || p.createdAt || '',
-  }));
-  
-  // Combinar todas
-  const todas = [...performancesBD, ...performancesMonolegal];
-  
-  // Ordenar por fecha (más reciente primero)
-  return todas.sort((a: any, b: any) => {
-    const fechaA = new Date(a.fechaOrden || 0).getTime();
-    const fechaB = new Date(b.fechaOrden || 0).getTime();
-    return fechaB - fechaA;
-  });
-}, [caso?.performances, actuacionesMonolegal]);
+  }, [caso?.performances, actuacionesMonolegal]);
 
-useEffect(() => {
-  if (caso && !totalCalculated) {
-    calculateTotalAmount();
-    setTotalCalculated(true);
-  }
-}, [caso?._id]); // Solo cuando cambia el ID del caso
+  useEffect(() => {
+    if (caso && !totalCalculated) {
+      calculateTotalAmount();
+      setTotalCalculated(true);
+    }
+  }, [caso?._id]); // Solo cuando cambia el ID del caso
 
   // Efecto para limpiar tipo de proceso cuando cambia la jurisdicción
   useEffect(() => {
@@ -2069,7 +2079,7 @@ useEffect(() => {
     if (clientType?.toLowerCase().includes("rappi")) {
       form.setValue("processType", "Ordinario");
     }
-  }, [clientType, form]);
+  }, [clientType, form]); 
 
   const onSubmit = async (data: CaseFormData) => {
     // Limpiar campos temporales antes de enviar - estos no deben ser parte del caso final
@@ -2791,6 +2801,10 @@ useEffect(() => {
         radicado: values.numeroRadicado,
         country: values.country || "COLOMBIA",
         location: values.location,
+        filingDate: values.filingDate
+          ? new Date(values.filingDate).toISOString()
+          : undefined,
+        isActive: values.isActive,
       };
 
       const result = await updateCaso(caseId, body);
@@ -3522,7 +3536,9 @@ useEffect(() => {
         department: "Atlántico",
         city: "Bogotá",
         processType: "Proceso Ejecutivo",
-        creationDate: new Date().toISOString().split("T")[0],
+        //creationDate: new Date().toISOString().split("T")[0],
+        filingDate: new Date().toISOString().split("T")[0],
+        //isActive: caso.isActive ?? true,
         jurisdiction: "PENAL CIRCUITO",
         despachoJudicial: "Juzgado 1 Civil del Circuito de Bogotá",
         processNumber: "",
@@ -3929,11 +3945,11 @@ useEffect(() => {
 
                       <FormField
                         control={form.control}
-                        name="creationDate"
+                        name="filingDate"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-gray-700 font-medium">
-                              Fecha de creación
+                              Fecha de radicación
                             </FormLabel>
                             <FormControl>
                               <DatePicker
@@ -4180,6 +4196,35 @@ useEffect(() => {
                                 }}
                               />
                             </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="isActive"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-700 font-medium">
+                              Estado del caso
+                            </FormLabel>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              disabled={isViewMode}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="border-gray-300">
+                                  <SelectValue placeholder="Seleccionar estado" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Activo">Activo</SelectItem>
+                                <SelectItem value="Inactivo">
+                                  Inactivo
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -7492,118 +7537,169 @@ useEffect(() => {
             )}
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-  {/* Mostrar todas las actuaciones (BD + Monolegal) */}
-  {loadingActuaciones ? (
-    <div className="text-sm text-gray-500 text-center py-4">
-      Cargando actuaciones...
-    </div>
-  ) : todasLasActuaciones.length > 0 ? (
-    todasLasActuaciones.map((p: any) => (
-      <div
-        key={p._id || (p as any).id || `${p.performanceType}-${p.createdAt}`}
-        className="bg-white rounded-lg p-4 shadow-sm"
-      >
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span
-              className={`px-2 py-0.5 text-xs rounded border-l-4 ${
-                p.fuente === "Base de Datos"
-                  ? "bg-green-50 text-green-700 border-green-500"
-                  : p.fuente === "Unificada"
-                    ? "bg-pink-50 text-pink-700 border-pink-500"
-                    : p.fuente === "Rama"
-                      ? "bg-blue-50 text-blue-700 border-blue-500"
-                      : p.fuente === "Tyba"
-                        ? "bg-purple-50 text-purple-700 border-purple-500"
-                        : p.fuente === "estadoselectronicos"
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-500"
-                          : p.fuente === "PublicacionesProcesales"
-                            ? "bg-amber-50 text-amber-700 border-amber-500"
-                            : p.fuente === "Siugj"
-                              ? "bg-cyan-50 text-cyan-700 border-cyan-500"
-                              : p.fuente === "Samai"
-                                ? "bg-violet-50 text-violet-700 border-violet-500"
-                                : "bg-gray-50 text-gray-700 border-gray-500"
-              }`}
-            >
-              {p.fuente || p.tipoFuente || "Sin fuente"}
-            </span>
-
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-600 hover:text-gray-900 p-1 h-auto"
-                onClick={() => {
-                  setSelectedPerformance(p);
-                  setShowPerformanceDetailModal(true);
-                }}
-              >
-                <Eye className="w-4 h-4" />
-              </Button>              
-              {p.isFromBD && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-red-600 hover:text-red-700 p-1 h-auto"
-                  onClick={async () => {
-                    if (!p._id && !(p as any).id) return;
-                    const id = p._id || (p as any).id;
-                    if (!caseId) return;
-                    if (!window.confirm("¿Eliminar actuación?")) return;
-                    try {
-                      await deletePerformance(id);
-                      toast.success("Actuación eliminada");
-                      await getCasoById(caseId);
-                    } catch (err) {
-                      console.error("Error eliminando actuación:", err);
-                      toast.error("No se pudo eliminar actuación");
+              {/* Mostrar todas las actuaciones (BD + Monolegal) */}
+              {loadingActuaciones ? (
+                <div className="text-sm text-gray-500 text-center py-4">
+                  Cargando actuaciones...
+                </div>
+              ) : todasLasActuaciones.length > 0 ? (
+                todasLasActuaciones.map((p: any) => (
+                  <div
+                    key={
+                      p._id ||
+                      (p as any).id ||
+                      `${p.performanceType}-${p.createdAt}`
                     }
-                  }}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                    className="bg-white rounded-lg p-4 shadow-sm"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`px-2 py-0.5 text-xs rounded border-l-4 ${
+                            p.fuente === "Base de Datos"
+                              ? "bg-green-50 text-green-700 border-green-500"
+                              : p.fuente === "Unificada"
+                                ? "bg-pink-50 text-pink-700 border-pink-500"
+                                : p.fuente === "Rama"
+                                  ? "bg-blue-50 text-blue-700 border-blue-500"
+                                  : p.fuente === "Tyba"
+                                    ? "bg-purple-50 text-purple-700 border-purple-500"
+                                    : p.fuente === "estadoselectronicos"
+                                      ? "bg-emerald-50 text-emerald-700 border-emerald-500"
+                                      : p.fuente === "PublicacionesProcesales"
+                                        ? "bg-amber-50 text-amber-700 border-amber-500"
+                                        : p.fuente === "Siugj"
+                                          ? "bg-cyan-50 text-cyan-700 border-cyan-500"
+                                          : p.fuente === "Samai"
+                                            ? "bg-violet-50 text-violet-700 border-violet-500"
+                                            : "bg-gray-50 text-gray-700 border-gray-500"
+                          }`}
+                        >
+                          {p.fuente || p.tipoFuente || "Sin fuente"}
+                        </span>
+
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-600 hover:text-gray-900 p-1 h-auto"
+                            onClick={() => {
+                              setSelectedPerformance(p);
+                              setShowPerformanceDetailModal(true);
+                            }}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          {p.isFromBD && (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-blue-600 hover:text-blue-700 p-1 h-auto"
+                                onClick={() => {
+                                  const fechaFormateada = p.performanceDate
+                                    ? p.performanceDate.split("T")[0]
+                                    : p.createdAt
+                                      ? p.createdAt.split("T")[0]
+                                      : "";
+
+                                  setDocumentForm(
+                                    (prev) =>
+                                      ({
+                                        ...prev,
+                                        estadoActuacion:
+                                          p.performanceType || "",
+                                        fechaActuacion: fechaFormateada,
+                                        responsableActuacion:
+                                          p.responsible || "",
+                                        observacionesActuacion:
+                                          p.observation || "",
+                                        documentoRelacion: "",
+                                      }) as any,
+                                  );
+                                  setSelectedPerformance(p);
+                                  setShowPerformanceForm(true);
+                                }}
+                              >
+                                <Pencil className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 p-1 h-auto"
+                                onClick={async () => {
+                                  if (!p._id && !(p as any).id) return;
+                                  const id = p._id || (p as any).id;
+                                  if (!caseId) return;
+                                  if (!window.confirm("¿Eliminar actuación?"))
+                                    return;
+                                  try {
+                                    await deletePerformance(id);
+                                    toast.success("Actuación eliminada");
+                                    await getCasoById(caseId);
+                                  } catch (err) {
+                                    console.error(
+                                      "Error eliminando actuación:",
+                                      err,
+                                    );
+                                    toast.error(
+                                      "No se pudo eliminar actuación",
+                                    );
+                                  }
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="text-pink-600 font-medium text-base">
+                        {p.textoActuacion ||
+                          p.actuacion ||
+                          p.performanceType ||
+                          "Actuación"}{" "}
+                        -{" "}
+                        <span className="text-gray-600">
+                          {p.performanceDate ||
+                          p.fechaDeActuacion ||
+                          p.createdAt
+                            ? formatToDisplay(
+                                p.performanceDate ||
+                                  p.fechaDeActuacion ||
+                                  p.createdAt,
+                              )
+                            : ""}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-600 line-clamp-3">
+                        {p.anotacion || p.observation || "Sin anotación"}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-sm text-gray-500">
+                  No hay actuaciones registradas
+                </div>
               )}
             </div>
-          </div>
 
-          <div className="text-pink-600 font-medium text-base">
-            {p.textoActuacion ||
-              p.actuacion ||
-              p.performanceType ||
-              "Actuación"}{" "}
-            -{" "}
-            <span className="text-gray-600">
-              {p.performanceDate || p.fechaDeActuacion || p.createdAt ? formatToDisplay(p.performanceDate || p.fechaDeActuacion || p.createdAt) : ""} 
-            </span>
-          </div>
-
-          <p className="text-sm text-gray-600 line-clamp-3">
-            {p.anotacion || p.observation || "Sin anotación"}
-          </p>
-        </div>
-      </div>
-    ))
-  ) : (
-    <div className="text-sm text-gray-500">
-      No hay actuaciones registradas
-    </div>
-  )}
-</div>
-
-{/* Botón Agregar Actuación */}
-{!showPerformanceForm && (
-  <div className="flex flex-col gap-2 items-center">
-    <Button
-      type="button"
-      className="elena-button-primary"
-      onClick={() => setShowPerformanceForm(true)}
-    >
-      <Plus className="w-4 h-4 mr-2" />
-      Agregar Actuación
-    </Button>
-  </div>
-)}
+            {/* Botón Agregar Actuación */}
+            {!showPerformanceForm && (
+              <div className="flex flex-col gap-2 items-center">
+                <Button
+                  type="button"
+                  className="elena-button-primary"
+                  onClick={() => setShowPerformanceForm(true)}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Agregar Actuación
+                </Button>
+              </div>
+            )}
 
             {/* Formulario de actuaciones - visible cuando showPerformanceForm es true */}
             {showPerformanceForm && (
@@ -7876,33 +7972,42 @@ useEffect(() => {
                     <Button
                       className="elena-button-primary text-xs"
                       onClick={async () => {
-  
-  
-  if (!caseId) {
-    toast.error("Guarda el caso antes de agregar actuaciones");
-    return;
-  }
-  
-  // Leer valores del formulario de actuación
-  const estadoActuacion = (documentForm && (documentForm as any).estadoActuacion) || "";
-  const responsableActuacion = (documentForm && (documentForm as any).responsableActuacion) || "Sistema";
-  const observacionesActuacion = (documentForm && (documentForm as any).observacionesActuacion) || "";
-  const relatedDoc = (documentForm && (documentForm as any).documentoRelacion) || ""; 
-  
-  // Validar que se haya seleccionado un estado
-  if (!estadoActuacion) {
-    toast.error("Selecciona un estado de actuación");
-    return;  // <-- AQUÍ SE ESTÁ DETENIENDO
-  }
-
-                        const currentState = caso?.estado;                        
-
-                        if (currentState === estadoActuacion) {
+                        if (!caseId) {
                           toast.error(
-                            `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
+                            "Guarda el caso antes de agregar actuaciones",
                           );
                           return;
-                        }                      
+                        }
+
+                        const estadoActuacion =
+                          (documentForm as any)?.estadoActuacion || "";
+                        const responsableActuacion =
+                          (documentForm as any)?.responsableActuacion ||
+                          "Sistema";
+                        const observacionesActuacion =
+                          (documentForm as any)?.observacionesActuacion || "";
+                        const relatedDoc =
+                          (documentForm as any)?.documentoRelacion || "";
+
+                        if (!estadoActuacion) {
+                          toast.error("Selecciona un estado de actuación");
+                          return;
+                        }
+
+                        const performanceId =
+                          selectedPerformance?._id ||
+                          (selectedPerformance as any)?.id;
+
+                        // Solo validar estado duplicado si es CREAR (no editar)
+                        if (!performanceId) {
+                          const currentState = caso?.estado;
+                          if (currentState === estadoActuacion) {
+                            toast.error(
+                              `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
+                            );
+                            return;
+                          }
+                        }
 
                         const payload = {
                           record: caseId,
@@ -7911,40 +8016,72 @@ useEffect(() => {
                           observation: relatedDoc
                             ? `${observacionesActuacion} | Documento relacionado: ${relatedDoc}`
                             : observacionesActuacion,
-                          forceTransition: false,
-                          performanceDate: (documentForm as any).fechaActuacion 
-                            ? new Date((documentForm as any).fechaActuacion).toISOString() 
+                          performanceDate: (documentForm as any)?.fechaActuacion
+                            ? new Date(
+                                (documentForm as any).fechaActuacion,
+                              ).toISOString()
                             : undefined,
                         };
-                       
 
                         try {
-                          const res = await createPerformance(payload as any);
-                          if ("performance" in res) {
-                            toast.success("Actuación creada");
-                            // refrescar caso
-                            await getCasoById(caseId);
-                            // ocultar formulario y limpiar campo
-                            setShowPerformanceForm(false);
-                            setDocumentForm(
-                              (prev) =>
-                                ({ ...prev, documentoRelacion: "" }) as any,
+                          let res;
+
+                          if (performanceId) {
+                            // ACTUALIZAR
+                            res = await updatePerformance(
+                              performanceId,
+                              payload as any,
                             );
+                            if ("performance" in res) {
+                              toast.success("Actuación actualizada");
+                            } else {
+                              const msg = Array.isArray((res as any).message)
+                                ? (res as any).message.join(", ")
+                                : (res as any).message;
+                              toast.error(
+                                msg || "Error al actualizar actuación",
+                              );
+                              return;
+                            }
                           } else {
-                            const msg = Array.isArray((res as any).message)
-                              ? (res as any).message.join(", ")
-                              : (res as any).message;
-                            toast.error(msg || "Error al crear actuación");
+                            // CREAR
+                            res = await createPerformance({
+                              ...payload,
+                              forceTransition: false,
+                            } as any);
+                            if ("performance" in res) {
+                              toast.success("Actuación creada");
+                            } else {
+                              const msg = Array.isArray((res as any).message)
+                                ? (res as any).message.join(", ")
+                                : (res as any).message;
+                              toast.error(msg || "Error al crear actuación");
+                              return;
+                            }
                           }
-                        } catch (err: any) {
-                          console.error("Error creando actuación:", err);
-                          toast.error(
-                            err?.message || "Error al crear actuación",
+
+                          // Refrescar y limpiar
+                          await getCasoById(caseId);
+                          setShowPerformanceForm(false);
+                          setSelectedPerformance(null);
+                          setDocumentForm(
+                            (prev) =>
+                              ({
+                                ...prev,
+                                estadoActuacion: "",
+                                fechaActuacion: "",
+                                responsableActuacion: "",
+                                observacionesActuacion: "",
+                                documentoRelacion: "",
+                              }) as any,
                           );
+                        } catch (err: any) {
+                          console.error("Error en actuación:", err);
+                          toast.error(err?.message || "Error en actuación");
                         }
                       }}
                     >
-                      Guardar
+                      {selectedPerformance ? "Actualizar" : "Guardar"}
                     </Button>
                   </div>
                 </div>
@@ -8116,7 +8253,9 @@ useEffect(() => {
               {showPerformanceForm && !isViewMode && (
                 <Card className="p-4 mt-4">
                   <h3 className="font-semibold text-pink-600 mb-4 text-sm">
-                    Actuaciones procesales
+                    {selectedPerformance
+                      ? "Editar actuación"
+                      : "Actuaciones procesales"}
                   </h3>
                   <div className="space-y-3">
                     <div className="space-y-2">
@@ -8348,6 +8487,7 @@ useEffect(() => {
                         size="sm"
                         onClick={() => {
                           setShowPerformanceForm(false);
+                          setSelectedPerformance(null); // ← Agregar esta línea
                           setPerformanceForm({
                             performanceType: "",
                             description: "",
@@ -8373,7 +8513,7 @@ useEffect(() => {
                             );
                             return;
                           }
-                          // Leer valores del formulario de actuación
+
                           const estadoActuacion =
                             performanceForm.estadoActuacion;
                           const responsableActuacion =
@@ -8383,19 +8523,25 @@ useEffect(() => {
                           const relatedDoc =
                             performanceForm.documentoRelacion || "";
 
-                          // Validar que se haya seleccionado un estado
                           if (!estadoActuacion) {
                             toast.error("Completa todos los campos requeridos");
                             return;
                           }
 
-                          const currentState = caso?.estado;
-                          if (currentState === estadoActuacion) {
-                            toast.error(
-                              `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
-                            );
-                            return;
-                          }                          
+                          const performanceId =
+                            selectedPerformance?._id ||
+                            (selectedPerformance as any)?.id;
+
+                          // Solo validar estado duplicado si es CREAR (no editar)
+                          if (!performanceId) {
+                            const currentState = caso?.estado;
+                            if (currentState === estadoActuacion) {
+                              toast.error(
+                                `El caso ya está en estado "${estadoActuacion}". Selecciona un estado diferente.`,
+                              );
+                              return;
+                            }
+                          }
 
                           const payload = {
                             record: caseId,
@@ -8404,45 +8550,71 @@ useEffect(() => {
                             observation: relatedDoc
                               ? `${observacionesActuacion} | Documento relacionado: ${relatedDoc}`
                               : observacionesActuacion,
-                            forceTransition: false,
-                            performanceDate: performanceForm.fechaActuacion 
-                              ? new Date(performanceForm.fechaActuacion).toISOString() 
+                            performanceDate: performanceForm.fechaActuacion
+                              ? new Date(
+                                  performanceForm.fechaActuacion,
+                                ).toISOString()
                               : undefined,
                           };
 
                           try {
-                            const res = await createPerformance(payload as any);
-                            if ("performance" in res) {
-                              toast.success("Actuación creada");
-                              // refrescar caso
-                              await getCasoById(caseId);
-                              // ocultar formulario
-                              setShowPerformanceForm(false);
-                              setPerformanceForm({
-                                performanceType: "",
-                                description: "",
-                                date: "",
-                                estadoActuacion: "",
-                                fechaActuacion: "",
-                                responsableActuacion: "",
-                                observacionesActuacion: "",
-                                documentoRelacion: "",
-                              });
+                            let res;
+
+                            if (performanceId) {
+                              // ACTUALIZAR
+                              res = await updatePerformance(
+                                performanceId,
+                                payload as any,
+                              );
+                              if ("performance" in res) {
+                                toast.success("Actuación actualizada");
+                              } else {
+                                const msg = Array.isArray((res as any).message)
+                                  ? (res as any).message.join(", ")
+                                  : (res as any).message;
+                                toast.error(
+                                  msg || "Error al actualizar actuación",
+                                );
+                                return;
+                              }
                             } else {
-                              const msg = Array.isArray((res as any).message)
-                                ? (res as any).message.join(", ")
-                                : (res as any).message;
-                              toast.error(msg || "Error al crear actuación");
+                              // CREAR
+                              res = await createPerformance({
+                                ...payload,
+                                forceTransition: false,
+                              } as any);
+                              if ("performance" in res) {
+                                toast.success("Actuación creada");
+                              } else {
+                                const msg = Array.isArray((res as any).message)
+                                  ? (res as any).message.join(", ")
+                                  : (res as any).message;
+                                toast.error(msg || "Error al crear actuación");
+                                return;
+                              }
                             }
+
+                            // Refrescar caso y limpiar formulario
+                            await getCasoById(caseId);
+                            setShowPerformanceForm(false);
+                            setSelectedPerformance(null);
+                            setPerformanceForm({
+                              performanceType: "",
+                              description: "",
+                              date: "",
+                              estadoActuacion: "",
+                              fechaActuacion: "",
+                              responsableActuacion: "",
+                              observacionesActuacion: "",
+                              documentoRelacion: "",
+                            });
                           } catch (err: any) {
-                            console.error("Error creando actuación:", err);
-                            toast.error(
-                              err?.message || "Error al crear actuación",
-                            );
+                            console.error("Error en actuación:", err);
+                            toast.error(err?.message || "Error en actuación");
                           }
                         }}
                       >
-                        Guardar
+                        {selectedPerformance ? "Actualizar" : "Guardar"}
                       </Button>
                     </div>
                   </div>

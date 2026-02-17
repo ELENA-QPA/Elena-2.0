@@ -170,6 +170,12 @@ export abstract class CasoRepository {
     radicado: string,
     token?: string,
   ): Promise<any[]>;
+
+  abstract updatePerformance(
+    id: string,
+    data: CreatePerformanceBody,
+    token?: string,
+  ): Promise<CreatePerformanceSuccessResponse | ErrorResponse>;
 }
 
 @injectable()
@@ -415,6 +421,42 @@ export class CasoRepositoryImpl implements CasoRepository {
         error: error.response?.data?.error || "Unknown Error",
       };
       return errorResponse;
+    }
+  }
+
+  async updatePerformance(
+    id: string,
+    data: CreatePerformanceBody,
+    token?: string,
+  ): Promise<CreatePerformanceSuccessResponse | ErrorResponse> {
+    try {      
+      const axiosRequest = await this.httpClient.request({
+        url: `${apiUrls.performance.update}/${id}`,
+        method: "patch",
+        body: JSON.stringify(data),
+        isAuth: true,
+        token,
+        headers: { "Content-Type": "application/json" },
+      });
+            
+      if (axiosRequest.statusCode === HttpStatusCode.ok) {
+        const response = mapCreatePerformanceResponse(axiosRequest.body);        
+        return response;
+      } else {
+        return {
+          statusCode: axiosRequest.statusCode,
+          message: axiosRequest.body.message || "Error al actualizar actuación",
+          error: axiosRequest.body.error || "Unknown Error",
+        };
+      }
+    } catch (error: any) {
+      console.error("[PERFORMANCE][updatePerformance][Error]:", error);
+      return {
+        statusCode: error.response?.status || 500,
+        message:
+          error.response?.data?.message || error.message || "Error inesperado",
+        error: error.response?.data?.error || "Internal Server Error",
+      };
     }
   }
 
