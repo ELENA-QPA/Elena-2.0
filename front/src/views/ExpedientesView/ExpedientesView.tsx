@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { usePathname } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -180,6 +181,26 @@ export default function ExpedientesView({
       console.error("Error al obtener última sincronización:", error);
     }
   };
+  
+  const refreshAll = useCallback(async () => {
+    setIsLoadingMore(true);
+    try {
+      const response = await getAllCasos(2000, 0);
+      if ("records" in response) {
+        setAllLoadedCasos(response.records);
+        setTotalRecords(response.total || 0);
+        setHasMoreToLoad(response.records.length < (response.total || 0));
+      }
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [getAllCasos]);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    refreshAll();
+  }, [pathname]);
 
   // Cargar datos de divipola.json y despacho_judicial.json
   useEffect(() => {

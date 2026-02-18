@@ -2076,6 +2076,35 @@ export default function InformacionCasoFormViewOld() {
     }
   }, [clientType, form]); 
 
+  // Actualizar etiqueta cuando cambie el tipo de cliente
+  useEffect(() => {
+    const clientType = form.watch("clientType");
+    const currentEtiqueta = form.getValues("internalCode");
+    
+    if (clientType && currentEtiqueta && mode === "edit") {
+      const firstConsecutivePart: Record<string, string> = {
+        'Rappi SAS': 'R',
+        'Uber': 'U',
+        'Didi': 'D',
+        'Beat': 'B',
+        'Ifood': 'I',
+        'Otro': 'O',
+      };
+      
+      const numeroMatch = currentEtiqueta.match(/\d+$/);
+      if (numeroMatch) {
+        const numero = numeroMatch[0];
+        const nuevaLetra = firstConsecutivePart[clientType];
+        if (nuevaLetra) {
+          const nuevaEtiqueta = `${nuevaLetra}${numero}`;
+          if (nuevaEtiqueta !== currentEtiqueta) {
+            form.setValue("internalCode", nuevaEtiqueta);
+          }
+        }
+      }
+    }
+  }, [form.watch("clientType")]);
+
   const onSubmit = async (data: CaseFormData) => {
     // Limpiar campos temporales antes de enviar - estos no deben ser parte del caso final
     const cleanData = {
@@ -2806,7 +2835,7 @@ export default function InformacionCasoFormViewOld() {
 
       if ("record" in result) {
         toast.success("Información general actualizada exitosamente");
-        // Refrescar caso completo
+        window.dispatchEvent(new CustomEvent("caso-updated"));        
         await getCasoById(caseId);
       } else {
         // Manejo específico para errores de transición de estado
