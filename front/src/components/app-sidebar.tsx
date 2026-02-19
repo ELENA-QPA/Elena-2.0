@@ -1,88 +1,99 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
-  SidebarProvider,
-  SidebarTrigger,
+  SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
+import { UserRoleBase } from '@/utilities/enums/user-roles.enum';
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
-  Home,
-  FileText,
-  Users,
+  Banknote,
+  BookCopy,
   CalendarDays,
-  Settings,
-  User,
-  BookOpen,
-  Menu,
-  ChevronLeft,
-  ChevronRight,
-  Scale,
-  History,
+  ChartLineIcon,
   ChevronDown,
-} from "lucide-react";
-import Image from "next/image";
-import { UserRoleBase } from "@/utilities/enums/user-roles.enum";
+  FileText,
+  History,
+  Home,
+  Scale,
+  Settings,
+  Users,
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // Definir las rutas que aún no tienen integración completa con APIs
-const pendingIntegrationRoutes = ["/dashboard/informacion-caso"];
+const pendingIntegrationRoutes = ['/dashboard/informacion-caso'];
 
 // Items principales de QP Alliance
 const mainItems = [
   {
-    title: "Inicio",
-    href: "/dashboard",
+    title: 'Inicio',
+    href: '/dashboard',
     icon: Home,
   },
   {
-    title: "Unidad de Litigios",
+    title: 'Unidad de Litigios',
     icon: Scale,
     subItems: [
       {
-        title: "Gestión de Expedientes",
-        href: "/dashboard/expedientes",
+        title: 'Gestión de Expedientes',
+        href: '/dashboard/expedientes',
         icon: FileText,
       },
       {
-        title: "Historial Sincronización",
-        href: "/dashboard/monolegal/importar",
+        title: 'Historial Sincronización',
+        href: '/dashboard/monolegal/importar',
         icon: History,
       },
       {
-        title: "Audiencias",
-        href: "/dashboard/audiencias",
+        title: 'Audiencias',
+        href: '/dashboard/audiencias',
         icon: CalendarDays,
       },
     ],
   },
   {
-    title: "Equipo de Trabajo",
-    href: "/dashboard/equipo",
+    title: 'Gestion Comercial',
+    icon: ChartLineIcon,
+    subItems: [
+      {
+        title: 'Generar Cotizacion',
+        href: '/dashboard/generar-cotizacion',
+        icon: Banknote,
+      },
+      {
+        title: 'Consultar Cotizaciones',
+        href: '/dashboard/consultar-cotizaciones',
+        icon: BookCopy,
+      },
+    ],
+  },
+  {
+    title: 'Equipo de Trabajo',
+    href: '/dashboard/equipo',
     icon: Users,
   },
 
   {
-    title: "Estadísticas y métricas",
-    href: "/dashboard/estadisticas",
+    title: 'Estadísticas y métricas',
+    href: '/dashboard/estadisticas',
     icon: CalendarDays,
   },
 ];
@@ -90,8 +101,8 @@ const mainItems = [
 // Items de configuración (al fondo)
 const configItems = [
   {
-    title: "Configuración",
-    href: "/dashboard/configuracion",
+    title: 'Configuración',
+    href: '/dashboard/configuracion',
     icon: Settings,
   },
 ];
@@ -100,13 +111,13 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { state, toggleSidebar } = useSidebar();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [openMenus, setOpenMenus] = useState<string[]>(["Unidad de Litigios"]);
+  const [openMenus, setOpenMenus] = useState<string[]>(['Unidad de Litigios']);
 
   // Verificar rol del usuario
   useEffect(() => {
     const checkUserRole = () => {
       try {
-        const userDataString = localStorage.getItem("user");
+        const userDataString = localStorage.getItem('user');
         if (userDataString) {
           const userData = JSON.parse(userDataString);
           const userRoles = userData.rol || userData.roles || [];
@@ -117,7 +128,7 @@ export function AppSidebar() {
           setIsAdmin(isUserAdmin);
         }
       } catch (error) {
-        console.error("Error checking user role:", error);
+        console.error('Error checking user role:', error);
         setIsAdmin(false);
       }
     };
@@ -126,61 +137,61 @@ export function AppSidebar() {
   }, []);
 
   const toggleMenu = (title: string) => {
-    setOpenMenus((prev) =>
-      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title],
+    setOpenMenus(prev =>
+      prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
     );
   };
 
   return (
     <Sidebar
-      variant="sidebar"
-      collapsible="icon"
-      className="bg-slate-900 border-r border-slate-800 shadow-xl"
+      variant='sidebar'
+      collapsible='icon'
+      className='bg-slate-900 border-r border-slate-800 shadow-xl'
     >
-      <SidebarHeader className="p-4 flex items-center justify-between bg-slate-900 border-b border-slate-700 relative">
+      <SidebarHeader className='p-4 flex items-center justify-between bg-slate-900 border-b border-slate-700 relative'>
         <Link
-          href="/dashboard"
-          className="flex items-center gap-2 min-w-0 flex-1"
+          href='/dashboard'
+          className='flex items-center gap-2 min-w-0 flex-1'
         >
           <Image
-            src="/logo ELENA.png"
-            alt="Elena Logo"
-            width={state === "collapsed" ? 32 : 120}
+            src='/logo ELENA.png'
+            alt='Elena Logo'
+            width={state === 'collapsed' ? 32 : 120}
             height={32}
-            style={{ width: "auto", height: "auto" }}
-            className="object-contain transition-all duration-200"
+            style={{ width: 'auto', height: 'auto' }}
+            className='object-contain transition-all duration-200'
           />
-          {state !== "collapsed" && (
-            <span className="text-xl font-bold ml-2 text-white">Elena</span>
+          {state !== 'collapsed' && (
+            <span className='text-xl font-bold ml-2 text-white'>Elena</span>
           )}
         </Link>
       </SidebarHeader>
       <SidebarContent
         className={`${
-          state === "collapsed" ? "pt-20" : "pt-32"
+          state === 'collapsed' ? 'pt-20' : 'pt-32'
         } md:pt-32 pt-20 p-3 pb-6 flex flex-col h-full bg-slate-900`}
       >
-        <SidebarMenu className="space-y-2 flex-1">
+        <SidebarMenu className='space-y-2 flex-1'>
           {mainItems
-            .filter((item) => {
+            .filter(item => {
               // Filtrar "Equipo de Trabajo" para usuarios no administradores
-              if (item.title === "Equipo de Trabajo") {
+              if (item.title === 'Equipo de Trabajo') {
                 return isAdmin;
               }
               return true;
             })
-            .map((item) => {
+            .map(item => {
               // Si el item tiene subItems, renderizar como Collapsible
-              if ("subItems" in item && item.subItems) {
+              if ('subItems' in item && item.subItems) {
                 const isOpen = openMenus.includes(item.title);
                 const hasActiveSubItem = item.subItems.some(
-                  (sub) => pathname === sub.href,
+                  sub => pathname === sub.href
                 );
 
                 return (
                   <SidebarMenuItem key={item.title}>
                     <Collapsible
-                      open={state !== "collapsed" && isOpen}
+                      open={state !== 'collapsed' && isOpen}
                       onOpenChange={() => toggleMenu(item.title)}
                     >
                       <CollapsibleTrigger asChild>
@@ -195,33 +206,33 @@ export function AppSidebar() {
                           <item.icon
                             className={`h-5 w-5 transition-colors ${
                               hasActiveSubItem
-                                ? "text-white"
-                                : "text-blue-400 group-hover:text-blue-300"
+                                ? 'text-white'
+                                : 'text-blue-400 group-hover:text-blue-300'
                             }`}
                           />
-                          {state !== "collapsed" && (
+                          {state !== 'collapsed' && (
                             <>
                               <span
                                 className={`font-medium transition-colors flex-1 text-left ${
                                   hasActiveSubItem
-                                    ? "text-white"
-                                    : "text-slate-300 group-hover:text-white"
+                                    ? 'text-white'
+                                    : 'text-slate-300 group-hover:text-white'
                                 }`}
                               >
                                 {item.title}
                               </span>
                               <ChevronDown
                                 className={`h-4 w-4 transition-transform ${
-                                  isOpen ? "rotate-180" : ""
+                                  isOpen ? 'rotate-180' : ''
                                 }`}
                               />
                             </>
                           )}
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
-                      {state !== "collapsed" && (
-                        <CollapsibleContent className="ml-4 mt-1 space-y-1">
-                          {item.subItems.map((subItem) => {
+                      {state !== 'collapsed' && (
+                        <CollapsibleContent className='ml-4 mt-1 space-y-1'>
+                          {item.subItems.map(subItem => {
                             const isActive = pathname === subItem.href;
                             return (
                               <SidebarMenuButton
@@ -234,22 +245,22 @@ export function AppSidebar() {
                                   className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group
                                     ${
                                       isActive
-                                        ? "bg-blue-500 text-white shadow-sm"
-                                        : "hover:bg-slate-800 text-slate-400 hover:text-white"
+                                        ? 'bg-blue-500 text-white shadow-sm'
+                                        : 'hover:bg-slate-800 text-slate-400 hover:text-white'
                                     }`}
                                 >
                                   <subItem.icon
                                     className={`h-4 w-4 transition-colors ${
                                       isActive
-                                        ? "text-white"
-                                        : "text-blue-400 group-hover:text-blue-300"
+                                        ? 'text-white'
+                                        : 'text-blue-400 group-hover:text-blue-300'
                                     }`}
                                   />
                                   <span
                                     className={`text-sm font-medium transition-colors ${
                                       isActive
-                                        ? "text-white"
-                                        : "text-slate-400 group-hover:text-white"
+                                        ? 'text-white'
+                                        : 'text-slate-400 group-hover:text-white'
                                     }`}
                                   >
                                     {subItem.title}
@@ -274,23 +285,23 @@ export function AppSidebar() {
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
                       ${
                         isActive
-                          ? "bg-blue-600 text-white shadow-md ring-1 ring-blue-500"
-                          : "hover:bg-slate-800 text-slate-300 hover:text-white"
+                          ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-500'
+                          : 'hover:bg-slate-800 text-slate-300 hover:text-white'
                       }`}
                   >
                     <item.icon
                       className={`h-5 w-5 transition-colors ${
                         isActive
-                          ? "text-white"
-                          : "text-blue-400 group-hover:text-blue-300"
+                          ? 'text-white'
+                          : 'text-blue-400 group-hover:text-blue-300'
                       }`}
                     />
-                    {state !== "collapsed" && (
+                    {state !== 'collapsed' && (
                       <span
                         className={`font-medium transition-colors ${
                           isActive
-                            ? "text-white"
-                            : "text-slate-300 group-hover:text-white"
+                            ? 'text-white'
+                            : 'text-slate-300 group-hover:text-white'
                         }`}
                       >
                         {item.title}
@@ -302,10 +313,10 @@ export function AppSidebar() {
 
               return (
                 <SidebarMenuItem key={item.href}>
-                  {state === "collapsed" ? (
+                  {state === 'collapsed' ? (
                     <Tooltip>
                       <TooltipTrigger asChild>{menuButton}</TooltipTrigger>
-                      <TooltipContent side="right" className="ml-2">
+                      <TooltipContent side='right' className='ml-2'>
                         {item.title}
                       </TooltipContent>
                     </Tooltip>
@@ -318,9 +329,9 @@ export function AppSidebar() {
         </SidebarMenu>
 
         {/* Items de configuración al fondo */}
-        <div className="border-t border-slate-700 pt-3 mt-3">
-          <SidebarMenu className="space-y-2">
-            {configItems.map((item) => {
+        <div className='border-t border-slate-700 pt-3 mt-3'>
+          <SidebarMenu className='space-y-2'>
+            {configItems.map(item => {
               const isActive = pathname === item.href;
               const menuButton = (
                 <SidebarMenuButton asChild isActive={isActive}>
@@ -329,23 +340,23 @@ export function AppSidebar() {
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
                       ${
                         isActive
-                          ? "bg-blue-600 text-white shadow-md ring-1 ring-blue-500"
-                          : "hover:bg-slate-800 text-slate-300 hover:text-white"
+                          ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-500'
+                          : 'hover:bg-slate-800 text-slate-300 hover:text-white'
                       }`}
                   >
                     <item.icon
                       className={`h-5 w-5 transition-colors ${
                         isActive
-                          ? "text-white"
-                          : "text-blue-400 group-hover:text-blue-300"
+                          ? 'text-white'
+                          : 'text-blue-400 group-hover:text-blue-300'
                       }`}
                     />
-                    {state !== "collapsed" && (
+                    {state !== 'collapsed' && (
                       <span
                         className={`font-medium transition-colors ${
                           isActive
-                            ? "text-white"
-                            : "text-slate-300 group-hover:text-white"
+                            ? 'text-white'
+                            : 'text-slate-300 group-hover:text-white'
                         }`}
                       >
                         {item.title}
@@ -357,10 +368,10 @@ export function AppSidebar() {
 
               return (
                 <SidebarMenuItem key={item.href}>
-                  {state === "collapsed" ? (
+                  {state === 'collapsed' ? (
                     <Tooltip>
                       <TooltipTrigger asChild>{menuButton}</TooltipTrigger>
-                      <TooltipContent side="right" className="ml-2">
+                      <TooltipContent side='right' className='ml-2'>
                         {item.title}
                       </TooltipContent>
                     </Tooltip>
