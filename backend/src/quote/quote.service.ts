@@ -68,7 +68,7 @@ export class QuoteService {
       status: QuoteStatus.DRAFT,
     });
 
-    return quote.save();
+    return quote.save() as unknown as QuoteDocument;
   }
 
   async findAll(query: QueryQuoteDto): Promise<{ data: QuoteDocument[]; total: number }> {
