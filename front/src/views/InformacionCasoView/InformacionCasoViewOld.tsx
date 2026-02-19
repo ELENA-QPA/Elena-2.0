@@ -2004,36 +2004,57 @@ export default function InformacionCasoFormViewOld() {
   // UN SOLO useEffect para calcular total - con flag para evitar loops
   const [totalCalculated, setTotalCalculated] = useState(false);
 
-  // Combinar actuaciones de BD + Monolegal
-  const todasLasActuaciones = useMemo(() => {
-    const performancesBD = (caso?.performances || [])
-      .filter((p: any) => p.responsible !== "Monolegal")
-      .map((p: any) => {
-        return {
-          ...p,
-          fuente: "Base de Datos",
-          isFromBD: true,
-          fechaOrden:
-            p.performanceDate || p.createdAt || p.fechaDeActuacion || "",
-        };
-      });
+ // Combinar actuaciones de BD + Monolegal
+const todasLasActuaciones = useMemo(() => {
+  // Función para parsear fechas en diferentes formatos
+  const parseFecha = (fecha: any): Date => {
+    if (!fecha) return new Date(0);
+    
+    // Si ya es Date
+    if (fecha instanceof Date) return fecha;
+    
+    // Si es string en formato DD/MM/YYYY
+    if (typeof fecha === "string" && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(fecha)) {
+      const parts = fecha.split("/");
+      return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    }
+    
+    // Si es ISO o cualquier otro formato
+    const parsed = new Date(fecha);
+    return isNaN(parsed.getTime()) ? new Date(0) : parsed;
+  };
 
-    const performancesMonolegal = actuacionesMonolegal.map((p: any) => ({
+  const performancesBD = (caso?.performances || [])
+    .filter((p: any) => p.responsible !== "Monolegal")
+    .map((p: any) => {
+      const fechaOrden = p.performanceDate || p.createdAt || p.fechaDeActuacion || "";
+      return {
+        ...p,
+        fuente: "Base de Datos",
+        isFromBD: true,
+        fechaOrden,
+        fechaOrdenParsed: parseFecha(fechaOrden),
+      };
+    });
+
+  const performancesMonolegal = actuacionesMonolegal.map((p: any) => {
+    const fechaOrden = p.fechaDeActuacion || p.fechaActuacion || p.createdAt || "";
+    return {
       ...p,
       isFromBD: false,
-      fechaOrden: p.fechaDeActuacion || p.fechaActuacion || p.createdAt || "",
-    }));
+      fechaOrden,
+      fechaOrdenParsed: parseFecha(fechaOrden),
+    };
+  });
 
-    // Combinar todas
-    const todas = [...performancesBD, ...performancesMonolegal];
+  // Combinar todas
+  const todas = [...performancesBD, ...performancesMonolegal];
 
-    // Ordenar por fecha (más reciente primero)
-    return todas.sort((a: any, b: any) => {
-      const fechaA = new Date(a.fechaOrden || 0).getTime();
-      const fechaB = new Date(b.fechaOrden || 0).getTime();
-      return fechaB - fechaA;
-    });
-  }, [caso?.performances, actuacionesMonolegal]);
+  // Ordenar por fecha (más reciente primero)
+  return todas.sort((a: any, b: any) => {
+    return b.fechaOrdenParsed.getTime() - a.fechaOrdenParsed.getTime();
+  });
+}, [caso?.performances, actuacionesMonolegal]);
 
   useEffect(() => {
     if (caso && !totalCalculated) {
