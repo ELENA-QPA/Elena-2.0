@@ -24,6 +24,7 @@ import { NotificationModule } from './notifications/notifications.module';
 import { ReminderModule } from './reminder/reminder.module';
 import { BullModule } from '@nestjs/bull';
 import { OpenaiModule } from './openai/openai.module';
+import { QuoteModule } from './quote/quote.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { OpenaiModule } from './openai/openai.module';
     AudienceModule,
     NotificationModule,
     ReminderModule,
+    QuoteModule
   ],
   controllers: [AppController],
   providers: [AppService],
