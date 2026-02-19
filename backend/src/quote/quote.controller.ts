@@ -6,7 +6,8 @@ import {
   Param,
   Patch,
   Post,
-  Query,  
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -20,14 +21,13 @@ import { CreateQuoteDto } from './dto/create-quote.dto';
 import { UpdateQuoteDto } from './dto/update-quote.dto';
 import { QueryQuoteDto } from './dto/query-quote.dto';
 import { QuoteStatus } from './entities/quote.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { User } from '../auth/entities/user.entity';
 
-// Ajusta estos imports según tus guards/decorators existentes
-// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-// import { GetUser } from '../auth/decorators/get-user.decorator';
-
-@ApiTags('ELENA - Cotizaciones')
+@ApiTags('QUANTA - Cotizaciones')
 @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)  ← descomenta cuando conectes auth
+@UseGuards(JwtAuthGuard)
 @Controller('quotes')
 export class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
@@ -36,10 +36,9 @@ export class QuoteController {
   @ApiOperation({ summary: 'Crear nueva cotización (inicia como borrador)' })
   create(
     @Body() dto: CreateQuoteDto,
-    // @GetUser('id') userId: string, 
+    @GetUser() user: User,
   ) {
-    const userId = 'temp-user-id'; 
-    return this.quoteService.create(dto, userId);
+    return this.quoteService.create(dto, user.id);
   }
 
   @Get()
@@ -56,8 +55,8 @@ export class QuoteController {
   }
 
   @Get('number/:quoteNumber')
-  @ApiOperation({ summary: 'Obtener cotización por número (ej: ELENA-2025-0001)' })
-  @ApiParam({ name: 'quoteNumber', example: 'ELENA-2025-0001' })
+  @ApiOperation({ summary: 'Obtener cotización por número (ej: QUANTA-2025-0001)' })
+  @ApiParam({ name: 'quoteNumber', example: 'QUANTA-2025-0001' })
   findByNumber(@Param('quoteNumber') quoteNumber: string) {
     return this.quoteService.findByQuoteNumber(quoteNumber);
   }
