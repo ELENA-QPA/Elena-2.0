@@ -9,6 +9,13 @@ import {
   Users,
   CalendarDays,
   Scale,
+  FileText, 
+  FileEdit,
+  FolderSearch,
+  Search,
+  ReceiptText,
+  ClipboardList,
+  FilePlus2,
   History,
   FolderOpen,
   ChevronRight,
@@ -30,6 +37,7 @@ export default function DashboardHomeView() {
   const [userRole, setUserRole] = useState<string[] | null>(null);
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
   const [isLitigiosOpen, setIsLitigiosOpen] = useState(false);
+  const [isQuotesOpen, setIsQuotesOpen] = useState(false);
 
   useEffect(() => {
     const user = getUserCookiesClient();
@@ -110,6 +118,26 @@ export default function DashboardHomeView() {
     },
   ];
 
+  const quotesOptions = [
+    {
+      title: "Generar Cotizaciones",
+      description: "Generar Cotizaciones Quanta",
+      icon: FileEdit,
+      href: "/dashboard/generar-cotizacion",
+      color: "from-pink-500 to-pink-600",
+      hoverColor: "hover:from-pink-600 hover:to-pink-700",
+    },
+    {
+      title: "Consultar Cotizaciones",
+      description: "Consultar cotizaciones creadas",
+      icon: FolderSearch,
+      href: "/dashboard/consultar-cotizaciones",
+      color: "from-pink-500 to-pink-600",
+      hoverColor: "hover:from-pink-600 hover:to-pink-700",
+    }, 
+  ];
+
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <AppBar user={currentUser} />
@@ -166,6 +194,90 @@ export default function DashboardHomeView() {
                       href={option.href}
                       className="group"
                       onClick={() => setIsLitigiosOpen(false)}
+                    >
+                      <div
+                        className={`
+                        bg-gradient-to-br ${option.color} ${option.hoverColor}
+                        rounded-xl p-6 text-white shadow-lg 
+                        transform transition-all duration-200 
+                        hover:scale-105 hover:shadow-2xl
+                        cursor-pointer
+                      `}
+                      >
+                        <div className="flex flex-col items-start space-y-3">
+                          <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                            <Icon className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg mb-1">
+                              {option.title}
+                            </h3>
+                            <p className="text-sm text-white/90 leading-snug">
+                              {option.description}
+                            </p>
+                          </div>
+                          <div className="flex items-center text-sm font-medium mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            Acceder
+                            <ChevronRight className="ml-1 h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Gestión Comercial */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-start transition-all hover:shadow-lg">
+            <div className="flex items-center justify-between w-full mb-6">
+              <div className="flex flex-col">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Gestión Comercial
+                </h2>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Accede a las herramientas para generar y consultar estado de las cotizaciones.                 
+                </p>
+              </div>
+              <div className="w-16 h-16 rounded-full border-2 border-pink-200 bg-pink-50 flex items-center justify-center flex-shrink-0 ml-4">
+                <FileText className="w-8 h-8 text-pink-600" />
+              </div>
+            </div>
+
+            {/* Botón Ingresar */}
+            <Button
+              onClick={() => setIsQuotesOpen(true)}
+              className="bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-6 text-base"
+            >
+              Ingresar
+            </Button>
+          </div>
+
+          {/* Modal de Cotizaciones */}
+          <Dialog open={isQuotesOpen} onOpenChange={setIsQuotesOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-pink-100 flex items-center justify-center">
+                    <ReceiptText className="h-6 w-6 text-pink-600" />
+                  </div>
+                  Cotizaciones QUANTA
+                </DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Selecciona el módulo al que deseas acceder
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
+                {quotesOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <Link
+                      key={option.title}
+                      href={option.href}
+                      className="group"
+                      onClick={() => setIsQuotesOpen(false)}
                     >
                       <div
                         className={`

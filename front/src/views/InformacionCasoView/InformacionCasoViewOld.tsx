@@ -2061,7 +2061,7 @@ const todasLasActuaciones = useMemo(() => {
       calculateTotalAmount();
       setTotalCalculated(true);
     }
-  }, [caso?._id]); // Solo cuando cambia el ID del caso
+  }, [caso?._id]); 
 
   // Efecto para limpiar tipo de proceso cuando cambia la jurisdicción
   useEffect(() => {

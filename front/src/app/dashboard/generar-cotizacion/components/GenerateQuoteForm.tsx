@@ -25,7 +25,7 @@ export function GenerateQuoteForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitHandler)}>
-        <Button type='submit'>Generar cotizacion</Button>
+        <Button type='submit'>Generar cotización</Button>
       </form>
     </Form>
   );
