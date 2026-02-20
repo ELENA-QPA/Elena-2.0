@@ -6,7 +6,7 @@ export default function GenerateQuote() {
   const userRole = 'admin';
 
   return (
-    <main>
+    <main className='max-w-screen-lg mx-auto'>
       <PageTitle userRole={userRole} />
       <GenerateQuoteForm />
     </main>

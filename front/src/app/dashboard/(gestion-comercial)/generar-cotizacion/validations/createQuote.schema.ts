@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const TECHNOLOGY_OPTIONS = [
+export const TECHNOLOGY_OPTIONS = [
   'excel',
   'erp_mrp',
   'software',
@@ -19,15 +19,17 @@ const QUOTE_STATUSES = [
 export const quoteSchema = z
   .object({
     //Datos del cliente
-    companyName: z
-      .string()
-      .min(1, { message: 'El nombre de la empresa no puede estar vacío' }),
+    companyName: z.string({
+      message: 'El nombre de la empresa no puede estar vacío',
+    }),
 
     // Solo dígitos, sin guiones, puntos ni comas, incluye el dígito de verificación (9-10 dígitos)
-    nit: z.string().regex(/^\d{9,10}$/, {
-      message:
-        'El NIT debe contener solo dígitos sin guiones, puntos ni comas, incluyendo el dígito de verificación',
-    }),
+    nit: z
+      .string({ message: 'Debe proporcionar un numero de NIT' })
+      .regex(/^\d{9,10}$/, {
+        message:
+          'El NIT debe contener solo dígitos sin guiones, puntos ni comas, incluyendo el dígito de verificación',
+      }),
 
     contactName: z
       .string()
@@ -37,9 +39,9 @@ export const quoteSchema = z
       .string()
       .min(1, { message: 'El cargo no puede estar vacío' }),
 
-    industry: z
-      .string()
-      .min(1, 'La industria/sector de la empresa no puede estar vacía'),
+    industry: z.string({
+      message: 'La industria/sector no puede estar vacío',
+    }),
 
     totalWorkers: z
       .number({ message: 'Debe ser un valor numérico' })
@@ -71,7 +73,9 @@ export const quoteSchema = z
 
     // Multi-selección: permite elegir una o varias opciones
     currentTechnology: z
-      .array(z.enum(TECHNOLOGY_OPTIONS))
+      .array(z.enum(TECHNOLOGY_OPTIONS), {
+        message: 'Debe seleccionar al menos una tecnología',
+      })
       .min(1, { message: 'Debe seleccionar al menos una tecnología' }),
 
     // La validación de requerido cuando se elige 'other' se hace en superRefine
