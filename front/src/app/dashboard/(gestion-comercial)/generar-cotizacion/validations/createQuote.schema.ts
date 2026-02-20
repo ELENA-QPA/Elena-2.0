@@ -1,145 +1,150 @@
 import { z } from 'zod';
+import {
+  OPERATION_TYPES,
+  QUOTE_STATUSES,
+  TECHNOLOGY_OPTIONS,
+} from '../types/quotes.types';
 
-export const TECHNOLOGY_OPTIONS = [
-  'excel',
-  'erp_mrp',
-  'software',
-  'none',
-  'other',
-] as const;
-const OPERATION_TYPES = ['make_to_order', 'make_to_stock', 'hybrid'] as const;
-const QUOTE_STATUSES = [
-  'draft',
-  'preview',
-  'sent',
-  'accepted',
-  'rejected',
-] as const;
-
-export const quoteSchema = z
-  .object({
-    //Datos del cliente
-    companyName: z.string({
+export const quoteSchema = z.object({
+  //Datos del cliente
+  companyName: z
+    .string({
       message: 'El nombre de la empresa no puede estar vacío',
+    })
+    .min(1, 'El nombre de la empresa no puede estar vacío'),
+
+  // Solo dígitos, sin guiones, puntos ni comas (6-10 dígitos)
+  nit: z
+    .string({ message: 'Debe proporcionar un número de NIT' })
+    .min(6, { message: 'El NIT debe tener al menos 6 dígitos' })
+    .max(10, { message: 'El NIT no puede tener más de 10 dígitos' })
+    .regex(/^\d+$/, {
+      message:
+        'El NIT debe contener solo dígitos, sin guiones, puntos ni comas',
     }),
 
-    // Solo dígitos, sin guiones, puntos ni comas, incluye el dígito de verificación (9-10 dígitos)
-    nit: z
-      .string({ message: 'Debe proporcionar un numero de NIT' })
-      .regex(/^\d{9,10}$/, {
-        message:
-          'El NIT debe contener solo dígitos sin guiones, puntos ni comas, incluyendo el dígito de verificación',
-      }),
+  contactName: z
+    .string({ message: 'El nombre del contacto no puede estar vacío' })
+    .min(4, {
+      message: 'El nombre del contacto debe tener almenos 4 digitos',
+    }),
 
-    contactName: z
-      .string()
-      .min(1, { message: 'El nombre del contacto no puede estar vacío' }),
+  contactPosition: z
+    .string()
+    .min(1, { message: 'El cargo no puede estar vacío' }),
 
-    contactPosition: z
-      .string()
-      .min(1, { message: 'El cargo no puede estar vacío' }),
-
-    industry: z.string({
+  industry: z
+    .string({
       message: 'La industria/sector no puede estar vacío',
-    }),
+    })
+    .min(1, { message: 'La industria/sector no puede estar vacío' }),
 
-    totalWorkers: z
-      .number({ message: 'Debe ser un valor numérico' })
-      .min(1, { message: 'El valor debe ser mayor a 0' })
-      .default(1),
+  totalWorkers: z
+    .number({
+      message: 'El total de trabajadores de la empresa no puede ser 0',
+    })
+    .min(1, { message: 'El valor debe ser mayor a 0' }),
 
-    // La validación cruzada con totalWorkers se hace en superRefine
-    productionWorkers: z
-      .number({ message: 'Debe ser un valor numérico' })
-      .min(1, { message: 'El valor debe ser mayor a 0' })
-      .default(1),
+  // La validación cruzada con totalWorkers se hace en superRefine
+  productionWorkers: z
+    .number({
+      message: 'El total de trabajadores en produccion no puede ser 0',
+    })
+    .min(1, { message: 'El valor debe ser mayor a 0' }),
 
-    email: z
-      .string()
-      .email({ message: 'Debe ser un correo electrónico válido' }),
+  email: z
+    .string({ message: 'El correo electronico no puede estar vacio' })
+    .email({ message: 'Debe ser un correo electrónico válido' }),
 
-    // 1 Número principal requerido, el resto opcionales
-    phones: z
-      .array(
-        z.string().regex(/^\d{7,15}$/, {
-          message: 'Número inválido, solo dígitos sin espacios',
-        })
-      )
-      .min(1, { message: 'Debe ingresar al menos un teléfono' }),
-
-    operationType: z.enum(OPERATION_TYPES, {
-      message: 'Debe elegir un tipo de operación',
-    }),
-
-    // Multi-selección: permite elegir una o varias opciones
-    currentTechnology: z
-      .array(z.enum(TECHNOLOGY_OPTIONS), {
-        message: 'Debe seleccionar al menos una tecnología',
+  // 1 Número principal requerido, el resto opcionales
+  phones: z
+    .array(
+      z.string().regex(/^\d{7,15}$/, {
+        message: 'Número inválido, solo dígitos sin espacios',
       })
-      .min(1, { message: 'Debe seleccionar al menos una tecnología' }),
+    )
+    .min(1, { message: 'Debe ingresar al menos un teléfono' }),
 
-    // La validación de requerido cuando se elige 'other' se hace en superRefine
-    otherTecnologyDetail: z.string().optional(),
+  operationType: z.enum(OPERATION_TYPES, {
+    message: 'Debe elegir un tipo de operación',
+  }),
 
-    includeLicences: z.boolean().default(false),
+  // Multi-selección: permite elegir una o varias opciones
+  currentTechnology: z
+    .array(z.enum(TECHNOLOGY_OPTIONS), {
+      message: 'Debe seleccionar al menos una tecnología',
+    })
+    .min(1, { message: 'Debe seleccionar al menos una tecnología' }),
 
-    standardLicensesCount: z
-      .number()
-      .min(1, { message: 'La cantidad de licencias debe ser mayor a 0' })
-      .default(0),
+  // La validación de requerido cuando se elige 'other' se hace en superRefine
+  otherTecnologyDetail: z.string().optional(),
 
-    standardLicencesPriceUSD: z
-      .number({ message: 'El valor debe ser numérico' })
-      .min(108, { message: 'El valor no puede ser menor de $108 USD' })
-      .default(108),
+  includeLicences: z.boolean().default(false),
 
-    premiumLicensesCount: z
-      .number()
-      .min(1, { message: 'La cantidad de licencias debe ser mayor a 0' })
-      .default(0),
+  standardLicenses: z.object({
+    quantity: z.preprocess(
+      value => (typeof value === 'string' ? parseInt(value, 10) : value),
+      z
+        .number({ message: 'La cantidad de licencias debe ser un número' })
+        .min(1, { message: 'La cantidad de licencias debe ser mínimo 1' })
+        .optional()
+    ),
+    unitPrice: z.preprocess(
+      value => {
+        if (typeof value === 'string') {
+          const numeric = value.replace(/[^0-9]/g, '');
+          return numeric ? parseInt(numeric, 10) : value;
+        }
+        return value;
+      },
+      z
+        .number({ message: 'El precio debe ser un número' })
+        .min(108, {
+          message: 'El precio mínimo de licencias estándar es $108 USD',
+        })
+        .default(108)
+    ),
+    totalLicensesPrice: z.number().optional(),
+  }),
 
-    premiumLicencesPriceUSD: z
-      .number({ message: 'El valor debe ser numérico' })
-      .min(120, { message: 'El valor no puede ser menor de $120 USD' })
-      .default(120),
+  premiumLicenses: z.object({
+    quantity: z.preprocess(
+      value => (typeof value === 'string' ? parseInt(value, 10) : value),
+      z
+        .number({ message: 'La cantidad de licencias debe ser un número' })
+        .min(1, { message: 'La cantidad de licencias debe ser mínimo 1' })
+        .optional()
+    ),
+    unitPrice: z.preprocess(
+      value => {
+        if (typeof value === 'string') {
+          const numeric = value.replace(/[^0-9]/g, '');
+          return numeric ? parseInt(numeric, 10) : value;
+        }
+        return value;
+      },
+      z
+        .number({ message: 'El precio no puede estar vacio' })
+        .min(120, {
+          message: 'El precio mínimo de licencias premium es $120 USD',
+        })
+        .default(120)
+    ),
+    totalLicencesPrice: z.number().optional(),
+  }),
 
-    implementationPriceUSD: z
-      .number({ message: 'El valor debe ser numérico' })
-      .min(0, { message: 'El precio debe ser mayor a 0' }),
+  implementationPriceUSD: z
+    .number({ message: 'El precio de implementacion no puede estar vacio' })
+    .min(0, { message: 'El precio debe ser mayor a 0' }),
 
-    // No puede ser menor a la fecha actual
-    estimatedStartDate: z
-      .date({ message: 'Debes seleccionar una fecha estimada de inicio' })
-      .refine(date => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
-        message: 'La fecha no puede ser anterior a hoy',
-      }),
+  // No puede ser menor a la fecha actual
+  estimatedStartDate: z
+    .date({ message: 'Debes seleccionar una fecha estimada de inicio' })
+    .refine(date => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+      message: 'La fecha no puede ser anterior a hoy',
+    }),
 
-    quoteStatus: z.enum(QUOTE_STATUSES).default('draft'),
-  })
-  .superRefine((data, ctx) => {
-    // productionWorkers no puede superar totalWorkers
-    if (data.productionWorkers > data.totalWorkers) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        maximum: data.totalWorkers,
-        type: 'number',
-        inclusive: true,
-        message: `No puede superar el total de trabajadores (${data.totalWorkers})`,
-        path: ['productionWorkers'],
-      });
-    }
-
-    // otherTecnologyDetail es obligatorio si se selecciona 'other'
-    if (
-      data.currentTechnology.includes('other') &&
-      !data.otherTecnologyDetail?.trim()
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Debe especificar cuál es la otra tecnología',
-        path: ['otherTecnologyDetail'],
-      });
-    }
-  });
+  quoteStatus: z.enum(QUOTE_STATUSES).default('draft'),
+});
 
 export type QuoteFormValues = z.infer<typeof quoteSchema>;

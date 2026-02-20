@@ -24,51 +24,41 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CalendarIcon, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import {
-  QuoteFormValues,
-  TECHNOLOGY_OPTIONS,
-  quoteSchema,
-} from '../validations';
+  currencyUSD,
+  handleAddPhone,
+  handleRemovePhone,
+} from '../lib/helperFunctions';
+import { QuoteFormValues, quoteResolver } from '../validations';
 
-const TECHNOLOGY_LABELS: Record<(typeof TECHNOLOGY_OPTIONS)[number], string> = {
-  excel: 'Excel',
-  erp_mrp: 'ERP/MRP',
-  software: 'Software especializado',
-  none: 'Ninguna',
-  other: 'Otra',
-};
+import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from '../types/quotes.types';
 
 export function GenerateQuoteForm() {
-  //Valores a enviar en la peticion
+  //Valores a enviar en la petición
   const form = useForm<QuoteFormValues>({
-    resolver: zodResolver(quoteSchema),
+    resolver: quoteResolver,
+    mode: 'onChange',
     defaultValues: {
       //Definir los valores que queramos por default o si queremos obtener los valores desde hubspot
+      companyName: '',
+      nit: '',
       phones: [''],
       includeLicences: false,
+      standardLicenses: { unitPrice: 108 },
+      premiumLicenses: { unitPrice: 120 },
     },
   });
 
+  //Watchers para validar cuando un valor cambia en el formulario
   const currentTechnology = form.watch('currentTechnology');
   const phones = form.watch('phones') ?? [''];
   const includeLicences = form.watch('includeLicences');
 
-  const handleAddPhone = () => {
-    form.setValue('phones', [...phones, '']);
-  };
-
-  const handleRemovePhone = (index: number) => {
-    form.setValue(
-      'phones',
-      phones.filter((_, i) => i !== index)
-    );
-  };
-
+  //Manejador para el envío de la petición
   const onSubmitHandler = async (values: QuoteFormValues) => {
     console.log('Values', values);
   };
@@ -77,7 +67,7 @@ export function GenerateQuoteForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitHandler)}>
         <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
-          Informacion de la empresa
+          Información de la empresa
         </p>
         <div className='grid grid-cols-2 gap-4'>
           <FormField
@@ -85,7 +75,7 @@ export function GenerateQuoteForm() {
             name='companyName'
             render={({ field }) => (
               <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Nombre de la empresa:</FormLabel>
+                <FormLabel className='text-sm'>Nombre:</FormLabel>
                 <FormControl>
                   <Input
                     className='text-sm text-muted-foreground truncate'
@@ -102,11 +92,11 @@ export function GenerateQuoteForm() {
             name='nit'
             render={({ field }) => (
               <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Nit de la empresa:</FormLabel>
+                <FormLabel className='text-sm'>Nit:</FormLabel>
                 <FormControl>
                   <Input
                     className='text-sm text-muted-foreground truncate'
-                    placeholder='Solo digitos numericos, incluyendo digito de verificacion, sin guiones (-) ni puntos (.)'
+                    placeholder='Solo dígitos numéricos, incluyendo dígito de verificación, sin guiones (-) ni puntos (.)'
                     {...field}
                   />
                 </FormControl>
@@ -122,7 +112,7 @@ export function GenerateQuoteForm() {
             render={({ field }) => (
               <FormItem className='space-y-1'>
                 <FormLabel className='text-sm'>
-                  Industria/Sector de la empresa:
+                  Industria/Sector que pertenece:
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -140,9 +130,7 @@ export function GenerateQuoteForm() {
             name='operationType'
             render={({ field }) => (
               <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>
-                  Tipo de operacion de la empresa:
-                </FormLabel>
+                <FormLabel className='text-sm'>Tipo de operación:</FormLabel>
                 <Select
                   defaultValue={field.value}
                   onValueChange={field.onChange}
@@ -151,7 +139,7 @@ export function GenerateQuoteForm() {
                     <SelectTrigger className='text-sm text-muted-foreground truncate'>
                       <SelectValue
                         placeholder={
-                          field.value ?? 'Seleccione un tipo de operacion'
+                          field.value ?? 'Seleccione un tipo de operación'
                         }
                       />
                     </SelectTrigger>
@@ -170,17 +158,20 @@ export function GenerateQuoteForm() {
         <div className='grid grid-cols-2 gap-4 mt-4'>
           <FormField
             control={form.control}
-            name='productionWorkers'
+            name='totalWorkers'
             render={({ field }) => (
               <FormItem className='space-y-1'>
                 <FormLabel className='text-sm'>
-                  Trabajadores en produccion:
+                  Total de trabajadores vinculados:
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type='number'
+                    min={1}
                     className='text-sm text-muted-foreground truncate'
-                    placeholder='Cantidad de trabajadores en produccion'
+                    placeholder='Total de trabajadores en la empresa'
                     {...field}
+                    onChange={e => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -189,17 +180,20 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='totalWorkers'
+            name='productionWorkers'
             render={({ field }) => (
               <FormItem className='space-y-1'>
                 <FormLabel className='text-sm'>
-                  Trabajadores de la empresa:
+                  Trabajadores en producción:
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type='number'
+                    min={1}
                     className='text-sm text-muted-foreground truncate'
-                    placeholder='Total de trabajadores en la empresa'
+                    placeholder='Cantidad de trabajadores en producción'
                     {...field}
+                    onChange={e => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -213,7 +207,7 @@ export function GenerateQuoteForm() {
             name='currentTechnology'
             render={() => (
               <FormItem>
-                <FormLabel className='text-sm'>Tecnologia utilizada:</FormLabel>
+                <FormLabel className='text-sm'>Tecnología utilizada:</FormLabel>
                 <div className='grid grid-cols-3 gap-3 mt-2'>
                   {TECHNOLOGY_OPTIONS.map(option => (
                     <FormField
@@ -233,7 +227,7 @@ export function GenerateQuoteForm() {
                                 field.onChange(
                                   checked
                                     ? [...current, option]
-                                    : current.filter(v => v !== option)
+                                    : current.filter((v: any) => v !== option)
                                 );
                               }}
                             />
@@ -273,7 +267,7 @@ export function GenerateQuoteForm() {
           )}
         </div>
         <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
-          Informacion de contacto
+          Información de contacto
         </p>
         <div className='grid grid-cols-2 gap-4'>
           <FormField
@@ -295,14 +289,14 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='email'
+            name='contactPosition'
             render={({ field }) => (
               <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Correo electronico:</FormLabel>
+                <FormLabel className='text-sm'>Cargo:</FormLabel>
                 <FormControl>
                   <Input
                     className='text-sm text-muted-foreground truncate'
-                    placeholder='mail del contacto de la empresa'
+                    placeholder='Cargo del contacto en la empresa'
                     {...field}
                   />
                 </FormControl>
@@ -311,63 +305,99 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <div className='mt-4 grid grid-cols-2 gap-4'>
-          {phones.map((_, index) => (
-            <FormField
-              key={index}
-              control={form.control}
-              name={`phones.${index}`}
-              render={({ field }) => (
-                <FormItem className='space-y-1'>
-                  <FormLabel className='text-sm'>
-                    {index === 0
-                      ? 'Número principal:'
-                      : `Número opcional ${index}:`}
-                  </FormLabel>
-                  <div className='flex items-center gap-2'>
-                    <div className='flex-1 min-w-0'>
-                      <FormControl>
-                        <Input
-                          className='text-sm text-muted-foreground truncate'
-                          placeholder={
-                            index === 0
-                              ? 'Número principal de contacto'
-                              : 'Número adicional de contacto'
-                          }
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    {index > 0 ? (
-                      <Button
-                        type='button'
-                        variant='ghost'
-                        size='icon'
-                        onClick={() => handleRemovePhone(index)}
-                        className='shrink-0'
-                      >
-                        <X className='h-4 w-4' />
-                      </Button>
-                    ) : (
-                      <Button
-                        type='button'
-                        variant='outline'
-                        size='sm'
-                        onClick={handleAddPhone}
-                        className='shrink-0'
-                      >
-                        Añadir
-                      </Button>
-                    )}
+        <div className='grid grid-cols-2 gap-4 mt-4'>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem className='space-y-1'>
+                <FormLabel className='text-sm'>Correo electrónico:</FormLabel>
+                <FormControl>
+                  <Input
+                    className='text-sm text-muted-foreground truncate'
+                    placeholder='Mail del contacto de la empresa'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='phones.0'
+            render={({ field }) => (
+              <FormItem className='space-y-1'>
+                <FormLabel className='text-sm'>Número principal:</FormLabel>
+                <div className='flex items-center gap-2'>
+                  <div className='flex-1 min-w-0'>
+                    <FormControl>
+                      <Input
+                        className='text-sm text-muted-foreground truncate'
+                        placeholder='Número principal de contacto'
+                        {...field}
+                      />
+                    </FormControl>
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='sm'
+                    onClick={() => handleAddPhone(form, phones)}
+                    className='shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700'
+                  >
+                    Añadir
+                  </Button>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
+        {phones.length > 1 && (
+          <div className='mt-4 grid grid-cols-2 gap-4'>
+            {phones.slice(1).map((_: any, i: number) => {
+              const index = i + 1;
+              return (
+                <FormField
+                  key={index}
+                  control={form.control}
+                  name={`phones.${index}`}
+                  render={({ field }) => (
+                    <FormItem className='space-y-1'>
+                      <FormLabel className='text-sm'>
+                        {`Número opcional ${index}:`}
+                      </FormLabel>
+                      <div className='flex items-center gap-2'>
+                        <div className='flex-1 min-w-0'>
+                          <FormControl>
+                            <Input
+                              className='text-sm text-muted-foreground truncate'
+                              placeholder='Número adicional de contacto'
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <Button
+                          type='button'
+                          variant='outline'
+                          size='icon'
+                          onClick={() => handleRemovePhone(form, phones, index)}
+                          className='shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700'
+                        >
+                          <X className='h-4 w-4' />
+                        </Button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              );
+            })}
+          </div>
+        )}
         <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
-          Detalles de la cotizacion
+          Detalles de la cotización
         </p>
         <div className='grid grid-cols-2 gap-4'>
           <FormField
@@ -434,7 +464,9 @@ export function GenerateQuoteForm() {
                         : 'text-muted-foreground'
                     )}
                   >
-                    {field.value ? 'Sí, incluir licencias' : 'No incluir licencias'}
+                    {field.value
+                      ? 'Sí, incluir licencias'
+                      : 'No incluir licencias'}
                   </span>
                   <FormControl>
                     <Switch
@@ -453,20 +485,34 @@ export function GenerateQuoteForm() {
             <p className='mt-5 text-sm text-muted-foreground font-medium'>
               Licencias estándar
             </p>
-            <div className='grid grid-cols-2 gap-4 mt-2'>
+            <div className='grid grid-cols-3 gap-4 mt-2'>
               <FormField
                 control={form.control}
-                name='standardLicensesCount'
+                name='standardLicenses.quantity'
                 render={({ field }) => (
                   <FormItem className='space-y-1'>
                     <FormLabel className='text-sm'>Cantidad:</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
                         type='number'
+                        min={1}
                         className='text-sm text-muted-foreground'
                         placeholder='Cantidad de licencias estándar'
-                        {...field}
-                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                        onChange={e => {
+                          const qty = e.target.valueAsNumber;
+                          field.onChange(qty);
+                          const unitPrice = form.getValues(
+                            'standardLicenses.unitPrice'
+                          );
+                          if (!isNaN(qty) && unitPrice) {
+                            form.setValue(
+                              'standardLicenses.totalLicensesPrice',
+                              qty * unitPrice,
+                              { shouldValidate: false }
+                            );
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -475,17 +521,62 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='standardLicencesPriceUSD'
+                name='standardLicenses.unitPrice'
                 render={({ field }) => (
                   <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>Precio por licencia (USD):</FormLabel>
+                    <FormLabel className='text-sm'>
+                      Precio por licencia (USD):
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        type='number'
-                        className='text-sm text-muted-foreground'
-                        placeholder='Precio mínimo $108 USD'
                         {...field}
-                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                        type='text'
+                        inputMode='numeric'
+                        className='text-sm text-muted-foreground'
+                        placeholder='Precio mínimo $108'
+                        value={
+                          field.value ? currencyUSD(Number(field.value)) : ''
+                        }
+                        onChange={e => {
+                          const rawValue = e.target.value.replace(/\D/g, '');
+                          const price = rawValue ? Number(rawValue) : undefined;
+                          field.onChange(price ?? '');
+                          const qty = form.getValues(
+                            'standardLicenses.quantity'
+                          );
+                          if (price && qty && !isNaN(qty)) {
+                            form.setValue(
+                              'standardLicenses.totalLicensesPrice',
+                              qty * price,
+                              { shouldValidate: false }
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='standardLicenses.totalLicensesPrice'
+                render={({ field }) => (
+                  <FormItem className='space-y-1'>
+                    <FormLabel className='text-sm'>
+                      Precio total estándar (USD):
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        readOnly
+                        type='text'
+                        className='text-sm text-muted-foreground bg-muted cursor-default'
+                        placeholder='Se calcula automáticamente'
+                        value={
+                          field.value ? currencyUSD(Number(field.value)) : ''
+                        }
+                        onChange={() => {}}
                       />
                     </FormControl>
                     <FormMessage />
@@ -496,20 +587,34 @@ export function GenerateQuoteForm() {
             <p className='mt-4 text-sm text-muted-foreground font-medium'>
               Licencias premium
             </p>
-            <div className='grid grid-cols-2 gap-4 mt-2'>
+            <div className='grid grid-cols-3 gap-4 mt-2'>
               <FormField
                 control={form.control}
-                name='premiumLicensesCount'
+                name='premiumLicenses.quantity'
                 render={({ field }) => (
                   <FormItem className='space-y-1'>
                     <FormLabel className='text-sm'>Cantidad:</FormLabel>
                     <FormControl>
                       <Input
+                        {...field}
                         type='number'
+                        min={1}
                         className='text-sm text-muted-foreground'
                         placeholder='Cantidad de licencias premium'
-                        {...field}
-                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                        onChange={e => {
+                          const qty = e.target.valueAsNumber;
+                          field.onChange(qty);
+                          const unitPrice = form.getValues(
+                            'premiumLicenses.unitPrice'
+                          );
+                          if (!isNaN(qty) && unitPrice) {
+                            form.setValue(
+                              'premiumLicenses.totalLicencesPrice',
+                              qty * unitPrice,
+                              { shouldValidate: false }
+                            );
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -518,17 +623,62 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='premiumLicencesPriceUSD'
+                name='premiumLicenses.unitPrice'
                 render={({ field }) => (
                   <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>Precio por licencia (USD):</FormLabel>
+                    <FormLabel className='text-sm'>
+                      Precio por licencia (USD):
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        type='number'
-                        className='text-sm text-muted-foreground'
-                        placeholder='Precio mínimo $120 USD'
                         {...field}
-                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                        type='text'
+                        inputMode='numeric'
+                        className='text-sm text-muted-foreground'
+                        placeholder='Precio mínimo $120'
+                        value={
+                          field.value ? currencyUSD(Number(field.value)) : ''
+                        }
+                        onChange={e => {
+                          const rawValue = e.target.value.replace(/\D/g, '');
+                          const price = rawValue ? Number(rawValue) : undefined;
+                          field.onChange(price ?? '');
+                          const qty = form.getValues(
+                            'premiumLicenses.quantity'
+                          );
+                          if (price && qty && !isNaN(qty)) {
+                            form.setValue(
+                              'premiumLicenses.totalLicencesPrice',
+                              qty * price,
+                              { shouldValidate: false }
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='premiumLicenses.totalLicencesPrice'
+                render={({ field }) => (
+                  <FormItem className='space-y-1'>
+                    <FormLabel className='text-sm'>
+                      Precio total premium (USD):
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        readOnly
+                        type='text'
+                        className='text-sm text-muted-foreground bg-muted cursor-default'
+                        placeholder='Se calcula automáticamente'
+                        value={
+                          field.value ? currencyUSD(Number(field.value)) : ''
+                        }
+                        onChange={() => {}}
                       />
                     </FormControl>
                     <FormMessage />
@@ -538,8 +688,42 @@ export function GenerateQuoteForm() {
             </div>
           </>
         )}
-        <Button className='mt-4' type='submit'>
-          Generar cotizacion
+        <div className='grid grid-cols-2 gap-4 mt-4'>
+          <FormField
+            control={form.control}
+            name='implementationPriceUSD'
+            render={({ field }) => (
+              <FormItem className='space-y-1'>
+                <FormLabel className='text-sm'>
+                  Precio de implementación (USD):
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type='text'
+                    inputMode='numeric'
+                    className='text-sm text-muted-foreground'
+                    placeholder='Precio de implementación'
+                    value={
+                      field.value !== undefined &&
+                      field.value !== null &&
+                      !isNaN(Number(field.value))
+                        ? currencyUSD(Number(field.value))
+                        : ''
+                    }
+                    onChange={e => {
+                      const rawValue = e.target.value.replace(/\D/g, '');
+                      field.onChange(rawValue ? Number(rawValue) : undefined);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button className='mt-6' type='submit'>
+          Generar cotización
         </Button>
       </form>
     </Form>
