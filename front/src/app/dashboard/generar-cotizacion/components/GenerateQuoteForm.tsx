@@ -2,16 +2,14 @@
 
 import { Button } from '@/components';
 import { Form } from '@/components/ui/form';
+import {
+  QuoteFormValues,
+  quoteSchema,
+} from '@/lib/gestion-comercial/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 export function GenerateQuoteForm() {
-  //Schema de la peticion con validaciones
-  const quoteSchema = z.object({});
-
-  type QuoteFormValues = z.infer<typeof quoteSchema>;
-
   //Valores a enviar en la peticion
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(quoteSchema),
