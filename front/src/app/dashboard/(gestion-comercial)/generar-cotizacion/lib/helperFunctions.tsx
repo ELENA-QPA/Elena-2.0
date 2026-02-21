@@ -1,17 +1,22 @@
 import { UseFormReturn } from 'react-hook-form';
 import { QuoteFormValues } from '../validations';
 
+const QUOTE_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
 /**
- * Formatea un valor numérico como moneda USD sin decimales.
- * @param value - El valor numérico a formatear.
- * @returns El valor formateado como string en formato de moneda USD. Ej: `$1,500`.
+ * Genera un ID único para una cotización con el formato `QT-XXXXXXXX`.
+ * Usa `crypto.getRandomValues` para garantizar aleatoriedad criptográfica.
+ * @returns ID de cotización. Ej: `QT-A3F9B2C1`.
  */
-export const currencyUSD = (value: number): string =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-  }).format(value);
+export const generateQuoteId = (): string => {
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  const suffix = Array.from(
+    bytes,
+    b => QUOTE_ID_CHARS[b % QUOTE_ID_CHARS.length]
+  ).join('');
+  return `QT-${suffix}`;
+};
 
 /**
  * Agrega un nuevo input de teléfono vacío al arreglo de teléfonos del formulario.
@@ -20,9 +25,9 @@ export const currencyUSD = (value: number): string =>
  */
 export const handleAddPhone = (
   form: UseFormReturn<QuoteFormValues>,
-  phones: string[]
+  phones: number[]
 ): void => {
-  form.setValue('phones', [...phones, '']);
+  form.setValue('phones', [...phones, NaN]);
 };
 
 /**
@@ -33,7 +38,7 @@ export const handleAddPhone = (
  */
 export const handleRemovePhone = (
   form: UseFormReturn<QuoteFormValues>,
-  phones: string[],
+  phones: number[],
   index: number
 ): void => {
   form.setValue(

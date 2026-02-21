@@ -28,14 +28,14 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CalendarIcon, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { currencyUSD, toTitleCase } from '../lib/formatters';
 import {
-  currencyUSD,
+  generateQuoteId,
   handleAddPhone,
   handleRemovePhone,
 } from '../lib/helperFunctions';
-import { QuoteFormValues, quoteResolver } from '../validations';
-
 import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from '../types/quotes.types';
+import { QuoteFormValues, quoteResolver } from '../validations';
 
 export function GenerateQuoteForm() {
   //Valores a enviar en la petición
@@ -44,10 +44,10 @@ export function GenerateQuoteForm() {
     mode: 'onChange',
     defaultValues: {
       //Definir los valores que queramos por default o si queremos obtener los valores desde hubspot
+      quoteId: generateQuoteId(),
       companyName: '',
-      nit: '',
-      phones: [''],
-      includeLicences: false,
+      phones: [NaN],
+      includeLicenses: false,
       standardLicenses: { unitPrice: 108 },
       premiumLicenses: { unitPrice: 120 },
     },
@@ -55,12 +55,22 @@ export function GenerateQuoteForm() {
 
   //Watchers para validar cuando un valor cambia en el formulario
   const currentTechnology = form.watch('currentTechnology');
-  const phones = form.watch('phones') ?? [''];
-  const includeLicences = form.watch('includeLicences');
+  const phones = form.watch('phones') ?? [1];
+  const includeLicenses = form.watch('includeLicenses');
 
   //Manejador para el envío de la petición
   const onSubmitHandler = async (values: QuoteFormValues) => {
-    console.log('Values', values);
+    const payload = {
+      ...values,
+      companyName: values.companyName.trim(),
+      contactName: toTitleCase(values.contactName.trim()),
+      contactPosition: values.contactPosition.trim(),
+      email: values.email.trim().toLowerCase(),
+      industry: values.industry.trim(),
+      otherTecnologyDetail: values.otherTecnologyDetail?.trim(),
+      estimatedStartDate: values.estimatedStartDate.toISOString().split('T')[0],
+    };
+    console.log('Payload', payload);
   };
 
   return (
@@ -95,9 +105,12 @@ export function GenerateQuoteForm() {
                 <FormLabel className='text-sm'>Nit:</FormLabel>
                 <FormControl>
                   <Input
+                    inputMode='numeric'
+                    type='number'
                     className='text-sm text-muted-foreground truncate'
                     placeholder='Solo dígitos numéricos, incluyendo dígito de verificación, sin guiones (-) ni puntos (.)'
                     {...field}
+                    onChange={e => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -333,9 +346,12 @@ export function GenerateQuoteForm() {
                   <div className='flex-1 min-w-0'>
                     <FormControl>
                       <Input
+                        type='number'
+                        inputMode='numeric'
                         className='text-sm text-muted-foreground truncate'
                         placeholder='Número principal de contacto'
                         {...field}
+                        onChange={e => field.onChange(e.target.valueAsNumber)}
                       />
                     </FormControl>
                   </div>
@@ -372,9 +388,14 @@ export function GenerateQuoteForm() {
                         <div className='flex-1 min-w-0'>
                           <FormControl>
                             <Input
+                              type='number'
+                              inputMode='numeric'
                               className='text-sm text-muted-foreground truncate'
                               placeholder='Número adicional de contacto'
                               {...field}
+                              onChange={e =>
+                                field.onChange(e.target.valueAsNumber)
+                              }
                             />
                           </FormControl>
                         </div>
@@ -444,7 +465,7 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='includeLicences'
+            name='includeLicenses'
             render={({ field }) => (
               <FormItem className='flex flex-col space-y-1'>
                 <FormLabel className='text-sm'>¿Incluir licencias?</FormLabel>
@@ -480,7 +501,7 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        {includeLicences && (
+        {includeLicenses && (
           <>
             <p className='mt-5 text-sm text-muted-foreground font-medium'>
               Licencias estándar
@@ -609,7 +630,7 @@ export function GenerateQuoteForm() {
                           );
                           if (!isNaN(qty) && unitPrice) {
                             form.setValue(
-                              'premiumLicenses.totalLicencesPrice',
+                              'premiumLicenses.totalLicensesPrice',
                               qty * unitPrice,
                               { shouldValidate: false }
                             );
@@ -648,7 +669,7 @@ export function GenerateQuoteForm() {
                           );
                           if (price && qty && !isNaN(qty)) {
                             form.setValue(
-                              'premiumLicenses.totalLicencesPrice',
+                              'premiumLicenses.totalLicensesPrice',
                               qty * price,
                               { shouldValidate: false }
                             );
@@ -662,7 +683,7 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='premiumLicenses.totalLicencesPrice'
+                name='premiumLicenses.totalLicensesPrice'
                 render={({ field }) => (
                   <FormItem className='space-y-1'>
                     <FormLabel className='text-sm'>

@@ -14,7 +14,7 @@ export const quoteResolver: Resolver<QuoteFormValues> = async (
     productionWorkers,
     currentTechnology,
     otherTecnologyDetail,
-    includeLicences,
+    includeLicenses,
     standardLicenses,
     premiumLicenses,
   } = values;
@@ -45,7 +45,7 @@ export const quoteResolver: Resolver<QuoteFormValues> = async (
     };
   }
 
-  if (includeLicences) {
+  if (includeLicenses) {
     if (!standardLicenses?.quantity || isNaN(standardLicenses.quantity)) {
       extra.standardLicenses = {
         quantity: {

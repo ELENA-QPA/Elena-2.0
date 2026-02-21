@@ -6,22 +6,17 @@ import {
 } from '../types/quotes.types';
 
 export const quoteSchema = z.object({
-  //Datos del cliente
   companyName: z
     .string({
       message: 'El nombre de la empresa no puede estar vacío',
     })
     .min(1, 'El nombre de la empresa no puede estar vacío'),
 
-  // Solo dígitos, sin guiones, puntos ni comas (6-10 dígitos)
   nit: z
-    .string({ message: 'Debe proporcionar un número de NIT' })
-    .min(6, { message: 'El NIT debe tener al menos 6 dígitos' })
-    .max(10, { message: 'El NIT no puede tener más de 10 dígitos' })
-    .regex(/^\d+$/, {
-      message:
-        'El NIT debe contener solo dígitos, sin guiones, puntos ni comas',
-    }),
+    .number({ message: 'Debe proporcionar un número de NIT' })
+    .int({ message: 'El NIT solo debe contener dígitos enteros' })
+    .min(100000, { message: 'El NIT debe tener al menos 6 dígitos' })
+    .max(9999999999, { message: 'El NIT no puede tener más de 10 dígitos' }),
 
   contactName: z
     .string({ message: 'El nombre del contacto no puede estar vacío' })
@@ -45,7 +40,6 @@ export const quoteSchema = z.object({
     })
     .min(1, { message: 'El valor debe ser mayor a 0' }),
 
-  // La validación cruzada con totalWorkers se hace en superRefine
   productionWorkers: z
     .number({
       message: 'El total de trabajadores en produccion no puede ser 0',
@@ -56,12 +50,15 @@ export const quoteSchema = z.object({
     .string({ message: 'El correo electronico no puede estar vacio' })
     .email({ message: 'Debe ser un correo electrónico válido' }),
 
-  // 1 Número principal requerido, el resto opcionales
   phones: z
     .array(
-      z.string().regex(/^\d{7,15}$/, {
-        message: 'Número inválido, solo dígitos sin espacios',
-      })
+      z
+        .number({ message: 'Debe digitar un numero de contacto' })
+        .int({ message: 'El número no puede contener decimales' })
+        .min(1000000, { message: 'El número debe tener al menos 7 dígitos' })
+        .max(9999999999, {
+          message: 'El número no puede tener más de 10 dígitos',
+        })
     )
     .min(1, { message: 'Debe ingresar al menos un teléfono' }),
 
@@ -69,17 +66,15 @@ export const quoteSchema = z.object({
     message: 'Debe elegir un tipo de operación',
   }),
 
-  // Multi-selección: permite elegir una o varias opciones
   currentTechnology: z
     .array(z.enum(TECHNOLOGY_OPTIONS), {
       message: 'Debe seleccionar al menos una tecnología',
     })
     .min(1, { message: 'Debe seleccionar al menos una tecnología' }),
 
-  // La validación de requerido cuando se elige 'other' se hace en superRefine
   otherTecnologyDetail: z.string().optional(),
 
-  includeLicences: z.boolean().default(false),
+  includeLicenses: z.boolean().default(false),
 
   standardLicenses: z.object({
     quantity: z.preprocess(
@@ -130,7 +125,7 @@ export const quoteSchema = z.object({
         })
         .default(120)
     ),
-    totalLicencesPrice: z.number().optional(),
+    totalLicensesPrice: z.number().optional(),
   }),
 
   implementationPriceUSD: z
@@ -145,6 +140,11 @@ export const quoteSchema = z.object({
     }),
 
   quoteStatus: z.enum(QUOTE_STATUSES).default('draft'),
+
+  // Generado en el frontend al cargar el formulario
+  quoteId: z.string().regex(/^QT-[A-Z0-9]{8}$/, {
+    message: 'El ID de cotización tiene un formato inválido',
+  }),
 });
 
 export type QuoteFormValues = z.infer<typeof quoteSchema>;
