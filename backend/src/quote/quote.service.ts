@@ -1,16 +1,12 @@
-import {  
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { Quote, QuoteDocument, QuoteStatus } from './entities/quote.entity';
 import { CreateQuoteDto } from './dto/create-quote.dto';
-import { UpdateQuoteDto } from './dto/update-quote.dto';
 import { QueryQuoteDto } from './dto/query-quote.dto';
-import { generateQuoteNumber } from './constants/quote.constants';
-import { IQuote, IQuoteTotals } from './interfaces/quote.interface';
+import { UpdateQuoteDto } from './dto/update-quote.dto';
+import { Quote, QuoteDocument } from './entities/quote.entity';
+import { IQuote, IQuoteTotals, QUOTE_STATUS } from './types/quote.types';
 
 @Injectable()
 export class QuoteService {
@@ -34,44 +30,25 @@ export class QuoteService {
       standardSubtotalUSD,
       premiumSubtotalUSD,
       implementationPriceUSD,
-      totalQuoteUSD: standardSubtotalUSD + premiumSubtotalUSD + implementationPriceUSD,
+      totalQuoteUSD:
+        standardSubtotalUSD + premiumSubtotalUSD + implementationPriceUSD,
     };
-  }
-
-  /**
-   * Genera el siguiente número de cotización secuencial del año en curso
-   */
-  private async generateQuoteNumber(): Promise<string> {
-    const year = new Date().getFullYear();
-    const prefix = `ELENA-${year}-`;
-
-    const lastQuote = await this.quoteModel
-      .findOne({ quoteNumber: { $regex: `^${prefix}` } })
-      .sort({ quoteNumber: -1 })
-      .lean();
-
-    if (!lastQuote) return generateQuoteNumber(1);
-
-    const lastSequential = parseInt(lastQuote.quoteNumber.split('-')[2], 10);
-    return generateQuoteNumber(lastSequential + 1);
   }
 
   // ─── CRUD ─────────────────────────────────────────────────────────────────
 
   async create(dto: CreateQuoteDto, userId: string): Promise<QuoteDocument> {
-    const quoteNumber = await this.generateQuoteNumber();
-
     const quote = new this.quoteModel({
       ...dto,
-      quoteNumber,
       createdBy: userId,
-      status: QuoteStatus.DRAFT,
     });
 
     return quote.save() as unknown as QuoteDocument;
   }
 
-  async findAll(query: QueryQuoteDto): Promise<{ data: QuoteDocument[]; total: number }> {
+  async findAll(
+    query: QueryQuoteDto,
+  ): Promise<{ data: QuoteDocument[]; total: number }> {
     const { status, search, createdBy, page = 1, limit = 10 } = query;
     const filter: Record<string, any> = {};
 
@@ -82,7 +59,12 @@ export class QuoteService {
     const skip = (page - 1) * limit;
 
     const [data, total] = await Promise.all([
-      this.quoteModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      this.quoteModel
+        .find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
       this.quoteModel.countDocuments(filter),
     ]);
 
@@ -97,7 +79,8 @@ export class QuoteService {
 
   async findByQuoteNumber(quoteNumber: string): Promise<QuoteDocument> {
     const quote = await this.quoteModel.findOne({ quoteNumber }).lean();
-    if (!quote) throw new NotFoundException(`Cotización ${quoteNumber} no encontrada`);
+    if (!quote)
+      throw new NotFoundException(`Cotización ${quoteNumber} no encontrada`);
     return quote as unknown as QuoteDocument;
   }
 
@@ -110,7 +93,7 @@ export class QuoteService {
     return quote as unknown as QuoteDocument;
   }
 
-  async updateStatus(id: string, status: QuoteStatus): Promise<QuoteDocument> {
+  async updateStatus(id: string, status: QUOTE_STATUS): Promise<QuoteDocument> {
     return this.update(id, { status });
   }
 

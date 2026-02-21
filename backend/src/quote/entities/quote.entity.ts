@@ -1,29 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-// ─── Enums ────────────────────────────────────────────────────────────────────
-
-export enum QuoteStatus {
-  DRAFT = 'draft',
-  PREVIEW = 'preview',
-  SENT = 'sent',
-  ACCEPTED = 'accepted',
-  REJECTED = 'rejected',
-}
-
-export enum OperationType {
-  MAKE_TO_ORDER = 'make_to_order',
-  MAKE_TO_STOCK = 'make_to_stock',
-  HYBRID = 'hybrid',
-}
-
-export enum CurrentTechnology {
-  EXCEL = 'excel',
-  SOFTWARE = 'software',
-  ERP_MRP = 'erp_mrp',
-  NONE = 'none',
-  OTHER = 'other',
-}
+import {
+  CURRENT_TECHNOLOGY,
+  OPERATION_TYPE,
+  QUOTE_STATUS,
+} from '../types/quote.types';
 
 // ─── Document Type ────────────────────────────────────────────────────────────
 
@@ -36,10 +17,10 @@ export class Quote {
   // ── Metadatos ──────────────────────────────────────────────────────────────
 
   @Prop({ required: true, unique: true })
-  quoteNumber: string; 
+  quoteNumber: string;
 
-  @Prop({ required: true, enum: QuoteStatus, default: QuoteStatus.DRAFT })
-  status: QuoteStatus;
+  @Prop({ required: true, enum: QUOTE_STATUS, default: QUOTE_STATUS.DRAFT })
+  status: QUOTE_STATUS;
 
   @Prop({ required: true })
   createdBy: string; // userId del agente comercial (ref User)
@@ -90,11 +71,11 @@ export class Quote {
 
   // ── 4. Contexto Operativo ──────────────────────────────────────────────────
 
-  @Prop({ required: false, enum: OperationType })
-  operationType?: OperationType;
+  @Prop({ required: false, enum: OPERATION_TYPE })
+  operationType?: OPERATION_TYPE;
 
-  @Prop({ type: [String], enum: CurrentTechnology, default: [] })
-  currentTechnology: CurrentTechnology[];
+  @Prop({ type: [String], enum: CURRENT_TECHNOLOGY, default: [] })
+  currentTechnology: CURRENT_TECHNOLOGY[];
 
   @Prop({ required: false, trim: true })
   otherTechnologyDetail?: string; // Solo aplica si currentTechnology incluye 'other'
@@ -137,4 +118,4 @@ export const QuoteSchema = SchemaFactory.createForClass(Quote);
 QuoteSchema.index({ quoteNumber: 1 });
 QuoteSchema.index({ status: 1 });
 QuoteSchema.index({ createdBy: 1 });
-QuoteSchema.index({ companyName: 'text', contactName: 'text' }); 
+QuoteSchema.index({ companyName: 'text', contactName: 'text' });

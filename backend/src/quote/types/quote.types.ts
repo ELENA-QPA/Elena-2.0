@@ -1,9 +1,29 @@
-import { CurrentTechnology, OperationType, QuoteStatus } from '../entities/quote.entity';
+export enum QUOTE_STATUS {
+  DRAFT = 'draft',
+  PREVIEW = 'preview',
+  SENT = 'sent',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
+}
+
+export enum OPERATION_TYPE {
+  MAKE_TO_ORDER = 'make_to_order',
+  MAKE_TO_STOCK = 'make_to_stock',
+  HYBRID = 'hybrid',
+}
+
+export enum CURRENT_TECHNOLOGY {
+  EXCEL = 'excel',
+  SOFTWARE = 'software',
+  ERP_MRP = 'erp_mrp',
+  NONE = 'none',
+  OTHER = 'other',
+}
 
 export interface IQuote {
   _id: string;
   quoteNumber: string;
-  status: QuoteStatus;
+  status: QUOTE_STATUS;
   createdBy: string;
 
   // HubSpot
@@ -27,8 +47,8 @@ export interface IQuote {
   phones: string[];
 
   // Contexto operativo
-  operationType?: OperationType;
-  currentTechnology: CurrentTechnology[];
+  operationType?: OPERATION_TYPE;
+  currentTechnology: CURRENT_TECHNOLOGY[];
   otherTechnologyDetail?: string;
 
   // Licenciamiento

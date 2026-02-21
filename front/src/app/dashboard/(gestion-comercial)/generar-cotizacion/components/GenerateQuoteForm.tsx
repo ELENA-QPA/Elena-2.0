@@ -67,7 +67,7 @@ export function GenerateQuoteForm() {
       contactPosition: values.contactPosition.trim(),
       email: values.email.trim().toLowerCase(),
       industry: values.industry.trim(),
-      otherTecnologyDetail: values.otherTecnologyDetail?.trim(),
+      otherTechnologyDetail: values.otherTechnologyDetail?.trim(),
       estimatedStartDate: values.estimatedStartDate.toISOString().split('T')[0],
     };
     console.log('Payload', payload);
@@ -260,7 +260,7 @@ export function GenerateQuoteForm() {
           {currentTechnology?.includes('other') && (
             <FormField
               control={form.control}
-              name='otherTecnologyDetail'
+              name='otherTechnologyDetail'
               render={({ field }) => (
                 <FormItem className='space-y-1 mt-4'>
                   <FormLabel className='text-sm'>

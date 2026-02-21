@@ -72,7 +72,7 @@ export const quoteSchema = z.object({
     })
     .min(1, { message: 'Debe seleccionar al menos una tecnología' }),
 
-  otherTecnologyDetail: z.string().optional(),
+  otherTechnologyDetail: z.string().optional(),
 
   includeLicenses: z.boolean().default(false),
 

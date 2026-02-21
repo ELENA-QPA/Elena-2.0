@@ -16,14 +16,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { QuoteService } from './quote.service';
-import { CreateQuoteDto } from './dto/create-quote.dto';
-import { UpdateQuoteDto } from './dto/update-quote.dto';
-import { QueryQuoteDto } from './dto/query-quote.dto';
-import { QuoteStatus } from './entities/quote.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CreateQuoteDto } from './dto/create-quote.dto';
+import { QueryQuoteDto } from './dto/query-quote.dto';
+import { UpdateQuoteDto } from './dto/update-quote.dto';
+import { QuoteService } from './quote.service';
+import { QUOTE_STATUS } from './types/quote.types';
 
 @ApiTags('QUANTA - Cotizaciones')
 @ApiBearerAuth()
@@ -34,10 +34,7 @@ export class QuoteController {
 
   @Post()
   @ApiOperation({ summary: 'Crear nueva cotización (inicia como borrador)' })
-  create(
-    @Body() dto: CreateQuoteDto,
-    @GetUser() user: User,
-  ) {
+  create(@Body() dto: CreateQuoteDto, @GetUser() user: User) {
     return this.quoteService.create(dto, user.id);
   }
 
@@ -48,14 +45,18 @@ export class QuoteController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtener cotización por ID (incluye totales calculados)' })
+  @ApiOperation({
+    summary: 'Obtener cotización por ID (incluye totales calculados)',
+  })
   @ApiParam({ name: 'id', description: 'MongoDB ObjectId de la cotización' })
   findOne(@Param('id') id: string) {
     return this.quoteService.findOneWithTotals(id);
   }
 
   @Get('number/:quoteNumber')
-  @ApiOperation({ summary: 'Obtener cotización por número (ej: QUANTA-2025-0001)' })
+  @ApiOperation({
+    summary: 'Obtener cotización por número (ej: QUANTA-2025-0001)',
+  })
   @ApiParam({ name: 'quoteNumber', example: 'QUANTA-2025-0001' })
   findByNumber(@Param('quoteNumber') quoteNumber: string) {
     return this.quoteService.findByQuoteNumber(quoteNumber);
@@ -69,11 +70,8 @@ export class QuoteController {
 
   @Patch(':id/status/:status')
   @ApiOperation({ summary: 'Cambiar estado de la cotización' })
-  @ApiParam({ name: 'status', enum: QuoteStatus })
-  updateStatus(
-    @Param('id') id: string,
-    @Param('status') status: QuoteStatus,
-  ) {
+  @ApiParam({ name: 'status', enum: QUOTE_STATUS })
+  updateStatus(@Param('id') id: string, @Param('status') status: QUOTE_STATUS) {
     return this.quoteService.updateStatus(id, status);
   }
 

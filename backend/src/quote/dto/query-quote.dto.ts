@@ -1,13 +1,16 @@
-import { IsEnum, IsOptional, IsString, IsInt, Min } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { QuoteStatus } from '../entities/quote.entity';
+import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { QUOTE_STATUS } from '../types/quote.types';
 
 export class QueryQuoteDto {
-  @ApiPropertyOptional({ description: 'Filtrar por estado', enum: QuoteStatus })
+  @ApiPropertyOptional({
+    description: 'Filtrar por estado',
+    enum: QUOTE_STATUS,
+  })
   @IsOptional()
-  @IsEnum(QuoteStatus)
-  status?: QuoteStatus;
+  @IsEnum(QUOTE_STATUS)
+  status?: QUOTE_STATUS;
 
   @ApiPropertyOptional({ description: 'Buscar por nombre empresa o contacto' })
   @IsOptional()

@@ -1,4 +1,6 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsDateString,
@@ -10,18 +12,54 @@ import {
   IsString,
   Min,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CurrentTechnology, OperationType } from '../entities/quote.entity';
+
+import { Type } from 'class-transformer';
 import {
-  DEFAULT_PREMIUM_LICENSE_PRICE_USD,
-  DEFAULT_STANDARD_LICENSE_PRICE_USD,
-} from '../constants/quote.constants';
+  CURRENT_TECHNOLOGY,
+  OPERATION_TYPE,
+  QUOTE_STATUS,
+} from '../types/quote.types';
+
+export class StandardLicensesDto {
+  @ApiProperty({ example: 4 })
+  @IsNumber()
+  @Min(1)
+  quantity: number;
+
+  @ApiProperty({ example: 108 })
+  @IsNumber()
+  @Min(108)
+  unitPrice: number;
+
+  @ApiProperty({ example: 432 })
+  @IsNumber()
+  @Min(108)
+  totalLicensesPrice: number;
+}
+
+export class PremiumLicensesDto {
+  @ApiProperty({ example: 2 })
+  @IsNumber()
+  @Min(1)
+  quantity: number;
+
+  @ApiProperty({ example: 120 })
+  @IsNumber()
+  @Min(120)
+  unitPrice: number;
+
+  @ApiProperty({ example: 240 })
+  @IsNumber()
+  @Min(120)
+  totalLicensesPrice: number;
+}
 
 export class CreateQuoteDto {
   // ── HubSpot ──────────────────────────────────────────────────────────────
 
-  @ApiPropertyOptional({ description: 'ID de la empresa en HubSpot' })
+  /*  @ApiPropertyOptional({ description: 'ID de la empresa en HubSpot' })
   @IsOptional()
   @IsString()
   hubspotCompanyId?: string;
@@ -34,9 +72,23 @@ export class CreateQuoteDto {
   @ApiPropertyOptional({ description: 'ID del negocio (deal) en HubSpot' })
   @IsOptional()
   @IsString()
-  hubspotDealId?: string;
+  hubspotDealId?: string; */
 
   // ── 1. Datos del Cliente ─────────────────────────────────────────────────
+
+  @ApiProperty({ description: 'Id de la cotizacion' })
+  @IsNotEmpty()
+  @IsString()
+  quoteId: string;
+
+  @ApiProperty({
+    description: 'Estado de la cotizacion',
+    enum: QUOTE_STATUS,
+    default: QUOTE_STATUS.DRAFT,
+  })
+  @IsOptional()
+  @IsEnum(QUOTE_STATUS)
+  quoteStatus: QUOTE_STATUS = QUOTE_STATUS.DRAFT;
 
   @ApiProperty({ description: 'Nombre de la empresa' })
   @IsNotEmpty()
@@ -44,12 +96,34 @@ export class CreateQuoteDto {
   companyName: string;
 
   @ApiProperty({
-    description: 'NIT sin guiones, puntos ni comas. Incluye dígito de verificación',
+    description:
+      'NIT sin guiones, puntos ni comas. Incluye dígito de verificación',
     example: '9001234565',
   })
   @IsNotEmpty()
+  @IsNumber()
+  nit: number;
+
+  @ApiProperty({ description: 'Industria / sector de la empresa' })
+  @IsNotEmpty()
   @IsString()
-  nit: string;
+  industry: string;
+
+  // ── 2. Tamaño del Cliente ────────────────────────────────────────────────
+
+  @ApiProperty({ description: 'Número total de trabajadores' })
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  totalWorkers: number;
+
+  @ApiProperty({ description: 'Trabajadores en producción' })
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  productionWorkers: number;
+
+  // ── 3. Datos de Contacto ─────────────────────────────────────────────────
 
   @ApiProperty({ description: 'Nombre completo del contacto' })
   @IsNotEmpty()
@@ -61,115 +135,87 @@ export class CreateQuoteDto {
   @IsString()
   contactPosition: string;
 
-  @ApiPropertyOptional({ description: 'Industria / sector de la empresa' })
-  @IsOptional()
-  @IsString()
-  industry?: string;
-
-  // ── 2. Tamaño del Cliente ────────────────────────────────────────────────
-
-  @ApiPropertyOptional({ description: 'Número total de trabajadores' })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  totalWorkers?: number;
-
-  @ApiPropertyOptional({ description: 'Trabajadores en producción' })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  productionWorkers?: number;
-
-  // ── 3. Datos de Contacto ─────────────────────────────────────────────────
-
   @ApiProperty({ description: 'Correo electrónico principal del contacto' })
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiPropertyOptional({
-    description: 'Teléfonos: índice 0 = principal, el resto = alternos',
-    type: [String],
+  @ApiProperty({
+    description:
+      'Teléfonos: índice 0 = principal (obligatorio), el resto = alternos (opcionales)',
+    type: [Number],
+    minItems: 1,
+    example: [2345821823, 1234358232],
   })
-  @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  phones?: string[];
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  phones: number[];
 
   // ── 4. Contexto Operativo ────────────────────────────────────────────────
 
   @ApiPropertyOptional({
     description: 'Tipo de operación',
-    enum: OperationType,
+    enum: OPERATION_TYPE,
   })
-  @IsOptional()
-  @IsEnum(OperationType)
-  operationType?: OperationType;
+  @IsNotEmpty()
+  @IsEnum(OPERATION_TYPE)
+  operationType: OPERATION_TYPE;
 
   @ApiPropertyOptional({
     description: 'Tecnología actual usada por el cliente',
-    enum: CurrentTechnology,
+    enum: CURRENT_TECHNOLOGY,
     isArray: true,
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsArray()
-  @IsEnum(CurrentTechnology, { each: true })
-  currentTechnology?: CurrentTechnology[];
+  @ArrayMinSize(1)
+  @IsEnum(CURRENT_TECHNOLOGY, { each: true })
+  currentTechnology: CURRENT_TECHNOLOGY[];
 
   @ApiPropertyOptional({
     description: 'Detalle si currentTechnology incluye "other"',
   })
-  @ValidateIf((o) => o.currentTechnology?.includes(CurrentTechnology.OTHER))
-  @IsNotEmpty({ message: 'Debes especificar la tecnología actual (campo "other")' })
+  @ValidateIf((o) => o.currentTechnology?.includes(CURRENT_TECHNOLOGY.OTHER))
+  @IsNotEmpty({
+    message: 'Debes especificar la tecnología actual (campo "other")',
+  })
   @IsString()
   otherTechnologyDetail?: string;
 
   // ── 5. Licenciamiento ────────────────────────────────────────────────────
 
   @ApiProperty({ description: '¿Se cotizan licencias en esta propuesta?' })
+  @IsNotEmpty()
   @IsBoolean()
   includeLicenses: boolean;
 
-  @ApiPropertyOptional({ description: 'Cantidad de licencias Standard' })
+  @ApiProperty({ description: 'Licencias Standard', type: StandardLicensesDto })
+  @IsNotEmpty()
   @ValidateIf((o) => o.includeLicenses === true)
-  @IsNumber()
-  @Min(0)
-  standardLicensesCount?: number;
+  @ValidateNested()
+  @Type(() => StandardLicensesDto)
+  standardLicenses: StandardLicensesDto;
 
-  @ApiPropertyOptional({
-    description: `Precio unitario licencia Standard en USD (default: $${DEFAULT_STANDARD_LICENSE_PRICE_USD})`,
-    default: DEFAULT_STANDARD_LICENSE_PRICE_USD,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  standardLicensePriceUSD?: number;
-
-  @ApiPropertyOptional({ description: 'Cantidad de licencias Premium' })
+  @ApiProperty({ description: 'Licencias Premium', type: PremiumLicensesDto })
+  @IsNotEmpty()
   @ValidateIf((o) => o.includeLicenses === true)
-  @IsNumber()
-  @Min(0)
-  premiumLicensesCount?: number;
-
-  @ApiPropertyOptional({
-    description: `Precio unitario licencia Premium en USD (default: $${DEFAULT_PREMIUM_LICENSE_PRICE_USD})`,
-    default: DEFAULT_PREMIUM_LICENSE_PRICE_USD,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  premiumLicensePriceUSD?: number;
+  @ValidateNested()
+  @Type(() => PremiumLicensesDto)
+  premiumLicenses: PremiumLicensesDto;
 
   // ── 6. Implementación ───────────────────────────────────────────────────
 
   @ApiPropertyOptional({ description: 'Precio de implementación en USD' })
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @Min(0)
   implementationPriceUSD?: number;
 
-  @ApiPropertyOptional({ description: 'Fecha estimada de inicio de implementación' })
-  @IsOptional()
+  @ApiPropertyOptional({
+    description: 'Fecha estimada de inicio de implementación',
+  })
+  @IsNotEmpty()
   @IsDateString()
-  estimatedStartDate?: string;
+  estimatedStartDate: string;
 }

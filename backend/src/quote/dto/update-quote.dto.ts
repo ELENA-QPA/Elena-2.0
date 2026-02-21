@@ -1,15 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { QUOTE_STATUS } from '../types/quote.types';
 import { CreateQuoteDto } from './create-quote.dto';
-import { QuoteStatus } from '../entities/quote.entity';
 
 export class UpdateQuoteDto extends PartialType(CreateQuoteDto) {
   @ApiPropertyOptional({
     description: 'Estado de la cotización',
-    enum: QuoteStatus,
+    enum: QUOTE_STATUS,
   })
   @IsOptional()
-  @IsEnum(QuoteStatus)
-  status?: QuoteStatus;
+  @IsEnum(QUOTE_STATUS)
+  status?: QUOTE_STATUS;
 }
