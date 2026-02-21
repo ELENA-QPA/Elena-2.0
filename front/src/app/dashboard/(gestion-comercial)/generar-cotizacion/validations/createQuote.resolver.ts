@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldError, Resolver } from 'react-hook-form';
+import { Resolver } from 'react-hook-form';
 import { QuoteFormValues, quoteSchema } from './createQuote.schema';
 
 //Resolver del formulario para validaciones complejas como la cantidad de trabajadores en produccion no sea mayor a la cantidad de trabajadores totales de la empresa y la validacion de las tecnologias utilizadas en la empresa
@@ -65,7 +65,6 @@ export const quoteResolver: Resolver<QuoteFormValues> = async (
   }
 
   return Object.keys(extra).length > 0
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ? { values: {}, errors: { ...result.errors, ...(extra as any) } }
     : result;
 };
