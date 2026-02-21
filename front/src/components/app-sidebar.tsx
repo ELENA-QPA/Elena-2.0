@@ -70,11 +70,11 @@ const mainItems = [
     ],
   },
   {
-    title: 'Gestion Comercial',
+    title: 'Gestión Comercial',
     icon: ChartLineIcon,
     subItems: [
       {
-        title: 'Generar Cotizacion',
+        title: 'Generar Cotización',
         href: '/dashboard/generar-cotizacion',
         icon: Banknote,
       },
