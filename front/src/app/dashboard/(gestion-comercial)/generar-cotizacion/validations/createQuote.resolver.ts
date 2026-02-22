@@ -13,7 +13,7 @@ export const quoteResolver: Resolver<QuoteFormValues> = async (
     totalWorkers,
     productionWorkers,
     currentTechnology,
-    otherTecnologyDetail,
+    otherTechnologyDetail,
     includeLicenses,
     standardLicenses,
     premiumLicenses,
@@ -37,7 +37,7 @@ export const quoteResolver: Resolver<QuoteFormValues> = async (
   if (
     Array.isArray(currentTechnology) &&
     currentTechnology.includes('other') &&
-    !otherTecnologyDetail?.trim()
+    !otherTechnologyDetail?.trim()
   ) {
     extra.otherTecnologyDetail = {
       type: 'custom',

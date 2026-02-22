@@ -20,10 +20,8 @@ export class QuoteService {
    * Calcula los totales de la cotización
    */
   calculateTotals(quote: Partial<Quote>): IQuoteTotals {
-    const standardSubtotalUSD =
-      (quote.standardLicensesCount ?? 0) * (quote.standardLicensePriceUSD ?? 0);
-    const premiumSubtotalUSD =
-      (quote.premiumLicensesCount ?? 0) * (quote.premiumLicensePriceUSD ?? 0);
+    const standardSubtotalUSD = quote.standardLicenses?.totalLicensesPrice ?? 0;
+    const premiumSubtotalUSD = quote.premiumLicenses?.totalLicensesPrice ?? 0;
     const implementationPriceUSD = quote.implementationPriceUSD ?? 0;
 
     return {
@@ -52,7 +50,7 @@ export class QuoteService {
     const { status, search, createdBy, page = 1, limit = 10 } = query;
     const filter: Record<string, any> = {};
 
-    if (status) filter.status = status;
+    if (status) filter.quoteStatus = status;
     if (createdBy) filter.createdBy = createdBy;
     if (search) filter.$text = { $search: search };
 
@@ -77,10 +75,10 @@ export class QuoteService {
     return quote as unknown as QuoteDocument;
   }
 
-  async findByQuoteNumber(quoteNumber: string): Promise<QuoteDocument> {
-    const quote = await this.quoteModel.findOne({ quoteNumber }).lean();
+  async findByQuoteId(quoteId: string): Promise<QuoteDocument> {
+    const quote = await this.quoteModel.findOne({ quoteId }).lean();
     if (!quote)
-      throw new NotFoundException(`Cotización ${quoteNumber} no encontrada`);
+      throw new NotFoundException(`Cotización ${quoteId} no encontrada`);
     return quote as unknown as QuoteDocument;
   }
 
@@ -94,7 +92,7 @@ export class QuoteService {
   }
 
   async updateStatus(id: string, status: QUOTE_STATUS): Promise<QuoteDocument> {
-    return this.update(id, { status });
+    return this.update(id, { quoteStatus: status });
   }
 
   async remove(id: string): Promise<void> {

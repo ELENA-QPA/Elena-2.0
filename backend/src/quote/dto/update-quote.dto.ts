@@ -10,5 +10,5 @@ export class UpdateQuoteDto extends PartialType(CreateQuoteDto) {
   })
   @IsOptional()
   @IsEnum(QUOTE_STATUS)
-  status?: QUOTE_STATUS;
+  quoteStatus?: QUOTE_STATUS;
 }

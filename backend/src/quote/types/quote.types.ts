@@ -20,20 +20,26 @@ export enum CURRENT_TECHNOLOGY {
   OTHER = 'other',
 }
 
+export interface ILicenses {
+  quantity: number;
+  unitPrice: number;
+  totalLicensesPrice: number;
+}
+
 export interface IQuote {
   _id: string;
-  quoteNumber: string;
-  status: QUOTE_STATUS;
+  quoteStatus: QUOTE_STATUS;
   createdBy: string;
+  quoteId: string;
 
   // HubSpot
-  hubspotCompanyId?: string;
+  /* hubspotCompanyId?: string;
   hubspotContactId?: string;
-  hubspotDealId?: string;
+  hubspotDealId?: string; */
 
   // Cliente
   companyName: string;
-  nit: string;
+  nit: number;
   contactName: string;
   contactPosition: string;
   industry?: string;
@@ -44,7 +50,7 @@ export interface IQuote {
 
   // Contacto
   email: string;
-  phones: string[];
+  phones: number[];
 
   // Contexto operativo
   operationType?: OPERATION_TYPE;
@@ -53,10 +59,8 @@ export interface IQuote {
 
   // Licenciamiento
   includeLicenses: boolean;
-  standardLicensesCount?: number;
-  standardLicensePriceUSD?: number;
-  premiumLicensesCount?: number;
-  premiumLicensePriceUSD?: number;
+  standardLicenses?: ILicenses;
+  premiumLicenses?: ILicenses;
 
   // Implementación
   implementationPriceUSD?: number;

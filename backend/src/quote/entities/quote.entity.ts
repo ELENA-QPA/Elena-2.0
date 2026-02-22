@@ -6,6 +6,34 @@ import {
   QUOTE_STATUS,
 } from '../types/quote.types';
 
+// ─── Schemas anidados ─────────────────────────────────────────────────────────
+
+@Schema({ _id: false })
+class StandardLicenses {
+  @Prop({ required: true, min: 1 })
+  quantity: number;
+
+  @Prop({ required: true, min: 0 })
+  unitPrice: number;
+
+  @Prop({ required: true, min: 0 })
+  totalLicensesPrice: number;
+}
+const StandardLicensesSchema = SchemaFactory.createForClass(StandardLicenses);
+
+@Schema({ _id: false })
+class PremiumLicenses {
+  @Prop({ required: true, min: 1 })
+  quantity: number;
+
+  @Prop({ required: true, min: 0 })
+  unitPrice: number;
+
+  @Prop({ required: true, min: 0 })
+  totalLicensesPrice: number;
+}
+const PremiumLicensesSchema = SchemaFactory.createForClass(PremiumLicenses);
+
 // ─── Document Type ────────────────────────────────────────────────────────────
 
 export type QuoteDocument = Quote & Document;
@@ -16,33 +44,33 @@ export type QuoteDocument = Quote & Document;
 export class Quote {
   // ── Metadatos ──────────────────────────────────────────────────────────────
 
-  @Prop({ required: true, unique: true })
-  quoteNumber: string;
-
   @Prop({ required: true, enum: QUOTE_STATUS, default: QUOTE_STATUS.DRAFT })
-  status: QUOTE_STATUS;
+  quoteStatus: QUOTE_STATUS;
 
   @Prop({ required: true })
   createdBy: string; // userId del agente comercial (ref User)
 
   // ── HubSpot ────────────────────────────────────────────────────────────────
 
-  @Prop({ required: false })
+  /* @Prop({ required: false })
   hubspotCompanyId?: string;
 
   @Prop({ required: false })
   hubspotContactId?: string;
 
   @Prop({ required: false })
-  hubspotDealId?: string;
+  hubspotDealId?: string; */
 
   // ── 1. Datos del Cliente ───────────────────────────────────────────────────
 
   @Prop({ required: true, trim: true })
-  companyName: string;
+  quoteId: string;
 
   @Prop({ required: true, trim: true })
-  nit: string; // Sin guiones, puntos ni comas, incluye dígito verificación
+  companyName: string;
+
+  @Prop({ required: true })
+  nit: number;
 
   @Prop({ required: true, trim: true })
   contactName: string;
@@ -50,31 +78,36 @@ export class Quote {
   @Prop({ required: true, trim: true })
   contactPosition: string;
 
-  @Prop({ required: false, trim: true })
-  industry?: string;
+  @Prop({ required: true, trim: true })
+  industry: string;
 
   // ── 2. Tamaño del Cliente ──────────────────────────────────────────────────
 
-  @Prop({ required: false, min: 0 })
-  totalWorkers?: number;
+  @Prop({ required: true, min: 1 })
+  totalWorkers: number;
 
-  @Prop({ required: false, min: 0 })
-  productionWorkers?: number;
+  @Prop({ required: true, min: 1 })
+  productionWorkers: number;
 
   // ── 3. Datos de Contacto ───────────────────────────────────────────────────
 
   @Prop({ required: true, trim: true, lowercase: true })
   email: string;
 
-  @Prop({ type: [String], default: [] })
-  phones: string[]; // Índice 0 = principal, resto = alternos
+  @Prop({ type: [Number], default: [] })
+  phones: number[]; // Índice 0 = principal, resto = alternos
 
   // ── 4. Contexto Operativo ──────────────────────────────────────────────────
 
-  @Prop({ required: false, enum: OPERATION_TYPE })
-  operationType?: OPERATION_TYPE;
+  @Prop({ required: true, enum: OPERATION_TYPE })
+  operationType: OPERATION_TYPE;
 
-  @Prop({ type: [String], enum: CURRENT_TECHNOLOGY, default: [] })
+  @Prop({
+    required: true,
+    type: [String],
+    enum: CURRENT_TECHNOLOGY,
+    default: [],
+  })
   currentTechnology: CURRENT_TECHNOLOGY[];
 
   @Prop({ required: false, trim: true })
@@ -82,20 +115,14 @@ export class Quote {
 
   // ── 5. Licenciamiento ──────────────────────────────────────────────────────
 
-  @Prop({ required: true, default: false })
+  @Prop({ required: true })
   includeLicenses: boolean;
 
-  @Prop({ required: false, min: 0, default: 0 })
-  standardLicensesCount?: number;
+  @Prop({ required: false, type: StandardLicensesSchema })
+  standardLicenses?: StandardLicenses;
 
-  @Prop({ required: false, min: 0, default: 108 })
-  standardLicensePriceUSD?: number; // Configurable, default $108 USD
-
-  @Prop({ required: false, min: 0, default: 0 })
-  premiumLicensesCount?: number;
-
-  @Prop({ required: false, min: 0, default: 120 })
-  premiumLicensePriceUSD?: number; // Configurable, default $120 USD
+  @Prop({ required: false, type: PremiumLicensesSchema })
+  premiumLicenses?: PremiumLicenses;
 
   // ── 6. Implementación ─────────────────────────────────────────────────────
 
@@ -104,18 +131,12 @@ export class Quote {
 
   @Prop({ required: false })
   estimatedStartDate?: Date;
-
-  // ── Campo calculado (no persistido) ───────────────────────────────────────
-  // totalQuoteUSD se calcula en el servicio:
-  // (standardLicensesCount * standardLicensePriceUSD)
-  // + (premiumLicensesCount * premiumLicensePriceUSD)
-  // + implementationPriceUSD
 }
 
 export const QuoteSchema = SchemaFactory.createForClass(Quote);
 
 // ── Índices ───────────────────────────────────────────────────────────────────
-QuoteSchema.index({ quoteNumber: 1 });
-QuoteSchema.index({ status: 1 });
+QuoteSchema.index({ quoteId: 1 }, { unique: true });
+QuoteSchema.index({ quoteStatus: 1 });
 QuoteSchema.index({ createdBy: 1 });
 QuoteSchema.index({ companyName: 'text', contactName: 'text' });

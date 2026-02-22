@@ -53,13 +53,11 @@ export class QuoteController {
     return this.quoteService.findOneWithTotals(id);
   }
 
-  @Get('number/:quoteNumber')
-  @ApiOperation({
-    summary: 'Obtener cotización por número (ej: QUANTA-2025-0001)',
-  })
-  @ApiParam({ name: 'quoteNumber', example: 'QUANTA-2025-0001' })
-  findByNumber(@Param('quoteNumber') quoteNumber: string) {
-    return this.quoteService.findByQuoteNumber(quoteNumber);
+  @Get('quote/:quoteId')
+  @ApiOperation({ summary: 'Obtener cotización por quoteId (ej: QT-OPFWPZGM)' })
+  @ApiParam({ name: 'quoteId', example: 'QT-OPFWPZGM' })
+  findByQuoteId(@Param('quoteId') quoteId: string) {
+    return this.quoteService.findByQuoteId(quoteId);
   }
 
   @Patch(':id')
