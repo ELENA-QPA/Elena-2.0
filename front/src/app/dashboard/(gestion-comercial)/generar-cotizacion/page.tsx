@@ -1,7 +1,7 @@
 import { GenerateQuoteForm } from './components/GenerateQuoteForm';
 import { PageTitle } from './components/PageTitle';
 
-export default function GenerateQuote() {
+export default function GenerateQuotePage() {
   //Datos provisionales
   const userRole = 'admin';
 

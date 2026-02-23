@@ -27,7 +27,10 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CalendarIcon, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { useCreateQuote } from '../../api/useQuotes';
 import { currencyUSD, toTitleCase } from '../lib/formatters';
 import {
   generateQuoteId,
@@ -38,6 +41,9 @@ import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from '../types/quotes.types';
 import { QuoteFormValues, quoteResolver } from '../validations';
 
 export function GenerateQuoteForm() {
+  const router = useRouter();
+  const { mutate, isPending } = useCreateQuote();
+
   //Valores a enviar en la petición
   const form = useForm<QuoteFormValues>({
     resolver: quoteResolver,
@@ -70,7 +76,30 @@ export function GenerateQuoteForm() {
       otherTechnologyDetail: values.otherTechnologyDetail?.trim(),
       estimatedStartDate: values.estimatedStartDate.toISOString().split('T')[0],
     };
-    console.log('Payload', payload);
+
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success('¡Cotización creada exitosamente!');
+        form.reset();
+        setTimeout(
+          () => router.push('/dashboard/consultar-cotizaciones'),
+          2000
+        );
+      },
+
+      onError: (error: Error) => {
+        toast.error(error.message || 'Error al crear la cotizaión');
+      },
+    });
+
+    /*  await toast.promise(createQuote(payload), {
+      loading: 'Creando cotización...',
+      success: '¡Cotización creada exitosamente!',
+      error: (err: Error) => err.message || 'Error al crear la cotización',
+    }); */
+
+    form.reset();
+    setTimeout(() => router.push('/dashboard/consultar-cotizaciones'), 2000);
   };
 
   return (
@@ -743,8 +772,8 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <Button className='mt-6' type='submit'>
-          Generar cotización
+        <Button className='mt-6' type='submit' disabled={isPending}>
+          {isPending ? 'Creando...' : 'Generar cotización'}
         </Button>
       </form>
     </Form>

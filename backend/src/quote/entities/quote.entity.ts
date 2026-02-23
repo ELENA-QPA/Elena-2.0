@@ -10,26 +10,26 @@ import {
 
 @Schema({ _id: false })
 class StandardLicenses {
-  @Prop({ required: true, min: 1 })
+  @Prop({ required: false, min: 1 })
   quantity: number;
 
-  @Prop({ required: true, min: 0 })
+  @Prop({ required: false, min: 0 })
   unitPrice: number;
 
-  @Prop({ required: true, min: 0 })
+  @Prop({ required: false, min: 0 })
   totalLicensesPrice: number;
 }
 const StandardLicensesSchema = SchemaFactory.createForClass(StandardLicenses);
 
 @Schema({ _id: false })
 class PremiumLicenses {
-  @Prop({ required: true, min: 1 })
+  @Prop({ required: false, min: 1 })
   quantity: number;
 
-  @Prop({ required: true, min: 0 })
+  @Prop({ required: false, min: 0 })
   unitPrice: number;
 
-  @Prop({ required: true, min: 0 })
+  @Prop({ required: false, min: 0 })
   totalLicensesPrice: number;
 }
 const PremiumLicensesSchema = SchemaFactory.createForClass(PremiumLicenses);
