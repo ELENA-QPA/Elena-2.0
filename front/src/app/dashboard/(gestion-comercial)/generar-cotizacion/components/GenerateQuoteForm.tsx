@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Button,
@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components';
+} from "@/components";
 import {
   Form,
   FormControl,
@@ -21,37 +21,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { CalendarIcon, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { useCreateQuote } from '../../api/useQuotes';
-import { currencyUSD, toTitleCase } from '../lib/formatters';
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { CalendarIcon, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { useCreateQuote, useUpdateQuote } from "../../api/useQuotes";
+import { currencyUSD, toTitleCase } from "../lib/formatters";
 import {
   generateQuoteId,
   handleAddPhone,
   handleRemovePhone,
-} from '../lib/helperFunctions';
-import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from '../types/quotes.types';
-import { QuoteFormValues, quoteResolver } from '../validations';
+} from "../lib/helperFunctions";
+import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from "../types/quotes.types";
+import { QuoteFormValues, quoteResolver } from "../validations";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useGetQuoteById } from "../../api/useQuotes";
+import { pushTimelineEvent } from "../../api/quotes.service";
 
 export function GenerateQuoteForm() {
   const router = useRouter();
   const { mutate, isPending } = useCreateQuote();
+  const { mutate: mutateUpdate, isPending: isUpdating } = useUpdateQuote();
 
   //Valores a enviar en la petición
   const form = useForm<QuoteFormValues>({
     resolver: quoteResolver,
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       //Definir los valores que queramos por default o si queremos obtener los valores desde hubspot
       quoteId: generateQuoteId(),
-      companyName: '',
+      companyName: "",
       phones: [NaN],
       includeLicenses: false,
       standardLicenses: { unitPrice: 108 },
@@ -59,10 +64,59 @@ export function GenerateQuoteForm() {
     },
   });
 
+  // Detectar modo edición
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("edit");
+  const { data: existingQuote, isLoading: isLoadingQuote } =
+    useGetQuoteById(editId);
+  const isEditMode = !!editId;
+  const hasTrackedResume = useRef(false);
+
+  // Cargar datos existentes cuando se obtienen
+  useEffect(() => {
+    if (existingQuote && isEditMode && editId) {
+      form.reset({
+        quoteId: existingQuote.quoteId,
+        companyName: existingQuote.companyName,
+        nit: existingQuote.nit,
+        industry: existingQuote.industry,
+        operationType: existingQuote.operationType,
+        totalWorkers: existingQuote.totalWorkers,
+        productionWorkers: existingQuote.productionWorkers,
+        contactName: existingQuote.contactName,
+        contactPosition: existingQuote.contactPosition,
+        email: existingQuote.email,
+        phones: existingQuote.phones,
+        currentTechnology: existingQuote.currentTechnology,
+        otherTechnologyDetail: existingQuote.otherTechnologyDetail,
+        includeLicenses: existingQuote.includeLicenses,
+        standardLicenses: existingQuote.standardLicenses ?? { unitPrice: 108 },
+        premiumLicenses: existingQuote.premiumLicenses ?? { unitPrice: 120 },
+        implementationPriceUSD: existingQuote.implementationPriceUSD,
+        estimatedStartDate: existingQuote.estimatedStartDate
+          ? new Date(
+              String(existingQuote.estimatedStartDate).replace(
+                "T00:00:00.000Z",
+                "T12:00:00",
+              ),
+            )
+          : undefined,
+      });
+      // Registrar evento solo una vez
+      if (!hasTrackedResume.current) {
+        hasTrackedResume.current = true;
+        pushTimelineEvent(editId, {
+          type: "editing_resumed",
+          detail: "Edición reanudada desde el detalle",
+        });
+      }
+    }
+  }, [existingQuote, isEditMode, editId, form]);
+
   //Watchers para validar cuando un valor cambia en el formulario
-  const currentTechnology = form.watch('currentTechnology');
-  const phones = form.watch('phones') ?? [1];
-  const includeLicenses = form.watch('includeLicenses');
+  const currentTechnology = form.watch("currentTechnology");
+  const phones = form.watch("phones") ?? [1];
+  const includeLicenses = form.watch("includeLicenses");
 
   //Manejador para el envío de la petición
   const onSubmitHandler = async (values: QuoteFormValues) => {
@@ -74,51 +128,60 @@ export function GenerateQuoteForm() {
       email: values.email.trim().toLowerCase(),
       industry: values.industry.trim(),
       otherTechnologyDetail: values.otherTechnologyDetail?.trim(),
-      estimatedStartDate: values.estimatedStartDate.toISOString().split('T')[0],
+      estimatedStartDate: values.estimatedStartDate.toISOString().split("T")[0],
     };
 
-    mutate(payload, {
-      onSuccess: () => {
-        toast.success('¡Cotización creada exitosamente!');
-        form.reset();
-        setTimeout(
-          () => router.push('/dashboard/consultar-cotizaciones'),
-          2000
-        );
-      },
-
-      onError: (error: Error) => {
-        toast.error(error.message || 'Error al crear la cotizaión');
-      },
-    });
-
-    /*  await toast.promise(createQuote(payload), {
-      loading: 'Creando cotización...',
-      success: '¡Cotización creada exitosamente!',
-      error: (err: Error) => err.message || 'Error al crear la cotización',
-    }); */
-
-    form.reset();
-    setTimeout(() => router.push('/dashboard/consultar-cotizaciones'), 2000);
+    if (isEditMode && editId) {
+      mutateUpdate(
+        { id: editId, payload },
+        {
+          onSuccess: () => {
+            toast.success("¡Cotización actualizada exitosamente!");
+            form.reset();
+            setTimeout(
+              () => router.push("/dashboard/consultar-cotizaciones"),
+              2000,
+            );
+          },
+          onError: (error: Error) => {
+            toast.error(error.message || "Error al actualizar la cotización");
+          },
+        },
+      );
+    } else {
+      mutate(payload, {
+        onSuccess: () => {
+          toast.success("¡Cotización creada exitosamente!");
+          form.reset();
+          setTimeout(
+            () => router.push("/dashboard/consultar-cotizaciones"),
+            2000,
+          );
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Error al crear la cotización");
+        },
+      });
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitHandler)}>
-        <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
+        <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Información de la empresa
         </p>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name='companyName'
+            name="companyName"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Nombre:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Nombre:</FormLabel>
                 <FormControl>
                   <Input
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Nombre completo de la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Nombre completo de la empresa"
                     {...field}
                   />
                 </FormControl>
@@ -128,18 +191,18 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='nit'
+            name="nit"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Nit:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Nit:</FormLabel>
                 <FormControl>
                   <Input
-                    inputMode='numeric'
-                    type='number'
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Solo dígitos numéricos, incluyendo dígito de verificación, sin guiones (-) ni puntos (.)'
+                    inputMode="numeric"
+                    type="number"
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Solo dígitos numéricos, incluyendo dígito de verificación, sin guiones (-) ni puntos (.)"
                     {...field}
-                    onChange={e => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -147,19 +210,19 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <div className='grid grid-cols-2 gap-4 mt-4'>
+        <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
-            name='industry'
+            name="industry"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
                   Industria/Sector que pertenece:
                 </FormLabel>
                 <FormControl>
                   <Input
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Industria o sector a la que pertenece la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Industria o sector a la que pertenece la empresa"
                     {...field}
                   />
                 </FormControl>
@@ -169,27 +232,27 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='operationType'
+            name="operationType"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Tipo de operación:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Tipo de operación:</FormLabel>
                 <Select
                   defaultValue={field.value}
                   onValueChange={field.onChange}
                 >
                   <FormControl>
-                    <SelectTrigger className='text-sm text-muted-foreground truncate'>
+                    <SelectTrigger className="text-sm text-muted-foreground truncate">
                       <SelectValue
                         placeholder={
-                          field.value ?? 'Seleccione un tipo de operación'
+                          field.value ?? "Seleccione un tipo de operación"
                         }
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value='make_to_order'>make_to_order</SelectItem>
-                    <SelectItem value='make_to_stock'>make_to_stock</SelectItem>
-                    <SelectItem value='hybrid'>hybrid</SelectItem>
+                    <SelectItem value="make_to_order">make_to_order</SelectItem>
+                    <SelectItem value="make_to_stock">make_to_stock</SelectItem>
+                    <SelectItem value="hybrid">hybrid</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -197,23 +260,23 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <div className='grid grid-cols-2 gap-4 mt-4'>
+        <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
-            name='totalWorkers'
+            name="totalWorkers"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
                   Total de trabajadores vinculados:
                 </FormLabel>
                 <FormControl>
                   <Input
-                    type='number'
+                    type="number"
                     min={1}
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Total de trabajadores en la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Total de trabajadores en la empresa"
                     {...field}
-                    onChange={e => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -222,20 +285,20 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='productionWorkers'
+            name="productionWorkers"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
                   Trabajadores en producción:
                 </FormLabel>
                 <FormControl>
                   <Input
-                    type='number'
+                    type="number"
                     min={1}
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Cantidad de trabajadores en producción'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Cantidad de trabajadores en producción"
                     {...field}
-                    onChange={e => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -243,38 +306,38 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <div className='mt-4'>
+        <div className="mt-4">
           <FormField
             control={form.control}
-            name='currentTechnology'
+            name="currentTechnology"
             render={() => (
               <FormItem>
-                <FormLabel className='text-sm'>Tecnología utilizada:</FormLabel>
-                <div className='grid grid-cols-3 gap-3 mt-2'>
-                  {TECHNOLOGY_OPTIONS.map(option => (
+                <FormLabel className="text-sm">Tecnología utilizada:</FormLabel>
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                  {TECHNOLOGY_OPTIONS.map((option) => (
                     <FormField
                       key={option}
                       control={form.control}
-                      name='currentTechnology'
+                      name="currentTechnology"
                       render={({ field }) => (
                         <FormItem
                           key={option}
-                          className='flex items-center space-x-2 space-y-0'
+                          className="flex items-center space-x-2 space-y-0"
                         >
                           <FormControl>
                             <Checkbox
                               checked={field.value?.includes(option)}
-                              onCheckedChange={checked => {
+                              onCheckedChange={(checked) => {
                                 const current = field.value ?? [];
                                 field.onChange(
                                   checked
                                     ? [...current, option]
-                                    : current.filter((v: any) => v !== option)
+                                    : current.filter((v: any) => v !== option),
                                 );
                               }}
                             />
                           </FormControl>
-                          <FormLabel className='text-sm font-normal'>
+                          <FormLabel className="text-sm font-normal">
                             {TECHNOLOGY_LABELS[option]}
                           </FormLabel>
                         </FormItem>
@@ -286,19 +349,19 @@ export function GenerateQuoteForm() {
               </FormItem>
             )}
           />
-          {currentTechnology?.includes('other') && (
+          {currentTechnology?.includes("other") && (
             <FormField
               control={form.control}
-              name='otherTechnologyDetail'
+              name="otherTechnologyDetail"
               render={({ field }) => (
-                <FormItem className='space-y-1 mt-4'>
-                  <FormLabel className='text-sm'>
+                <FormItem className="space-y-1 mt-4">
+                  <FormLabel className="text-sm">
                     Especifica la otra tecnología:
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className='text-sm text-muted-foreground truncate'
-                      placeholder='Describe la tecnología que utilizas'
+                      className="text-sm text-muted-foreground truncate"
+                      placeholder="Describe la tecnología que utilizas"
                       {...field}
                     />
                   </FormControl>
@@ -308,20 +371,20 @@ export function GenerateQuoteForm() {
             />
           )}
         </div>
-        <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
+        <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Información de contacto
         </p>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name='contactName'
+            name="contactName"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Nombre completo:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Nombre completo:</FormLabel>
                 <FormControl>
                   <Input
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Nombre del contacto de la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Nombre del contacto de la empresa"
                     {...field}
                   />
                 </FormControl>
@@ -331,14 +394,14 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='contactPosition'
+            name="contactPosition"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Cargo:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Cargo:</FormLabel>
                 <FormControl>
                   <Input
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Cargo del contacto en la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Cargo del contacto en la empresa"
                     {...field}
                   />
                 </FormControl>
@@ -347,17 +410,17 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <div className='grid grid-cols-2 gap-4 mt-4'>
+        <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
-            name='email'
+            name="email"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Correo electrónico:</FormLabel>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Correo electrónico:</FormLabel>
                 <FormControl>
                   <Input
-                    className='text-sm text-muted-foreground truncate'
-                    placeholder='Mail del contacto de la empresa'
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Mail del contacto de la empresa"
                     {...field}
                   />
                 </FormControl>
@@ -367,29 +430,29 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='phones.0'
+            name="phones.0"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>Número principal:</FormLabel>
-                <div className='flex items-center gap-2'>
-                  <div className='flex-1 min-w-0'>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Número principal:</FormLabel>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 min-w-0">
                     <FormControl>
                       <Input
-                        type='number'
-                        inputMode='numeric'
-                        className='text-sm text-muted-foreground truncate'
-                        placeholder='Número principal de contacto'
+                        type="number"
+                        inputMode="numeric"
+                        className="text-sm text-muted-foreground truncate"
+                        placeholder="Número principal de contacto"
                         {...field}
-                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
                       />
                     </FormControl>
                   </div>
                   <Button
-                    type='button'
-                    variant='outline'
-                    size='sm'
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => handleAddPhone(form, phones)}
-                    className='shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700'
+                    className="shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700"
                   >
                     Añadir
                   </Button>
@@ -400,7 +463,7 @@ export function GenerateQuoteForm() {
           />
         </div>
         {phones.length > 1 && (
-          <div className='mt-4 grid grid-cols-2 gap-4'>
+          <div className="mt-4 grid grid-cols-2 gap-4">
             {phones.slice(1).map((_: any, i: number) => {
               const index = i + 1;
               return (
@@ -409,33 +472,33 @@ export function GenerateQuoteForm() {
                   control={form.control}
                   name={`phones.${index}`}
                   render={({ field }) => (
-                    <FormItem className='space-y-1'>
-                      <FormLabel className='text-sm'>
+                    <FormItem className="space-y-1">
+                      <FormLabel className="text-sm">
                         {`Número opcional ${index}:`}
                       </FormLabel>
-                      <div className='flex items-center gap-2'>
-                        <div className='flex-1 min-w-0'>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 min-w-0">
                           <FormControl>
                             <Input
-                              type='number'
-                              inputMode='numeric'
-                              className='text-sm text-muted-foreground truncate'
-                              placeholder='Número adicional de contacto'
+                              type="number"
+                              inputMode="numeric"
+                              className="text-sm text-muted-foreground truncate"
+                              placeholder="Número adicional de contacto"
                               {...field}
-                              onChange={e =>
+                              onChange={(e) =>
                                 field.onChange(e.target.valueAsNumber)
                               }
                             />
                           </FormControl>
                         </div>
                         <Button
-                          type='button'
-                          variant='outline'
-                          size='icon'
+                          type="button"
+                          variant="outline"
+                          size="icon"
                           onClick={() => handleRemovePhone(form, phones, index)}
-                          className='shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700'
+                          className="shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700"
                         >
-                          <X className='h-4 w-4' />
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                       <FormMessage />
@@ -446,38 +509,38 @@ export function GenerateQuoteForm() {
             })}
           </div>
         )}
-        <p className='mt-5 text-md text-elena-pink-500 font-semibold'>
+        <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Detalles de la cotización
         </p>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name='estimatedStartDate'
+            name="estimatedStartDate"
             render={({ field }) => (
-              <FormItem className='flex flex-col space-y-1'>
-                <FormLabel className='text-sm'>
+              <FormItem className="flex flex-col space-y-1">
+                <FormLabel className="text-sm">
                   Fecha estimada de inicio:
                 </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
-                        variant='outline'
+                        variant="outline"
                         className={cn(
-                          'text-sm font-normal justify-start',
-                          !field.value && 'text-muted-foreground'
+                          "text-sm font-normal justify-start",
+                          !field.value && "text-muted-foreground",
                         )}
                       >
-                        <CalendarIcon className='mr-2 h-4 w-4' />
+                        <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value
-                          ? format(field.value, 'dd/MM/yyyy', { locale: es })
-                          : 'Seleccionar fecha de inicio'}
+                          ? format(field.value, "dd/MM/yyyy", { locale: es })
+                          : "Seleccionar fecha de inicio"}
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className='w-auto p-0' align='start'>
+                  <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode='single'
+                      mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={{
@@ -494,35 +557,35 @@ export function GenerateQuoteForm() {
           />
           <FormField
             control={form.control}
-            name='includeLicenses'
+            name="includeLicenses"
             render={({ field }) => (
-              <FormItem className='flex flex-col space-y-1'>
-                <FormLabel className='text-sm'>¿Incluir licencias?</FormLabel>
+              <FormItem className="flex flex-col space-y-1">
+                <FormLabel className="text-sm">¿Incluir licencias?</FormLabel>
                 <div
                   className={cn(
-                    'flex items-center justify-between border rounded-lg px-3 h-9 transition-colors',
+                    "flex items-center justify-between border rounded-lg px-3 h-9 transition-colors",
                     field.value
-                      ? 'border-elena-pink-400 bg-elena-pink-50'
-                      : 'border-input bg-background'
+                      ? "border-elena-pink-400 bg-elena-pink-50"
+                      : "border-input bg-background",
                   )}
                 >
                   <span
                     className={cn(
-                      'text-sm transition-colors',
+                      "text-sm transition-colors",
                       field.value
-                        ? 'text-elena-pink-600 font-medium'
-                        : 'text-muted-foreground'
+                        ? "text-elena-pink-600 font-medium"
+                        : "text-muted-foreground",
                     )}
                   >
                     {field.value
-                      ? 'Sí, incluir licencias'
-                      : 'No incluir licencias'}
+                      ? "Sí, incluir licencias"
+                      : "No incluir licencias"}
                   </span>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      className='data-[state=checked]:bg-elena-pink-500 data-[state=unchecked]:bg-elena-pink-100'
+                      className="data-[state=checked]:bg-elena-pink-500 data-[state=unchecked]:bg-elena-pink-100"
                     />
                   </FormControl>
                 </div>
@@ -532,34 +595,34 @@ export function GenerateQuoteForm() {
         </div>
         {includeLicenses && (
           <>
-            <p className='mt-5 text-sm text-muted-foreground font-medium'>
+            <p className="mt-5 text-sm text-muted-foreground font-medium">
               Licencias estándar
             </p>
-            <div className='grid grid-cols-3 gap-4 mt-2'>
+            <div className="grid grid-cols-3 gap-4 mt-2">
               <FormField
                 control={form.control}
-                name='standardLicenses.quantity'
+                name="standardLicenses.quantity"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>Cantidad:</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">Cantidad:</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type='number'
+                        type="number"
                         min={1}
-                        className='text-sm text-muted-foreground'
-                        placeholder='Cantidad de licencias estándar'
-                        onChange={e => {
+                        className="text-sm text-muted-foreground"
+                        placeholder="Cantidad de licencias estándar"
+                        onChange={(e) => {
                           const qty = e.target.valueAsNumber;
                           field.onChange(qty);
                           const unitPrice = form.getValues(
-                            'standardLicenses.unitPrice'
+                            "standardLicenses.unitPrice",
                           );
                           if (!isNaN(qty) && unitPrice) {
                             form.setValue(
-                              'standardLicenses.totalLicensesPrice',
+                              "standardLicenses.totalLicensesPrice",
                               qty * unitPrice,
-                              { shouldValidate: false }
+                              { shouldValidate: false },
                             );
                           }
                         }}
@@ -571,34 +634,34 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='standardLicenses.unitPrice'
+                name="standardLicenses.unitPrice"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
                       Precio por licencia (USD):
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type='text'
-                        inputMode='numeric'
-                        className='text-sm text-muted-foreground'
-                        placeholder='Precio mínimo $108'
+                        type="text"
+                        inputMode="numeric"
+                        className="text-sm text-muted-foreground"
+                        placeholder="Precio mínimo $108"
                         value={
-                          field.value ? currencyUSD(Number(field.value)) : ''
+                          field.value ? currencyUSD(Number(field.value)) : ""
                         }
-                        onChange={e => {
-                          const rawValue = e.target.value.replace(/\D/g, '');
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/\D/g, "");
                           const price = rawValue ? Number(rawValue) : undefined;
-                          field.onChange(price ?? '');
+                          field.onChange(price ?? "");
                           const qty = form.getValues(
-                            'standardLicenses.quantity'
+                            "standardLicenses.quantity",
                           );
                           if (price && qty && !isNaN(qty)) {
                             form.setValue(
-                              'standardLicenses.totalLicensesPrice',
+                              "standardLicenses.totalLicensesPrice",
                               qty * price,
-                              { shouldValidate: false }
+                              { shouldValidate: false },
                             );
                           }
                         }}
@@ -610,21 +673,21 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='standardLicenses.totalLicensesPrice'
+                name="standardLicenses.totalLicensesPrice"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
                       Precio total estándar (USD):
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         readOnly
-                        type='text'
-                        className='text-sm text-muted-foreground bg-muted cursor-default'
-                        placeholder='Se calcula automáticamente'
+                        type="text"
+                        className="text-sm text-muted-foreground bg-muted cursor-default"
+                        placeholder="Se calcula automáticamente"
                         value={
-                          field.value ? currencyUSD(Number(field.value)) : ''
+                          field.value ? currencyUSD(Number(field.value)) : ""
                         }
                         onChange={() => {}}
                       />
@@ -634,34 +697,34 @@ export function GenerateQuoteForm() {
                 )}
               />
             </div>
-            <p className='mt-4 text-sm text-muted-foreground font-medium'>
+            <p className="mt-4 text-sm text-muted-foreground font-medium">
               Licencias premium
             </p>
-            <div className='grid grid-cols-3 gap-4 mt-2'>
+            <div className="grid grid-cols-3 gap-4 mt-2">
               <FormField
                 control={form.control}
-                name='premiumLicenses.quantity'
+                name="premiumLicenses.quantity"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>Cantidad:</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">Cantidad:</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type='number'
+                        type="number"
                         min={1}
-                        className='text-sm text-muted-foreground'
-                        placeholder='Cantidad de licencias premium'
-                        onChange={e => {
+                        className="text-sm text-muted-foreground"
+                        placeholder="Cantidad de licencias premium"
+                        onChange={(e) => {
                           const qty = e.target.valueAsNumber;
                           field.onChange(qty);
                           const unitPrice = form.getValues(
-                            'premiumLicenses.unitPrice'
+                            "premiumLicenses.unitPrice",
                           );
                           if (!isNaN(qty) && unitPrice) {
                             form.setValue(
-                              'premiumLicenses.totalLicensesPrice',
+                              "premiumLicenses.totalLicensesPrice",
                               qty * unitPrice,
-                              { shouldValidate: false }
+                              { shouldValidate: false },
                             );
                           }
                         }}
@@ -673,34 +736,34 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='premiumLicenses.unitPrice'
+                name="premiumLicenses.unitPrice"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
                       Precio por licencia (USD):
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type='text'
-                        inputMode='numeric'
-                        className='text-sm text-muted-foreground'
-                        placeholder='Precio mínimo $120'
+                        type="text"
+                        inputMode="numeric"
+                        className="text-sm text-muted-foreground"
+                        placeholder="Precio mínimo $120"
                         value={
-                          field.value ? currencyUSD(Number(field.value)) : ''
+                          field.value ? currencyUSD(Number(field.value)) : ""
                         }
-                        onChange={e => {
-                          const rawValue = e.target.value.replace(/\D/g, '');
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/\D/g, "");
                           const price = rawValue ? Number(rawValue) : undefined;
-                          field.onChange(price ?? '');
+                          field.onChange(price ?? "");
                           const qty = form.getValues(
-                            'premiumLicenses.quantity'
+                            "premiumLicenses.quantity",
                           );
                           if (price && qty && !isNaN(qty)) {
                             form.setValue(
-                              'premiumLicenses.totalLicensesPrice',
+                              "premiumLicenses.totalLicensesPrice",
                               qty * price,
-                              { shouldValidate: false }
+                              { shouldValidate: false },
                             );
                           }
                         }}
@@ -712,21 +775,21 @@ export function GenerateQuoteForm() {
               />
               <FormField
                 control={form.control}
-                name='premiumLicenses.totalLicensesPrice'
+                name="premiumLicenses.totalLicensesPrice"
                 render={({ field }) => (
-                  <FormItem className='space-y-1'>
-                    <FormLabel className='text-sm'>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
                       Precio total premium (USD):
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         readOnly
-                        type='text'
-                        className='text-sm text-muted-foreground bg-muted cursor-default'
-                        placeholder='Se calcula automáticamente'
+                        type="text"
+                        className="text-sm text-muted-foreground bg-muted cursor-default"
+                        placeholder="Se calcula automáticamente"
                         value={
-                          field.value ? currencyUSD(Number(field.value)) : ''
+                          field.value ? currencyUSD(Number(field.value)) : ""
                         }
                         onChange={() => {}}
                       />
@@ -738,31 +801,31 @@ export function GenerateQuoteForm() {
             </div>
           </>
         )}
-        <div className='grid grid-cols-2 gap-4 mt-4'>
+        <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
-            name='implementationPriceUSD'
+            name="implementationPriceUSD"
             render={({ field }) => (
-              <FormItem className='space-y-1'>
-                <FormLabel className='text-sm'>
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
                   Precio de implementación (USD):
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    type='text'
-                    inputMode='numeric'
-                    className='text-sm text-muted-foreground'
-                    placeholder='Precio de implementación'
+                    type="text"
+                    inputMode="numeric"
+                    className="text-sm text-muted-foreground"
+                    placeholder="Precio de implementación"
                     value={
                       field.value !== undefined &&
                       field.value !== null &&
                       !isNaN(Number(field.value))
                         ? currencyUSD(Number(field.value))
-                        : ''
+                        : ""
                     }
-                    onChange={e => {
-                      const rawValue = e.target.value.replace(/\D/g, '');
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/\D/g, "");
                       field.onChange(rawValue ? Number(rawValue) : undefined);
                     }}
                   />
@@ -772,8 +835,18 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
-        <Button className='mt-6' type='submit' disabled={isPending}>
-          {isPending ? 'Creando...' : 'Generar cotización'}
+        <Button
+          className="mt-6"
+          type="submit"
+          disabled={isPending || isUpdating || isLoadingQuote}
+        >
+          {isPending || isUpdating
+            ? isEditMode
+              ? "Actualizando..."
+              : "Creando..."
+            : isEditMode
+              ? "Actualizar cotización"
+              : "Generar cotización"}
         </Button>
       </form>
     </Form>

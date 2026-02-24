@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -15,6 +16,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
@@ -60,22 +62,56 @@ export class QuoteController {
     return this.quoteService.findByQuoteId(quoteId);
   }
 
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar cotización' })
+  remove(@Param('id') id: string) {
+    return this.quoteService.remove(id);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar cotización' })
-  update(@Param('id') id: string, @Body() dto: UpdateQuoteDto) {
-    return this.quoteService.update(id, dto);
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateQuoteDto,
+    @GetUser() user: User,
+  ) {
+    return this.quoteService.update(id, dto, user.id);
   }
 
   @Patch(':id/status/:status')
   @ApiOperation({ summary: 'Cambiar estado de la cotización' })
   @ApiParam({ name: 'status', enum: QUOTE_STATUS })
-  updateStatus(@Param('id') id: string, @Param('status') status: QUOTE_STATUS) {
-    return this.quoteService.updateStatus(id, status);
+  updateStatus(
+    @Param('id') id: string,
+    @Param('status') status: QUOTE_STATUS,
+    @GetUser() user: User,
+  ) {
+    return this.quoteService.updateStatus(id, status, user.id);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar cotización' })
-  remove(@Param('id') id: string) {
-    return this.quoteService.remove(id);
+  @Patch(':id/timeline')
+  @ApiOperation({ summary: 'Agregar evento al timeline de la cotización' })
+  addTimelineEvent(
+    @Param('id') id: string,
+    @Body() body: { type: string; detail: string },
+    @GetUser() user: User,
+  ) {
+    return this.quoteService.addTimelineEvent(
+      id,
+      body.type,
+      body.detail,
+      user.id,
+    );
+  }
+  @Get(':id/pdf')
+  @ApiOperation({ summary: 'Descargar PDF de la cotización' })
+  async downloadPdf(@Param('id') id: string, @Res() res: Response) {
+    const pdf = await this.quoteService.generatePdf(id);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=cotizacion-${id}.pdf`,
+      'Content-Length': pdf.length,
+    });
+    res.end(pdf);
   }
 }

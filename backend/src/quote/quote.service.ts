@@ -7,11 +7,15 @@ import { QueryQuoteDto } from './dto/query-quote.dto';
 import { UpdateQuoteDto } from './dto/update-quote.dto';
 import { Quote, QuoteDocument } from './entities/quote.entity';
 import { IQuote, IQuoteTotals, QUOTE_STATUS } from './types/quote.types';
+import { User } from 'src/auth/entities/user.entity';
+import { QuotePdfService } from './pdf/quote-pdf.service';
 
 @Injectable()
 export class QuoteService {
   constructor(
     @InjectModel(Quote.name) private readonly quoteModel: Model<QuoteDocument>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly pdfService: QuotePdfService,
   ) {}
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -33,20 +37,40 @@ export class QuoteService {
     };
   }
 
+  private async resolveActorName(userId: string): Promise<string> {
+    try {
+      const user = await this.userModel
+        .findById(userId)
+        .select('name lastname')
+        .lean();
+      return user ? `${user.name} ${user.lastname}`.trim() : userId;
+    } catch {
+      return userId;
+    }
+  }
+
   // ─── CRUD ─────────────────────────────────────────────────────────────────
 
   async create(dto: CreateQuoteDto, userId: string): Promise<QuoteDocument> {
+    const actorName = await this.resolveActorName(userId);
+
     const quote = new this.quoteModel({
       ...dto,
       createdBy: userId,
+      timeline: [
+        {
+          type: 'created',
+          date: new Date(),
+          actor: actorName,
+          detail: `Cotización ${dto.quoteId} creada`,
+        },
+      ],
     });
 
     return quote.save() as unknown as QuoteDocument;
   }
 
-  async findAll(
-    query: QueryQuoteDto,
-  ): Promise<{ data: QuoteDocument[]; total: number }> {
+  async findAll(query: QueryQuoteDto): Promise<{ data: any[]; total: number }> {
     const { status, search, createdBy, page = 1, limit = 10 } = query;
     const filter: Record<string, any> = {};
 
@@ -66,7 +90,12 @@ export class QuoteService {
       this.quoteModel.countDocuments(filter),
     ]);
 
-    return { data: data as unknown as QuoteDocument[], total };
+    const dataWithTotals = data.map((quote) => ({
+      ...quote,
+      ...this.calculateTotals(quote),
+    }));
+
+    return { data: dataWithTotals, total };
   }
 
   async findOne(id: string): Promise<QuoteDocument> {
@@ -82,22 +111,107 @@ export class QuoteService {
     return quote as unknown as QuoteDocument;
   }
 
-  async update(id: string, dto: UpdateQuoteDto): Promise<QuoteDocument> {
+  async update(
+    id: string,
+    dto: UpdateQuoteDto,
+    userId?: string,
+  ): Promise<QuoteDocument> {
+    const actorName = userId ? await this.resolveActorName(userId) : 'system';
+
+    const timelineEvent = {
+      type: 'draft_saved',
+      date: new Date(),
+      actor: actorName,
+      detail: 'Borrador actualizado',
+    };
+
     const quote = await this.quoteModel
-      .findByIdAndUpdate(id, { $set: dto }, { new: true, runValidators: true })
+      .findByIdAndUpdate(
+        id,
+        {
+          $set: dto,
+          $push: { timeline: timelineEvent },
+        },
+        { new: true, runValidators: true },
+      )
       .lean();
 
     if (!quote) throw new NotFoundException(`Cotización ${id} no encontrada`);
     return quote as unknown as QuoteDocument;
   }
 
-  async updateStatus(id: string, status: QUOTE_STATUS): Promise<QuoteDocument> {
-    return this.update(id, { quoteStatus: status });
-  }
+  async updateStatus(
+    id: string,
+    status: QUOTE_STATUS,
+    userId?: string,
+  ): Promise<QuoteDocument> {
+    const actorName = userId ? await this.resolveActorName(userId) : 'system';
 
+    const eventTypeMap: Record<string, string> = {
+      [QUOTE_STATUS.SENT]: 'sent',
+      [QUOTE_STATUS.ACCEPTED]: 'accepted',
+      [QUOTE_STATUS.REJECTED]: 'rejected',
+    };
+
+    const timelineEvent = {
+      type: eventTypeMap[status] ?? 'status_changed',
+      date: new Date(),
+      actor: actorName,
+      detail: `Estado cambiado a ${status}`,
+    };
+
+    const quote = await this.quoteModel
+      .findByIdAndUpdate(
+        id,
+        {
+          $set: { quoteStatus: status },
+          $push: { timeline: timelineEvent },
+        },
+        { new: true, runValidators: true },
+      )
+      .lean();
+
+    if (!quote) throw new NotFoundException(`Cotización ${id} no encontrada`);
+    return quote as unknown as QuoteDocument;
+  }
   async remove(id: string): Promise<void> {
     const result = await this.quoteModel.findByIdAndDelete(id);
     if (!result) throw new NotFoundException(`Cotización ${id} no encontrada`);
+  }
+
+  async addTimelineEvent(
+    id: string,
+    type: string,
+    detail: string,
+    userId?: string,
+  ): Promise<QuoteDocument> {
+    const actorName = userId ? await this.resolveActorName(userId) : 'system';
+
+    const quote = await this.quoteModel
+      .findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            timeline: {
+              type,
+              date: new Date(),
+              actor: actorName,
+              detail,
+            },
+          },
+        },
+        { new: true },
+      )
+      .lean();
+
+    if (!quote) throw new NotFoundException(`Cotización ${id} no encontrada`);
+    return quote as unknown as QuoteDocument;
+  }
+
+  async generatePdf(id: string): Promise<Buffer> {
+    const quote = await this.findOne(id);
+    const totals = this.calculateTotals(quote);
+    return this.pdfService.generatePdf(quote, totals);
   }
 
   // ─── Totales enriquecidos ─────────────────────────────────────────────────

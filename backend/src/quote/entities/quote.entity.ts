@@ -34,6 +34,22 @@ class PremiumLicenses {
 }
 const PremiumLicensesSchema = SchemaFactory.createForClass(PremiumLicenses);
 
+@Schema({ _id: false })
+export class TimelineEvent {
+  @Prop({ required: true })
+  type: string;
+
+  @Prop({ required: true, default: () => new Date() })
+  date: Date;
+
+  @Prop({ required: false })
+  actor?: string;
+
+  @Prop({ required: false })
+  detail?: string;
+}
+const TimelineEventSchema = SchemaFactory.createForClass(TimelineEvent);
+
 // ─── Document Type ────────────────────────────────────────────────────────────
 
 export type QuoteDocument = Quote & Document;
@@ -131,6 +147,11 @@ export class Quote {
 
   @Prop({ required: false })
   estimatedStartDate?: Date;
+
+  // ── 7. Timeline ───────────────────────────────────────────────────────────
+
+  @Prop({ type: [TimelineEventSchema], default: [] })
+  timeline: TimelineEvent[];
 }
 
 export const QuoteSchema = SchemaFactory.createForClass(Quote);

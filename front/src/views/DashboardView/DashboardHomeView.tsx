@@ -234,7 +234,7 @@ export default function DashboardHomeView() {
             <div className="flex items-center justify-between w-full mb-6">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Gestión Comercial
+                  Gestión Comercial QUANTA
                 </h2>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
                   Accede a las herramientas para generar y consultar estado de las cotizaciones.                 

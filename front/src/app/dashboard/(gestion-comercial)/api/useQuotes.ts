@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createQuote, getQuotes } from './quotes.service';
+import { createQuote, getQuoteById, getQuotes, updateQuote } from './quotes.service';
 
 //Flujo completo:
 /* Usuario llena form → mutate(payload)
@@ -9,12 +9,17 @@ import { createQuote, getQuotes } from './quotes.service';
   → La tabla de cotizaciones se actualiza sola */
 
 export const useGetAllQuotes = () => {
-  //Mantiene una copia almacenada el estado esperando, lo que permite que se actualicen en tiempo real (refetch) cuando se crea una cotizacion de forma automatica.
-
-  //Cuando lleguemos a la parte de actualizacion de una cotizacion veremos la actualizacion optimista.
   return useQuery({
     queryKey: ['quotes'],
     queryFn: getQuotes,
+  });
+};
+
+export const useGetQuoteById = (id: string | null) => {
+  return useQuery({
+    queryKey: ['quote', id],
+    queryFn: () => getQuoteById(id!),
+    enabled: !!id,
   });
 };
 
@@ -23,8 +28,18 @@ export const useCreateQuote = () => {
 
   return useMutation({
     mutationFn: createQuote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['quotes'] });
+    },
+  });
+};
 
-    //Al crear una nueva cotizacion invalida la cache de las cotizaciones y actualiza el listado automaticamente
+export const useUpdateQuote = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
+      updateQuote(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quotes'] });
     },
