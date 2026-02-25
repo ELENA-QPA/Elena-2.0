@@ -66,17 +66,6 @@ export class Quote {
   @Prop({ required: true })
   createdBy: string; // userId del agente comercial (ref User)
 
-  // ── HubSpot ────────────────────────────────────────────────────────────────
-
-  /* @Prop({ required: false })
-  hubspotCompanyId?: string;
-
-  @Prop({ required: false })
-  hubspotContactId?: string;
-
-  @Prop({ required: false })
-  hubspotDealId?: string; */
-
   // ── 1. Datos del Cliente ───────────────────────────────────────────────────
 
   @Prop({ required: true, trim: true })

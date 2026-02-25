@@ -57,23 +57,6 @@ export class PremiumLicensesDto {
 }
 
 export class CreateQuoteDto {
-  // ── HubSpot ──────────────────────────────────────────────────────────────
-
-  /*  @ApiPropertyOptional({ description: 'ID de la empresa en HubSpot' })
-  @IsOptional()
-  @IsString()
-  hubspotCompanyId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del contacto en HubSpot' })
-  @IsOptional()
-  @IsString()
-  hubspotContactId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del negocio (deal) en HubSpot' })
-  @IsOptional()
-  @IsString()
-  hubspotDealId?: string; */
-
   // ── 1. Datos del Cliente ─────────────────────────────────────────────────
 
   @ApiProperty({ description: 'Id de la cotizacion' })

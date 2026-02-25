@@ -32,11 +32,6 @@ export interface IQuote {
   createdBy: string;
   quoteId: string;
 
-  // HubSpot
-  /* hubspotCompanyId?: string;
-  hubspotContactId?: string;
-  hubspotDealId?: string; */
-
   // Cliente
   companyName: string;
   nit: number;

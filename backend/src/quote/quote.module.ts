@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Quote, QuoteSchema } from './entities/quote.entity';
-import { QuoteController } from './quote.controller';
-import { QuoteService } from './quote.service';
-import { HubspotModule } from './hubspot/hubspot.module';
 import { User, UserSchema } from 'src/auth/entities/user.entity';
+import { Quote, QuoteSchema } from './entities/quote.entity';
 import { QuotePdfService } from './pdf/quote-pdf.service';
 import { PipedriveModule } from './pipedrive/pipedrive.module';
+import { QuoteController } from './quote.controller';
+import { QuoteService } from './quote.service';
 
 @Module({
   imports: [
@@ -14,7 +13,6 @@ import { PipedriveModule } from './pipedrive/pipedrive.module';
       { name: Quote.name, schema: QuoteSchema },
       { name: User.name, schema: UserSchema },
     ]),
-    HubspotModule,
     PipedriveModule,
   ],
   controllers: [QuoteController],
