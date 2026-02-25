@@ -9,6 +9,7 @@ import { Quote, QuoteDocument } from './entities/quote.entity';
 import { IQuote, IQuoteTotals, QUOTE_STATUS } from './types/quote.types';
 import { User } from 'src/auth/entities/user.entity';
 import { QuotePdfService } from './pdf/quote-pdf.service';
+import { QuoteMailService } from './mail/quote-mail.service';
 
 @Injectable()
 export class QuoteService {
@@ -16,6 +17,7 @@ export class QuoteService {
     @InjectModel(Quote.name) private readonly quoteModel: Model<QuoteDocument>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly pdfService: QuotePdfService,
+    private readonly mailService: QuoteMailService,
   ) {}
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -211,7 +213,126 @@ export class QuoteService {
   async generatePdf(id: string): Promise<Buffer> {
     const quote = await this.findOne(id);
     const totals = this.calculateTotals(quote);
-    return this.pdfService.generatePdf(quote, totals);
+
+    // Popular datos del asesor para el PDF
+    const advisorUser = await this.userModel
+      .findById(quote.createdBy)
+      .select('name lastname email position')
+      .lean();
+
+    const quoteWithAdvisor = {
+      ...quote,
+      createdByUser: advisorUser
+        ? {
+            fullName: `${advisorUser.name} ${advisorUser.lastname}`.trim(),
+            email: advisorUser.email,
+            position: advisorUser.position,
+          }
+        : null,
+    };
+
+    return this.pdfService.generatePdf(quoteWithAdvisor, totals);
+  }
+  async sendQuote(
+    id: string,
+    userId: string,
+    overrideEmail?: string,
+  ): Promise<QuoteDocument> {
+    const quote = await this.findOne(id);
+    const totals = this.calculateTotals(quote);
+    const actorName = await this.resolveActorName(userId);
+    const targetEmail = overrideEmail || quote.email;
+
+    // Validar email
+    if (!targetEmail || !targetEmail.includes('@')) {
+      // Registrar error en timeline
+      await this.quoteModel.findByIdAndUpdate(id, {
+        $push: {
+          timeline: {
+            type: 'send_error',
+            date: new Date(),
+            actor: actorName,
+            detail: 'Error: correo del contacto vacío o inválido',
+          },
+        },
+      });
+      throw new Error('El correo del contacto es inválido o está vacío');
+    }
+
+    // Obtener datos del asesor
+    const advisorUser = await this.userModel
+      .findById(userId)
+      .select('name lastname email phone position')
+      .lean();
+
+    const advisor = {
+      name: advisorUser
+        ? `${advisorUser.name} ${advisorUser.lastname}`.trim()
+        : actorName,
+      email: advisorUser?.email ?? '',
+      phone: advisorUser?.phone,
+      position: advisorUser?.position,
+    };
+
+    // Generar PDF
+    const pdfBuffer = await this.pdfService.generatePdf(quote, totals);
+
+    try {
+      // Enviar email
+      await this.mailService.sendQuoteEmail({
+        to: targetEmail,
+        quoteId: quote.quoteId,
+        companyName: quote.companyName,
+        contactName: quote.contactName,
+        pdfBuffer,
+        totalQuoteUSD: totals.totalQuoteUSD,
+        includeLicenses: quote.includeLicenses,
+        implementationPriceUSD: totals.implementationPriceUSD,
+        estimatedStartDate: quote.estimatedStartDate,
+        advisor,
+      });
+
+      // Si ya está enviada, solo registrar reenvío sin cambiar estado
+      const isSent = quote.quoteStatus === QUOTE_STATUS.SENT;
+      // Cambiar estado y registrar éxito en timeline
+      const updated = await this.quoteModel
+        .findByIdAndUpdate(
+          id,
+          {
+            ...(isSent ? {} : { $set: { quoteStatus: QUOTE_STATUS.SENT } }),
+            $push: {
+              timeline: {
+                type: isSent ? 'resent' : 'sent',
+                date: new Date(),
+                actor: actorName,
+                detail: isSent
+                  ? `Cotización reenviada a ${targetEmail}`
+                  : `Cotización enviada a ${targetEmail}`,
+              },
+            },
+          },
+          { new: true },
+        )
+        .lean();
+
+      return updated as unknown as QuoteDocument;
+    } catch (error) {
+      // Registrar error en timeline
+      await this.quoteModel.findByIdAndUpdate(id, {
+        $push: {
+          timeline: {
+            type: 'send_error',
+            date: new Date(),
+            actor: actorName,
+            detail: `Error al enviar: ${
+              (error as any).message || 'Error desconocido'
+            }`,
+          },
+        },
+      });
+
+      throw error;
+    }
   }
 
   // ─── Totales enriquecidos ─────────────────────────────────────────────────

@@ -12,7 +12,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue,  
 } from "@/components";
 import {
   Form,
@@ -26,41 +26,55 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarIcon, X } from "lucide-react";
+import { CalendarIcon, X, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useCreateQuote, useUpdateQuote } from "../../api/useQuotes";
 import { currencyUSD, toTitleCase } from "../lib/formatters";
+import { Textarea } from "@/components/ui/textarea";
 import {
   generateQuoteId,
   handleAddPhone,
   handleRemovePhone,
 } from "../lib/helperFunctions";
-import { TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from "../types/quotes.types";
+import { LICENSE_BILLING_PERIOD, TECHNOLOGY_LABELS, TECHNOLOGY_OPTIONS } from "../types/quotes.types";
 import { QuoteFormValues, quoteResolver } from "../validations";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useGetQuoteById } from "../../api/useQuotes";
 import { pushTimelineEvent } from "../../api/quotes.service";
 
+// ── NUEVO: Módulos predefinidos ──────────────────────────────────────────────
+
+const MODULE_OPTIONS = [
+  { value: "production", label: "Producción" },
+  { value: "inventory", label: "Inventarios y Stock" },
+  { value: "purchasing", label: "Compras" },
+  { value: "commercial", label: "Gestión Comercial" },
+  { value: "hr", label: "Talento Humano" },
+  { value: "analytics", label: "Tableros y Analítica" },
+] as const;
+
 export function GenerateQuoteForm() {
   const router = useRouter();
   const { mutate, isPending } = useCreateQuote();
   const { mutate: mutateUpdate, isPending: isUpdating } = useUpdateQuote();
 
-  //Valores a enviar en la petición
   const form = useForm<QuoteFormValues>({
     resolver: quoteResolver,
     mode: "onChange",
     defaultValues: {
-      //Definir los valores que queramos por default o si queremos obtener los valores desde hubspot
       quoteId: generateQuoteId(),
       companyName: "",
       phones: [NaN],
       includeLicenses: false,
       standardLicenses: { unitPrice: 108 },
       premiumLicenses: { unitPrice: 120 },
+      // NUEVO: defaults para campos nuevos
+      notificationEmails: [],
+      includedModules: [],
+      licenseBillingPeriod: LICENSE_BILLING_PERIOD.MONTHLY,
     },
   });
 
@@ -101,8 +115,38 @@ export function GenerateQuoteForm() {
               ),
             )
           : undefined,
+        // NUEVO: cargar campos nuevos en edición
+        companyAddress: existingQuote.companyAddress ?? "",
+        notificationEmails: existingQuote.notificationEmails ?? [],
+        numberOfLocations: existingQuote.numberOfLocations,
+        operationalNotes: existingQuote.operationalNotes ?? "",
+        licenseBillingPeriod: existingQuote.licenseBillingPeriod ?? LICENSE_BILLING_PERIOD.MONTHLY,
+        implementationDurationWeeks:
+          existingQuote.implementationDurationWeeks,
+        estimatedGoLiveDate: existingQuote.estimatedGoLiveDate
+          ? new Date(
+              String(existingQuote.estimatedGoLiveDate).replace(
+                "T00:00:00.000Z",
+                "T12:00:00",
+              ),
+            )
+          : undefined,
+        implementationDescription:
+          existingQuote.implementationDescription ?? "",
+        paymentTerms: existingQuote.paymentTerms ?? "",
+        includedModules: existingQuote.includedModules ?? [],
+        additionalModulesDetail:
+          existingQuote.additionalModulesDetail ?? "",
+        expirationDateOverride: existingQuote.expirationDateOverride
+          ? new Date(
+              String(existingQuote.expirationDateOverride).replace(
+                "T00:00:00.000Z",
+                "T12:00:00",
+              ),
+            )
+          : undefined,
+        advisorOverride: existingQuote.advisorOverride ?? {},
       });
-      // Registrar evento solo una vez
       if (!hasTrackedResume.current) {
         hasTrackedResume.current = true;
         pushTimelineEvent(editId, {
@@ -113,12 +157,13 @@ export function GenerateQuoteForm() {
     }
   }, [existingQuote, isEditMode, editId, form]);
 
-  //Watchers para validar cuando un valor cambia en el formulario
+  // Watchers
   const currentTechnology = form.watch("currentTechnology");
   const phones = form.watch("phones") ?? [1];
   const includeLicenses = form.watch("includeLicenses");
+  const notificationEmails = form.watch("notificationEmails") ?? [];
 
-  //Manejador para el envío de la petición
+  // Manejador para el envío
   const onSubmitHandler = async (values: QuoteFormValues) => {
     const payload = {
       ...values,
@@ -128,7 +173,23 @@ export function GenerateQuoteForm() {
       email: values.email.trim().toLowerCase(),
       industry: values.industry.trim(),
       otherTechnologyDetail: values.otherTechnologyDetail?.trim(),
-      estimatedStartDate: values.estimatedStartDate.toISOString().split("T")[0],
+      companyAddress: values.companyAddress?.trim(),
+      operationalNotes: values.operationalNotes?.trim(),
+      implementationDescription: values.implementationDescription?.trim(),
+      paymentTerms: values.paymentTerms?.trim(),
+      additionalModulesDetail: values.additionalModulesDetail?.trim(),
+      estimatedStartDate: values.estimatedStartDate
+        ?.toISOString()
+        .split("T")[0],
+      estimatedGoLiveDate: values.estimatedGoLiveDate
+        ?.toISOString()
+        .split("T")[0],
+      expirationDateOverride: values.expirationDateOverride
+        ?.toISOString()
+        .split("T")[0],
+      notificationEmails: (values.notificationEmails ?? [])
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean),
     };
 
     if (isEditMode && editId) {
@@ -165,9 +226,27 @@ export function GenerateQuoteForm() {
     }
   };
 
+  // ── Helper: agregar/quitar emails de notificación ──────────────────────────
+
+  const handleAddNotificationEmail = () => {
+    const current = form.getValues("notificationEmails") ?? [];
+    form.setValue("notificationEmails", [...current, ""]);
+  };
+
+  const handleRemoveNotificationEmail = (index: number) => {
+    const current = form.getValues("notificationEmails") ?? [];
+    form.setValue(
+      "notificationEmails",
+      current.filter((_, i) => i !== index),
+    );
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitHandler)}>
+        {/* ════════════════════════════════════════════════════════════════════
+            SECCIÓN 1: Información de la empresa
+        ════════════════════════════════════════════════════════════════════ */}
         <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Información de la empresa
         </p>
@@ -260,6 +339,30 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
+
+        {/* NUEVO: Dirección de la empresa */}
+        <div className="grid grid-cols-1 gap-4 mt-4">
+          <FormField
+            control={form.control}
+            name="companyAddress"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Dirección de la empresa:
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Dirección principal de la empresa"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
@@ -306,6 +409,56 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
+
+        {/* NUEVO: Sedes y observaciones operativas */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <FormField
+            control={form.control}
+            name="numberOfLocations"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Número de sedes o plantas:
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={1}
+                    className="text-sm text-muted-foreground truncate"
+                    placeholder="Cantidad de sedes o plantas"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="mt-4">
+          <FormField
+            control={form.control}
+            name="operationalNotes"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Observaciones operativas:
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="text-sm text-muted-foreground resize-none"
+                    placeholder="Observaciones relevantes sobre la operación del cliente"
+                    rows={3}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Tecnología utilizada (existente) */}
         <div className="mt-4">
           <FormField
             control={form.control}
@@ -371,6 +524,10 @@ export function GenerateQuoteForm() {
             />
           )}
         </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SECCIÓN 2: Información de contacto
+        ════════════════════════════════════════════════════════════════════ */}
         <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Información de contacto
         </p>
@@ -509,6 +666,146 @@ export function GenerateQuoteForm() {
             })}
           </div>
         )}
+
+        {/* NUEVO: Emails de notificación */}
+        <div className="mt-4">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-medium">
+              Emails de notificación contractual:
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleAddNotificationEmail}
+              className="shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700"
+            >
+              <Plus className="h-3 w-3 mr-1" />
+              Añadir email
+            </Button>
+          </div>
+          {notificationEmails.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              Si no se agregan, se usará el correo de contacto principal.
+            </p>
+          )}
+          <div className="grid grid-cols-2 gap-4">
+            {notificationEmails.map((_, i) => (
+              <FormField
+                key={i}
+                control={form.control}
+                name={`notificationEmails.${i}`}
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
+                      {`Email notificación ${i + 1}:`}
+                    </FormLabel>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 min-w-0">
+                        <FormControl>
+                          <Input
+                            type="email"
+                            className="text-sm text-muted-foreground truncate"
+                            placeholder="email@empresa.com"
+                            {...field}
+                          />
+                        </FormControl>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleRemoveNotificationEmail(i)}
+                        className="shrink-0 border-elena-pink-400 bg-elena-pink-50 text-elena-pink-600 hover:bg-elena-pink-100 hover:text-elena-pink-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SECCIÓN 3: Módulos incluidos (NUEVO)
+        ════════════════════════════════════════════════════════════════════ */}
+        <p className="mt-5 text-md text-elena-pink-500 font-semibold">
+          Módulos incluidos
+        </p>
+        <div className="mt-2">
+          <FormField
+            control={form.control}
+            name="includedModules"
+            render={() => (
+              <FormItem>
+                <FormLabel className="text-sm">
+                  Selecciona los módulos que incluye la propuesta:
+                </FormLabel>
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                  {MODULE_OPTIONS.map((mod) => (
+                    <FormField
+                      key={mod.value}
+                      control={form.control}
+                      name="includedModules"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(mod.value)}
+                              onCheckedChange={(checked) => {
+                                const current = field.value ?? [];
+                                field.onChange(
+                                  checked
+                                    ? [...current, mod.value]
+                                    : current.filter(
+                                        (v: string) => v !== mod.value,
+                                      ),
+                                );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm font-normal">
+                            {mod.label}
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="mt-4">
+          <FormField
+            control={form.control}
+            name="additionalModulesDetail"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Módulos o funcionalidades adicionales:
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="text-sm text-muted-foreground resize-none"
+                    placeholder="Describe módulos o funcionalidades extras no listados arriba"
+                    rows={2}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SECCIÓN 4: Detalles de la cotización
+        ════════════════════════════════════════════════════════════════════ */}
         <p className="mt-5 text-md text-elena-pink-500 font-semibold">
           Detalles de la cotización
         </p>
@@ -593,8 +890,40 @@ export function GenerateQuoteForm() {
             )}
           />
         </div>
+
+        {/* Licencias (existente) */}
         {includeLicenses && (
           <>
+            {/* NUEVO: Periodo de facturación */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <FormField
+                control={form.control}
+                name="licenseBillingPeriod"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm">
+                      Periodo de facturación:
+                    </FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="text-sm text-muted-foreground">
+                          <SelectValue placeholder="Seleccionar periodo" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="monthly">Mensual</SelectItem>
+                        <SelectItem value="annual">Anual</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <p className="mt-5 text-sm text-muted-foreground font-medium">
               Licencias estándar
             </p>
@@ -801,6 +1130,8 @@ export function GenerateQuoteForm() {
             </div>
           </>
         )}
+
+        {/* Implementación */}
         <div className="grid grid-cols-2 gap-4 mt-4">
           <FormField
             control={form.control}
@@ -834,7 +1165,235 @@ export function GenerateQuoteForm() {
               </FormItem>
             )}
           />
+
+          {/* NUEVO: Duración de implementación */}
+          <FormField
+            control={form.control}
+            name="implementationDurationWeeks"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Duración estimada (semanas):
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={1}
+                    className="text-sm text-muted-foreground"
+                    placeholder="Duración en semanas"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
+
+        {/* NUEVO: Go-Live, forma de pago, descripción */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <FormField
+            control={form.control}
+            name="estimatedGoLiveDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col space-y-1">
+                <FormLabel className="text-sm">
+                  Fecha estimada de Go-Live:
+                </FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "text-sm font-normal justify-start",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value
+                          ? format(field.value, "dd/MM/yyyy", { locale: es })
+                          : "Seleccionar fecha de Go-Live"}
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={{
+                        before: new Date(new Date().setHours(0, 0, 0, 0)),
+                      }}
+                      locale={es}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="paymentTerms"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Forma de pago:</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm text-muted-foreground"
+                    placeholder="Ej: 50% al inicio, 50% en Go-Live"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="mt-4">
+          <FormField
+            control={form.control}
+            name="implementationDescription"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">
+                  Descripción de implementación (para propuesta):
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="text-sm text-muted-foreground resize-none"
+                    placeholder="Descripción del servicio de implementación que aparecerá en la propuesta comercial"
+                    rows={2}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SECCIÓN 5: Fecha de vencimiento (NUEVO)
+        ════════════════════════════════════════════════════════════════════ */}
+        <p className="mt-5 text-md text-elena-pink-500 font-semibold">
+          Vencimiento y asesor
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="expirationDateOverride"
+            render={({ field }) => (
+              <FormItem className="flex flex-col space-y-1">
+                <FormLabel className="text-sm">
+                  Fecha de vencimiento (opcional):
+                </FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "text-sm font-normal justify-start",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value
+                          ? format(field.value, "dd/MM/yyyy", { locale: es })
+                          : "Auto: emisión + 30 días"}
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={{
+                        before: new Date(new Date().setHours(0, 0, 0, 0)),
+                      }}
+                      locale={es}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <p className="text-xs text-muted-foreground">
+                  Si no seleccionas fecha, se calcula automáticamente como fecha
+                  de emisión + 30 días
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* NUEVO: Asesor override */}
+        <p className="mt-4 text-sm text-muted-foreground font-medium">
+          Asesor Quanta (se toma del usuario logueado; completa solo si deseas
+          sobreescribir)
+        </p>
+        <div className="grid grid-cols-3 gap-4 mt-2">
+          <FormField
+            control={form.control}
+            name="advisorOverride.name"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Nombre del asesor:</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm text-muted-foreground"
+                    placeholder="Nombre (vacío = usuario actual)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="advisorOverride.position"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Cargo del asesor:</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm text-muted-foreground"
+                    placeholder="Cargo (vacío = usuario actual)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="advisorOverride.email"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm">Email del asesor:</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    className="text-sm text-muted-foreground"
+                    placeholder="Email (vacío = usuario actual)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SUBMIT
+        ════════════════════════════════════════════════════════════════════ */}
         <Button
           className="mt-6"
           type="submit"

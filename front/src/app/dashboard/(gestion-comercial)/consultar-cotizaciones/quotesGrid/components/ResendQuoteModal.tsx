@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { X, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { IQuoteWithMeta } from "../../types/quotes.types";
-import { pushTimelineEvent } from "../../../api/quotes.service";
+import { pushTimelineEvent, sendQuote } from "../../../api/quotes.service";
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 
@@ -30,14 +30,7 @@ export function ResendQuoteModal({ quote, onClose }: ResendQuoteModalProps) {
     setIsSending(true);
 
     try {
-      // Registrar evento de reenvío en el timeline
-      await pushTimelineEvent(quote._id, {
-        type: "resent",
-        detail: `Cotización reenviada a ${email}`,
-      });
-
-      // Aquí irá la lógica real de envío de email 
-
+      await sendQuote(quote._id, email);
       toast.success(`Cotización reenviada a ${email}`);
       onClose();
     } catch (error: any) {

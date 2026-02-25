@@ -50,6 +50,21 @@ export class TimelineEvent {
 }
 const TimelineEventSchema = SchemaFactory.createForClass(TimelineEvent);
 
+// ── NUEVO: Asesor override ────────────────────────────────────────────────────
+
+@Schema({ _id: false })
+class AdvisorOverride {
+  @Prop({ required: false, trim: true })
+  name?: string;
+
+  @Prop({ required: false, trim: true })
+  position?: string;
+
+  @Prop({ required: false, trim: true, lowercase: true })
+  email?: string;
+}
+const AdvisorOverrideSchema = SchemaFactory.createForClass(AdvisorOverride);
+
 // ─── Document Type ────────────────────────────────────────────────────────────
 
 export type QuoteDocument = Quote & Document;
@@ -97,6 +112,9 @@ export class Quote {
   @Prop({ required: true, trim: true })
   industry: string;
 
+  @Prop({ required: false, trim: true })
+  companyAddress?: string; // NUEVO: Dirección de la empresa
+
   // ── 2. Tamaño del Cliente ──────────────────────────────────────────────────
 
   @Prop({ required: true, min: 1 })
@@ -113,6 +131,9 @@ export class Quote {
   @Prop({ type: [Number], default: [] })
   phones: number[]; // Índice 0 = principal, resto = alternos
 
+  @Prop({ type: [String], default: [] })
+  notificationEmails: string[]; // NUEVO: Emails para notificaciones contractuales
+
   // ── 4. Contexto Operativo ──────────────────────────────────────────────────
 
   @Prop({ required: true, enum: OPERATION_TYPE })
@@ -127,7 +148,13 @@ export class Quote {
   currentTechnology: CURRENT_TECHNOLOGY[];
 
   @Prop({ required: false, trim: true })
-  otherTechnologyDetail?: string; // Solo aplica si currentTechnology incluye 'other'
+  otherTechnologyDetail?: string;
+
+  @Prop({ required: false, min: 1 })
+  numberOfLocations?: number; // NUEVO: Sedes o plantas
+
+  @Prop({ required: false, trim: true })
+  operationalNotes?: string; // NUEVO: Observaciones operativas
 
   // ── 5. Licenciamiento ──────────────────────────────────────────────────────
 
@@ -140,6 +167,9 @@ export class Quote {
   @Prop({ required: false, type: PremiumLicensesSchema })
   premiumLicenses?: PremiumLicenses;
 
+  @Prop({ required: false, enum: ['monthly', 'annual'], default: 'monthly' })
+  licenseBillingPeriod?: string; // NUEVO: Periodo de facturación
+
   // ── 6. Implementación ─────────────────────────────────────────────────────
 
   @Prop({ required: false, min: 0 })
@@ -148,7 +178,37 @@ export class Quote {
   @Prop({ required: false })
   estimatedStartDate?: Date;
 
-  // ── 7. Timeline ───────────────────────────────────────────────────────────
+  @Prop({ required: false, min: 1 })
+  implementationDurationWeeks?: number; // NUEVO: Duración en semanas
+
+  @Prop({ required: false })
+  estimatedGoLiveDate?: Date; // NUEVO: Fecha estimada de Go-Live
+
+  @Prop({ required: false, trim: true })
+  implementationDescription?: string; // NUEVO: Descripción para tabla del PDF
+
+  @Prop({ required: false, trim: true })
+  paymentTerms?: string; // NUEVO: Forma de pago (ej: "50% inicio, 50% Go-Live")
+
+  // ── 7. Módulos incluidos ──────────────────────────────────────────────────
+
+  @Prop({ type: [String], default: [] })
+  includedModules: string[]; // NUEVO: Checkboxes predefinidos
+
+  @Prop({ required: false, trim: true })
+  additionalModulesDetail?: string; // NUEVO: Módulos adicionales (texto libre)
+
+  // ── 8. Fecha de vencimiento ───────────────────────────────────────────────
+
+  @Prop({ required: false })
+  expirationDateOverride?: Date; // NUEVO: Override (si null → createdAt + 30 días)
+
+  // ── 9. Asesor Quanta ──────────────────────────────────────────────────────
+
+  @Prop({ required: false, type: AdvisorOverrideSchema })
+  advisorOverride?: AdvisorOverride; // NUEVO: Override del asesor (si vacío → User)
+
+  // ── 10. Timeline ──────────────────────────────────────────────────────────
 
   @Prop({ type: [TimelineEventSchema], default: [] })
   timeline: TimelineEvent[];

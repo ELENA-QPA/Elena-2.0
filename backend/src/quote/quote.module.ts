@@ -6,6 +6,7 @@ import { QuoteService } from './quote.service';
 import { HubspotModule } from './hubspot/hubspot.module';
 import { User, UserSchema } from 'src/auth/entities/user.entity';
 import { QuotePdfService } from './pdf/quote-pdf.service';
+import { QuoteMailService } from './mail/quote-mail.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { QuotePdfService } from './pdf/quote-pdf.service';
     HubspotModule,
   ],
   controllers: [QuoteController],
-  providers: [QuoteService, QuotePdfService],
+  providers: [QuoteService, QuotePdfService, QuoteMailService],
   exports: [QuoteService],
 })
 export class QuoteModule {}

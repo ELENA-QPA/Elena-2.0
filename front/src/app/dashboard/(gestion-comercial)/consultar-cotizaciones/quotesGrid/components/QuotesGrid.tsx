@@ -44,6 +44,7 @@ import {
 } from "../../types/quotes.types";
 import { QUOTE_STATUSES } from "../../../generar-cotizacion/types/quotes.types";
 import { currencyUSD } from "../../../generar-cotizacion/lib/formatters";
+import { deleteQuote } from "../../../api/quotes.service";
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 
@@ -68,6 +69,8 @@ export function QuotesGrid({
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [companyFilter, setCompanyFilter] = useState("");
   const [contactFilter, setContactFilter] = useState("");
+  const [dateFromFilter, setDateFromFilter] = useState("");
+  const [dateToFilter, setDateToFilter] = useState("");
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,14 +99,16 @@ export function QuotesGrid({
     setStatusFilter("all");
     setCompanyFilter("");
     setContactFilter("");
+    setDateFromFilter("");
+    setDateToFilter("");
     setCurrentPage(1);
   }, []);
 
   // ── Filtrado y ordenamiento ──────────────────────────────────────────────
 
   const filteredQuotes = useMemo(() => {
-  const safeQuotes = Array.isArray(quotes) ? quotes : [];
-  let filtered = [...safeQuotes];
+    const safeQuotes = Array.isArray(quotes) ? quotes : [];
+    let filtered = [...safeQuotes];
 
     // Búsqueda general
     if (searchTerm.trim()) {
@@ -137,6 +142,23 @@ export function QuotesGrid({
       filtered = filtered.filter((q) =>
         q.contactName.toLowerCase().includes(ct),
       );
+    }
+
+    // Filtro por fecha de creación desde
+    if (dateFromFilter) {
+      const from = dateFromFilter + "T00:00:00";
+      filtered = filtered.filter((q) => {
+        const created = new Date(q.createdAt).toLocaleDateString("en-CA");
+        return created >= dateFromFilter;
+      });
+    }
+
+    // Filtro por fecha de creación hasta
+    if (dateToFilter) {
+      filtered = filtered.filter((q) => {
+        const created = new Date(q.createdAt).toLocaleDateString("en-CA");
+        return created <= dateToFilter;
+      });
     }
 
     // Ordenamiento
@@ -191,6 +213,8 @@ export function QuotesGrid({
     statusFilter,
     companyFilter,
     contactFilter,
+    dateFromFilter,
+    dateToFilter,
     sortColumn,
     sortDirection,
   ]);
@@ -205,7 +229,14 @@ export function QuotesGrid({
   // Resetear página al cambiar filtros
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, statusFilter, companyFilter, contactFilter]);
+  }, [
+    searchTerm,
+    statusFilter,
+    companyFilter,
+    contactFilter,
+    dateFromFilter,
+    dateToFilter,
+  ]);
 
   // ── Render helpers ───────────────────────────────────────────────────────
 
@@ -279,10 +310,7 @@ export function QuotesGrid({
             )}
           </p>
         </div>
-        <Link
-          href="/dashboard/generar-cotizacion"
-          className="flex-shrink-0"
-        >
+        <Link href="/dashboard/generar-cotizacion" className="flex-shrink-0">
           <Button className="bg-elena-pink-600 hover:bg-elena-pink-700 text-white rounded-lg text-xs sm:text-sm">
             <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
             Nueva Cotización
@@ -312,13 +340,17 @@ export function QuotesGrid({
               Filtros
               {(statusFilter !== "all" ||
                 companyFilter.trim() ||
-                contactFilter.trim()) && (
+                contactFilter.trim() ||
+                dateFromFilter ||
+                dateToFilter) && (
                 <span className="ml-1 sm:ml-2 text-xs px-1 py-0 bg-red-100 text-red-800 rounded">
                   {
                     [
                       statusFilter !== "all" ? "1" : "",
                       companyFilter.trim(),
                       contactFilter.trim(),
+                      dateFromFilter,
+                      dateToFilter,
                     ].filter(Boolean).length
                   }
                 </span>
@@ -329,7 +361,7 @@ export function QuotesGrid({
           {/* Panel de filtros colapsable */}
           <Collapsible open={showFilters} onOpenChange={setShowFilters}>
             <CollapsibleContent className="space-y-4 mt-4 p-2 sm:p-4 border rounded-lg bg-gray-50">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-4">
                 <div className="space-y-1 sm:space-y-2">
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
                     Estado
@@ -369,6 +401,30 @@ export function QuotesGrid({
                     value={contactFilter}
                     onChange={(e) => setContactFilter(e.target.value)}
                     placeholder="Filtrar por contacto"
+                    className="text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-gray-700">
+                    Fecha creación desde
+                  </label>
+                  <Input
+                    type="date"
+                    value={dateFromFilter}
+                    onChange={(e) => setDateFromFilter(e.target.value)}
+                    className="text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium text-gray-700">
+                    Fecha creación hasta
+                  </label>
+                  <Input
+                    type="date"
+                    value={dateToFilter}
+                    onChange={(e) => setDateToFilter(e.target.value)}
                     className="text-sm"
                   />
                 </div>
@@ -523,18 +579,45 @@ export function QuotesGrid({
                             <Eye className="h-4 w-4" />
                           </Button>
                           {quote.quoteStatus === "draft" && (
-                            <Link
-                              href={`/dashboard/generar-cotizacion?edit=${quote._id}`}
-                            >
+                            <>
+                              <Link
+                                href={`/dashboard/consultar-cotizaciones?edit=${quote._id}`}
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0 hover:text-blue-600"
+                                  title="Editar"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                              </Link>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-8 w-8 p-0 hover:text-blue-600"
-                                title="Editar"
+                                className="h-8 w-8 p-0 hover:text-red-600"
+                                title="Eliminar"
+                                onClick={async () => {
+                                  if (
+                                    window.confirm(
+                                      `¿Eliminar cotización ${quote.quoteId}?`,
+                                    )
+                                  ) {
+                                    try {
+                                      await deleteQuote(quote._id);
+                                      toast.success("Cotización eliminada");
+                                      window.location.reload();
+                                    } catch {
+                                      toast.error(
+                                        "Error al eliminar la cotización",
+                                      );
+                                    }
+                                  }
+                                }}
                               >
-                                <Edit className="h-4 w-4" />
+                                <Trash2 className="h-4 w-4" />
                               </Button>
-                            </Link>
+                            </>
                           )}
                         </div>
                       </TableCell>

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  LICENSE_BILLING_PERIOD,
   OPERATION_TYPES,
   QUOTE_STATUSES,
   TECHNOLOGY_OPTIONS,
@@ -145,6 +146,51 @@ export const quoteSchema = z.object({
   quoteId: z.string().regex(/^QT-[A-Z0-9]{8}$/, {
     message: 'El ID de cotización tiene un formato inválido',
   }),
+
+  // ── NUEVOS CAMPOS ──────────────────────────────────────────────────────────
+
+  companyAddress: z.string().optional(),
+
+  notificationEmails: z
+    .array(z.string().email({ message: 'Debe ser un email válido' }))
+    .default([]),
+
+  numberOfLocations: z
+    .number()
+    .int()
+    .min(1, { message: 'Debe ser al menos 1' })
+    .optional(),
+
+  operationalNotes: z.string().optional(),
+
+  licenseBillingPeriod: z.nativeEnum(LICENSE_BILLING_PERIOD).default(LICENSE_BILLING_PERIOD.MONTHLY),
+
+  implementationDurationWeeks: z
+    .number()
+    .int()
+    .min(1, { message: 'La duración debe ser al menos 1 semana' })
+    .optional(),
+
+  estimatedGoLiveDate: z.date().optional(),
+
+  implementationDescription: z.string().optional(),
+
+  paymentTerms: z.string().optional(),
+
+  includedModules: z.array(z.string()).default([]),
+
+  additionalModulesDetail: z.string().optional(),
+
+  expirationDateOverride: z.date().optional(),
+
+  advisorOverride: z
+    .object({
+      name: z.string().optional(),
+      position: z.string().optional(),
+      email: z.string().email({ message: 'Email inválido' }).optional().or(z.literal('')),
+    })
+    .optional(),
+
 });
 
 export type QuoteFormValues = z.infer<typeof quoteSchema>;

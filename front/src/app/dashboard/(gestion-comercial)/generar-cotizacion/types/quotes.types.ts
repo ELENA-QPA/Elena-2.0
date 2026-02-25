@@ -34,6 +34,17 @@ export const QUOTE_STATUSES = [
 ] as const;
 export type QuoteStatus = (typeof QUOTE_STATUSES)[number];
 
+export interface IAdvisorOverride {
+  name?: string;
+  position?: string;
+  email?: string;
+}
+
+export enum LICENSE_BILLING_PERIOD {
+  MONTHLY = 'monthly',
+  ANNUAL = 'annual',
+}
+
 export interface IQuote {
   quoteId: string;
   quoteStatus: QuoteStatus;
@@ -62,4 +73,17 @@ export interface IQuote {
   };
   implementationPriceUSD: number;
   estimatedStartDate: Date | string;
+  companyAddress?: string;
+  notificationEmails: string[];
+  numberOfLocations?: number;
+  operationalNotes?: string;
+  licenseBillingPeriod?: LICENSE_BILLING_PERIOD;
+  implementationDurationWeeks?: number;
+  estimatedGoLiveDate?: string;
+  implementationDescription?: string;
+  paymentTerms?: string;
+  includedModules: string[];
+  additionalModulesDetail?: string;
+  expirationDateOverride?: string;
+  advisorOverride?: IAdvisorOverride;
 }
