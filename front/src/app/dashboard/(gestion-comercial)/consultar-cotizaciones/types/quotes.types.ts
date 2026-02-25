@@ -45,6 +45,24 @@ export const QUOTE_STATUS_COLORS: Record<
   },
 };
 
+// Enum para módulos predefinidos ────────────────────────────────────
+
+export enum INCLUDED_MODULE {
+  PRODUCTION = 'production',
+  INVENTORY = 'inventory',
+  PURCHASING = 'purchasing',
+  COMMERCIAL = 'commercial',
+  HR = 'hr',
+  ANALYTICS = 'analytics',
+}
+
+// ── Enum para periodo de facturación ──────────────────────────────────
+
+export enum LICENSE_BILLING_PERIOD {
+  MONTHLY = 'monthly',
+  ANNUAL = 'annual',
+}
+
 export const OPERATION_TYPE_LABELS: Record<string, string> = {
   make_to_order: 'Make to Order',
   make_to_stock: 'Make to Stock',

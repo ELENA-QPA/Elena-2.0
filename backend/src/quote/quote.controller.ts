@@ -114,4 +114,14 @@ export class QuoteController {
     });
     res.end(pdf);
   }
+
+  @Patch(':id/send')
+  @ApiOperation({ summary: 'Enviar cotización por correo electrónico' })
+  async sendQuote(
+    @Param('id') id: string,
+    @Body() body: { email?: string },
+    @GetUser() user: User,
+  ) {
+    return this.quoteService.sendQuote(id, user.id, body.email);
+  }
 }

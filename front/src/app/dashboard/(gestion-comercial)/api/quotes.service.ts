@@ -137,3 +137,45 @@ export const downloadQuotePdf = async (id: string, quoteId: string): Promise<voi
   a.click();
   window.URL.revokeObjectURL(url);
 };
+
+export const deleteQuote = async (id: string): Promise<void> => {
+  const token = getCookie('token');
+  if (!token) throw new Error('No se pudo obtener el token de acceso');
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/quotes/${id}`,
+    {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Error al eliminar la cotización');
+  }
+};
+
+export const sendQuote = async (id: string, email?: string): Promise<any> => {
+  const token = getCookie('token');
+  if (!token) throw new Error('No se pudo obtener el token de acceso');
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/quotes/${id}/send`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Error al enviar la cotización');
+  }
+
+  return response.json();
+};
