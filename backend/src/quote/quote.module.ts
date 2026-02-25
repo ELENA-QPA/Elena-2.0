@@ -6,6 +6,7 @@ import { QuoteService } from './quote.service';
 import { HubspotModule } from './hubspot/hubspot.module';
 import { User, UserSchema } from 'src/auth/entities/user.entity';
 import { QuotePdfService } from './pdf/quote-pdf.service';
+import { PipedriveModule } from './pipedrive/pipedrive.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { QuotePdfService } from './pdf/quote-pdf.service';
       { name: User.name, schema: UserSchema },
     ]),
     HubspotModule,
+    PipedriveModule,
   ],
   controllers: [QuoteController],
   providers: [QuoteService, QuotePdfService],
