@@ -115,7 +115,7 @@ export function QuotesGrid({
       const search = searchTerm.toLowerCase().trim();
       filtered = filtered.filter(
         (q) =>
-          q.quoteId.toLowerCase().includes(search) ||
+          (q.quoteId?.toLowerCase().includes(search) ?? false) ||
           q.companyName.toLowerCase().includes(search) ||
           q.contactName.toLowerCase().includes(search) ||
           q.email.toLowerCase().includes(search) ||
@@ -169,8 +169,8 @@ export function QuotesGrid({
 
         switch (sortColumn) {
           case "quoteId":
-            valA = a.quoteId.toLowerCase();
-            valB = b.quoteId.toLowerCase();
+            valA = (a.quoteId ?? "").toLowerCase();
+            valB = (b.quoteId ?? "").toLowerCase();
             break;
           case "companyName":
             valA = a.companyName.toLowerCase();

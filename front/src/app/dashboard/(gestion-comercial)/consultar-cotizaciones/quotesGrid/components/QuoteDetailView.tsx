@@ -136,7 +136,7 @@ export function QuoteDetailView({ quote, onBack }: QuoteDetailViewProps) {
               className="border-gray-400 text-gray-600 hover:bg-gray-50"
               onClick={async () => {
                 try {
-                  await downloadQuotePdf(quote._id, quote.quoteId);
+                  await downloadQuotePdf(quote._id, quote.quoteId ?? "");
                   toast.success("PDF descargado");
                 } catch {
                   toast.error("Error al descargar el PDF");
