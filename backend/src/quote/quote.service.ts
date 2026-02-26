@@ -55,16 +55,18 @@ export class QuoteService {
 
   async create(dto: CreateQuoteDto, userId: string): Promise<QuoteDocument> {
     const actorName = await this.resolveActorName(userId);
+    const quoteId = await this.generateQuoteId();
 
     const quote = new this.quoteModel({
       ...dto,
+      quoteId,
       createdBy: userId,
       timeline: [
         {
           type: 'created',
           date: new Date(),
           actor: actorName,
-          detail: `Cotización ${dto.quoteId} creada`,
+          detail: `Cotización ${quoteId} creada`,
         },
       ],
     });
@@ -242,6 +244,11 @@ export class QuoteService {
     const totals = this.calculateTotals(quote);
     const actorName = await this.resolveActorName(userId);
     const targetEmail = overrideEmail || quote.email;
+    const allRecipients = [
+      targetEmail,
+      ...(quote.notificationEmails || []),
+    ].filter(Boolean);
+    const recipientString = allRecipients.join(', ');
 
     // Validar email
     if (!targetEmail || !targetEmail.includes('@')) {
@@ -279,8 +286,14 @@ export class QuoteService {
 
     try {
       // Enviar email
+
+      console.log('=== INICIO ENVÍO ===');
+      console.log('DESTINATARIOS:', recipientString);
+      console.log('QUOTE ID:', quote.quoteId);
+      
+
       await this.mailService.sendQuoteEmail({
-        to: targetEmail,
+        to: recipientString,
         quoteId: quote.quoteId,
         companyName: quote.companyName,
         contactName: quote.contactName,
@@ -306,17 +319,19 @@ export class QuoteService {
                 date: new Date(),
                 actor: actorName,
                 detail: isSent
-                  ? `Cotización reenviada a ${targetEmail}`
-                  : `Cotización enviada a ${targetEmail}`,
+                  ? `Cotización reenviada a ${recipientString}`
+                  : `Cotización enviada a ${recipientString}`,
               },
             },
           },
           { new: true },
         )
         .lean();
-
+      console.log('=== CORREO ENVIADO OK ===');
       return updated as unknown as QuoteDocument;
+      
     } catch (error) {
+      console.log('=== ERROR ENVÍO ===', (error as any).message);
       // Registrar error en timeline
       await this.quoteModel.findByIdAndUpdate(id, {
         $push: {
@@ -333,6 +348,31 @@ export class QuoteService {
 
       throw error;
     }
+  }
+
+  private async generateQuoteId(): Promise<string> {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const prefix = `QT-${year}${month}-`;
+
+    // Buscar la última cotización del mes actual
+    const lastQuote = await this.quoteModel
+      .findOne({ quoteId: { $regex: `^${prefix}` } })
+      .sort({ quoteId: -1 })
+      .select('quoteId')
+      .lean();
+
+    let nextNumber = 1;
+    if (lastQuote?.quoteId) {
+      const lastNumber = parseInt(
+        lastQuote.quoteId.split('-').pop() || '0',
+        10,
+      );
+      nextNumber = lastNumber + 1;
+    }
+
+    return `${prefix}${String(nextNumber).padStart(3, '0')}`;
   }
 
   // ─── Totales enriquecidos ─────────────────────────────────────────────────

@@ -143,9 +143,7 @@ export const quoteSchema = z.object({
   quoteStatus: z.enum(QUOTE_STATUSES).default('draft'),
 
   // Generado en el frontend al cargar el formulario
-  quoteId: z.string().regex(/^QT-[A-Z0-9]{8}$/, {
-    message: 'El ID de cotización tiene un formato inválido',
-  }),
+  quoteId: z.string().optional(),
 
   // ── NUEVOS CAMPOS ──────────────────────────────────────────────────────────
 

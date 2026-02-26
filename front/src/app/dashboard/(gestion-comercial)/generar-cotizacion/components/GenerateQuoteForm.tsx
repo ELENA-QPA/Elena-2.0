@@ -65,13 +65,12 @@ export function GenerateQuoteForm() {
     resolver: quoteResolver,
     mode: "onChange",
     defaultValues: {
-      quoteId: generateQuoteId(),
+      //quoteId: generateQuoteId(),
       companyName: "",
       phones: [NaN],
       includeLicenses: false,
       standardLicenses: { unitPrice: 108 },
-      premiumLicenses: { unitPrice: 120 },
-      // NUEVO: defaults para campos nuevos
+      premiumLicenses: { unitPrice: 120 },      
       notificationEmails: [],
       includedModules: [],
       licenseBillingPeriod: LICENSE_BILLING_PERIOD.MONTHLY,
