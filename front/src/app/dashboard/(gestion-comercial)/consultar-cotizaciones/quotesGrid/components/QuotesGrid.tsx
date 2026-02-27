@@ -581,7 +581,7 @@ export function QuotesGrid({
                           {quote.quoteStatus === "draft" && (
                             <>
                               <Link
-                                href={`/dashboard/consultar-cotizaciones?edit=${quote._id}`}
+                                href={`/dashboard/generar-cotizacion?edit=${quote._id}`}
                               >
                                 <Button
                                   variant="ghost"
