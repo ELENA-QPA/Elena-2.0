@@ -1,10 +1,9 @@
 'use client';
 
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { FileText } from 'lucide-react';
-import Link from 'next/link';
+import { Table, TableBody } from '@/components/ui/table';
 import { useDeleteQuote } from '../../../../_shared/hooks/useDeleteQuote';
 import type { IQuoteWithMeta } from '../../../../_shared/types/quotes.types';
+import { QuotesEmptyState } from './QuotesEmptyState';
 import { QuotesTableHeader } from './QuotesTableHeader';
 import { QuotesTableRow } from './QuotesTableRow';
 
@@ -44,21 +43,7 @@ export function QuotesTable({
               />
             ))
           ) : (
-            <TableRow>
-              <TableCell
-                colSpan={8}
-                className='text-center py-12 text-muted-foreground'
-              >
-                <FileText className='h-12 w-12 mx-auto mb-3 text-gray-300' />
-                <p>No hay cotizaciones registradas</p>
-                <Link
-                  href='/dashboard/generar-cotizacion'
-                  className='text-elena-pink-600 hover:underline text-sm mt-1 inline-block'
-                >
-                  Crear primera cotización
-                </Link>
-              </TableCell>
-            </TableRow>
+            <QuotesEmptyState />
           )}
         </TableBody>
       </Table>
