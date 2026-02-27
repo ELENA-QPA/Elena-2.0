@@ -8,7 +8,7 @@ export function PageTitle({
   description: string;
 }) {
   return (
-    <>
+    <div>
       <h1 className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold truncate'>
         {title}
       </h1>
@@ -25,6 +25,6 @@ export function PageTitle({
           </span>
         </span>
       </p>
-    </>
+    </div>
   );
 }
