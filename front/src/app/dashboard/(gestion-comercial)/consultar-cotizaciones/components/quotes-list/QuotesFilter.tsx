@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, CardHeader, Input } from '@/components';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
   Select,
   SelectContent,
@@ -132,11 +133,10 @@ export function QuotesFilter({ filters, totalCount }: QuotesFilterProps) {
               <label className='text-xs sm:text-sm font-medium text-gray-700'>
                 Fecha creación desde
               </label>
-              <Input
-                type='date'
-                value={dateFromFilter}
-                onChange={e => setDateFromFilter(e.target.value)}
-                className='text-sm'
+              <DatePicker
+                selected={dateFromFilter || null}
+                onSelect={date => setDateFromFilter(date ?? '')}
+                placeholder='Desde'
               />
             </div>
 
@@ -144,11 +144,10 @@ export function QuotesFilter({ filters, totalCount }: QuotesFilterProps) {
               <label className='text-xs sm:text-sm font-medium text-gray-700'>
                 Fecha creación hasta
               </label>
-              <Input
-                type='date'
-                value={dateToFilter}
-                onChange={e => setDateToFilter(e.target.value)}
-                className='text-sm'
+              <DatePicker
+                selected={dateToFilter || null}
+                onSelect={date => setDateToFilter(date ?? '')}
+                placeholder='Hasta'
               />
             </div>
           </div>
