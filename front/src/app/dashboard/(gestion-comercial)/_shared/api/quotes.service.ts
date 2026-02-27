@@ -120,7 +120,7 @@ export const pushTimelineEvent = async (
 
 export const downloadQuotePdf = async (
   id: string,
-  quoteId: string
+  quoteId: string | undefined
 ): Promise<void> => {
   const token = getCookie('token');
   if (!token) throw new Error('No se pudo obtener el token de acceso');
