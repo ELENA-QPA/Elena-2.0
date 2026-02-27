@@ -64,6 +64,7 @@ export function QuoteDetailHeader({
           onSend={onSend}
           onDownload={onDownload}
           onResend={onResend}
+          onBack={onBack}
         />
       </div>
 

@@ -60,7 +60,7 @@ export class CreateQuoteDto {
   // ── 1. Datos del Cliente ─────────────────────────────────────────────────
 
   @ApiProperty({ description: 'Id de la cotizacion' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   quoteId: string;
 

@@ -12,8 +12,6 @@ export function useQuoteDetail(quote: IQuoteWithMeta, onBack: () => void) {
   const toggleFullscreen = () => setIsFullscreen(prev => !prev);
 
   const handleSend = async () => {
-    if (!window.confirm(`¿Enviar cotización ${quote.quoteId} a ${quote.email}?`))
-      return;
     try {
       await sendQuote(quote._id);
       toast.success(`Cotización enviada a ${quote.email}`);

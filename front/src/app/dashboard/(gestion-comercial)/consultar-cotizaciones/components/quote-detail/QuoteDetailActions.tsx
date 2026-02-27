@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Download, Edit, Send } from 'lucide-react';
 import type { IQuoteWithMeta } from '../../../_shared/types/quotes.types';
+import { SendQuoteModal } from './SendQuoteModal';
 import { UpdateQuoteModal } from './UpdateQuoteModal';
 
 interface QuoteDetailActionsProps {
@@ -10,13 +11,14 @@ interface QuoteDetailActionsProps {
   onSend: () => void;
   onDownload: () => void;
   onResend: () => void;
+  onBack: () => void;
 }
 
 export function QuoteDetailActions({
   quote,
-  onSend,
   onDownload,
   onResend,
+  onBack,
 }: QuoteDetailActionsProps) {
   return (
     <div className='flex items-center gap-2 shrink-0'>
@@ -35,15 +37,7 @@ export function QuoteDetailActions({
               </Button>
             }
           />
-          <Button
-            variant='outline'
-            size='sm'
-            className='border-emerald-400 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700'
-            onClick={onSend}
-          >
-            <Send className='h-4 w-4 mr-1.5' />
-            Enviar cotización
-          </Button>
+          <SendQuoteModal quote={quote} onBack={onBack} />
         </>
       )}
 

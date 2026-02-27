@@ -44,7 +44,7 @@ export enum LICENSE_BILLING_PERIOD {
 }
 
 export interface IQuote {
-  quoteId: string;
+  quoteId?: string;
   quoteStatus: QuoteStatus;
   companyName: string;
   nit: number;
