@@ -3,12 +3,13 @@
 import * as React from "react"
 import { es } from "date-fns/locale"
 import { format, parse } from "date-fns"
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react'
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export type DatePickerProps = {
     selected?: string | null
@@ -17,27 +18,115 @@ export type DatePickerProps = {
     disabled?: boolean
 }
 
+const MONTHS_ES = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+]
+
+const years = Array.from(
+    { length: new Date().getFullYear() + 10 - 1990 + 1 },
+    (_, i) => 1990 + i
+)
+
+type CaptionProps = {
+    month: Date
+    onMonthChange: (date: Date) => void
+}
+
+function CustomCaption({ month, onMonthChange }: CaptionProps) {
+    const currentYear = month.getFullYear()
+    const currentMonth = month.getMonth()
+
+    const handleMonthChange = (value: string) => {
+        const next = new Date(month)
+        next.setMonth(parseInt(value))
+        onMonthChange(next)
+    }
+
+    const handleYearChange = (value: string) => {
+        const next = new Date(month)
+        next.setFullYear(parseInt(value))
+        onMonthChange(next)
+    }
+
+    return (
+        <div className="flex items-center justify-between gap-1 px-1 py-1">
+            <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => {
+                    const prev = new Date(month)
+                    prev.setMonth(prev.getMonth() - 1)
+                    onMonthChange(prev)
+                }}
+            >
+                <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div className="flex gap-1 flex-1 justify-center">
+                <Select value={String(currentMonth)} onValueChange={handleMonthChange}>
+                    <SelectTrigger className="h-7 text-xs px-2 w-[110px]">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {MONTHS_ES.map((m, i) => (
+                            <SelectItem key={i} value={String(i)} className="text-xs">
+                                {m}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+
+                <Select value={String(currentYear)} onValueChange={handleYearChange}>
+                    <SelectTrigger className="h-7 text-xs px-2 w-[75px]">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-48">
+                        {years.map((y) => (
+                            <SelectItem key={y} value={String(y)} className="text-xs">
+                                {y}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => {
+                    const next = new Date(month)
+                    next.setMonth(next.getMonth() + 1)
+                    onMonthChange(next)
+                }}
+            >
+                <ChevronRight className="h-4 w-4" />
+            </Button>
+        </div>
+    )
+}
+
 export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fecha", disabled = false }: DatePickerProps) {
     const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(() => {
         if (!selected) return undefined;
-        
         try {
             const parsedDate = parse(selected, 'yyyy-MM-dd', new Date());
-            if (isNaN(parsedDate.getTime())) {
-                return undefined;
-            }
+            if (isNaN(parsedDate.getTime())) return undefined;
             return parsedDate;
-        } catch (error) {
+        } catch {
             return undefined;
         }
     });
+
+    const [month, setMonth] = React.useState<Date>(selectedDate || new Date());
 
     React.useEffect(() => {
         if (!selected) {
             setSelectedDate(undefined);
             return;
         }
-        
         try {
             const parsedDate = parse(selected, 'yyyy-MM-dd', new Date());
             if (isNaN(parsedDate.getTime())) {
@@ -45,7 +134,8 @@ export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fech
                 return;
             }
             setSelectedDate(parsedDate);
-        } catch (error) {
+            setMonth(parsedDate);
+        } catch {
             setSelectedDate(undefined);
         }
     }, [selected]);
@@ -53,12 +143,7 @@ export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fech
     const handleSelect = (date: Date | undefined) => {
         setSelectedDate(date);
         if (onSelect) {
-            if (date) {
-                const formattedDate = format(date, 'yyyy-MM-dd');
-                onSelect(formattedDate);
-            } else {
-                onSelect(undefined);
-            }
+            onSelect(date ? format(date, 'yyyy-MM-dd') : undefined);
         }
     };
 
@@ -75,7 +160,10 @@ export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fech
                     disabled={disabled}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {selectedDate && !isNaN(selectedDate.getTime()) ? format(selectedDate, "dd/MM/yy") : <span>{placeholder}</span>}
+                    {selectedDate && !isNaN(selectedDate.getTime())
+                        ? format(selectedDate, "dd/MM/yyyy")
+                        : <span>{placeholder}</span>
+                    }
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -83,18 +171,23 @@ export function DatePicker({ selected, onSelect, placeholder = "Seleccionar fech
                     mode="single"
                     selected={selectedDate}
                     onSelect={handleSelect}
+                    month={month}
+                    onMonthChange={setMonth}
                     locale={es}
                     showOutsideDays={true}
                     fixedWeeks={true}
+                    components={{
+                        Caption: () => <CustomCaption month={month} onMonthChange={setMonth} />,
+                    }}
                     classNames={{
                         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                         month: "space-y-4",
                         caption: "flex justify-center pt-1 relative items-center",
                         caption_label: "text-sm font-medium",
                         nav: "space-x-1 flex items-center",
-                        nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 inline-flex items-center justify-center rounded-md border border-input",
-                        nav_button_previous: "absolute left-1",
-                        nav_button_next: "absolute right-1",
+                        nav_button: "hidden",
+                        nav_button_previous: "hidden",
+                        nav_button_next: "hidden",
                         table: "w-full border-collapse space-y-1",
                         head_row: "flex",
                         head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",

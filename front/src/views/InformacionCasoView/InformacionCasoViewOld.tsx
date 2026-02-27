@@ -1643,7 +1643,7 @@ export default function InformacionCasoFormViewOld() {
       setCaseInitialLoadCompleted(false);
 
       const clientTypeValue = (() => {
-        const rawValue = caso.clientType?.trim().toUpperCase() || "";     
+        const rawValue = caso.clientType?.trim().toUpperCase() || "";
         if (rawValue.includes("RAPPI")) return "Rappi SAS";
         if (rawValue.includes("UBER")) return "Uber";
         if (rawValue.includes("DIDI")) return "Didi";
@@ -1651,27 +1651,29 @@ export default function InformacionCasoFormViewOld() {
         if (rawValue.includes("IFOOD")) return "Ifood";
         if (rawValue) return "Otro";
         return "";
-      })();     
+      })();
       const internalCodeValue = caso.etiqueta || "";
-    
+
       // Función para capitalizar nombres
       const capitalizeName = (name: string) => {
-  if (!name) return "";
+        if (!name) return "";
 
-  const upperName = name.toUpperCase();
+        const upperName = name.toUpperCase();
 
-  // Mapeo de nombres de departamentos para coincidir exactamente con divipola.json
-  const departmentMap: { [key: string]: string } = {
-    "BOGOTA": "Bogotá D.C.",
-    "BOGOTÁ": "Bogotá D.C.",
-    "BOGOTA D.C.": "Bogotá D.C.",
-    "BOGOTÁ D.C.": "Bogotá D.C.",
-    "VALLE DEL CAUCA": "Valle del Cauca",
-    "NORTE DE SANTANDER": "Norte de Santander",
-    "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA": "San Andrés, Providencia y Santa Catalina",
-    "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA": "San Andrés, Providencia y Santa Catalina",
-    "LA GUAJIRA": "La Guajira",
-  };
+        // Mapeo de nombres de departamentos para coincidir exactamente con divipola.json
+        const departmentMap: { [key: string]: string } = {
+          "BOGOTA": "Bogotá D.C.",
+          "BOGOTÁ": "Bogotá D.C.",
+          "BOGOTA D.C.": "Bogotá D.C.",
+          "BOGOTÁ D.C.": "Bogotá D.C.",
+          "VALLE DEL CAUCA": "Valle del Cauca",
+          "NORTE DE SANTANDER": "Norte de Santander",
+          "SAN ANDRES, PROVIDENCIA Y SANTA CATALINA":
+            "San Andrés, Providencia y Santa Catalina",
+          "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA":
+            "San Andrés, Providencia y Santa Catalina",
+          "LA GUAJIRA": "La Guajira",
+        };
 
         // Buscar en el mapeo
         if (departmentMap[upperName]) {
@@ -1774,7 +1776,7 @@ export default function InformacionCasoFormViewOld() {
 
       const numeroRadicadoValue =
         (caso as any).radicado || (caso as any).numeroRadicado || "";
-    
+
       const filingDateValue = sanitizeDate((caso as any).filingDate) || "";
 
       // EJECUTAR EL RESET DEL FORMULARIO
@@ -2004,57 +2006,70 @@ export default function InformacionCasoFormViewOld() {
   // UN SOLO useEffect para calcular total - con flag para evitar loops
   const [totalCalculated, setTotalCalculated] = useState(false);
 
- // Combinar actuaciones de BD + Monolegal
-const todasLasActuaciones = useMemo(() => {
-  // Función para parsear fechas en diferentes formatos
-  const parseFecha = (fecha: any): Date => {
-    if (!fecha) return new Date(0);
-    
-    // Si ya es Date
-    if (fecha instanceof Date) return fecha;
-    
-    // Si es string en formato DD/MM/YYYY
-    if (typeof fecha === "string" && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(fecha)) {
-      const parts = fecha.split("/");
-      return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-    }
-    
-    // Si es ISO o cualquier otro formato
-    const parsed = new Date(fecha);
-    return isNaN(parsed.getTime()) ? new Date(0) : parsed;
-  };
+  // Combinar actuaciones de BD + Monolegal
+  const todasLasActuaciones = useMemo(() => {
+    const parseFecha = (fecha: any): Date => {
+      if (!fecha) return new Date(0);
+      if (fecha instanceof Date) return fecha;
+      if (
+        typeof fecha === "string" &&
+        /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(fecha)
+      ) {
+        const parts = fecha.split("/");
+        return new Date(
+          parseInt(parts[2]),
+          parseInt(parts[1]) - 1,
+          parseInt(parts[0]),
+        );
+      }
+      const parsed = new Date(fecha);
+      return isNaN(parsed.getTime()) ? new Date(0) : parsed;
+    };
 
-  const performancesBD = (caso?.performances || [])
-    .filter((p: any) => p.responsible !== "Monolegal")
-    .map((p: any) => {
-      const fechaOrden = p.performanceDate || p.createdAt || p.fechaDeActuacion || "";
+    const performancesBD = (caso?.performances || [])
+      .filter((p: any) => p.responsible !== "Monolegal")
+      .map((p: any) => {
+        const fechaOrden =
+          p.performanceDate || p.createdAt || p.fechaDeActuacion || "";
+        return {
+          ...p,
+          fuente: "Base de Datos",
+          isFromBD: true,
+          fechaOrden,
+          fechaOrdenParsed: parseFecha(fechaOrden),
+        };
+      });
+
+    const performancesMonolegal = actuacionesMonolegal.map((p: any) => {
+      const fechaOrden =
+        p.fechaDeActuacion || p.fechaActuacion || p.createdAt || "";
       return {
         ...p,
-        fuente: "Base de Datos",
-        isFromBD: true,
+        isFromBD: false,
         fechaOrden,
         fechaOrdenParsed: parseFecha(fechaOrden),
       };
     });
 
-  const performancesMonolegal = actuacionesMonolegal.map((p: any) => {
-    const fechaOrden = p.fechaDeActuacion || p.fechaActuacion || p.createdAt || "";
-    return {
-      ...p,
-      isFromBD: false,
-      fechaOrden,
-      fechaOrdenParsed: parseFecha(fechaOrden),
-    };
-  });
+    const todas = [...performancesBD, ...performancesMonolegal];
 
-  // Combinar todas
-  const todas = [...performancesBD, ...performancesMonolegal];
+    // Deduplicar por texto + fecha
+    const vistas = new Set<string>();
+    const deduplicadas = todas.filter((p: any) => {
+      const texto = p.textoActuacion || p.actuacion || p.performanceType || "";
+      const fecha =
+        p.fechaDeActuacion || p.performanceDate || p.createdAt || "";
+      const key = `${texto}|${fecha}`;
+      if (vistas.has(key)) return false;
+      vistas.add(key);
+      return true;
+    });
 
-  // Ordenar por fecha (más reciente primero)
-  return todas.sort((a: any, b: any) => {
-    return b.fechaOrdenParsed.getTime() - a.fechaOrdenParsed.getTime();
-  });
-}, [caso?.performances, actuacionesMonolegal]);
+    return deduplicadas.sort(
+      (a: any, b: any) =>
+        b.fechaOrdenParsed.getTime() - a.fechaOrdenParsed.getTime(),
+    );
+  }, [caso?.performances, actuacionesMonolegal]);
 
   useEffect(() => {
     if (caso && !totalCalculated) {
@@ -2095,23 +2110,23 @@ const todasLasActuaciones = useMemo(() => {
     if (clientType?.toLowerCase().includes("rappi")) {
       form.setValue("processType", "Ordinario");
     }
-  }, [clientType, form]); 
+  }, [clientType, form]);
 
   // Actualizar etiqueta cuando cambie el tipo de cliente
   useEffect(() => {
     const clientType = form.watch("clientType");
     const currentEtiqueta = form.getValues("internalCode");
-    
+
     if (clientType && currentEtiqueta && mode === "edit") {
       const firstConsecutivePart: Record<string, string> = {
-        'Rappi SAS': 'R',
-        'Uber': 'U',
-        'Didi': 'D',
-        'Beat': 'B',
-        'Ifood': 'I',
-        'Otro': 'O',
+        "Rappi SAS": "R",
+        Uber: "U",
+        Didi: "D",
+        Beat: "B",
+        Ifood: "I",
+        Otro: "O",
       };
-      
+
       const numeroMatch = currentEtiqueta.match(/\d+$/);
       if (numeroMatch) {
         const numero = numeroMatch[0];
@@ -2856,7 +2871,7 @@ const todasLasActuaciones = useMemo(() => {
 
       if ("record" in result) {
         toast.success("Información general actualizada exitosamente");
-        window.dispatchEvent(new CustomEvent("caso-updated"));        
+        window.dispatchEvent(new CustomEvent("caso-updated"));
         await getCasoById(caseId);
       } else {
         // Manejo específico para errores de transición de estado
@@ -7820,6 +7835,10 @@ const todasLasActuaciones = useMemo(() => {
                               label: "Fija audiencia",
                             },
                             {
+                              value: "Reprogramación de audiencia",
+                              label: "Reprogramación de audiencia",
+                            },
+                            {
                               value: "Celebra audiencia # 1",
                               label: "Celebra audiencia # 1",
                             },
@@ -8364,6 +8383,10 @@ const todasLasActuaciones = useMemo(() => {
                               {
                                 value: "Fija audiencia",
                                 label: "Fija audiencia",
+                              },
+                              {
+                                value: "Reprogramación de audiencia",
+                                label: "Reprogramación de audiencia",
                               },
                               {
                                 value: "Celebra audiencia # 1",
